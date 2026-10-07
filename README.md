@@ -6,7 +6,7 @@ Misukatti Interactive's website: plain static HTML and CSS, no build step.
 |---|---|
 | `index.html`, `assets/site.css` | The studio page: City of Thieves, Hammerite 3D, contact. Night and moon, DM Serif Display and Josefin Sans. |
 | `hammerite/` | Hammerite 3D's page, in Hammerite's own look: stone, red and Cinzel, with a slim Misukatti bar and footer. |
-| `assets/misukatti/` | Logos from [misukatti/brand](https://github.com/misukatti/brand). |
+| `assets/misukatti/` | Logos from [misukatti/brand](https://github.com/misukatti/brand): the `night` versions, which have no SVG mask. The `on-dark` ones are masked, and Safari on iOS blurs masks. |
 | `hammerite/assets/` | Hammerite's logo, favicons and screenshots, from the Hammerite repo (`docs/logo/`, the editor manual's images). |
 
 Links are root-relative (`/hammerite/`), so the site has to be served from a domain's root: the org
