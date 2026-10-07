@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HammeriteEntity — Hammerite 3D API</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="/hammerite/assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="/hammerite/assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/hammerite/assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=Josefin+Sans:wght@300&family=JetBrains+Mono:wght@400&display=swap">
+<link rel="stylesheet" href="/hammerite/hammerite.css">
+<link rel="stylesheet" href="/hammerite/api.css">
+</head>
+<body class="api">
+
+<header class="studio">
+	<a class="studio-logo" href="/"><img src="/assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="/hammerite/">Hammerite 3D</a>
+		<a href="/hammerite/api/">API reference</a>
+	</nav>
+</header>
+
+<div class="api-layout">
+	<article class="api-page">
+<h1>HammeriteEntity</h1>
+<p class="inherits">Core: the map. Inherits <a href="https://docs.godotengine.org/en/stable/classes/class_resource.html"><code>Resource</code></a></p>
+<p class="brief">One placed thing in a <a href="HammeriteMap.html"><code>HammeriteMap</code></a> that is not world geometry: a light, a prop, a spawn point.</p>
+<p>An entity is data - a registered <a href="#property-type"><code>type</code></a>, a <code>classname</code> and a <a href="#property-properties"><code>properties</code></a> bag - and <a href="HammeriteMap3D.html"><code>HammeriteMap3D</code></a> builds a node for it by looking the classname up as a <code>class_name</code>. A point entity stands at <a href="#property-origin"><code>origin</code></a>; a <a href="HammeriteBrushEntity.html"><code>HammeriteBrushEntity</code></a> owns brushes instead. Add one to a map with <a href="HammeriteMap.html#method-add_entity"><code>HammeriteMap.add_entity()</code></a>, after giving it a nonzero <a href="#property-id"><code>id</code></a> from <a href="HammeriteMap.html#method-gen_entity_id"><code>HammeriteMap.gen_entity_id()</code></a>.</p>
+<h2>Properties</h2>
+<table class="members"><thead><tr><th>Type</th><th>Name</th><th>Default</th></tr></thead><tbody><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_stringname.html"><code>StringName</code></a></td><td><a href="#property-type"><code>type</code></a></td><td><code>&amp;&quot;&quot;</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_int.html"><code>int</code></a></td><td><a href="#property-id"><code>id</code></a></td><td><code>0</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_int.html"><code>int</code></a></td><td><a href="#property-group_id"><code>group_id</code></a></td><td><code>0</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_int.html"><code>int</code></a></td><td><a href="#property-prefab_id"><code>prefab_id</code></a></td><td><code>0</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_int.html"><code>int</code></a></td><td><a href="#property-instance_id"><code>instance_id</code></a></td><td><code>0</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_int.html"><code>int</code></a></td><td><a href="#property-layer_id"><code>layer_id</code></a></td><td><code>0</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_dictionary.html"><code>Dictionary</code></a></td><td><a href="#property-properties"><code>properties</code></a></td><td><code>{}</code></td></tr><tr><td><a href="HammeriteMap.html"><code>HammeriteMap</code></a></td><td><a href="#property-map"><code>map</code></a></td><td></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_bool.html"><code>bool</code></a></td><td><a href="#property-selected"><code>selected</code></a></td><td><code>false</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_bool.html"><code>bool</code></a></td><td><a href="#property-hidden"><code>hidden</code></a></td><td><code>false</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_bool.html"><code>bool</code></a></td><td><a href="#property-hovered"><code>hovered</code></a></td><td><code>false</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_transform3d.html"><code>Transform3D</code></a></td><td><a href="#property-temporary_transform"><code>temporary_transform</code></a></td><td><code>Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_vector3.html"><code>Vector3</code></a></td><td><a href="#property-origin"><code>origin</code></a></td><td></td></tr></tbody></table>
+<h2>Methods</h2>
+<table class="members"><thead><tr><th>Returns</th><th>Method</th></tr></thead><tbody><tr><td><code>void</code></td><td><a href="#method-set_group_id"><code>set_group_id</code></a><code>(id: int)</code></td></tr><tr><td><code>void</code></td><td><a href="#method-set_layer_id"><code>set_layer_id</code></a><code>(id: int)</code></td></tr><tr><td><a href="HammeriteMap.html"><code>HammeriteMap</code></a></td><td><a href="#method-get_map"><code>get_map</code></a><code>()</code></td></tr><tr><td><code>void</code></td><td><a href="#method-set_map"><code>set_map</code></a><code>(new_map: HammeriteMap)</code></td></tr><tr><td><code>void</code></td><td><a href="#method-set_selected"><code>set_selected</code></a><code>(is_selected: bool)</code></td></tr><tr><td><code>void</code></td><td><a href="#method-set_hidden"><code>set_hidden</code></a><code>(is_hidden: bool)</code></td></tr><tr><td><code>void</code></td><td><a href="#method-set_hovered"><code>set_hovered</code></a><code>(is_hovered: bool)</code></td></tr><tr><td><code>void</code></td><td><a href="#method-request_delete"><code>request_delete</code></a><code>()</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_stringname.html"><code>StringName</code></a></td><td><a href="#method-get_classname"><code>get_classname</code></a><code>()</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_vector3.html"><code>Vector3</code></a></td><td><a href="#method-get_origin"><code>get_origin</code></a><code>()</code></td></tr><tr><td><code>void</code></td><td><a href="#method-set_origin"><code>set_origin</code></a><code>(origin: Vector3)</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_basis.html"><code>Basis</code></a></td><td><a href="#method-get_basis"><code>get_basis</code></a><code>()</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_bool.html"><code>bool</code></a></td><td><a href="#method-is_turnable"><code>is_turnable</code></a><code>()</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_vector3.html"><code>Vector3</code></a></td><td><a href="#method-get_scale"><code>get_scale</code></a><code>()</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_bool.html"><code>bool</code></a></td><td><a href="#method-is_scalable"><code>is_scalable</code></a><code>()</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_transform3d.html"><code>Transform3D</code></a></td><td><a href="#method-get_transform"><code>get_transform</code></a><code>()</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_vector3.html"><code>Vector3</code></a></td><td><a href="#method-rotation_of"><code>rotation_of</code></a><code>(basis: Basis)</code> <code>static</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_bool.html"><code>bool</code></a></td><td><a href="#method-may_turn_about"><code>may_turn_about</code></a><code>(axes: String, axis: Vector3)</code> <code>static</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_aabb.html"><code>AABB</code></a></td><td><a href="#method-get_aabb"><code>get_aabb</code></a><code>(center_on_origin: bool = true)</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_bool.html"><code>bool</code></a></td><td><a href="#method-is_box_turned"><code>is_box_turned</code></a><code>()</code></td></tr><tr><td><code>HammeriteEntityBox</code></td><td><a href="#method-get_box"><code>get_box</code></a><code>()</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_bool.html"><code>bool</code></a></td><td><a href="#method-is_editor_only"><code>is_editor_only</code></a><code>(prop_name)</code> <code>static</code></td></tr><tr><td><code>void</code></td><td><a href="#method-set_properties"><code>set_properties</code></a><code>(value: Dictionary)</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_variant.html"><code>Variant</code></a></td><td><a href="#method-get_property"><code>get_property</code></a><code>(prop_name: StringName, default = null)</code></td></tr><tr><td><code>void</code></td><td><a href="#method-set_property"><code>set_property</code></a><code>(prop_name: StringName, value)</code></td></tr><tr><td><code>void</code></td><td><a href="#method-set_property_no_emit"><code>set_property_no_emit</code></a><code>(prop_name: StringName, value)</code></td></tr></tbody></table>
+<h2>Signals</h2>
+<h3 id="signal-group_changed">group_changed</h3>
+<pre class="signature"><code>signal group_changed()</code></pre>
+<p>Emitted when <a href="#property-group_id"><code>group_id</code></a> has changed.</p>
+<h3 id="signal-layer_changed">layer_changed</h3>
+<pre class="signature"><code>signal layer_changed()</code></pre>
+<p>Emitted when <a href="#property-layer_id"><code>layer_id</code></a> has changed.</p>
+<h3 id="signal-delete_requested">delete_requested</h3>
+<pre class="signature"><code>signal delete_requested()</code></pre>
+<p>Emitted by <a href="#method-request_delete"><code>request_delete()</code></a>. The owning <a href="HammeriteMap.html"><code>HammeriteMap</code></a> listens and removes the entity.</p>
+<h3 id="signal-property_changed">property_changed</h3>
+<pre class="signature"><code>signal property_changed(prop_name: StringName, value)</code></pre>
+<p>Emitted by <a href="#method-set_property"><code>set_property()</code></a>. Not emitted by <a href="#method-set_property_no_emit"><code>set_property_no_emit()</code></a>, by assigning <a href="#property-properties"><code>properties</code></a> whole, or by writing into the dictionary directly.</p>
+<h3 id="signal-selection_changed">selection_changed</h3>
+<pre class="signature"><code>signal selection_changed(selected: bool)</code></pre>
+<p>Emitted when entity selection state has changed.</p>
+<h3 id="signal-visibility_changed">visibility_changed</h3>
+<pre class="signature"><code>signal visibility_changed(hidden: bool)</code></pre>
+<p>Emitted when entity visibility has changed.</p>
+<h3 id="signal-hover_changed">hover_changed</h3>
+<pre class="signature"><code>signal hover_changed(hovered: bool)</code></pre>
+<p>Emitted when entity hover state has changed.</p>
+<h3 id="signal-temporary_transform_changed">temporary_transform_changed</h3>
+<pre class="signature"><code>signal temporary_transform_changed(transform: Transform3D)</code></pre>
+<p>Emitted when temporary transform has changed (used during transform tool operations).</p>
+<h2>Constants</h2>
+<h3 id="constant-editor_only_prefix">EDITOR_ONLY_PREFIX</h3>
+<pre class="signature"><code>const EDITOR_ONLY_PREFIX = &quot;_editor_&quot;</code></pre>
+<p>A type&#x27;s registration also carries what the editor draws it with - its icon, its tint - under this prefix. That belongs to the type, never to one entity of it: a copy on the entity is an editor asset baked into the map, and it goes stale the moment the type&#x27;s picture changes.</p>
+<h3 id="constant-key_box_basis">KEY_BOX_BASIS</h3>
+<pre class="signature"><code>const KEY_BOX_BASIS = &amp;&quot;_aabb_basis&quot;</code></pre>
+<p>Which way this entity&#x27;s box is turned. Identity - no turn at all - for almost everything.</p>
+<h3 id="constant-key_rotation">KEY_ROTATION</h3>
+<pre class="signature"><code>const KEY_ROTATION = &amp;&quot;rotation&quot;</code></pre>
+<p>Which way the entity itself is turned (#77), as Euler angles in degrees - what <code>Node3D.rotation_degrees</code> holds, so a value typed into the property panel reads the way Godot&#x27;s own does. Only on a type that declares it may be turned (<code>_editor_rotation_axes</code> in its registration); everything else has no such property and faces the way it was made.</p>
+<h3 id="constant-key_scale">KEY_SCALE</h3>
+<pre class="signature"><code>const KEY_SCALE = &amp;&quot;scale&quot;</code></pre>
+<p>How far the entity itself is stretched along each of its own axes, before it is turned - what <code>Node3D.scale</code> holds. Only on a type that declares it may be sized, by carrying this in its registration; everything else has no such property and is the size it was made.</p>
+<h3 id="constant-least_scale">LEAST_SCALE</h3>
+<pre class="signature"><code>const LEAST_SCALE = 0.001</code></pre>
+<p>The least an entity may be sized to along an axis: nothing has no inverse, and a mesh of no depth has no inside to be lit from.</p>
+<h2>Property descriptions</h2>
+<h3 id="property-type">type</h3>
+<pre class="signature"><code>var type: StringName = &amp;&quot;&quot;</code></pre>
+<p>The registered entity type this was made as (e.g. <code>&amp;&quot;prop_model&quot;</code>), which names its editor registration and defaults. Distinct from the <code>classname</code> property, which names the node class built for it.</p>
+<h3 id="property-id">id</h3>
+<pre class="signature"><code>var id: int = 0</code></pre>
+<p>Unique within its map, from <a href="HammeriteMap.html#method-gen_entity_id"><code>HammeriteMap.gen_entity_id()</code></a>. 0 means unassigned, and <a href="HammeriteMap.html#method-add_entity"><code>HammeriteMap.add_entity()</code></a> refuses it.</p>
+<h3 id="property-group_id">group_id</h3>
+<pre class="signature"><code>var group_id: int = 0</code></pre>
+<p>The editor group this entity is selected together with, or 0 for none. Emits <a href="#signal-group_changed"><code>group_changed</code></a>.</p>
+<h3 id="property-prefab_id">prefab_id</h3>
+<pre class="signature"><code>var prefab_id: int = 0</code></pre>
+<p>The <a href="HammeritePrefab.html#property-prefab_id"><code>HammeritePrefab.prefab_id</code></a> of the prefab this entity was placed from, or 0 if it is not part of a prefab instance.</p>
+<h3 id="property-instance_id">instance_id</h3>
+<pre class="signature"><code>var instance_id: int = 0</code></pre>
+<p>The <a href="HammeritePrefabInstance.html#property-instance_id"><code>HammeritePrefabInstance.instance_id</code></a> this entity belongs to, or 0 if none.</p>
+<h3 id="property-layer_id">layer_id</h3>
+<pre class="signature"><code>var layer_id: int = 0</code></pre>
+<p>The <a href="HammeriteLayer.html"><code>HammeriteLayer</code></a> this entity is on; it is present in the world only while that layer is (<a href="HammeriteMap.html#method-is_entity_present"><code>HammeriteMap.is_entity_present()</code></a>). Emits <a href="#signal-layer_changed"><code>layer_changed</code></a>.</p>
+<h3 id="property-properties">properties</h3>
+<pre class="signature"><code>var properties: Dictionary = {}</code></pre>
+<p>The entity&#x27;s authored values, keyed by <a href="https://docs.godotengine.org/en/stable/classes/class_stringname.html"><code>StringName</code></a>. Keys starting with <a href="#constant-editor_only_prefix"><code>EDITOR_ONLY_PREFIX</code></a> are dropped on assignment. Prefer <a href="#method-set_property"><code>set_property()</code></a>, which emits <a href="#signal-property_changed"><code>property_changed</code></a>.</p>
+<h3 id="property-map">map</h3>
+<pre class="signature"><code>var map: HammeriteMap</code></pre>
+<p>The map this entity belongs to. Held weakly, as a brush holds its map (see <a href="HammeriteBrush.html#property-map"><code>HammeriteBrush.map</code></a>).</p>
+<h3 id="property-selected">selected</h3>
+<pre class="signature"><code>var selected: bool = false</code></pre>
+<p>Editor selection state, not saved. Emits <a href="#signal-selection_changed"><code>selection_changed</code></a>.</p>
+<h3 id="property-hidden">hidden</h3>
+<pre class="signature"><code>var hidden: bool = false</code></pre>
+<p>Hidden by an editor tool, not saved. Emits <a href="#signal-visibility_changed"><code>visibility_changed</code></a>.</p>
+<h3 id="property-hovered">hovered</h3>
+<pre class="signature"><code>var hovered: bool = false</code></pre>
+<p>Editor hover state, not saved. Emits <a href="#signal-hover_changed"><code>hover_changed</code></a>.</p>
+<h3 id="property-temporary_transform">temporary_transform</h3>
+<pre class="signature"><code>var temporary_transform: Transform3D = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)</code></pre>
+<p>Temporary transform applied during transform tool operations. This allows preview without recalculating geometry. Not saved; identity when no tool is using it.</p>
+<h3 id="property-origin">origin</h3>
+<pre class="signature"><code>var origin: Vector3</code></pre>
+<p>Where a point entity stands, in map space: the <code>origin</code> property. Setting it goes through <a href="#method-set_property"><code>set_property()</code></a>, so it emits <a href="#signal-property_changed"><code>property_changed</code></a>.</p>
+<h2>Method descriptions</h2>
+<h3 id="method-set_group_id">set_group_id()</h3>
+<pre class="signature"><code>func set_group_id(id: int) -&gt; void</code></pre>
+<p>Setter for <a href="#property-group_id"><code>group_id</code></a>; emits <a href="#signal-group_changed"><code>group_changed</code></a> even when the value is unchanged.</p>
+<h3 id="method-set_layer_id">set_layer_id()</h3>
+<pre class="signature"><code>func set_layer_id(id: int) -&gt; void</code></pre>
+<p>Setter for <a href="#property-layer_id"><code>layer_id</code></a>; emits <a href="#signal-layer_changed"><code>layer_changed</code></a> even when the value is unchanged.</p>
+<h3 id="method-get_map">get_map()</h3>
+<pre class="signature"><code>func get_map() -&gt; HammeriteMap</code></pre>
+<p>The map this entity was added to, or null before <a href="HammeriteMap.html#method-add_entity"><code>HammeriteMap.add_entity()</code></a> or once the map is freed.</p>
+<h3 id="method-set_map">set_map()</h3>
+<pre class="signature"><code>func set_map(new_map: HammeriteMap) -&gt; void</code></pre>
+<p>Set by <a href="HammeriteMap.html#method-add_entity"><code>HammeriteMap.add_entity()</code></a>. Only records the back-reference; it does not add the entity to <code>new_map</code>.</p>
+<h3 id="method-set_selected">set_selected()</h3>
+<pre class="signature"><code>func set_selected(is_selected: bool) -&gt; void</code></pre>
+<p>Setter for <a href="#property-selected"><code>selected</code></a>; emits <a href="#signal-selection_changed"><code>selection_changed</code></a>.</p>
+<h3 id="method-set_hidden">set_hidden()</h3>
+<pre class="signature"><code>func set_hidden(is_hidden: bool) -&gt; void</code></pre>
+<p>Setter for <a href="#property-hidden"><code>hidden</code></a>; emits <a href="#signal-visibility_changed"><code>visibility_changed</code></a>.</p>
+<h3 id="method-set_hovered">set_hovered()</h3>
+<pre class="signature"><code>func set_hovered(is_hovered: bool) -&gt; void</code></pre>
+<p>Setter for <a href="#property-hovered"><code>hovered</code></a>; emits <a href="#signal-hover_changed"><code>hover_changed</code></a>.</p>
+<h3 id="method-request_delete">request_delete()</h3>
+<pre class="signature"><code>func request_delete() -&gt; void</code></pre>
+<p>Ask the owning map to remove this entity, by emitting <a href="#signal-delete_requested"><code>delete_requested</code></a>. Does nothing before the entity is added to a map.</p>
+<h3 id="method-get_classname">get_classname()</h3>
+<pre class="signature"><code>func get_classname() -&gt; StringName</code></pre>
+<p>The <code>classname</code> property: the <code>class_name</code> of the node built for this entity, or empty if it has none.</p>
+<h3 id="method-get_origin">get_origin()</h3>
+<pre class="signature"><code>func get_origin() -&gt; Vector3</code></pre>
+<p>The <code>origin</code> property, or <code>Vector3.ZERO</code> when it has none (a brush entity).</p>
+<h3 id="method-set_origin">set_origin()</h3>
+<pre class="signature"><code>func set_origin(origin: Vector3) -&gt; void</code></pre>
+<p>Setter for <a href="#property-origin"><code>origin</code></a>; emits <a href="#signal-property_changed"><code>property_changed</code></a>.</p>
+<h3 id="method-get_basis">get_basis()</h3>
+<pre class="signature"><code>func get_basis() -&gt; Basis</code></pre>
+<p><a href="#constant-key_rotation"><code>KEY_ROTATION</code></a> as a basis: identity for an entity that is not turned, or cannot be.</p>
+<h3 id="method-is_turnable">is_turnable()</h3>
+<pre class="signature"><code>func is_turnable() -&gt; bool</code></pre>
+<p>Whether this entity carries a turn of its own - whether its type lets it be turned at all.</p>
+<h3 id="method-get_scale">get_scale()</h3>
+<pre class="signature"><code>func get_scale() -&gt; Vector3</code></pre>
+<p><a href="#constant-key_scale"><code>KEY_SCALE</code></a>: one along each axis for an entity that is not sized, or cannot be. Never less than <a href="#constant-least_scale"><code>LEAST_SCALE</code></a>, and never mirrored - a mesh turned inside out is lit from the wrong side.</p>
+<h3 id="method-is_scalable">is_scalable()</h3>
+<pre class="signature"><code>func is_scalable() -&gt; bool</code></pre>
+<p>Whether this entity carries a size of its own - whether its type lets it be sized at all.</p>
+<h3 id="method-get_transform">get_transform()</h3>
+<pre class="signature"><code>func get_transform() -&gt; Transform3D</code></pre>
+<p>What a point of the entity&#x27;s own goes through to stand in the world: sized along its own axes, then turned, then put where the entity is.</p>
+<h3 id="method-rotation_of">rotation_of()</h3>
+<pre class="signature"><code>static func rotation_of(basis: Basis) -&gt; Vector3</code></pre>
+<p><code>basis</code> as what <a href="#constant-key_rotation"><code>KEY_ROTATION</code></a> stores: degrees, and near-whole numbers rounded to them, so a quarter turn made with the tool reads 90 rather than 89.99999.</p>
+<h3 id="method-may_turn_about">may_turn_about()</h3>
+<pre class="signature"><code>static func may_turn_about(axes: String, axis: Vector3) -&gt; bool</code></pre>
+<p>Whether <code>axes</code> - a type&#x27;s <code>_editor_rotation_axes</code>, some of &quot;xyz&quot; - lets it turn about <code>axis</code>: a world axis the turn is about, or near enough to one.</p>
+<h3 id="method-get_aabb">get_aabb()</h3>
+<pre class="signature"><code>func get_aabb(center_on_origin: bool = true) -&gt; AABB</code></pre>
+<p>The entity&#x27;s axis-aligned box from its <code>_aabb</code> property, sized by <a href="#method-get_scale"><code>get_scale()</code></a>. Placed at <a href="#property-origin"><code>origin</code></a> when <code>center_on_origin</code>, otherwise relative to it. When it is turned (<a href="#method-is_box_turned"><code>is_box_turned()</code></a>) this is the box enclosing the turned one. Empty for a type with no <code>_aabb</code>, which includes brush entities.</p>
+<h3 id="method-is_box_turned">is_box_turned()</h3>
+<pre class="signature"><code>func is_box_turned() -&gt; bool</code></pre>
+<p>Whether this entity&#x27;s box is turned, and so whether asking for the <a href="https://docs.godotengine.org/en/stable/classes/class_aabb.html"><code>AABB</code></a> loses something.</p>
+<h3 id="method-get_box">get_box()</h3>
+<pre class="signature"><code>func get_box() -&gt; HammeriteEntityBox</code></pre>
+<p>The box it fills, turned if it is turned. What the editor draws and what a click is tested against.</p>
+<h3 id="method-is_editor_only">is_editor_only()</h3>
+<pre class="signature"><code>static func is_editor_only(prop_name) -&gt; bool</code></pre>
+<p>Whether <code>prop_name</code> starts with <a href="#constant-editor_only_prefix"><code>EDITOR_ONLY_PREFIX</code></a> and so belongs to the type&#x27;s registration, not to a saved entity.</p>
+<h3 id="method-set_properties">set_properties()</h3>
+<pre class="signature"><code>func set_properties(value: Dictionary) -&gt; void</code></pre>
+<p><code>value</code> without the keys that are <a href="#method-is_editor_only"><code>is_editor_only()</code></a>. Dropped on the way in, which is also the way a map is loaded: the property panel&#x27;s type change once copied a type&#x27;s whole registration, icon included, and a map saved then loses it the next time it is opened.</p>
+<h3 id="method-get_property">get_property()</h3>
+<pre class="signature"><code>func get_property(prop_name: StringName, default = null) -&gt; Variant</code></pre>
+<p>The stored value of <code>prop_name</code>, or <code>default</code>. Does not fall back to the type&#x27;s registered default.</p>
+<h3 id="method-set_property">set_property()</h3>
+<pre class="signature"><code>func set_property(prop_name: StringName, value) -&gt; void</code></pre>
+<p>Store <code>value</code> and emit <a href="#signal-property_changed"><code>property_changed</code></a>, which the entity&#x27;s node listens to.</p>
+<h3 id="method-set_property_no_emit">set_property_no_emit()</h3>
+<pre class="signature"><code>func set_property_no_emit(prop_name: StringName, value) -&gt; void</code></pre>
+<p>Store <code>value</code> without emitting <a href="#signal-property_changed"><code>property_changed</code></a>, so the node does not hear of it.</p>
+	</article>
+	<nav class="api-nav"><a class="api-home" href="index.html">API reference</a><h2>Autoloads</h2><ul><li><a href="Hammerite.html">Hammerite</a></li><li><a href="HammeriteEditor.html">HammeriteEditor</a></li><li><a href="HammeriteAudio.html">HammeriteAudio</a></li><li><a href="HammeriteNav.html">HammeriteNav</a></li></ul><h2>Core: the map</h2><ul><li><a href="HammeriteMap.html">HammeriteMap</a></li><li><a href="HammeriteBrush.html">HammeriteBrush</a></li><li><a href="HammeriteFace.html">HammeriteFace</a></li><li><a href="HammeriteEntity.html" aria-current="page">HammeriteEntity</a></li><li><a href="HammeriteBrushEntity.html">HammeriteBrushEntity</a></li><li><a href="HammeriteLayer.html">HammeriteLayer</a></li><li><a href="HammeriteCell.html">HammeriteCell</a></li><li><a href="HammeritePortal.html">HammeritePortal</a></li><li><a href="HammeriteBoundaryWall.html">HammeriteBoundaryWall</a></li><li><a href="HammeritePrefab.html">HammeritePrefab</a></li><li><a href="HammeritePrefabSet.html">HammeritePrefabSet</a></li><li><a href="HammeritePrefabInstance.html">HammeritePrefabInstance</a></li><li><a href="HammeriteSkybox.html">HammeriteSkybox</a></li></ul><h2>Core: in the scene</h2><ul><li><a href="HammeriteMap3D.html">HammeriteMap3D</a></li><li><a href="HammeriteWorldrepCompile.html">HammeriteWorldrepCompile</a></li><li><a href="HammeriteCompileProgress.html">HammeriteCompileProgress</a></li></ul><h2>Core: entities</h2><ul><li><a href="HammeritePointEntityNode3D.html">HammeritePointEntityNode3D</a></li><li><a href="HammeritePointEntityAnimatableBody3D.html">HammeritePointEntityAnimatableBody3D</a></li><li><a href="HammeritePointEntityRigidBody3D.html">HammeritePointEntityRigidBody3D</a></li><li><a href="HammeriteBrushEntityNode3D.html">HammeriteBrushEntityNode3D</a></li><li><a href="HammeriteBrushEntityStaticBody3D.html">HammeriteBrushEntityStaticBody3D</a></li><li><a href="HammeriteBrushEntityArea3D.html">HammeriteBrushEntityArea3D</a></li><li><a href="HammeritePointLight3D.html">HammeritePointLight3D</a></li><li><a href="HammeriteDynamicPointLight3D.html">HammeriteDynamicPointLight3D</a></li><li><a href="HammeriteDirectionalLight3D.html">HammeriteDirectionalLight3D</a></li><li><a href="HammeriteDynamicDirectionalLight3D.html">HammeriteDynamicDirectionalLight3D</a></li><li><a href="HammeriteGenericBrushEntity.html">HammeriteGenericBrushEntity</a></li><li><a href="HammeritePropModel.html">HammeritePropModel</a></li><li><a href="HammeriteDecal3D.html">HammeriteDecal3D</a></li><li><a href="HammeriteGizmoBuffer.html">HammeriteGizmoBuffer</a></li><li><a href="HammeriteEditorHandle.html">HammeriteEditorHandle</a></li></ul><h2>Core: lighting</h2><ul><li><a href="HammeriteLightmapper.html">HammeriteLightmapper</a></li><li><a href="HammeriteBakedLight.html">HammeriteBakedLight</a></li><li><a href="HammeriteLightProbeSet.html">HammeriteLightProbeSet</a></li><li><a href="HammeriteLightCurve.html">HammeriteLightCurve</a></li><li><a href="HammeriteLightmapSampler3D.html">HammeriteLightmapSampler3D</a></li><li><a href="HammeriteBakeOccluders.html">HammeriteBakeOccluders</a></li><li><a href="HammeriteBrushEntityLighting.html">HammeriteBrushEntityLighting</a></li><li><a href="HammeriteShaderGlobals.html">HammeriteShaderGlobals</a></li></ul><h2>Core: files, names and extension</h2><ul><li><a href="HammeriteDataFile.html">HammeriteDataFile</a></li><li><a href="HammeriteUnknownData.html">HammeriteUnknownData</a></li><li><a href="HammeriteReferences.html">HammeriteReferences</a></li><li><a href="HammeriteTextureLibrary.html">HammeriteTextureLibrary</a></li><li><a href="HammeriteModelLibrary.html">HammeriteModelLibrary</a></li><li><a href="HammeriteAssetLibrary.html">HammeriteAssetLibrary</a></li><li><a href="HammeriteBrushPropertySchema.html">HammeriteBrushPropertySchema</a></li><li><a href="HammeriteBrushPropertyRegistry.html">HammeriteBrushPropertyRegistry</a></li><li><a href="HammeriteBrushFillRegistry.html">HammeriteBrushFillRegistry</a></li><li><a href="HammeriteSkyPropertyRegistry.html">HammeriteSkyPropertyRegistry</a></li><li><a href="HammeriteUtils.html">HammeriteUtils</a></li><li><a href="HammeriteVersion.html">HammeriteVersion</a></li></ul><h2>Editor</h2><ul><li><a href="HammeriteMapEditor.html">HammeriteMapEditor</a></li><li><a href="HammeriteMapEditorSettings.html">HammeriteMapEditorSettings</a></li><li><a href="HammeriteEditorColors.html">HammeriteEditorColors</a></li><li><a href="HammeriteEditorTheme.html">HammeriteEditorTheme</a></li><li><a href="HammeriteEditorCommand.html">HammeriteEditorCommand</a></li><li><a href="HammeriteEditorCommands.html">HammeriteEditorCommands</a></li><li><a href="HammeriteEditorTool.html">HammeriteEditorTool</a></li><li><a href="HammeritePropertyControl.html">HammeritePropertyControl</a></li><li><a href="HammeriteEditorWorkspaces.html">HammeriteEditorWorkspaces</a></li><li><a href="HammeriteManual.html">HammeriteManual</a></li><li><a href="HammeriteNotableSizes.html">HammeriteNotableSizes</a></li></ul><h2>Audio</h2><ul><li><a href="HammeriteAudioRuntime.html">HammeriteAudioRuntime</a></li><li><a href="HammeriteAudioManager.html">HammeriteAudioManager</a></li><li><a href="HammeriteAudioEmitter3D.html">HammeriteAudioEmitter3D</a></li><li><a href="HammeriteAudioListener3D.html">HammeriteAudioListener3D</a></li><li><a href="HammeriteAudioSoundTypes.html">HammeriteAudioSoundTypes</a></li><li><a href="HammeriteAudioSoundEvent.html">HammeriteAudioSoundEvent</a></li><li><a href="HammeriteAudioPreset.html">HammeriteAudioPreset</a></li><li><a href="HammeriteAudioMaterialDB.html">HammeriteAudioMaterialDB</a></li><li><a href="HammeriteAudioBrushProperties.html">HammeriteAudioBrushProperties</a></li><li><a href="HammeriteAudioPortalProperties.html">HammeriteAudioPortalProperties</a></li><li><a href="HammeriteAudioEditorPlugin.html">HammeriteAudioEditorPlugin</a></li></ul><h2>Navigation</h2><ul><li><a href="HammeriteNavigationRuntime.html">HammeriteNavigationRuntime</a></li><li><a href="HammeriteNavigationAgentProfile.html">HammeriteNavigationAgentProfile</a></li><li><a href="HammeriteNavigationAgentProfiles.html">HammeriteNavigationAgentProfiles</a></li><li><a href="HammeriteNavigationBrushProperties.html">HammeriteNavigationBrushProperties</a></li><li><a href="HammeriteNavigationEditorPlugin.html">HammeriteNavigationEditorPlugin</a></li><li><a href="HammeriteNavigationLink3D.html">HammeriteNavigationLink3D</a></li><li><a href="HammeriteNavigationBakeReport.html">HammeriteNavigationBakeReport</a></li><li><a href="HammeriteNavigationSurface.html">HammeriteNavigationSurface</a></li><li><a href="HammeriteNavigationLinkData.html">HammeriteNavigationLinkData</a></li><li><a href="HammeriteNavigationBuilder.html">HammeriteNavigationBuilder</a></li><li><a href="HammeriteNavigationLinkBuilder.html">HammeriteNavigationLinkBuilder</a></li><li><a href="HammeriteNavigationMeshEmitter.html">HammeriteNavigationMeshEmitter</a></li></ul></nav>
+</div>
+
+<footer class="studio-foot">
+	<a href="/"><img src="/assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>
