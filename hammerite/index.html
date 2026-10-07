@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hammerite 3D — Misukatti Interactive</title>
+<meta name="description" content="A brush-based level editor and GPU lightmapper for Godot. Worlds are carved, not built.">
+<meta property="og:title" content="Hammerite 3D">
+<meta property="og:description" content="A brush-based level editor and GPU lightmapper for Godot.">
+<meta property="og:image" content="/hammerite/assets/editor.png">
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="/hammerite/assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="/hammerite/assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/hammerite/assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=Josefin+Sans:wght@400&display=swap">
+<link rel="stylesheet" href="/hammerite/hammerite.css">
+</head>
+<body>
+
+<header class="studio">
+	<a href="/"><img src="/assets/misukatti/logo-horizontal-on-dark.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="#features">Features</a>
+		<a href="#addons">Addons</a>
+		<a href="#licence">Licence</a>
+	</nav>
+</header>
+
+<main>
+	<section class="hero">
+		<img class="hero-logo" src="/hammerite/assets/hammerite-3d-dark.svg" alt="Hammerite 3D">
+		<p class="lede">A brush-based level editor and GPU lightmapper for Godot, in the tradition of the
+		classic brush-based level editors.</p>
+		<div class="buy">
+			<!-- Placeholder: replace href with the store page when Hammerite goes on sale. -->
+			<a class="button" href="#buy" id="buy" aria-disabled="true">Buy Hammerite 3D</a>
+			<p class="buy-note">Store link coming soon · Godot 4.7 · Version 0.9</p>
+		</div>
+	</section>
+
+	<figure class="shot">
+		<img src="/hammerite/assets/editor.png" alt="The Hammerite editor: a 3D view and three 2D views of two rooms joined by a passage, with the selection, layers and properties panels around them" width="1280" height="800">
+	</figure>
+
+	<section class="carved">
+		<h2>Carved, not built</h2>
+		<p>Solid is the default. Air brushes carve rooms out of it, and the compiler works out the rest:
+		which air is one room, where rooms open into each other, which walls are visible. Overlap to
+		extend a space, abut to divide one.</p>
+		<p>Lighting, acoustics and navigation are all read off that one compiled world, so a room is lit,
+		heard and walked the moment it is carved.</p>
+	</section>
+
+	<section id="features" class="features">
+		<article>
+			<img src="/hammerite/assets/building-arch.png" alt="An arched doorway carved between two rooms, seen in the editor's 3D view" loading="lazy">
+			<h3>An editor inside your game</h3>
+			<p>The map editor runs in the game itself, with its own manual under Help. Ship it, and your
+			players can make maps too.</p>
+		</article>
+		<article>
+			<img src="/hammerite/assets/lighting-bake.png" alt="Two rooms lit by a single lamp after a lightmap bake, with the bake settings panel beside them" loading="lazy">
+			<h3>GPU lightmapper</h3>
+			<p>Bakes bounced light for every surface on the GPU, from the editor or from a script in a
+			build pipeline.</p>
+		</article>
+		<article class="plain">
+			<h3>Sound that follows the rooms</h3>
+			<p>Sound travels through the openings between rooms rather than through walls, and AI can hear
+			it the same way.</p>
+		</article>
+		<article class="plain">
+			<h3>Navigation from the same world</h3>
+			<p>Walkable ground and traversal links come straight from the carved rooms, as Godot
+			navigation meshes.</p>
+		</article>
+	</section>
+
+	<section id="addons" class="addons">
+		<h2>Four addons</h2>
+		<p>Each is a standalone Godot addon; nothing in them depends on a particular game.</p>
+		<table>
+			<thead><tr><th>Addon</th><th>What it does</th><th>Needs</th></tr></thead>
+			<tbody>
+				<tr><td>hammerite-core</td><td>Data model, subtractive compiler, runtime scene, lightmapper</td><td>—</td></tr>
+				<tr><td>hammerite-editor</td><td>The in-game map editor</td><td>core</td></tr>
+				<tr><td>hammerite-audio</td><td>Sound propagation between rooms; AI hearing</td><td>core</td></tr>
+				<tr><td>hammerite-nav</td><td>Walkable ground and traversal links; Godot navigation meshes</td><td>core</td></tr>
+			</tbody>
+		</table>
+	</section>
+
+	<section id="licence" class="licence">
+		<h2>Licence</h2>
+		<p>Commercial. Games made with Hammerite may ship it, and let their players make maps with it,
+		royalty-free. The addons themselves may not be redistributed.</p>
+	</section>
+</main>
+
+<footer class="studio-foot">
+	<a href="/"><img src="/assets/misukatti/mark-on-dark.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>
