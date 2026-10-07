@@ -78,10 +78,19 @@ h3 { font-size: 1.2rem; margin: 1.25rem 0 0.5rem; }
 .hero-logo { width: min(560px, 100%); margin: 0 auto; }
 
 .lede {
-	max-width: 40ch;
+	max-width: 30ch;
 	margin: 1.75rem auto 0;
-	font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+	font-family: var(--display);
+	font-size: clamp(1.4rem, 3.5vw, 1.9rem);
+	letter-spacing: 0.03em;
+	line-height: 1.3;
 	color: var(--bone);
+}
+
+.sublede {
+	max-width: 52ch;
+	margin: 1rem auto 0;
+	color: var(--bone-dim);
 }
 
 .buy { margin-top: 2rem; }
@@ -117,6 +126,63 @@ h3 { font-size: 1.2rem; margin: 1.25rem 0 0.5rem; }
 
 .shot img { width: 100%; height: auto; }
 
+.loop {
+	margin: 0 auto clamp(3rem, 8vw, 5rem);
+	text-align: center;
+}
+
+.loop-intro {
+	max-width: 60ch;
+	margin: 0 auto 2rem;
+	color: var(--bone-dim);
+}
+
+.loops {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+	gap: 1.25rem;
+	text-align: left;
+}
+
+.loop-card {
+	padding: 1.5rem 1.75rem;
+	border-radius: 10px;
+	border: 1px solid var(--line);
+}
+
+.loop-card h3 { margin-top: 0; }
+
+.loop-card ol {
+	margin: 0;
+	padding-left: 1.4rem;
+}
+
+.loop-card li { padding: 0.15rem 0; }
+
+.loop-old { color: var(--bone-dim); }
+
+.loop-old h3 { color: var(--bone-dim); }
+
+.loop-old li:last-child { font-style: italic; }
+
+.loop-new {
+	background: var(--stone-raised);
+	border-color: var(--red);
+}
+
+.loop-new ol {
+	font-family: var(--display);
+	font-size: 1.5rem;
+	letter-spacing: 0.04em;
+}
+
+.loop-new ol li::marker { color: var(--red-bright); }
+
+.loop-new p {
+	margin: 1rem 0 0;
+	color: var(--bone-dim);
+}
+
 .carved {
 	max-width: 68ch;
 	margin: 0 auto clamp(3rem, 8vw, 5rem);
@@ -149,6 +215,8 @@ h3 { font-size: 1.2rem; margin: 1.25rem 0 0.5rem; }
 .features article.plain h3 { margin-top: 0; }
 
 .features p { margin: 0; color: var(--bone-dim); }
+
+.features p + p { margin-top: 0.75rem; }
 
 .addons, .licence { margin-bottom: clamp(3rem, 8vw, 5rem); }
 

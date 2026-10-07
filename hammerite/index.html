@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Hammerite 3D — Misukatti Interactive</title>
-<meta name="description" content="A brush-based level editor and GPU lightmapper for Godot. Worlds are carved, not built.">
+<meta name="description" content="A brush-based level editor that runs inside your Godot game. No edit-save-run loop: edit, then test, in the same running game. Retro radiosity lighting and sound that travels through the rooms.">
 <meta property="og:title" content="Hammerite 3D">
-<meta property="og:description" content="A brush-based level editor and GPU lightmapper for Godot.">
+<meta property="og:description" content="A level editor inside your Godot game: edit, then test, with no reload in between.">
 <meta property="og:image" content="/hammerite/assets/editor.png">
 <meta name="theme-color" content="#1f1b18">
 <link rel="icon" href="/hammerite/assets/favicon.ico" sizes="48x48">
@@ -22,8 +22,8 @@
 <header class="studio">
 	<a class="studio-logo" href="/"><img src="/assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
 	<nav>
+		<a href="#loop">Workflow</a>
 		<a href="#features">Features</a>
-		<a href="#addons">Addons</a>
 		<a href="#licence">Licence</a>
 	</nav>
 </header>
@@ -31,8 +31,9 @@
 <main>
 	<section class="hero">
 		<img class="hero-logo" src="/hammerite/assets/hammerite-3d-dark.svg" alt="Hammerite 3D">
-		<p class="lede">A brush-based level editor and GPU lightmapper for Godot, in the tradition of the
-		classic brush-based level editors.</p>
+		<p class="lede">The level editor that lives inside your game.</p>
+		<p class="sublede">Brush-based level editing for Godot, with a retro radiosity lightmapper and
+		sound that travels through the rooms you carve. No edit-save-run loop: edit, then test.</p>
 		<div class="buy">
 			<!-- Placeholder: replace href with the store page when Hammerite goes on sale. -->
 			<a class="button" href="#buy" id="buy" aria-disabled="true">Buy Hammerite 3D</a>
@@ -44,32 +45,68 @@
 		<img src="/hammerite/assets/editor.png" alt="The Hammerite editor: a 3D view and three 2D views of two rooms joined by a passage, with the selection, layers and properties panels around them" width="1280" height="800">
 	</figure>
 
+	<section id="loop" class="loop">
+		<h2>Edit. Test. That's the loop.</h2>
+		<p class="loop-intro">Hammerite is embedded in the game itself, so the level you are editing is
+		the level you are playing. There is nothing to save, export or reload before you can try a
+		change.</p>
+		<div class="loops">
+			<div class="loop-card loop-old">
+				<h3>The usual loop</h3>
+				<ol>
+					<li>Edit the level</li>
+					<li>Save it</li>
+					<li>Run the game</li>
+					<li>Walk back to the spot</li>
+					<li>Test</li>
+					<li>Quit, and start over</li>
+				</ol>
+			</div>
+			<div class="loop-card loop-new">
+				<h3>With Hammerite</h3>
+				<ol>
+					<li>Edit the level</li>
+					<li>Test</li>
+				</ol>
+				<p>Carve a doorway and walk through it. Bake the light and look at it from where you stand.
+				Close a door and hear the guard beyond it go quiet.</p>
+			</div>
+		</div>
+	</section>
+
 	<section class="carved">
 		<h2>Carved, not built</h2>
 		<p>Solid is the default. Air brushes carve rooms out of it, and the compiler works out the rest:
 		which air is one room, where rooms open into each other, which walls are visible. Overlap to
 		extend a space, abut to divide one.</p>
-		<p>Lighting, acoustics and navigation are all read off that one compiled world, so a room is lit,
-		heard and walked the moment it is carved.</p>
+		<p>Lighting, sound and navigation are all read off that one compiled world, so a room is lit,
+		heard and walkable the moment it is carved.</p>
 	</section>
 
 	<section id="features" class="features">
 		<article>
-			<img src="/hammerite/assets/building-arch.png" alt="An arched doorway carved between two rooms, seen in the editor's 3D view" loading="lazy">
-			<h3>An editor inside your game</h3>
-			<p>The map editor runs in the game itself, with its own manual under Help. Ship it, and your
-			players can make maps too.</p>
+			<img src="/hammerite/assets/lighting-bake.png" alt="Two rooms lit by a single lamp after a lightmap bake, with the bake settings panel beside them" loading="lazy">
+			<h3>Retro radiosity lighting</h3>
+			<p>A GPU radiosity lightmapper in the spirit of the classic brush-based games: light that
+			bounces, bleeds colour from the walls, and pools in the corners.</p>
+			<p>Every surface keeps four light slots, so lamps can flicker, dim and switch at runtime
+			without a rebake: a guttering torch, a chandelier that goes out as one, a lightning flash
+			across every window. After an edit, a quick bake lights just the walls that changed.</p>
 		</article>
 		<article>
-			<img src="/hammerite/assets/lighting-bake.png" alt="Two rooms lit by a single lamp after a lightmap bake, with the bake settings panel beside them" loading="lazy">
-			<h3>GPU lightmapper</h3>
-			<p>Bakes bounced light for every surface on the GPU, from the editor or from a script in a
-			build pipeline.</p>
+			<img src="/hammerite/assets/building-arch.png" alt="An arched doorway carved between two rooms, seen in the editor's 3D view" loading="lazy">
+			<h3>Sound that travels like sound</h3>
+			<p>Sound finds its way through doorways and windows instead of through walls, so you hear it
+			from the opening it comes through. A closed door on the way muffles it, and AI hears by the
+			same rules.</p>
+			<p>Reverb comes from each room's size and surfaces, and weather is heard where it should be:
+			rain and wind all around you outdoors, and indoors through the nearest windows, muffled by
+			the roof.</p>
 		</article>
 		<article class="plain">
-			<h3>Sound that follows the rooms</h3>
-			<p>Sound travels through the openings between rooms rather than through walls, and AI can hear
-			it the same way.</p>
+			<h3>An editor you can ship</h3>
+			<p>The editor comes with its own manual under Help. Games made with Hammerite may ship it, so
+			players can make maps too, royalty-free.</p>
 		</article>
 		<article class="plain">
 			<h3>Navigation from the same world</h3>
@@ -84,9 +121,9 @@
 		<table>
 			<thead><tr><th>Addon</th><th>What it does</th><th>Needs</th></tr></thead>
 			<tbody>
-				<tr><td>hammerite-core</td><td>Data model, subtractive compiler, runtime scene, lightmapper</td><td>—</td></tr>
-				<tr><td>hammerite-editor</td><td>The in-game map editor</td><td>core</td></tr>
-				<tr><td>hammerite-audio</td><td>Sound propagation between rooms; AI hearing</td><td>core</td></tr>
+				<tr><td>hammerite-core</td><td>Data model, subtractive compiler, runtime scene, radiosity lightmapper</td><td>—</td></tr>
+				<tr><td>hammerite-editor</td><td>The in-game level editor</td><td>core</td></tr>
+				<tr><td>hammerite-audio</td><td>Sound propagation through the rooms, weather, reverb; AI hearing</td><td>core</td></tr>
 				<tr><td>hammerite-nav</td><td>Walkable ground and traversal links; Godot navigation meshes</td><td>core</td></tr>
 			</tbody>
 		</table>
