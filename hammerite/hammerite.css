@@ -32,13 +32,12 @@ img { max-width: 100%; display: block; }
 .studio {
 	display: flex;
 	align-items: center;
-	justify-content: space-between;
-	gap: 1rem;
-	padding: 0.6rem clamp(1rem, 4vw, 3rem);
+	gap: clamp(1rem, 3vw, 1.75rem);
+	padding: 0.4rem clamp(1rem, 4vw, 3rem);
 	background: var(--night);
 }
 
-.studio img { height: 28px; width: auto; }
+.studio-logo img { height: 36px; width: 36px; }
 
 .studio nav { display: flex; gap: clamp(0.75rem, 3vw, 1.75rem); }
 
@@ -46,6 +45,7 @@ img { max-width: 100%; display: block; }
 	color: #c9bd9a;
 	text-decoration: none;
 	font-family: "Josefin Sans", var(--sans);
+	font-weight: 300;
 	font-size: 0.75rem;
 	letter-spacing: 0.2em;
 	text-transform: uppercase;

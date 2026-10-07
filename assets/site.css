@@ -30,13 +30,12 @@ img { max-width: 100%; display: block; }
 .bar {
 	display: flex;
 	align-items: center;
-	justify-content: space-between;
-	gap: 1rem;
-	padding: 1rem clamp(1rem, 4vw, 3rem);
+	gap: clamp(1rem, 3vw, 2rem);
+	padding: 0.75rem clamp(1rem, 4vw, 3rem);
 	border-bottom: 1px solid var(--line);
 }
 
-.bar-logo img { height: 40px; width: auto; }
+.bar-logo img { height: 48px; width: 48px; }
 
 .bar nav { display: flex; gap: clamp(0.75rem, 3vw, 2rem); }
 
