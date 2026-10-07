@@ -116,7 +116,7 @@
 	</section>
 
 	<section id="addons" class="addons">
-		<h2>Four addons</h2>
+		<h2>Four addons and a native kernel</h2>
 		<p>Each is a standalone Godot addon; nothing in them depends on a particular game.</p>
 		<table>
 			<thead><tr><th>Addon</th><th>What it does</th><th>Needs</th></tr></thead>
@@ -125,8 +125,12 @@
 				<tr><td>hammerite-editor</td><td>The in-game level editor</td><td>core</td></tr>
 				<tr><td>hammerite-audio</td><td>Sound propagation through the rooms, weather, reverb; AI hearing</td><td>core</td></tr>
 				<tr><td>hammerite-nav</td><td>Walkable ground and traversal links; Godot navigation meshes</td><td>core</td></tr>
+				<tr><td>native kernel</td><td>Optional C++ for the heavy geometry: carving, compiling rooms and openings, navigation and bake preparation</td><td>core</td></tr>
 			</tbody>
 		</table>
+		<p class="kernel">The kernel is what keeps the edit-test loop quick on a big level. On our reference level
+		a cold compile drops from 40 s to 6.5 s, and an edit to a large room recompiles in 0.88 s instead
+		of 7.1 s. Without it, GDScript does the same work with the same results, to the bit.</p>
 	</section>
 
 	<section id="licence" class="licence">

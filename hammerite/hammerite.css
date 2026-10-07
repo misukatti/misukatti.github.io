@@ -222,6 +222,8 @@ h3 { font-size: 1.2rem; margin: 1.25rem 0 0.5rem; }
 
 .addons > p, .licence p { color: var(--bone-dim); max-width: 68ch; }
 
+.addons .kernel { margin-top: 1.25rem; }
+
 table {
 	width: 100%;
 	border-collapse: collapse;
