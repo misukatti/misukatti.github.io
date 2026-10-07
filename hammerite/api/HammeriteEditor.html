@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HammeriteEditor — Hammerite 3D API</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="/hammerite/assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="/hammerite/assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/hammerite/assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=Josefin+Sans:wght@300&family=JetBrains+Mono:wght@400&display=swap">
+<link rel="stylesheet" href="/hammerite/hammerite.css">
+<link rel="stylesheet" href="/hammerite/api.css">
+</head>
+<body class="api">
+
+<header class="studio">
+	<a class="studio-logo" href="/"><img src="/assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="/hammerite/">Hammerite 3D</a>
+		<a href="/hammerite/api/">API reference</a>
+	</nav>
+</header>
+
+<div class="api-layout">
+	<article class="api-page">
+<h1>HammeriteEditor</h1>
+<p class="inherits">Autoloads. Inherits <a href="https://docs.godotengine.org/en/stable/classes/class_node.html"><code>Node</code></a></p>
+<p class="brief">Hammerite editor integration facade (autoload: <code>HammeriteEditor</code>).</p>
+<p>Embeds the Hammerite HammeriteMapEditor into a running game scene. This is the editor-dependent counterpart to hammerite-core&#x27;s <code>Hammerite</code> autoload -- only use this if hammerite-editor is installed and enabled.</p>
+<h2>Properties</h2>
+<table class="members"><thead><tr><th>Type</th><th>Name</th><th>Default</th></tr></thead><tbody><tr><td><a href="HammeriteMapEditor.html"><code>HammeriteMapEditor</code></a></td><td><a href="#property-editor"><code>editor</code></a></td><td><code>null</code></td></tr><tr><td><a href="HammeriteEditorWorkspaces.html"><code>HammeriteEditorWorkspaces</code></a></td><td><a href="#property-workspaces"><code>workspaces</code></a></td><td><code>null</code></td></tr></tbody></table>
+<h2>Methods</h2>
+<table class="members"><thead><tr><th>Returns</th><th>Method</th></tr></thead><tbody><tr><td><a href="HammeriteMapEditor.html"><code>HammeriteMapEditor</code></a></td><td><a href="#method-integrate"><code>integrate</code></a><code>(into: Node)</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_int.html"><code>int</code></a></td><td><a href="#method-register_workspace"><code>register_workspace</code></a><code>(name: String, panel: Control)</code></td></tr><tr><td><code>void</code></td><td><a href="#method-unregister_workspace"><code>unregister_workspace</code></a><code>(id: int)</code></td></tr><tr><td><code>void</code></td><td><a href="#method-show_workspace"><code>show_workspace</code></a><code>(id: int)</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_bool.html"><code>bool</code></a></td><td><a href="#method-is_active"><code>is_active</code></a><code>()</code></td></tr></tbody></table>
+<h2>Property descriptions</h2>
+<h3 id="property-editor">editor</h3>
+<pre class="signature"><code>var editor: HammeriteMapEditor = null</code></pre>
+<p>The level editor, or null until <a href="#method-integrate"><code>integrate()</code></a> has built it.</p>
+<h3 id="property-workspaces">workspaces</h3>
+<pre class="signature"><code>var workspaces: HammeriteEditorWorkspaces = null</code></pre>
+<p>The tab strip the editor lives in, and the seam a game hangs its own authoring on (<a href="HammeriteEditorWorkspaces.html"><code>HammeriteEditorWorkspaces</code></a>). Built by <a href="#method-integrate"><code>integrate()</code></a>; the level editor is workspace zero.</p>
+<h2>Method descriptions</h2>
+<h3 id="method-integrate">integrate()</h3>
+<pre class="signature"><code>func integrate(into: Node) -&gt; HammeriteMapEditor</code></pre>
+<p>Creates a Hammerite editor as a child of the given node <code>into</code>.  On a layer of its own (<code>HammeriteEditorCanvas</code>) rather than straight into the tree, because the editor is drawn at ITS scale rather than at the host game&#x27;s - see that class for why a tool should not grow because a game&#x27;s menus did.</p>
+<h3 id="method-register_workspace">register_workspace()</h3>
+<pre class="signature"><code>func register_workspace(name: String, panel: Control) -&gt; int</code></pre>
+<p>Offer <code>name</code> alongside the level editor, returning the id to show or unregister it by.  For authoring that is not about the map in front of you - a game&#x27;s dialogue, its quests, its loot tables - which wants the whole window rather than a panel, and wants to be in this shell because it keeps asking the open map who is in it.</p>
+<h3 id="method-unregister_workspace">unregister_workspace()</h3>
+<pre class="signature"><code>func unregister_workspace(id: int) -&gt; void</code></pre>
+<p>Take a workspace out of the tab strip. Ids are positions, so every workspace registered after it moves down by one.</p>
+<h3 id="method-show_workspace">show_workspace()</h3>
+<pre class="signature"><code>func show_workspace(id: int) -&gt; void</code></pre>
+<p>Bring the workspace <code>id</code> to the front, as clicking its tab does. Unknown ids are ignored.</p>
+<h3 id="method-is_active">is_active()</h3>
+<pre class="signature"><code>func is_active() -&gt; bool</code></pre>
+<p>Returns true if the editor has been integrated and is currently active and visible.</p>
+	</article>
+	<nav class="api-nav"><a class="api-home" href="index.html">API reference</a><h2>Autoloads</h2><ul><li><a href="Hammerite.html">Hammerite</a></li><li><a href="HammeriteEditor.html" aria-current="page">HammeriteEditor</a></li><li><a href="HammeriteAudio.html">HammeriteAudio</a></li><li><a href="HammeriteNav.html">HammeriteNav</a></li></ul><h2>Core: the map</h2><ul><li><a href="HammeriteMap.html">HammeriteMap</a></li><li><a href="HammeriteBrush.html">HammeriteBrush</a></li><li><a href="HammeriteFace.html">HammeriteFace</a></li><li><a href="HammeriteEntity.html">HammeriteEntity</a></li><li><a href="HammeriteBrushEntity.html">HammeriteBrushEntity</a></li><li><a href="HammeriteLayer.html">HammeriteLayer</a></li><li><a href="HammeriteCell.html">HammeriteCell</a></li><li><a href="HammeritePortal.html">HammeritePortal</a></li><li><a href="HammeriteBoundaryWall.html">HammeriteBoundaryWall</a></li><li><a href="HammeritePrefab.html">HammeritePrefab</a></li><li><a href="HammeritePrefabSet.html">HammeritePrefabSet</a></li><li><a href="HammeritePrefabInstance.html">HammeritePrefabInstance</a></li><li><a href="HammeriteSkybox.html">HammeriteSkybox</a></li></ul><h2>Core: in the scene</h2><ul><li><a href="HammeriteMap3D.html">HammeriteMap3D</a></li><li><a href="HammeriteWorldrepCompile.html">HammeriteWorldrepCompile</a></li><li><a href="HammeriteCompileProgress.html">HammeriteCompileProgress</a></li></ul><h2>Core: entities</h2><ul><li><a href="HammeritePointEntityNode3D.html">HammeritePointEntityNode3D</a></li><li><a href="HammeritePointEntityAnimatableBody3D.html">HammeritePointEntityAnimatableBody3D</a></li><li><a href="HammeritePointEntityRigidBody3D.html">HammeritePointEntityRigidBody3D</a></li><li><a href="HammeriteBrushEntityNode3D.html">HammeriteBrushEntityNode3D</a></li><li><a href="HammeriteBrushEntityStaticBody3D.html">HammeriteBrushEntityStaticBody3D</a></li><li><a href="HammeriteBrushEntityArea3D.html">HammeriteBrushEntityArea3D</a></li><li><a href="HammeritePointLight3D.html">HammeritePointLight3D</a></li><li><a href="HammeriteDynamicPointLight3D.html">HammeriteDynamicPointLight3D</a></li><li><a href="HammeriteDirectionalLight3D.html">HammeriteDirectionalLight3D</a></li><li><a href="HammeriteDynamicDirectionalLight3D.html">HammeriteDynamicDirectionalLight3D</a></li><li><a href="HammeriteGenericBrushEntity.html">HammeriteGenericBrushEntity</a></li><li><a href="HammeritePropModel.html">HammeritePropModel</a></li><li><a href="HammeriteDecal3D.html">HammeriteDecal3D</a></li><li><a href="HammeriteGizmoBuffer.html">HammeriteGizmoBuffer</a></li><li><a href="HammeriteEditorHandle.html">HammeriteEditorHandle</a></li></ul><h2>Core: lighting</h2><ul><li><a href="HammeriteLightmapper.html">HammeriteLightmapper</a></li><li><a href="HammeriteBakedLight.html">HammeriteBakedLight</a></li><li><a href="HammeriteLightProbeSet.html">HammeriteLightProbeSet</a></li><li><a href="HammeriteLightCurve.html">HammeriteLightCurve</a></li><li><a href="HammeriteLightmapSampler3D.html">HammeriteLightmapSampler3D</a></li><li><a href="HammeriteBakeOccluders.html">HammeriteBakeOccluders</a></li><li><a href="HammeriteBrushEntityLighting.html">HammeriteBrushEntityLighting</a></li><li><a href="HammeriteShaderGlobals.html">HammeriteShaderGlobals</a></li></ul><h2>Core: files, names and extension</h2><ul><li><a href="HammeriteDataFile.html">HammeriteDataFile</a></li><li><a href="HammeriteUnknownData.html">HammeriteUnknownData</a></li><li><a href="HammeriteReferences.html">HammeriteReferences</a></li><li><a href="HammeriteTextureLibrary.html">HammeriteTextureLibrary</a></li><li><a href="HammeriteModelLibrary.html">HammeriteModelLibrary</a></li><li><a href="HammeriteAssetLibrary.html">HammeriteAssetLibrary</a></li><li><a href="HammeriteBrushPropertySchema.html">HammeriteBrushPropertySchema</a></li><li><a href="HammeriteBrushPropertyRegistry.html">HammeriteBrushPropertyRegistry</a></li><li><a href="HammeriteBrushFillRegistry.html">HammeriteBrushFillRegistry</a></li><li><a href="HammeriteSkyPropertyRegistry.html">HammeriteSkyPropertyRegistry</a></li><li><a href="HammeriteUtils.html">HammeriteUtils</a></li><li><a href="HammeriteVersion.html">HammeriteVersion</a></li></ul><h2>Editor</h2><ul><li><a href="HammeriteMapEditor.html">HammeriteMapEditor</a></li><li><a href="HammeriteMapEditorSettings.html">HammeriteMapEditorSettings</a></li><li><a href="HammeriteEditorColors.html">HammeriteEditorColors</a></li><li><a href="HammeriteEditorTheme.html">HammeriteEditorTheme</a></li><li><a href="HammeriteEditorCommand.html">HammeriteEditorCommand</a></li><li><a href="HammeriteEditorCommands.html">HammeriteEditorCommands</a></li><li><a href="HammeriteEditorTool.html">HammeriteEditorTool</a></li><li><a href="HammeritePropertyControl.html">HammeritePropertyControl</a></li><li><a href="HammeriteEditorWorkspaces.html">HammeriteEditorWorkspaces</a></li><li><a href="HammeriteManual.html">HammeriteManual</a></li><li><a href="HammeriteNotableSizes.html">HammeriteNotableSizes</a></li></ul><h2>Audio</h2><ul><li><a href="HammeriteAudioRuntime.html">HammeriteAudioRuntime</a></li><li><a href="HammeriteAudioManager.html">HammeriteAudioManager</a></li><li><a href="HammeriteAudioEmitter3D.html">HammeriteAudioEmitter3D</a></li><li><a href="HammeriteAudioListener3D.html">HammeriteAudioListener3D</a></li><li><a href="HammeriteAudioSoundTypes.html">HammeriteAudioSoundTypes</a></li><li><a href="HammeriteAudioSoundEvent.html">HammeriteAudioSoundEvent</a></li><li><a href="HammeriteAudioPreset.html">HammeriteAudioPreset</a></li><li><a href="HammeriteAudioMaterialDB.html">HammeriteAudioMaterialDB</a></li><li><a href="HammeriteAudioBrushProperties.html">HammeriteAudioBrushProperties</a></li><li><a href="HammeriteAudioPortalProperties.html">HammeriteAudioPortalProperties</a></li><li><a href="HammeriteAudioEditorPlugin.html">HammeriteAudioEditorPlugin</a></li></ul><h2>Navigation</h2><ul><li><a href="HammeriteNavigationRuntime.html">HammeriteNavigationRuntime</a></li><li><a href="HammeriteNavigationAgentProfile.html">HammeriteNavigationAgentProfile</a></li><li><a href="HammeriteNavigationAgentProfiles.html">HammeriteNavigationAgentProfiles</a></li><li><a href="HammeriteNavigationBrushProperties.html">HammeriteNavigationBrushProperties</a></li><li><a href="HammeriteNavigationEditorPlugin.html">HammeriteNavigationEditorPlugin</a></li><li><a href="HammeriteNavigationLink3D.html">HammeriteNavigationLink3D</a></li><li><a href="HammeriteNavigationBakeReport.html">HammeriteNavigationBakeReport</a></li><li><a href="HammeriteNavigationSurface.html">HammeriteNavigationSurface</a></li><li><a href="HammeriteNavigationLinkData.html">HammeriteNavigationLinkData</a></li><li><a href="HammeriteNavigationBuilder.html">HammeriteNavigationBuilder</a></li><li><a href="HammeriteNavigationLinkBuilder.html">HammeriteNavigationLinkBuilder</a></li><li><a href="HammeriteNavigationMeshEmitter.html">HammeriteNavigationMeshEmitter</a></li></ul></nav>
+</div>
+
+<footer class="studio-foot">
+	<a href="/"><img src="/assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>
