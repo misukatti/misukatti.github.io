@@ -22,14 +22,14 @@
 		<a href="/hammerite/">Hammerite 3D</a>
 		<a href="/hammerite/docs/">Docs</a>
 		<a href="/hammerite/docs/guides/">Guides</a>
-		<a href="/hammerite/docs/api/">API</a>
+		<a href="/hammerite/api/">API</a>
 	</nav>
 </header>
 
 <div class="docs-layout">
 	<aside class="docs-side">
 		<a class="docs-brand" href="/hammerite/docs/"><img src="/hammerite/assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
-		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="/hammerite/docs/install.html">Installing Hammerite</a></li><li><a href="/hammerite/docs/getting-started.html">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="/hammerite/docs/guides/writing-an-entity.html">Writing an entity class</a></li><li><a href="/hammerite/docs/guides/rooms-and-sight.html" aria-current="page">Rooms, portals and line of sight</a></li><li><a href="/hammerite/docs/guides/stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="/hammerite/docs/guides/stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="/hammerite/docs/guides/probe-lighting.html">Probe lighting</a></li><li><a href="/hammerite/docs/guides/moving-brush-entities.html">Moving brush entities</a></li><li><a href="/hammerite/docs/guides/guard-navigation.html">Navigation for guards</a></li><li><a href="/hammerite/docs/guides/brush-materials.html">Brush materials and shaders</a></li><li><a href="/hammerite/docs/guides/brush-properties.html">Properties on brushes</a></li></ul><h2>Reference</h2><ul><li><a href="/hammerite/docs/api/">API reference</a></li><li><a href="/hammerite/docs/baking.html">Baking from a script</a></li><li><a href="/hammerite/docs/performance.html">Performance and limits</a></li><li><a href="/hammerite/docs/troubleshooting.html">Troubleshooting</a></li><li><a href="/hammerite/docs/api-stability.html">API stability</a></li></ul></nav>
+		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="/hammerite/docs/install.html">Installing Hammerite</a></li><li><a href="/hammerite/docs/getting-started.html">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="/hammerite/docs/guides/writing-an-entity.html">Writing an entity class</a></li><li><a href="/hammerite/docs/guides/rooms-and-sight.html" aria-current="page">Rooms, portals and line of sight</a></li><li><a href="/hammerite/docs/guides/stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="/hammerite/docs/guides/stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="/hammerite/docs/guides/probe-lighting.html">Probe lighting</a></li><li><a href="/hammerite/docs/guides/moving-brush-entities.html">Moving brush entities</a></li><li><a href="/hammerite/docs/guides/guard-navigation.html">Navigation for guards</a></li><li><a href="/hammerite/docs/guides/brush-materials.html">Brush materials and shaders</a></li><li><a href="/hammerite/docs/guides/brush-properties.html">Properties on brushes</a></li></ul><h2>Reference</h2><ul><li><a href="/hammerite/api/">API reference</a></li><li><a href="/hammerite/docs/baking.html">Baking from a script</a></li><li><a href="/hammerite/docs/performance.html">Performance and limits</a></li><li><a href="/hammerite/docs/troubleshooting.html">Troubleshooting</a></li><li><a href="/hammerite/docs/api-stability.html">API stability</a></li></ul></nav>
 	</aside>
 	<main class="docs-main">
 		<article class="prose">
@@ -42,7 +42,7 @@ model as an author meets it.</p>
 <p>All of it is in <strong>map space</strong>, the coordinates the brushes are authored in. Under a <code>HammeriteMap3D</code>
 that has been moved, convert with <code>map_3d.to_local(world_point)</code> first.</p>
 <h2 id="1-which-room">1. Which room</h2>
-<p>A <a href="/hammerite/docs/api/HammeriteCell.html"><code>HammeriteCell</code></a> is one <em>convex piece</em> of carved air. A room is a group of
+<p>A <a href="/hammerite/api/HammeriteCell.html"><code>HammeriteCell</code></a> is one <em>convex piece</em> of carved air. A room is a group of
 them - a pillar splits a hall into four cells that are still one room - and <code>cell.key()</code> names the
 room, not the piece:</p>
 <pre><code class="language-gdscript">var cell: HammeriteCell = map.point_in_cell(map_3d.to_local(guard.global_position + Vector3.UP * 64.0))
@@ -63,7 +63,7 @@ different:</p>
   not: its rain is at the window. The question for weather and acoustics.</li>
 </ul>
 <h2 id="2-what-joins-rooms">2. What joins rooms</h2>
-<p>A <a href="/hammerite/docs/api/HammeritePortal.html"><code>HammeritePortal</code></a> joins two rooms, in one of two ways:</p>
+<p>A <a href="/hammerite/api/HammeritePortal.html"><code>HammeritePortal</code></a> joins two rooms, in one of two ways:</p>
 <ul>
 <li>an <strong>aperture</strong> - the rooms abut on a shared wall, and the portal is the hole in it: a doorway, a
   window. It has a <code>polygon</code> and a <code>plane</code>.</li>
@@ -89,7 +89,7 @@ finds the opening a point stands in.</p>
 <pre><code class="language-gdscript">func can_see(map_3d: HammeriteMap3D, eye: Vector3, target: Vector3) -&gt; bool:
     return map_3d.map.segment_in_air(map_3d.to_local(eye), map_3d.to_local(target))
 </code></pre>
-<p><a href="/hammerite/docs/api/HammeriteMap.html#method-segment_in_air"><code>segment_in_air()</code></a> walks the line from room to room
+<p><a href="/hammerite/api/HammeriteMap.html#method-segment_in_air"><code>segment_in_air()</code></a> walks the line from room to room
 through the openings, and is false as soon as it would enter rock - or if either end is in rock.</p>
 <p><strong>Never use a raycast against the brushes for this.</strong> In a carved world it is wrong both ways: the air
 brushes are in the tree, so open space reads as blocked; and a block of rock is one authored brush with
@@ -117,8 +117,8 @@ arrives on the <code>HammeriteMap3D</code>'s <code>map_changed</code>.</p>
 <ul>
 <li><a href="/hammerite/docs/guides/stealth-hearing.html">Hearing for stealth gameplay</a> - sound travels through these openings.</li>
 <li><a href="/hammerite/docs/guides/guard-navigation.html">Navigation for guards</a> - so do paths.</li>
-<li><a href="/hammerite/docs/api/HammeriteMap.html"><code>HammeriteMap</code></a>, <a href="/hammerite/docs/api/HammeriteBoundaryWall.html"><code>HammeriteBoundaryWall</code></a>,
-  and <a href="/hammerite/docs/api/HammeriteMap3D.html#method-is_room_seen_at"><code>HammeriteMap3D.is_room_seen_at()</code></a> for
+<li><a href="/hammerite/api/HammeriteMap.html"><code>HammeriteMap</code></a>, <a href="/hammerite/api/HammeriteBoundaryWall.html"><code>HammeriteBoundaryWall</code></a>,
+  and <a href="/hammerite/api/HammeriteMap3D.html#method-is_room_seen_at"><code>HammeriteMap3D.is_room_seen_at()</code></a> for
   deciding what is worth doing every frame.</li>
 </ul>
 		</article>

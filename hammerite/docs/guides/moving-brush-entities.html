@@ -22,14 +22,14 @@
 		<a href="/hammerite/">Hammerite 3D</a>
 		<a href="/hammerite/docs/">Docs</a>
 		<a href="/hammerite/docs/guides/">Guides</a>
-		<a href="/hammerite/docs/api/">API</a>
+		<a href="/hammerite/api/">API</a>
 	</nav>
 </header>
 
 <div class="docs-layout">
 	<aside class="docs-side">
 		<a class="docs-brand" href="/hammerite/docs/"><img src="/hammerite/assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
-		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="/hammerite/docs/install.html">Installing Hammerite</a></li><li><a href="/hammerite/docs/getting-started.html">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="/hammerite/docs/guides/writing-an-entity.html">Writing an entity class</a></li><li><a href="/hammerite/docs/guides/rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="/hammerite/docs/guides/stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="/hammerite/docs/guides/stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="/hammerite/docs/guides/probe-lighting.html">Probe lighting</a></li><li><a href="/hammerite/docs/guides/moving-brush-entities.html" aria-current="page">Moving brush entities</a></li><li><a href="/hammerite/docs/guides/guard-navigation.html">Navigation for guards</a></li><li><a href="/hammerite/docs/guides/brush-materials.html">Brush materials and shaders</a></li><li><a href="/hammerite/docs/guides/brush-properties.html">Properties on brushes</a></li></ul><h2>Reference</h2><ul><li><a href="/hammerite/docs/api/">API reference</a></li><li><a href="/hammerite/docs/baking.html">Baking from a script</a></li><li><a href="/hammerite/docs/performance.html">Performance and limits</a></li><li><a href="/hammerite/docs/troubleshooting.html">Troubleshooting</a></li><li><a href="/hammerite/docs/api-stability.html">API stability</a></li></ul></nav>
+		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="/hammerite/docs/install.html">Installing Hammerite</a></li><li><a href="/hammerite/docs/getting-started.html">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="/hammerite/docs/guides/writing-an-entity.html">Writing an entity class</a></li><li><a href="/hammerite/docs/guides/rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="/hammerite/docs/guides/stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="/hammerite/docs/guides/stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="/hammerite/docs/guides/probe-lighting.html">Probe lighting</a></li><li><a href="/hammerite/docs/guides/moving-brush-entities.html" aria-current="page">Moving brush entities</a></li><li><a href="/hammerite/docs/guides/guard-navigation.html">Navigation for guards</a></li><li><a href="/hammerite/docs/guides/brush-materials.html">Brush materials and shaders</a></li><li><a href="/hammerite/docs/guides/brush-properties.html">Properties on brushes</a></li></ul><h2>Reference</h2><ul><li><a href="/hammerite/api/">API reference</a></li><li><a href="/hammerite/docs/baking.html">Baking from a script</a></li><li><a href="/hammerite/docs/performance.html">Performance and limits</a></li><li><a href="/hammerite/docs/troubleshooting.html">Troubleshooting</a></li><li><a href="/hammerite/docs/api-stability.html">API stability</a></li></ul></nav>
 	</aside>
 	<main class="docs-main">
 		<article class="prose">
@@ -96,7 +96,7 @@ there too:</p>
     hand_back_to_lightmap()
 </code></pre>
 <h2 id="5-driving-it-yourself">5. Driving it yourself</h2>
-<p><code>get_lighting()</code> returns the entity's <a href="/hammerite/docs/api/HammeriteBrushEntityLighting.html"><code>HammeriteBrushEntityLighting</code></a>,
+<p><code>get_lighting()</code> returns the entity's <a href="/hammerite/api/HammeriteBrushEntityLighting.html"><code>HammeriteBrushEntityLighting</code></a>,
 made the first time it is asked for. <code>get_blend()</code> says how far over it is - <code>0.0</code> all lightmap,
 <code>1.0</code> all probes. After a rebake replaces the brushwork's meshes, the lighting finds the new materials
 itself.</p>
@@ -104,8 +104,8 @@ itself.</p>
 <ul>
 <li><a href="/hammerite/docs/guides/probe-lighting.html">Probe lighting</a> - what the faces are lit by once handed over.</li>
 <li><a href="/hammerite/docs/guides/writing-an-entity.html">Writing an entity class</a> - brushwork entities, and the rest of the interface.</li>
-<li><a href="/hammerite/docs/api/HammeriteBrushEntityStaticBody3D.html"><code>HammeriteBrushEntityStaticBody3D</code></a>,
-  <a href="/hammerite/docs/api/HammeriteBrushEntityNode3D.html"><code>HammeriteBrushEntityNode3D</code></a>.</li>
+<li><a href="/hammerite/api/HammeriteBrushEntityStaticBody3D.html"><code>HammeriteBrushEntityStaticBody3D</code></a>,
+  <a href="/hammerite/api/HammeriteBrushEntityNode3D.html"><code>HammeriteBrushEntityNode3D</code></a>.</li>
 </ul>
 		</article>
 	</main>

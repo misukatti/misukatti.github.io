@@ -22,14 +22,14 @@
 		<a href="/hammerite/">Hammerite 3D</a>
 		<a href="/hammerite/docs/">Docs</a>
 		<a href="/hammerite/docs/guides/">Guides</a>
-		<a href="/hammerite/docs/api/">API</a>
+		<a href="/hammerite/api/">API</a>
 	</nav>
 </header>
 
 <div class="docs-layout">
 	<aside class="docs-side">
 		<a class="docs-brand" href="/hammerite/docs/"><img src="/hammerite/assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
-		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="/hammerite/docs/install.html">Installing Hammerite</a></li><li><a href="/hammerite/docs/getting-started.html">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="/hammerite/docs/guides/writing-an-entity.html">Writing an entity class</a></li><li><a href="/hammerite/docs/guides/rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="/hammerite/docs/guides/stealth-hearing.html" aria-current="page">Hearing for stealth gameplay</a></li><li><a href="/hammerite/docs/guides/stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="/hammerite/docs/guides/probe-lighting.html">Probe lighting</a></li><li><a href="/hammerite/docs/guides/moving-brush-entities.html">Moving brush entities</a></li><li><a href="/hammerite/docs/guides/guard-navigation.html">Navigation for guards</a></li><li><a href="/hammerite/docs/guides/brush-materials.html">Brush materials and shaders</a></li><li><a href="/hammerite/docs/guides/brush-properties.html">Properties on brushes</a></li></ul><h2>Reference</h2><ul><li><a href="/hammerite/docs/api/">API reference</a></li><li><a href="/hammerite/docs/baking.html">Baking from a script</a></li><li><a href="/hammerite/docs/performance.html">Performance and limits</a></li><li><a href="/hammerite/docs/troubleshooting.html">Troubleshooting</a></li><li><a href="/hammerite/docs/api-stability.html">API stability</a></li></ul></nav>
+		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="/hammerite/docs/install.html">Installing Hammerite</a></li><li><a href="/hammerite/docs/getting-started.html">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="/hammerite/docs/guides/writing-an-entity.html">Writing an entity class</a></li><li><a href="/hammerite/docs/guides/rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="/hammerite/docs/guides/stealth-hearing.html" aria-current="page">Hearing for stealth gameplay</a></li><li><a href="/hammerite/docs/guides/stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="/hammerite/docs/guides/probe-lighting.html">Probe lighting</a></li><li><a href="/hammerite/docs/guides/moving-brush-entities.html">Moving brush entities</a></li><li><a href="/hammerite/docs/guides/guard-navigation.html">Navigation for guards</a></li><li><a href="/hammerite/docs/guides/brush-materials.html">Brush materials and shaders</a></li><li><a href="/hammerite/docs/guides/brush-properties.html">Properties on brushes</a></li></ul><h2>Reference</h2><ul><li><a href="/hammerite/api/">API reference</a></li><li><a href="/hammerite/docs/baking.html">Baking from a script</a></li><li><a href="/hammerite/docs/performance.html">Performance and limits</a></li><li><a href="/hammerite/docs/troubleshooting.html">Troubleshooting</a></li><li><a href="/hammerite/docs/api-stability.html">API stability</a></li></ul></nav>
 	</aside>
 	<main class="docs-main">
 		<article class="prose">
@@ -50,7 +50,7 @@ map_3d.map = map
 <p>A map saved without an audio graph is baked as it loads. One that has a graph keeps it - see
 <a href="#6-rebaking">Rebaking</a>.</p>
 <h2 id="2-sound-types-what-exists-and-how-loud">2. Sound types: what exists and how loud</h2>
-<p>A <a href="/hammerite/docs/api/HammeriteAudioSoundType.html"><code>HammeriteAudioSoundType</code></a> is a kind of noise. Its loudness
+<p>A <a href="/hammerite/api/HammeriteAudioSoundType.html"><code>HammeriteAudioSoundType</code></a> is a kind of noise. Its loudness
 lives here, not on whatever plays it, so a footstep is as loud to a guard whatever the mixer does with
 it:</p>
 <pre><code class="language-gdscript">var footstep := HammeriteAudioSoundType.new()
@@ -74,7 +74,7 @@ HammeriteAudio.sound_types = table
 <code>rebuild_index()</code> afterwards; assigning the array does it for you.</p>
 <h2 id="3-making-a-noise">3. Making a noise</h2>
 <p>Every route ends in the same report: a type, a position, and who made it.</p>
-<p><strong>A sound the player hears too</strong> - an <a href="/hammerite/docs/api/HammeriteAudioEmitter3D.html"><code>HammeriteAudioEmitter3D</code></a>
+<p><strong>A sound the player hears too</strong> - an <a href="/hammerite/api/HammeriteAudioEmitter3D.html"><code>HammeriteAudioEmitter3D</code></a>
 with <code>sound_type</code> set reports each time it plays, from where it stands, with its parent as the one
 who made it:</p>
 <pre><code class="language-gdscript">@onready var _steps: HammeriteAudioEmitter3D = $Footsteps   # sound_type = &amp;&quot;footstep&quot;
@@ -94,7 +94,7 @@ the guards whatever the mixer is doing, report it.</p>
 <p>A report costs nothing when no listener hears its type, little when the source is out of range in a
 straight line, and a route through the graph only after both.</p>
 <h2 id="4-a-guard-who-listens">4. A guard who listens</h2>
-<p>Give the guard a <a href="/hammerite/docs/api/HammeriteAudioReceiver3D.html"><code>HammeriteAudioReceiver3D</code></a> at head height. It
+<p>Give the guard a <a href="/hammerite/api/HammeriteAudioReceiver3D.html"><code>HammeriteAudioReceiver3D</code></a> at head height. It
 registers itself, and emits <code>sound_heard</code> for every sound of a type it listens for that arrives at or
 above its threshold:</p>
 <pre><code class="language-gdscript">@onready var _ears: HammeriteAudioReceiver3D = $Head/Ears
@@ -111,7 +111,7 @@ func _on_sound_heard(event: HammeriteAudioSoundEvent) -&gt; void:
 </code></pre>
 <p>A receiver with no <code>heard_types</code> is deaf, so an unconfigured guard is never omniscient. Assign the
 array whole, or use <code>add_heard_type()</code> - appending to it in place does not reach the manager.</p>
-<p>What the <a href="/hammerite/docs/api/HammeriteAudioSoundEvent.html"><code>HammeriteAudioSoundEvent</code></a> says:</p>
+<p>What the <a href="/hammerite/api/HammeriteAudioSoundEvent.html"><code>HammeriteAudioSoundEvent</code></a> says:</p>
 <table>
 <thead>
 <tr>
@@ -176,8 +176,8 @@ named is a door that never muffles anything.</p>
 <p>Openings are named, and their closed attenuation set, in the editor's <strong>Audio Portals</strong> tool. A name
 is stored on the faces the opening is cut from, so it survives every edit of the level; hammerite-nav
 reads the same name, so one call can shut both the sound and the route. From code the per-opening
-values are <a href="/hammerite/docs/api/HammeriteAudioPortalProperties.html"><code>HammeriteAudioPortalProperties</code></a>, and the name is
-<a href="/hammerite/docs/api/HammeritePortal.html"><code>HammeritePortal.set_portal_name()</code></a>.</p>
+values are <a href="/hammerite/api/HammeriteAudioPortalProperties.html"><code>HammeriteAudioPortalProperties</code></a>, and the name is
+<a href="/hammerite/api/HammeritePortal.html"><code>HammeritePortal.set_portal_name()</code></a>.</p>
 <p>A player leaning on a door to listen hears through it better. Do it for gameplay with the receiver
 and for what is played with the autoload:</p>
 <pre><code class="language-gdscript">_ears.press_ear_to_portal(&quot;vault_door&quot;, 12.0)
@@ -198,7 +198,7 @@ print(report.summary())
 <ul>
 <li><a href="/hammerite/docs/guides/rooms-and-sight.html">Rooms, portals and line of sight</a> - the rooms and openings sound travels through.</li>
 <li><a href="/hammerite/docs/guides/stealth-light-level.html">Sampling the light level</a> - the other half of being noticed.</li>
-<li><a href="/hammerite/docs/api/HammeriteAudio.html"><code>HammeriteAudio</code></a>, <a href="/hammerite/docs/api/HammeriteAudioHearing.html"><code>HammeriteAudioHearing</code></a>,
+<li><a href="/hammerite/api/HammeriteAudio.html"><code>HammeriteAudio</code></a>, <a href="/hammerite/api/HammeriteAudioHearing.html"><code>HammeriteAudioHearing</code></a>,
   and the <span class="unlinked">hammerite-audio README</span>.</li>
 </ul>
 		</article>

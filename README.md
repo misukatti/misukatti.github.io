@@ -7,8 +7,7 @@ Misukatti Interactive's website: plain static HTML and CSS, no build step.
 | `index.html`, `assets/site.css` | The studio page: City of Thieves, Hammerite 3D, contact. Night and moon, DM Serif Display and Josefin Sans. |
 | `hammerite/` | Hammerite 3D's page, in Hammerite's own look: stone, red and Cinzel, with a slim Misukatti bar and footer. |
 | `assets/misukatti/` | Logos from [misukatti/brand](https://github.com/misukatti/brand): the `night` versions, which have no SVG mask. The `on-dark` ones are masked, and Safari on iOS blurs masks. |
-| `hammerite/api/` | Hammerite's API reference, generated from the Hammerite repo; see below. Never edit it by hand. |
-| `hammerite/api.css`, `tools/hammerite-api-page.html` | The reference's stylesheet and the page every one of its files is poured into. |
+| `hammerite/api/`, `hammerite/docs/` | Hammerite's API reference and its guides, generated from a Hammerite checkout; see below. Never edit the pages by hand. `hammerite/docs/docs.css` and `tools/docs-template.html` are this site's own. |
 | `hammerite/assets/` | Hammerite's logo, favicons and screenshots, from the Hammerite repo (`docs/logo/`, the editor manual's images). |
 
 Links are root-relative (`/hammerite/`), so the site has to be served from a domain's root: the org
@@ -20,26 +19,15 @@ To look at it locally:
 python3 -m http.server 8765
 ```
 
-## The Hammerite API reference
-
-`hammerite/api/` mirrors the Hammerite repo's `docs/api/`: the same pages, from the same documentation
-comments, as HTML in this site's look. To bring it up to date, from a Hammerite checkout:
-
-```bash
-GODOT=<godot 4.7 binary> tools/make_api_docs.sh \
-  --html <this repo>/hammerite/api --template <this repo>/tools/hammerite-api-page.html
-```
-
-That rewrites every `.html` in `hammerite/api/` (and Hammerite's own `docs/api/`); commit what changed.
-
 ## Hammerite's docs
 
 ```bash
 tools/import_hammerite_docs.sh ../hammerite
 ```
 
-Regenerates `hammerite/docs/` from a Hammerite checkout: the API reference through Hammerite's own
-`tools/make_api_docs.sh`, then the guides. Needs Godot and Python's `markdown` package
+Regenerates `hammerite/api/` and `hammerite/docs/` from a Hammerite checkout: the API reference
+through Hammerite's own `tools/make_api_docs.sh`, then the guides. Commit what changes. Needs Godot
+and Python's `markdown` package
 (`pip install markdown`). Links to files in the Hammerite repository outside `docs/` are shown as
 plain text, since that repository is private.
 

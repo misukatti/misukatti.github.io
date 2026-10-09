@@ -22,14 +22,14 @@
 		<a href="/hammerite/">Hammerite 3D</a>
 		<a href="/hammerite/docs/">Docs</a>
 		<a href="/hammerite/docs/guides/">Guides</a>
-		<a href="/hammerite/docs/api/">API</a>
+		<a href="/hammerite/api/">API</a>
 	</nav>
 </header>
 
 <div class="docs-layout">
 	<aside class="docs-side">
 		<a class="docs-brand" href="/hammerite/docs/"><img src="/hammerite/assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
-		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="/hammerite/docs/install.html">Installing Hammerite</a></li><li><a href="/hammerite/docs/getting-started.html">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="/hammerite/docs/guides/writing-an-entity.html">Writing an entity class</a></li><li><a href="/hammerite/docs/guides/rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="/hammerite/docs/guides/stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="/hammerite/docs/guides/stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="/hammerite/docs/guides/probe-lighting.html">Probe lighting</a></li><li><a href="/hammerite/docs/guides/moving-brush-entities.html">Moving brush entities</a></li><li><a href="/hammerite/docs/guides/guard-navigation.html" aria-current="page">Navigation for guards</a></li><li><a href="/hammerite/docs/guides/brush-materials.html">Brush materials and shaders</a></li><li><a href="/hammerite/docs/guides/brush-properties.html">Properties on brushes</a></li></ul><h2>Reference</h2><ul><li><a href="/hammerite/docs/api/">API reference</a></li><li><a href="/hammerite/docs/baking.html">Baking from a script</a></li><li><a href="/hammerite/docs/performance.html">Performance and limits</a></li><li><a href="/hammerite/docs/troubleshooting.html">Troubleshooting</a></li><li><a href="/hammerite/docs/api-stability.html">API stability</a></li></ul></nav>
+		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="/hammerite/docs/install.html">Installing Hammerite</a></li><li><a href="/hammerite/docs/getting-started.html">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="/hammerite/docs/guides/writing-an-entity.html">Writing an entity class</a></li><li><a href="/hammerite/docs/guides/rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="/hammerite/docs/guides/stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="/hammerite/docs/guides/stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="/hammerite/docs/guides/probe-lighting.html">Probe lighting</a></li><li><a href="/hammerite/docs/guides/moving-brush-entities.html">Moving brush entities</a></li><li><a href="/hammerite/docs/guides/guard-navigation.html" aria-current="page">Navigation for guards</a></li><li><a href="/hammerite/docs/guides/brush-materials.html">Brush materials and shaders</a></li><li><a href="/hammerite/docs/guides/brush-properties.html">Properties on brushes</a></li></ul><h2>Reference</h2><ul><li><a href="/hammerite/api/">API reference</a></li><li><a href="/hammerite/docs/baking.html">Baking from a script</a></li><li><a href="/hammerite/docs/performance.html">Performance and limits</a></li><li><a href="/hammerite/docs/troubleshooting.html">Troubleshooting</a></li><li><a href="/hammerite/docs/api-stability.html">API stability</a></li></ul></nav>
 	</aside>
 	<main class="docs-main">
 		<article class="prose">
@@ -41,7 +41,7 @@ knows its headroom and width, every windowsill and drop knows its height, and yo
 profiles decide who fits where. That is how a thief climbs through the scullery window and the guard
 chasing them has to go round.</p>
 <h2 id="1-say-who-walks">1. Say who walks</h2>
-<p>An <a href="/hammerite/docs/api/HammeriteNavigationAgentProfile.html"><code>HammeriteNavigationAgentProfile</code></a> is one kind of body:
+<p>An <a href="/hammerite/api/HammeriteNavigationAgentProfile.html"><code>HammeriteNavigationAgentProfile</code></a> is one kind of body:
 how tall, how wide, how high it can climb and how far it will drop. Each profile gets a navigation
 layer of its own, and the ground is baked onto the layers of every profile that fits it.</p>
 <pre><code class="language-gdscript">var guard := HammeriteNavigationAgentProfile.new()
@@ -57,7 +57,7 @@ thief.height = 72.0
 thief.crouch_height = 40.0
 thief.climb_height = 96.0
 </code></pre>
-<p>Normally the table is a <code>.tres</code> <a href="/hammerite/docs/api/HammeriteNavigationAgentProfiles.html"><code>HammeriteNavigationAgentProfiles</code></a>
+<p>Normally the table is a <code>.tres</code> <a href="/hammerite/api/HammeriteNavigationAgentProfiles.html"><code>HammeriteNavigationAgentProfiles</code></a>
 edited in the inspector. Distances are in map units, the same as the brushes. Two profiles on one layer
 are a mistake that would otherwise be silent - <code>validate()</code> says so.</p>
 <h2 id="2-bake">2. Bake</h2>
@@ -127,8 +127,8 @@ obstacle, something to stand on, or both, and the bake warns how many were left 
 <ul>
 <li><a href="/hammerite/docs/guides/rooms-and-sight.html">Rooms, portals and line of sight</a> - the rooms the ground is cut from.</li>
 <li><a href="/hammerite/docs/guides/stealth-hearing.html">Hearing for stealth gameplay</a> - where a guard decides to go.</li>
-<li><a href="/hammerite/docs/api/HammeriteNavigation.html"><code>HammeriteNavigation</code></a>,
-  <a href="/hammerite/docs/api/HammeriteNavigationBakeReport.html"><code>HammeriteNavigationBakeReport</code></a>, and the
+<li><a href="/hammerite/api/HammeriteNavigation.html"><code>HammeriteNavigation</code></a>,
+  <a href="/hammerite/api/HammeriteNavigationBakeReport.html"><code>HammeriteNavigationBakeReport</code></a>, and the
   <span class="unlinked">hammerite-nav README</span>.</li>
 </ul>
 		</article>

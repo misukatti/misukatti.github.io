@@ -22,14 +22,14 @@
 		<a href="/hammerite/">Hammerite 3D</a>
 		<a href="/hammerite/docs/">Docs</a>
 		<a href="/hammerite/docs/guides/">Guides</a>
-		<a href="/hammerite/docs/api/">API</a>
+		<a href="/hammerite/api/">API</a>
 	</nav>
 </header>
 
 <div class="docs-layout">
 	<aside class="docs-side">
 		<a class="docs-brand" href="/hammerite/docs/"><img src="/hammerite/assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
-		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="/hammerite/docs/install.html">Installing Hammerite</a></li><li><a href="/hammerite/docs/getting-started.html">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="/hammerite/docs/guides/writing-an-entity.html" aria-current="page">Writing an entity class</a></li><li><a href="/hammerite/docs/guides/rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="/hammerite/docs/guides/stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="/hammerite/docs/guides/stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="/hammerite/docs/guides/probe-lighting.html">Probe lighting</a></li><li><a href="/hammerite/docs/guides/moving-brush-entities.html">Moving brush entities</a></li><li><a href="/hammerite/docs/guides/guard-navigation.html">Navigation for guards</a></li><li><a href="/hammerite/docs/guides/brush-materials.html">Brush materials and shaders</a></li><li><a href="/hammerite/docs/guides/brush-properties.html">Properties on brushes</a></li></ul><h2>Reference</h2><ul><li><a href="/hammerite/docs/api/">API reference</a></li><li><a href="/hammerite/docs/baking.html">Baking from a script</a></li><li><a href="/hammerite/docs/performance.html">Performance and limits</a></li><li><a href="/hammerite/docs/troubleshooting.html">Troubleshooting</a></li><li><a href="/hammerite/docs/api-stability.html">API stability</a></li></ul></nav>
+		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="/hammerite/docs/install.html">Installing Hammerite</a></li><li><a href="/hammerite/docs/getting-started.html">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="/hammerite/docs/guides/writing-an-entity.html" aria-current="page">Writing an entity class</a></li><li><a href="/hammerite/docs/guides/rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="/hammerite/docs/guides/stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="/hammerite/docs/guides/stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="/hammerite/docs/guides/probe-lighting.html">Probe lighting</a></li><li><a href="/hammerite/docs/guides/moving-brush-entities.html">Moving brush entities</a></li><li><a href="/hammerite/docs/guides/guard-navigation.html">Navigation for guards</a></li><li><a href="/hammerite/docs/guides/brush-materials.html">Brush materials and shaders</a></li><li><a href="/hammerite/docs/guides/brush-properties.html">Properties on brushes</a></li></ul><h2>Reference</h2><ul><li><a href="/hammerite/api/">API reference</a></li><li><a href="/hammerite/docs/baking.html">Baking from a script</a></li><li><a href="/hammerite/docs/performance.html">Performance and limits</a></li><li><a href="/hammerite/docs/troubleshooting.html">Troubleshooting</a></li><li><a href="/hammerite/docs/api-stability.html">API stability</a></li></ul></nav>
 	</aside>
 	<main class="docs-main">
 		<article class="prose">
@@ -37,7 +37,7 @@
 <p>An entity is a thing placed in a map that is not world geometry: a light, a door, a pickup, a guard's
 post. It is two halves:</p>
 <ul>
-<li><strong>authored</strong> - a <a href="/hammerite/docs/api/HammeriteEntity.html"><code>HammeriteEntity</code></a> in the map: a type name and a
+<li><strong>authored</strong> - a <a href="/hammerite/api/HammeriteEntity.html"><code>HammeriteEntity</code></a> in the map: a type name and a
   dictionary of properties, saved with the map;</li>
 <li><strong>running</strong> - a node the game builds from it, found by the <code>classname</code> property. That is your
   script.</li>
@@ -58,27 +58,27 @@ default that does nothing, and you write only the ones your entity uses.</p>
 </thead>
 <tbody>
 <tr>
-<td><a href="/hammerite/docs/api/HammeritePointEntityNode3D.html"><code>HammeritePointEntityNode3D</code></a></td>
+<td><a href="/hammerite/api/HammeritePointEntityNode3D.html"><code>HammeritePointEntityNode3D</code></a></td>
 <td>something that only has to be somewhere: a light, a marker, a pickup</td>
 </tr>
 <tr>
-<td><a href="/hammerite/docs/api/HammeritePointEntityAnimatableBody3D.html"><code>HammeritePointEntityAnimatableBody3D</code></a></td>
+<td><a href="/hammerite/api/HammeritePointEntityAnimatableBody3D.html"><code>HammeritePointEntityAnimatableBody3D</code></a></td>
 <td>something that moves and is collided with: a door leaf, a lift</td>
 </tr>
 <tr>
-<td><a href="/hammerite/docs/api/HammeritePointEntityRigidBody3D.html"><code>HammeritePointEntityRigidBody3D</code></a></td>
+<td><a href="/hammerite/api/HammeritePointEntityRigidBody3D.html"><code>HammeritePointEntityRigidBody3D</code></a></td>
 <td>something physics moves</td>
 </tr>
 <tr>
-<td><a href="/hammerite/docs/api/HammeriteBrushEntityNode3D.html"><code>HammeriteBrushEntityNode3D</code></a></td>
+<td><a href="/hammerite/api/HammeriteBrushEntityNode3D.html"><code>HammeriteBrushEntityNode3D</code></a></td>
 <td>brushwork with no physics</td>
 </tr>
 <tr>
-<td><a href="/hammerite/docs/api/HammeriteBrushEntityStaticBody3D.html"><code>HammeriteBrushEntityStaticBody3D</code></a></td>
+<td><a href="/hammerite/api/HammeriteBrushEntityStaticBody3D.html"><code>HammeriteBrushEntityStaticBody3D</code></a></td>
 <td>brushwork the player walks into</td>
 </tr>
 <tr>
-<td><a href="/hammerite/docs/api/HammeriteBrushEntityArea3D.html"><code>HammeriteBrushEntityArea3D</code></a></td>
+<td><a href="/hammerite/api/HammeriteBrushEntityArea3D.html"><code>HammeriteBrushEntityArea3D</code></a></td>
 <td>brushwork that notices what is inside it: water, triggers</td>
 </tr>
 </tbody>
@@ -89,7 +89,7 @@ extends HammeritePointEntityNode3D
 <p>The <code>class_name</code> is the <code>classname</code> the map names. It is your game's, so it needs no prefix.</p>
 <h2 id="2-register-the-type">2. Register the type</h2>
 <p>A type says what its entities carry and the default of each. Register it with core
-(<a href="/hammerite/docs/api/HammeriteEntityTypeRegistry.html"><code>HammeriteEntityTypeRegistry</code></a>), before the map is built, so
+(<a href="/hammerite/api/HammeriteEntityTypeRegistry.html"><code>HammeriteEntityTypeRegistry</code></a>), before the map is built, so
 the game knows it with or without the editor:</p>
 <pre><code class="language-gdscript">HammeriteEntityTypeRegistry.register_point(&amp;&quot;pickup&quot;, {
     &amp;&quot;classname&quot;: &amp;&quot;ExamplePickup&quot;,
@@ -120,7 +120,7 @@ the map loads, and each time the author changes one in the editor:</p>
             _spin_degrees = float(value)
 </code></pre>
 <p><code>origin</code> is where it stands, in the map's space: set <code>position</code>, not <code>global_position</code>, and the
-entity goes wherever the <a href="/hammerite/docs/api/HammeriteMap3D.html"><code>HammeriteMap3D</code></a> goes. <code>rotation</code>, when the type
+entity goes wherever the <a href="/hammerite/api/HammeriteMap3D.html"><code>HammeriteMap3D</code></a> goes. <code>rotation</code>, when the type
 has one, is applied for you before this is called.</p>
 <h2 id="4-drawing-for-the-author">4. Drawing for the author</h2>
 <p><code>set_editor_active(active)</code> is told whether the editor is up over the world - as the node is built
@@ -132,7 +132,7 @@ whether the game is running. A light shows a bulb icon; a spawn point with no me
 <p>The pickup's own box is all it needs, so its <code>set_editor_active()</code> does nothing.</p>
 <p><strong>Gizmos</strong> are lines over the level for what a mesh cannot show - how far something reaches, which
 way it looks. <code>draw_editor_gizmos()</code> is asked every frame the editor is up, and writes into a
-<a href="/hammerite/docs/api/HammeriteGizmoBuffer.html"><code>HammeriteGizmoBuffer</code></a> in world space. Say which views a shape is
+<a href="/hammerite/api/HammeriteGizmoBuffer.html"><code>HammeriteGizmoBuffer</code></a> in world space. Say which views a shape is
 for: the ortho views already outline the entity's box, so a second box there is noise.</p>
 <pre><code class="language-gdscript">func draws_editor_gizmos_only_when_picked() -&gt; bool:
     return true

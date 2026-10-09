@@ -22,21 +22,21 @@
 		<a href="/hammerite/">Hammerite 3D</a>
 		<a href="/hammerite/docs/">Docs</a>
 		<a href="/hammerite/docs/guides/">Guides</a>
-		<a href="/hammerite/docs/api/">API</a>
+		<a href="/hammerite/api/">API</a>
 	</nav>
 </header>
 
 <div class="docs-layout">
 	<aside class="docs-side">
 		<a class="docs-brand" href="/hammerite/docs/"><img src="/hammerite/assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
-		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="/hammerite/docs/install.html">Installing Hammerite</a></li><li><a href="/hammerite/docs/getting-started.html">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="/hammerite/docs/guides/writing-an-entity.html">Writing an entity class</a></li><li><a href="/hammerite/docs/guides/rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="/hammerite/docs/guides/stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="/hammerite/docs/guides/stealth-light-level.html" aria-current="page">Sampling the light level for stealth gameplay</a></li><li><a href="/hammerite/docs/guides/probe-lighting.html">Probe lighting</a></li><li><a href="/hammerite/docs/guides/moving-brush-entities.html">Moving brush entities</a></li><li><a href="/hammerite/docs/guides/guard-navigation.html">Navigation for guards</a></li><li><a href="/hammerite/docs/guides/brush-materials.html">Brush materials and shaders</a></li><li><a href="/hammerite/docs/guides/brush-properties.html">Properties on brushes</a></li></ul><h2>Reference</h2><ul><li><a href="/hammerite/docs/api/">API reference</a></li><li><a href="/hammerite/docs/baking.html">Baking from a script</a></li><li><a href="/hammerite/docs/performance.html">Performance and limits</a></li><li><a href="/hammerite/docs/troubleshooting.html">Troubleshooting</a></li><li><a href="/hammerite/docs/api-stability.html">API stability</a></li></ul></nav>
+		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="/hammerite/docs/install.html">Installing Hammerite</a></li><li><a href="/hammerite/docs/getting-started.html">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="/hammerite/docs/guides/writing-an-entity.html">Writing an entity class</a></li><li><a href="/hammerite/docs/guides/rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="/hammerite/docs/guides/stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="/hammerite/docs/guides/stealth-light-level.html" aria-current="page">Sampling the light level for stealth gameplay</a></li><li><a href="/hammerite/docs/guides/probe-lighting.html">Probe lighting</a></li><li><a href="/hammerite/docs/guides/moving-brush-entities.html">Moving brush entities</a></li><li><a href="/hammerite/docs/guides/guard-navigation.html">Navigation for guards</a></li><li><a href="/hammerite/docs/guides/brush-materials.html">Brush materials and shaders</a></li><li><a href="/hammerite/docs/guides/brush-properties.html">Properties on brushes</a></li></ul><h2>Reference</h2><ul><li><a href="/hammerite/api/">API reference</a></li><li><a href="/hammerite/docs/baking.html">Baking from a script</a></li><li><a href="/hammerite/docs/performance.html">Performance and limits</a></li><li><a href="/hammerite/docs/troubleshooting.html">Troubleshooting</a></li><li><a href="/hammerite/docs/api-stability.html">API stability</a></li></ul></nav>
 	</aside>
 	<main class="docs-main">
 		<article class="prose">
 <h1 id="sampling-the-light-level-for-stealth-gameplay">Sampling the light level for stealth gameplay</h1>
 <p>How visible is the player? In a stealth game that is mostly a question of how much light falls where
 they stand. The bake already knows: every light probe carries the light that reaches it, and
-<a href="/hammerite/docs/api/HammeriteMap.html#method-light_level_at"><code>HammeriteMap.light_level_at()</code></a> reads them at any
+<a href="/hammerite/api/HammeriteMap.html#method-light_level_at"><code>HammeriteMap.light_level_at()</code></a> reads them at any
 point - including what the lamps switched since the bake no longer give.</p>
 <p>Hammerite measures; what counts as <em>dark enough</em> is your game's to decide.</p>
 <h2 id="1-read-it">1. Read it</h2>
@@ -67,7 +67,7 @@ func visibility(level: float) -&gt; float:
 </code></pre>
 <p>A game wanting a finer feel shapes that further - a <code>Curve</code>, a few thresholds for a light gem. Retune
 it when the lighting is retuned: doubling every lamp's energy doubles every reading.</p>
-<p><a href="/hammerite/docs/api/HammeriteLightCurve.html"><code>HammeriteLightCurve</code></a> is <em>not</em> that curve. It shapes how surfaces
+<p><a href="/hammerite/api/HammeriteLightCurve.html"><code>HammeriteLightCurve</code></a> is <em>not</em> that curve. It shapes how surfaces
 look to the eye, on the surface's scale, and nothing in it touches this reading.</p>
 <h2 id="3-sample-the-body-not-a-point">3. Sample the body, not a point</h2>
 <p>A player crouched with their head in a pool of lamplight is seen. Read a few points up the body and
@@ -110,9 +110,9 @@ cached darkness map for guard AI, say - should be rebuilt on <code>map.light_pro
 <ul>
 <li><a href="/hammerite/docs/guides/probe-lighting.html">Probe lighting</a> - the probes themselves, and lighting a character with them.</li>
 <li><a href="/hammerite/docs/guides/stealth-hearing.html">Hearing for stealth gameplay</a> - the other half of being noticed.</li>
-<li><a href="/hammerite/docs/api/HammeriteBakedLight.html"><code>HammeriteBakedLight</code></a>,
-  <a href="/hammerite/docs/api/HammeriteDynamicLight3D.html"><code>HammeriteDynamicLight3D</code></a>,
-  <a href="/hammerite/docs/api/HammeriteEyeAdaptation3D.html"><code>HammeriteEyeAdaptation3D</code></a>, which reads the same level at the
+<li><a href="/hammerite/api/HammeriteBakedLight.html"><code>HammeriteBakedLight</code></a>,
+  <a href="/hammerite/api/HammeriteDynamicLight3D.html"><code>HammeriteDynamicLight3D</code></a>,
+  <a href="/hammerite/api/HammeriteEyeAdaptation3D.html"><code>HammeriteEyeAdaptation3D</code></a>, which reads the same level at the
   camera to set the exposure.</li>
 </ul>
 		</article>

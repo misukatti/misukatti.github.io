@@ -22,14 +22,14 @@
 		<a href="/hammerite/">Hammerite 3D</a>
 		<a href="/hammerite/docs/">Docs</a>
 		<a href="/hammerite/docs/guides/">Guides</a>
-		<a href="/hammerite/docs/api/">API</a>
+		<a href="/hammerite/api/">API</a>
 	</nav>
 </header>
 
 <div class="docs-layout">
 	<aside class="docs-side">
 		<a class="docs-brand" href="/hammerite/docs/"><img src="/hammerite/assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
-		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="/hammerite/docs/install.html">Installing Hammerite</a></li><li><a href="/hammerite/docs/getting-started.html">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="/hammerite/docs/guides/writing-an-entity.html">Writing an entity class</a></li><li><a href="/hammerite/docs/guides/rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="/hammerite/docs/guides/stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="/hammerite/docs/guides/stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="/hammerite/docs/guides/probe-lighting.html">Probe lighting</a></li><li><a href="/hammerite/docs/guides/moving-brush-entities.html">Moving brush entities</a></li><li><a href="/hammerite/docs/guides/guard-navigation.html">Navigation for guards</a></li><li><a href="/hammerite/docs/guides/brush-materials.html">Brush materials and shaders</a></li><li><a href="/hammerite/docs/guides/brush-properties.html">Properties on brushes</a></li></ul><h2>Reference</h2><ul><li><a href="/hammerite/docs/api/">API reference</a></li><li><a href="/hammerite/docs/baking.html">Baking from a script</a></li><li><a href="/hammerite/docs/performance.html">Performance and limits</a></li><li><a href="/hammerite/docs/troubleshooting.html">Troubleshooting</a></li><li><a href="/hammerite/docs/api-stability.html" aria-current="page">API stability</a></li></ul></nav>
+		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="/hammerite/docs/install.html">Installing Hammerite</a></li><li><a href="/hammerite/docs/getting-started.html">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="/hammerite/docs/guides/writing-an-entity.html">Writing an entity class</a></li><li><a href="/hammerite/docs/guides/rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="/hammerite/docs/guides/stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="/hammerite/docs/guides/stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="/hammerite/docs/guides/probe-lighting.html">Probe lighting</a></li><li><a href="/hammerite/docs/guides/moving-brush-entities.html">Moving brush entities</a></li><li><a href="/hammerite/docs/guides/guard-navigation.html">Navigation for guards</a></li><li><a href="/hammerite/docs/guides/brush-materials.html">Brush materials and shaders</a></li><li><a href="/hammerite/docs/guides/brush-properties.html">Properties on brushes</a></li></ul><h2>Reference</h2><ul><li><a href="/hammerite/api/">API reference</a></li><li><a href="/hammerite/docs/baking.html">Baking from a script</a></li><li><a href="/hammerite/docs/performance.html">Performance and limits</a></li><li><a href="/hammerite/docs/troubleshooting.html">Troubleshooting</a></li><li><a href="/hammerite/docs/api-stability.html" aria-current="page">API stability</a></li></ul></nav>
 	</aside>
 	<main class="docs-main">
 		<article class="prose">
@@ -39,7 +39,7 @@ every addon's <code>plugin.cfg</code>), following <a href="https://semver.org">s
 listed here: their public properties, methods, signals and constants, the autoloads (<code>Hammerite</code>,
 <code>HammeriteEditor</code>, <code>HammeriteAudio</code>, <code>HammeriteNavigation</code>), and the <a href="#shader-contracts">shader contracts</a> a
 game's own shaders are written against. What changes is in <span class="unlinked">CHANGELOG.md</span>, and
-what each of them does is in the <a href="/hammerite/docs/api/">API reference</a>.</p>
+what each of them does is in the <a href="/hammerite/api/">API reference</a>.</p>
 <ul>
 <li>A <strong>patch</strong> release (0.9.x) fixes things and changes none of it.</li>
 <li>A <strong>minor</strong> release adds to it. Before 1.0, a minor release may also change it, and the changelog
@@ -89,9 +89,9 @@ names in Hammerite's shaders rather than against a class. These are covered by t
 <p><strong>Sky</strong> - a <code>shader_type sky</code> material assigned to <code>HammeriteSkybox.dome_material</code>. A uniform it
 declares under one of these names is set from the skybox: <code>horizon_color</code>, <code>zenith_color</code>,
 <code>body_direction</code>, <code>body_color</code>, <code>body_energy</code>, <code>body_is_moon</code>, <code>light_energy</code>. And one named after
-each property declared on the sky (<a href="/hammerite/docs/api/HammeriteSkyPropertyRegistry.html"><code>HammeriteSkyPropertyRegistry</code></a>),
+each property declared on the sky (<a href="/hammerite/api/HammeriteSkyPropertyRegistry.html"><code>HammeriteSkyPropertyRegistry</code></a>),
 with <code>/</code> as <code>_</code>: <code>clouds/cover</code> is <code>clouds_cover</code>.</p>
-<p><strong>Shader globals</strong> - the names <a href="/hammerite/docs/api/HammeriteShaderGlobals.html"><code>HammeriteShaderGlobals</code></a> declares.</p>
+<p><strong>Shader globals</strong> - the names <a href="/hammerite/api/HammeriteShaderGlobals.html"><code>HammeriteShaderGlobals</code></a> declares.</p>
 		</article>
 	</main>
 </div>

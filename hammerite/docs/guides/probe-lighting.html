@@ -22,14 +22,14 @@
 		<a href="/hammerite/">Hammerite 3D</a>
 		<a href="/hammerite/docs/">Docs</a>
 		<a href="/hammerite/docs/guides/">Guides</a>
-		<a href="/hammerite/docs/api/">API</a>
+		<a href="/hammerite/api/">API</a>
 	</nav>
 </header>
 
 <div class="docs-layout">
 	<aside class="docs-side">
 		<a class="docs-brand" href="/hammerite/docs/"><img src="/hammerite/assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
-		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="/hammerite/docs/install.html">Installing Hammerite</a></li><li><a href="/hammerite/docs/getting-started.html">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="/hammerite/docs/guides/writing-an-entity.html">Writing an entity class</a></li><li><a href="/hammerite/docs/guides/rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="/hammerite/docs/guides/stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="/hammerite/docs/guides/stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="/hammerite/docs/guides/probe-lighting.html" aria-current="page">Probe lighting</a></li><li><a href="/hammerite/docs/guides/moving-brush-entities.html">Moving brush entities</a></li><li><a href="/hammerite/docs/guides/guard-navigation.html">Navigation for guards</a></li><li><a href="/hammerite/docs/guides/brush-materials.html">Brush materials and shaders</a></li><li><a href="/hammerite/docs/guides/brush-properties.html">Properties on brushes</a></li></ul><h2>Reference</h2><ul><li><a href="/hammerite/docs/api/">API reference</a></li><li><a href="/hammerite/docs/baking.html">Baking from a script</a></li><li><a href="/hammerite/docs/performance.html">Performance and limits</a></li><li><a href="/hammerite/docs/troubleshooting.html">Troubleshooting</a></li><li><a href="/hammerite/docs/api-stability.html">API stability</a></li></ul></nav>
+		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="/hammerite/docs/install.html">Installing Hammerite</a></li><li><a href="/hammerite/docs/getting-started.html">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="/hammerite/docs/guides/writing-an-entity.html">Writing an entity class</a></li><li><a href="/hammerite/docs/guides/rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="/hammerite/docs/guides/stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="/hammerite/docs/guides/stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="/hammerite/docs/guides/probe-lighting.html" aria-current="page">Probe lighting</a></li><li><a href="/hammerite/docs/guides/moving-brush-entities.html">Moving brush entities</a></li><li><a href="/hammerite/docs/guides/guard-navigation.html">Navigation for guards</a></li><li><a href="/hammerite/docs/guides/brush-materials.html">Brush materials and shaders</a></li><li><a href="/hammerite/docs/guides/brush-properties.html">Properties on brushes</a></li></ul><h2>Reference</h2><ul><li><a href="/hammerite/api/">API reference</a></li><li><a href="/hammerite/docs/baking.html">Baking from a script</a></li><li><a href="/hammerite/docs/performance.html">Performance and limits</a></li><li><a href="/hammerite/docs/troubleshooting.html">Troubleshooting</a></li><li><a href="/hammerite/docs/api-stability.html">API stability</a></li></ul></nav>
 	</aside>
 	<main class="docs-main">
 		<article class="prose">
@@ -39,26 +39,26 @@ a door on its hinge - is somewhere else by the next frame, and needs the bake's 
 it has got to</em>. That is what light probes are: points through the level's air, each carrying the light
 that reaches it, baked in the same pass as the lightmaps and from the same lights.</p>
 <h2 id="1-what-the-bake-makes">1. What the bake makes</h2>
-<p><a href="/hammerite/docs/api/HammeriteLightmapper.html"><code>HammeriteLightmapper.bake()</code></a> places the probes before it lights
+<p><a href="/hammerite/api/HammeriteLightmapper.html"><code>HammeriteLightmapper.bake()</code></a> places the probes before it lights
 anything, then lights them:</p>
 <ul>
 <li><strong>surface probes</strong> just off every wall, on the room's side;</li>
 <li><strong>volume probes</strong> on a lattice through the air, clear of the walls.</li>
 </ul>
-<p>They are saved with the map as its <a href="/hammerite/docs/api/HammeriteLightProbeSet.html"><code>probe_set</code></a>, in map space. A
+<p>They are saved with the map as its <a href="/hammerite/api/HammeriteLightProbeSet.html"><code>probe_set</code></a>, in map space. A
 probe carries the bake's light in two parts:</p>
 <ul>
 <li>the light that can never change - static lights, and their bounce;</li>
 <li>up to four <strong>slots</strong> of switchable light, each the share of one
-  <a href="/hammerite/docs/api/HammeriteBakedLight.html"><code>HammeriteBakedLight</code></a> (a switchable lamp, or a group of them) at
+  <a href="/hammerite/api/HammeriteBakedLight.html"><code>HammeriteBakedLight</code></a> (a switchable lamp, or a group of them) at
   full strength.</li>
 </ul>
 <p>What is drawn multiplies each slot by its light's <em>current</em> modulation, so a lamp switched off goes
 dark on everything probe-lit as it does on the walls.</p>
-<p>The lattice spacing is <a href="/hammerite/docs/api/HammeriteBakeSettings.html"><code>HammeriteBakeSettings.probe_cell_size</code></a>
+<p>The lattice spacing is <a href="/hammerite/api/HammeriteBakeSettings.html"><code>HammeriteBakeSettings.probe_cell_size</code></a>
 (64 units by default): smaller follows light more closely, at more probes to bake and store.</p>
 <h2 id="2-asking-the-probes">2. Asking the probes</h2>
-<p>Two calls on <a href="/hammerite/docs/api/HammeriteMap.html"><code>HammeriteMap</code></a> light a thing of your own:</p>
+<p>Two calls on <a href="/hammerite/api/HammeriteMap.html"><code>HammeriteMap</code></a> light a thing of your own:</p>
 <pre><code class="language-gdscript">var probes := map.query_light_probes(position_in_map)
 map.update_probe_lit_uniforms(material, probes)
 </code></pre>
@@ -112,12 +112,12 @@ standing at the origin.</p>
 </blockquote>
 <h2 id="4-what-else-reads-the-probes">4. What else reads the probes</h2>
 <ul>
-<li><a href="/hammerite/docs/api/HammeriteMap.html#method-light_level_at"><code>HammeriteMap.light_level_at()</code></a> reads the same
+<li><a href="/hammerite/api/HammeriteMap.html#method-light_level_at"><code>HammeriteMap.light_level_at()</code></a> reads the same
   probes with the same weighting, for a game asking how lit a point is: see
   <a href="/hammerite/docs/guides/stealth-light-level.html">Sampling the light level</a>.</li>
-<li><a href="/hammerite/docs/api/HammeriteEyeAdaptation3D.html"><code>HammeriteEyeAdaptation3D</code></a>, under the camera, reads the level
+<li><a href="/hammerite/api/HammeriteEyeAdaptation3D.html"><code>HammeriteEyeAdaptation3D</code></a>, under the camera, reads the level
   where the player stands and where they look, and sets the exposure every probe-lit and lightmapped
-  surface is drawn with (<code>hammerite_exposure</code>, in <a href="/hammerite/docs/api/HammeriteShaderGlobals.html"><code>HammeriteShaderGlobals</code></a>).</li>
+  surface is drawn with (<code>hammerite_exposure</code>, in <a href="/hammerite/api/HammeriteShaderGlobals.html"><code>HammeriteShaderGlobals</code></a>).</li>
 <li>A brush entity that moves hands itself over from its lightmap to the probes: see
   <a href="/hammerite/docs/guides/moving-brush-entities.html">Moving brush entities</a>.</li>
 </ul>
@@ -132,9 +132,9 @@ too dark to play in:</p>
 <h2 id="see-also">See also</h2>
 <ul>
 <li><a href="/hammerite/docs/baking.html">Baking from a script</a> - baking the lightmaps and probes in a pipeline.</li>
-<li><a href="/hammerite/docs/api/HammeriteLightProbeSet.html"><code>HammeriteLightProbeSet</code></a>,
-  <a href="/hammerite/docs/api/HammeriteBakedLight.html"><code>HammeriteBakedLight</code></a>,
-  <a href="/hammerite/docs/api/HammeriteLightCurve.html"><code>HammeriteLightCurve</code></a>.</li>
+<li><a href="/hammerite/api/HammeriteLightProbeSet.html"><code>HammeriteLightProbeSet</code></a>,
+  <a href="/hammerite/api/HammeriteBakedLight.html"><code>HammeriteBakedLight</code></a>,
+  <a href="/hammerite/api/HammeriteLightCurve.html"><code>HammeriteLightCurve</code></a>.</li>
 </ul>
 		</article>
 	</main>

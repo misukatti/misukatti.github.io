@@ -61,7 +61,7 @@ def relink(content: str, source: str, pages: dict, api: set) -> str:
 		if target.startswith("docs/api/") and target.endswith(".md"):
 			name = posixpath.basename(target)[:-3]
 			if name == "index" or name in api:
-				return f'<a href="/hammerite/docs/api/{"" if name == "index" else name + ".html"}{fragment}">{label}</a>'
+				return f'<a href="/hammerite/api/{"" if name == "index" else name + ".html"}{fragment}">{label}</a>'
 		return f'<span class="unlinked">{label}</span>'
 
 	return re.sub(r'<a href="([^"]+)">(.*?)</a>', replace, content, flags=re.DOTALL)
@@ -81,7 +81,7 @@ def nav(guides: list, titles: dict, current: str) -> str:
 	parts += [item(f"/hammerite/docs/guides/{stem}.html", title) for title, stem, _ in guides]
 	parts.append("</ul>")
 	parts.append('<h2>Reference</h2><ul>')
-	parts.append(item("/hammerite/docs/api/", "API reference"))
+	parts.append(item("/hammerite/api/", "API reference"))
 	parts += [item(f"/hammerite/docs/{stem}.html", titles[stem]) for stem in TOP[1][1]]
 	parts.append("</ul></nav>")
 	return "".join(parts)
@@ -97,7 +97,7 @@ supported class and member.</p>
 <div class="doc-cards">
 <a class="doc-card" href="install.html"><h2>Install</h2><p>Requirements, the addon folders, enabling the plugins.</p></a>
 <a class="doc-card" href="getting-started.html"><h2>Getting started</h2><p>A map in your game with the editor over it, step by step.</p></a>
-<a class="doc-card" href="api/"><h2>API reference</h2><p>Every supported class, generated from the source's documentation.</p></a>
+<a class="doc-card" href="/hammerite/api/"><h2>API reference</h2><p>Every supported class, generated from the source's documentation.</p></a>
 </div>
 <h2>Guides</h2>
 <p>How the classes are used together, one task at a time.</p>
@@ -114,7 +114,7 @@ def main() -> int:
 	docs = repo / "docs"
 	template = TEMPLATE.read_text()
 	guides = guides_table((docs / "guides" / "index.md").read_text())
-	api = {p.stem for p in (OUT / "api").glob("*.html")} - {"index"}
+	api = {p.stem for p in (SITE / "hammerite" / "api").glob("*.html")} - {"index"}
 
 	sources = {}
 	for _, stems in TOP:
