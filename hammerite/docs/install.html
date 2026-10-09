@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Installing Hammerite — Hammerite 3D docs</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="/hammerite/assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="/hammerite/assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/hammerite/assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@300&display=swap">
+<link rel="stylesheet" href="/hammerite/hammerite.css">
+<link rel="stylesheet" href="/hammerite/docs/docs.css">
+</head>
+<body class="docs">
+
+<header class="studio">
+	<a class="studio-logo" href="/"><img src="/assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="/hammerite/">Hammerite 3D</a>
+		<a href="/hammerite/docs/">Docs</a>
+		<a href="/hammerite/docs/guides/">Guides</a>
+		<a href="/hammerite/docs/api/">API</a>
+	</nav>
+</header>
+
+<div class="docs-layout">
+	<aside class="docs-side">
+		<a class="docs-brand" href="/hammerite/docs/"><img src="/hammerite/assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
+		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="/hammerite/docs/install.html" aria-current="page">Installing Hammerite</a></li><li><a href="/hammerite/docs/getting-started.html">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="/hammerite/docs/guides/writing-an-entity.html">Writing an entity class</a></li><li><a href="/hammerite/docs/guides/rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="/hammerite/docs/guides/stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="/hammerite/docs/guides/stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="/hammerite/docs/guides/probe-lighting.html">Probe lighting</a></li><li><a href="/hammerite/docs/guides/moving-brush-entities.html">Moving brush entities</a></li><li><a href="/hammerite/docs/guides/guard-navigation.html">Navigation for guards</a></li><li><a href="/hammerite/docs/guides/brush-materials.html">Brush materials and shaders</a></li><li><a href="/hammerite/docs/guides/brush-properties.html">Properties on brushes</a></li></ul><h2>Reference</h2><ul><li><a href="/hammerite/docs/api/">API reference</a></li><li><a href="/hammerite/docs/baking.html">Baking from a script</a></li><li><a href="/hammerite/docs/performance.html">Performance and limits</a></li><li><a href="/hammerite/docs/troubleshooting.html">Troubleshooting</a></li><li><a href="/hammerite/docs/api-stability.html">API stability</a></li></ul></nav>
+	</aside>
+	<main class="docs-main">
+		<article class="prose">
+<h1 id="installing-hammerite">Installing Hammerite</h1>
+<h2 id="requirements">Requirements</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Godot</td>
+<td>4.7. The suites run on 4.7.1; earlier versions are not tested</td>
+</tr>
+<tr>
+<td>Renderer</td>
+<td>Forward+ or Mobile. Lightmap baking runs on the GPU through a local <code>RenderingDevice</code>, which the Compatibility renderer does not have</td>
+</tr>
+<tr>
+<td>Platforms</td>
+<td>macOS, Windows and Linux editors and games. Development and measurement happen on macOS</td>
+</tr>
+<tr>
+<td>Web</td>
+<td>not supported</td>
+</tr>
+</tbody>
+</table>
+<p>Only baking needs the GPU compute path. A map baked under Forward+ displays under Compatibility, a
+little darker in the shadows (checked on macOS with OpenGL 3); there the lightmap tool says it cannot
+bake and its bake buttons are off.</p>
+<h2 id="the-addons">The addons</h2>
+<table>
+<thead>
+<tr>
+<th>Folder</th>
+<th>Needs</th>
+<th>Ships in a game</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>hammerite-core</code></td>
+<td>—</td>
+<td>always</td>
+</tr>
+<tr>
+<td><code>hammerite-editor</code></td>
+<td>core</td>
+<td>if players edit maps; optional otherwise</td>
+</tr>
+<tr>
+<td><code>hammerite-audio</code></td>
+<td>core; editor for its tool</td>
+<td>if you use it</td>
+</tr>
+<tr>
+<td><code>hammerite-nav</code></td>
+<td>core; editor for its tool</td>
+<td>if you use it</td>
+</tr>
+</tbody>
+</table>
+<p>Each addon comes as its own zip, <code>hammerite-&lt;addon&gt;-&lt;version&gt;.zip</code>, holding <code>addons/&lt;addon&gt;/</code>: unzip
+the ones you have into your project's root.</p>
+<ol>
+<li>Copy the folders to <code>res://addons/</code>, keeping their names: <code>res://addons/hammerite-core</code>,
+   <code>res://addons/hammerite-editor</code> and so on. The addons refer to their own files by those paths, so a
+   renamed or nested folder does not load.</li>
+<li>Open the project in Godot and enable the plugins in <strong>Project &gt; Project Settings &gt; Plugins</strong>, core
+   first. Each adds its autoload (<code>Hammerite</code>, <code>HammeriteEditor</code>, <code>HammeriteAudio</code>, <code>HammeriteNavigation</code>).
+   Core also declares the shader globals its materials read; your own values for any of them are
+   left alone.</li>
+<li>The first import of a project prints a few shader compile errors, once: Godot imports before any
+   plugin can declare the globals. Reopening the project is clean.</li>
+</ol>
+<p>Hammerite adds no input actions and no project settings of its own beyond those.</p>
+<p><strong>Shipping a game.</strong> Core carries the Inter typeface, which a game exports with it, and the SIL Open
+Font License it is under asks that its licence go wherever the font does. Godot exports no <code>.txt</code> file
+it is not told to, so add <code>addons/hammerite-core/inter-OFL.txt</code> to your export preset's
+<strong>Filters to export non-resource files/folders</strong> (<code>include_filter</code>).</p>
+<h2 id="next">Next</h2>
+<ul>
+<li><a href="/hammerite/docs/getting-started.html">Getting started</a>: a map in your game, with the editor over it.</li>
+<li><a href="/hammerite/docs/troubleshooting.html">Troubleshooting</a> if something on the way did not go as described.</li>
+</ul>
+		</article>
+	</main>
+</div>
+
+<footer class="studio-foot">
+	<a href="/"><img src="/assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>

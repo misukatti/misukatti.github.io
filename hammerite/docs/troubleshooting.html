@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Troubleshooting — Hammerite 3D docs</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="/hammerite/assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="/hammerite/assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/hammerite/assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@300&display=swap">
+<link rel="stylesheet" href="/hammerite/hammerite.css">
+<link rel="stylesheet" href="/hammerite/docs/docs.css">
+</head>
+<body class="docs">
+
+<header class="studio">
+	<a class="studio-logo" href="/"><img src="/assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="/hammerite/">Hammerite 3D</a>
+		<a href="/hammerite/docs/">Docs</a>
+		<a href="/hammerite/docs/guides/">Guides</a>
+		<a href="/hammerite/docs/api/">API</a>
+	</nav>
+</header>
+
+<div class="docs-layout">
+	<aside class="docs-side">
+		<a class="docs-brand" href="/hammerite/docs/"><img src="/hammerite/assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
+		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="/hammerite/docs/install.html">Installing Hammerite</a></li><li><a href="/hammerite/docs/getting-started.html">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="/hammerite/docs/guides/writing-an-entity.html">Writing an entity class</a></li><li><a href="/hammerite/docs/guides/rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="/hammerite/docs/guides/stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="/hammerite/docs/guides/stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="/hammerite/docs/guides/probe-lighting.html">Probe lighting</a></li><li><a href="/hammerite/docs/guides/moving-brush-entities.html">Moving brush entities</a></li><li><a href="/hammerite/docs/guides/guard-navigation.html">Navigation for guards</a></li><li><a href="/hammerite/docs/guides/brush-materials.html">Brush materials and shaders</a></li><li><a href="/hammerite/docs/guides/brush-properties.html">Properties on brushes</a></li></ul><h2>Reference</h2><ul><li><a href="/hammerite/docs/api/">API reference</a></li><li><a href="/hammerite/docs/baking.html">Baking from a script</a></li><li><a href="/hammerite/docs/performance.html">Performance and limits</a></li><li><a href="/hammerite/docs/troubleshooting.html" aria-current="page">Troubleshooting</a></li><li><a href="/hammerite/docs/api-stability.html">API stability</a></li></ul></nav>
+	</aside>
+	<main class="docs-main">
+		<article class="prose">
+<h1 id="troubleshooting">Troubleshooting</h1>
+<h2 id="installing">Installing</h2>
+<p><strong>"Shader compilation failed" / "Global uniform 'hammerite_…' does not exist".</strong>
+Once, on the very first import of a project, this is expected: Godot imports before any plugin can
+declare the shader globals. If it goes on, the core plugin is not enabled - enable <strong>Hammerite Core</strong>
+in <strong>Project Settings &gt; Plugins</strong> - or the globals were removed; disabling and enabling the plugin
+declares them again. The <code>Hammerite</code> autoload lists any that are missing when the game starts.</p>
+<p><strong>Errors about files under <code>res://addons/hammerite-core/…</code> not found.</strong> The addon folders must keep
+their names and sit directly under <code>res://addons/</code>. See <a href="/hammerite/docs/install.html">Installing</a>.</p>
+<p><strong>"invalid UID … using text path instead".</strong> Harmless, and gone after the project's next import. It
+means an addon's <code>.import</code> file was not copied with its asset; copy the addon folders whole.</p>
+<h2 id="maps">Maps</h2>
+<p><strong>A map will not open.</strong> The editor's message log (hover the status bar's last section) says why;
+from code, <code>HammeriteDataFile.last_error</code>. The usual reasons:</p>
+<ul>
+<li><em>written by a newer Hammerite</em> - the file's format is newer than this copy of the addons.</li>
+<li><em>it points at a script</em> / <em>a file outside the game</em> - a map cannot name code, by design.</li>
+<li><em>the file is damaged</em> - the save was cut short or the file was edited. The editor keeps the
+  previous save beside the map as <code>level.hmap.bak</code>, and unsaved work as <code>level.autosave.hmap</code>.</li>
+</ul>
+<p><strong>A map opens with warnings in the log.</strong> Something in it is not what this game has now: a property
+a class no longer has (left out), a class this game does not have (kept, and saved back unchanged -
+typically an addon that has since been disabled), or a texture or model the game no longer provides.
+The Problems panel lists the last kind.</p>
+<p><strong>Faces show a magenta checkerboard.</strong> Their texture was not found. Set
+<code>HammeriteTextureLibrary.search_paths</code> before the map is built, and check the texture's file name
+matches the name the face holds.</p>
+<p><strong>An entity is missing in the game.</strong> The output has <em>could not find script for classname …</em>: no
+class has the <code>class_name</code> its <code>classname</code> property names. Check the spelling and that the script
+declares <code>class_name</code>.</p>
+<p><strong>A room is black, or light leaks between rooms.</strong> Bake again after carving; a bake describes the
+world as it was when baked. The Problems panel lists what the last bake could not do.</p>
+<h2 id="the-editor">The editor</h2>
+<p><strong>Shortcuts do nothing.</strong> A tool other than Select takes the plain keys while it is running: press
+<code>Esc</code> first. Keys are also ignored while a text field has focus. On Windows and Linux, <code>Cmd</code> in the
+manual is <code>Ctrl</code>, and a <code>Ctrl</code> combination is <code>Alt</code>.</p>
+<p><strong>Clicking selects brushes, not faces.</strong> Faces are picked in face mode: tap <code>Q</code> or press <strong>Faces</strong> on
+the toolbar, or hold <code>Q</code> while clicking.</p>
+<p><strong>The UI is too small or too large.</strong> <strong>View &gt; Bigger UI / Smaller UI</strong> (<code>Cmd</code> <code>=</code> / <code>Cmd</code> <code>-</code>). It is
+remembered per machine.</p>
+<p><strong>The in-game manual is empty in an exported game.</strong> The editor plugin packs the addons' manual
+pages into an export. Pages of your own kept elsewhere must be listed in
+<code>hammerite/manual/export_directories</code> in the project settings.</p>
+<h2 id="baking">Baking</h2>
+<p><strong>Baking fails or crashes on start.</strong> Baking needs the Forward+ or Mobile renderer, and a GPU with
+compute shaders. It does not run under the Compatibility renderer, on the web or with <code>--headless</code>:
+the lightmap tool says so in its panel, and a script's <code>bake()</code> answers <code>ERR_UNAVAILABLE</code>. <code>HammeriteLightmapper.can_bake()</code> asks beforehand.</p>
+<p><strong>Baking is slow or runs out of memory.</strong> See <a href="/hammerite/docs/performance.html">Performance and limits</a>: coarser
+lightmap scale on large dim surfaces is the main lever.</p>
+		</article>
+	</main>
+</div>
+
+<footer class="studio-foot">
+	<a href="/"><img src="/assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>

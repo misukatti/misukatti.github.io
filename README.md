@@ -32,6 +32,17 @@ GODOT=<godot 4.7 binary> tools/make_api_docs.sh \
 
 That rewrites every `.html` in `hammerite/api/` (and Hammerite's own `docs/api/`); commit what changed.
 
+## Hammerite's docs
+
+```bash
+tools/import_hammerite_docs.sh ../hammerite
+```
+
+Regenerates `hammerite/docs/` from a Hammerite checkout: the API reference through Hammerite's own
+`tools/make_api_docs.sh`, then the guides. Needs Godot and Python's `markdown` package
+(`pip install markdown`). Links to files in the Hammerite repository outside `docs/` are shown as
+plain text, since that repository is private.
+
 ## Before going live
 
 - The **Buy** button on the Hammerite page points at `#buy`. Replace the `href` with the store page

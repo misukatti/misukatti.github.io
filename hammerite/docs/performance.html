@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Performance and limits — Hammerite 3D docs</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="/hammerite/assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="/hammerite/assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/hammerite/assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@300&display=swap">
+<link rel="stylesheet" href="/hammerite/hammerite.css">
+<link rel="stylesheet" href="/hammerite/docs/docs.css">
+</head>
+<body class="docs">
+
+<header class="studio">
+	<a class="studio-logo" href="/"><img src="/assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="/hammerite/">Hammerite 3D</a>
+		<a href="/hammerite/docs/">Docs</a>
+		<a href="/hammerite/docs/guides/">Guides</a>
+		<a href="/hammerite/docs/api/">API</a>
+	</nav>
+</header>
+
+<div class="docs-layout">
+	<aside class="docs-side">
+		<a class="docs-brand" href="/hammerite/docs/"><img src="/hammerite/assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
+		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="/hammerite/docs/install.html">Installing Hammerite</a></li><li><a href="/hammerite/docs/getting-started.html">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="/hammerite/docs/guides/writing-an-entity.html">Writing an entity class</a></li><li><a href="/hammerite/docs/guides/rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="/hammerite/docs/guides/stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="/hammerite/docs/guides/stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="/hammerite/docs/guides/probe-lighting.html">Probe lighting</a></li><li><a href="/hammerite/docs/guides/moving-brush-entities.html">Moving brush entities</a></li><li><a href="/hammerite/docs/guides/guard-navigation.html">Navigation for guards</a></li><li><a href="/hammerite/docs/guides/brush-materials.html">Brush materials and shaders</a></li><li><a href="/hammerite/docs/guides/brush-properties.html">Properties on brushes</a></li></ul><h2>Reference</h2><ul><li><a href="/hammerite/docs/api/">API reference</a></li><li><a href="/hammerite/docs/baking.html">Baking from a script</a></li><li><a href="/hammerite/docs/performance.html" aria-current="page">Performance and limits</a></li><li><a href="/hammerite/docs/troubleshooting.html">Troubleshooting</a></li><li><a href="/hammerite/docs/api-stability.html">API stability</a></li></ul></nav>
+	</aside>
+	<main class="docs-main">
+		<article class="prose">
+<h1 id="performance-and-limits">Performance and limits</h1>
+<p>Hammerite is developed against a large imported reference level, and each slow path found on it is
+fixed and the measurement recorded in the commit that fixed it. The figures below are that level's, on an Apple Silicon Mac, and move as the work goes on.
+Measure your own levels with the benchmarks at the end.</p>
+<h2 id="the-reference-level">The reference level</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>brushes</td>
+<td>7,240</td>
+</tr>
+<tr>
+<td>rooms</td>
+<td>about 1,800</td>
+</tr>
+<tr>
+<td>walls after carving</td>
+<td>about 130,000</td>
+</tr>
+<tr>
+<td>entities</td>
+<td>2,200</td>
+</tr>
+<tr>
+<td>lightmap patches</td>
+<td>about 4 million</td>
+</tr>
+</tbody>
+</table>
+<h2 id="what-it-costs">What it costs</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Opening, cold</strong></td>
+<td>the world is carved from scratch: of the order of a minute on the reference level. Saving writes a worldrep cache beside the map (<code>level.worldrep.hcache</code>), and opening with one is far faster</td>
+</tr>
+<tr>
+<td><strong>An edit</strong></td>
+<td>recompiles only what the edit's carves reach: about half a second on the reference level, and no pause to notice on a small one</td>
+</tr>
+<tr>
+<td><strong>Drawing, in the game</strong></td>
+<td>each room's walls are drawn only when the camera can see into it through the doorways, so the cost follows what is in view rather than the level's size</td>
+</tr>
+<tr>
+<td><strong>Navigation</strong></td>
+<td>building walkable ground and links takes over a minute on the reference level (#114); it runs on the compile's worker thread</td>
+</tr>
+<tr>
+<td><strong>Baking</strong></td>
+<td>22 minutes on the reference level on a GTX 1070 Ti with the native kernel, nearly all of it light transfer (#125). Patch data is about 1.2 GB there</td>
+</tr>
+</tbody>
+</table>
+<p>These costs grow with the level. A level of tens of rooms carves in a fraction of a second and edits
+without a pause.</p>
+<h2 id="keeping-a-level-fast">Keeping a level fast</h2>
+<ul>
+<li><strong>Save as <code>.hmap</code>, and keep the worldrep cache with it.</strong> It is what makes opening fast; deleting it
+  is safe but costs a full carve on the next open.</li>
+<li><strong>Overlap to extend a space, abut to divide one.</strong> Every air brush is a cell, and every pair that
+  touches is a portal to find: dressing carved with many small air brushes costs more than the same
+  shape in detail brushes.</li>
+<li><strong>Detail brushes for dressing.</strong> They do not take part in carving, so they cost nothing at compile
+  time beyond their own faces.</li>
+<li><strong>Lightmap scale.</strong> A face's <code>lightmap_scale</code> (16 units a texel by default) sets how many patches it
+  makes. Coarser on large, dim surfaces is the biggest lever on bake time and memory.</li>
+</ul>
+<h2 id="measuring">Measuring</h2>
+<p>The benchmarks print timings rather than asserting them. Run one against the tests project:</p>
+<pre><code>godot --headless --path tests --script res://benchmark_compile.gd   # carving, by level size
+godot --headless --path tests --script res://benchmark_detail.gd    # the cost of carving dressing
+godot --headless --path tests --script res://benchmark_nav.gd       # navigation build
+godot --headless --path tests --script res://benchmark_persist.gd   # save and load
+</code></pre>
+		</article>
+	</main>
+</div>
+
+<footer class="studio-foot">
+	<a href="/"><img src="/assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>

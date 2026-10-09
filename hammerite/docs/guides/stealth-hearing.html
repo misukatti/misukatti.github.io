@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hearing for stealth gameplay — Hammerite 3D docs</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="/hammerite/assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="/hammerite/assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/hammerite/assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@300&display=swap">
+<link rel="stylesheet" href="/hammerite/hammerite.css">
+<link rel="stylesheet" href="/hammerite/docs/docs.css">
+</head>
+<body class="docs">
+
+<header class="studio">
+	<a class="studio-logo" href="/"><img src="/assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="/hammerite/">Hammerite 3D</a>
+		<a href="/hammerite/docs/">Docs</a>
+		<a href="/hammerite/docs/guides/">Guides</a>
+		<a href="/hammerite/docs/api/">API</a>
+	</nav>
+</header>
+
+<div class="docs-layout">
+	<aside class="docs-side">
+		<a class="docs-brand" href="/hammerite/docs/"><img src="/hammerite/assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
+		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="/hammerite/docs/install.html">Installing Hammerite</a></li><li><a href="/hammerite/docs/getting-started.html">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="/hammerite/docs/guides/writing-an-entity.html">Writing an entity class</a></li><li><a href="/hammerite/docs/guides/rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="/hammerite/docs/guides/stealth-hearing.html" aria-current="page">Hearing for stealth gameplay</a></li><li><a href="/hammerite/docs/guides/stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="/hammerite/docs/guides/probe-lighting.html">Probe lighting</a></li><li><a href="/hammerite/docs/guides/moving-brush-entities.html">Moving brush entities</a></li><li><a href="/hammerite/docs/guides/guard-navigation.html">Navigation for guards</a></li><li><a href="/hammerite/docs/guides/brush-materials.html">Brush materials and shaders</a></li><li><a href="/hammerite/docs/guides/brush-properties.html">Properties on brushes</a></li></ul><h2>Reference</h2><ul><li><a href="/hammerite/docs/api/">API reference</a></li><li><a href="/hammerite/docs/baking.html">Baking from a script</a></li><li><a href="/hammerite/docs/performance.html">Performance and limits</a></li><li><a href="/hammerite/docs/troubleshooting.html">Troubleshooting</a></li><li><a href="/hammerite/docs/api-stability.html">API stability</a></li></ul></nav>
+	</aside>
+	<main class="docs-main">
+		<article class="prose">
+<h1 id="hearing-for-stealth-gameplay">Hearing for stealth gameplay</h1>
+<p>A guard should hear a footstep in the next room through the open door, hear it muffled through a
+shut one, and not hear it through a metre of rock - and should go and look where the sound <em>came
+from</em>, the doorway, not at the player behind the wall. hammerite-audio gives a game that from the
+same graph of rooms and openings it plays sound through.</p>
+<p>The split is the usual one: Hammerite measures how a sound travels; your game says which sounds exist,
+how loud each is, and what a guard does about one.</p>
+<h2 id="1-set-up">1. Set up</h2>
+<p>Hand each <code>HammeriteMap3D</code> to the audio addon before giving it a map, so the map's audio manager exists
+before its entities are built:</p>
+<pre><code class="language-gdscript">HammeriteAudio.sound_types = load(&quot;res://audio/sound_types.tres&quot;)
+HammeriteAudio.integrate(map_3d)
+map_3d.map = map
+</code></pre>
+<p>A map saved without an audio graph is baked as it loads. One that has a graph keeps it - see
+<a href="#6-rebaking">Rebaking</a>.</p>
+<h2 id="2-sound-types-what-exists-and-how-loud">2. Sound types: what exists and how loud</h2>
+<p>A <a href="/hammerite/docs/api/HammeriteAudioSoundType.html"><code>HammeriteAudioSoundType</code></a> is a kind of noise. Its loudness
+lives here, not on whatever plays it, so a footstep is as loud to a guard whatever the mixer does with
+it:</p>
+<pre><code class="language-gdscript">var footstep := HammeriteAudioSoundType.new()
+footstep.type_name = &amp;&quot;footstep&quot;
+footstep.loudness_db = 45.0
+footstep.max_range = 700.0
+
+var table := HammeriteAudioSoundTypes.new()
+table.types = [footstep]
+HammeriteAudio.sound_types = table
+</code></pre>
+<ul>
+<li><code>loudness_db</code> is on a scale of your choosing; it is compared with a listener's threshold after the
+  route has taken its share.</li>
+<li><code>max_range</code> is the distance a sound can travel, along its route round corners, and is the main
+  control on how far it carries: the model's own falloff with distance is capped at 12 dB, so distance
+  alone rarely silences anything.</li>
+<li>A type the table does not list is still heard, at the table's defaults.</li>
+</ul>
+<p>Normally the table is a <code>.tres</code> resource edited in the inspector. Appending to <code>types</code> in place needs
+<code>rebuild_index()</code> afterwards; assigning the array does it for you.</p>
+<h2 id="3-making-a-noise">3. Making a noise</h2>
+<p>Every route ends in the same report: a type, a position, and who made it.</p>
+<p><strong>A sound the player hears too</strong> - an <a href="/hammerite/docs/api/HammeriteAudioEmitter3D.html"><code>HammeriteAudioEmitter3D</code></a>
+with <code>sound_type</code> set reports each time it plays, from where it stands, with its parent as the one
+who made it:</p>
+<pre><code class="language-gdscript">@onready var _steps: HammeriteAudioEmitter3D = $Footsteps   # sound_type = &amp;&quot;footstep&quot;
+
+func _on_foot_down() -&gt; void:
+    _steps.play()
+</code></pre>
+<p>An emitter with no <code>sound_type</code> is heard by the player and by nobody in the game.</p>
+<p><strong>A one-shot</strong> where nothing will stay to own an emitter - a bottle that shatters and is freed:</p>
+<pre><code class="language-gdscript">HammeriteAudio.play_one_shot(&quot;glass_break.wav&quot;, bottle.global_position, &amp;&quot;glass_break&quot;, 0.0, true, self)
+</code></pre>
+<p><strong>A noise with no sound of its own</strong> - played by another system, or heard only by the game:</p>
+<pre><code class="language-gdscript">HammeriteAudio.report_sound(&amp;&quot;landing&quot;, global_position, self)
+</code></pre>
+<p>An emitter that cannot play - no file, no map loaded - reports nothing. For a noise that must reach
+the guards whatever the mixer is doing, report it.</p>
+<p>A report costs nothing when no listener hears its type, little when the source is out of range in a
+straight line, and a route through the graph only after both.</p>
+<h2 id="4-a-guard-who-listens">4. A guard who listens</h2>
+<p>Give the guard a <a href="/hammerite/docs/api/HammeriteAudioReceiver3D.html"><code>HammeriteAudioReceiver3D</code></a> at head height. It
+registers itself, and emits <code>sound_heard</code> for every sound of a type it listens for that arrives at or
+above its threshold:</p>
+<pre><code class="language-gdscript">@onready var _ears: HammeriteAudioReceiver3D = $Head/Ears
+
+func _ready() -&gt; void:
+    _ears.heard_types = [&amp;&quot;footstep&quot;, &amp;&quot;glass_break&quot;]
+    _ears.threshold_db = 10.0
+    _ears.own_sounds_node = self
+    _ears.sound_heard.connect(_on_sound_heard)
+
+func _on_sound_heard(event: HammeriteAudioSoundEvent) -&gt; void:
+    var muffled: bool = event.cutoff_hz &lt; 2000.0
+    _investigate(event.apparent_position, event.level_db, muffled)
+</code></pre>
+<p>A receiver with no <code>heard_types</code> is deaf, so an unconfigured guard is never omniscient. Assign the
+array whole, or use <code>add_heard_type()</code> - appending to it in place does not reach the manager.</p>
+<p>What the <a href="/hammerite/docs/api/HammeriteAudioSoundEvent.html"><code>HammeriteAudioSoundEvent</code></a> says:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>apparent_position</code></td>
+<td>the last opening the sound came through, or the source when nothing stood between: <strong>where to go and look</strong></td>
+</tr>
+<tr>
+<td><code>source_position</code></td>
+<td>where it really was - what the guard should <em>not</em> know</td>
+</tr>
+<tr>
+<td><code>is_direct</code></td>
+<td>a clear run, so the apparent position is the real one</td>
+</tr>
+<tr>
+<td><code>level_db</code></td>
+<td>how loud it arrived, on the sound types' scale</td>
+</tr>
+<tr>
+<td><code>cutoff_hz</code></td>
+<td>what the route left of it: a shut door two rooms away leaves a few hundred hertz, so <em>muffled</em> can be told from <em>far</em></td>
+</tr>
+<tr>
+<td><code>distance</code></td>
+<td>the length of the route, round corners</td>
+</tr>
+<tr>
+<td><code>emitter</code></td>
+<td>who made it, or null for a bare position</td>
+</tr>
+</tbody>
+</table>
+<p>Hearing is pushed, never polled: the signal is emitted inside the report, once per listener that
+hears it. Keep the handler short - note the sound and decide in your own update.</p>
+<p>Things that save a guard from looking foolish:</p>
+<ul>
+<li>Set <code>own_sounds_node</code> to the character when the receiver is not its direct child, or the guard hears
+  their own footsteps.</li>
+<li>Keep the ears off the floor. A point exactly on a room's floor is in no room, and a sound traced
+  room to room never reaches it.</li>
+<li>Turn towards a new sound only when it is louder than the one being followed by a few decibels, so a
+  trail of footsteps does not make the guard shuffle in place.</li>
+<li><code>apparent_position</code> is often mid-air in a doorway. Snap it to the navmesh before walking to it (see
+  <a href="/hammerite/docs/guides/guard-navigation.html">Navigation for guards</a>).</li>
+</ul>
+<p><code>enabled = false</code> takes a receiver out of the routing altogether - a sleeping guard costs nothing.</p>
+<h2 id="5-doors">5. Doors</h2>
+<p>A sound travels through the openings between rooms and not through walls. A door shuts an opening by
+name:</p>
+<pre><code class="language-gdscript">func _set_open(amount: float) -&gt; void:   # 0 shut .. 1 open
+    HammeriteAudio.set_portal_occlusion(_portal_name, 1.0 - amount, self)
+</code></pre>
+<p><code>0</code> is open, <code>1</code> costs the opening its full authored attenuation, and anything between is ajar. It
+returns <code>false</code> when no opening has that name - worth a warning, because a door whose opening was never
+named is a door that never muffles anything.</p>
+<p>Openings are named, and their closed attenuation set, in the editor's <strong>Audio Portals</strong> tool. A name
+is stored on the faces the opening is cut from, so it survives every edit of the level; hammerite-nav
+reads the same name, so one call can shut both the sound and the route. From code the per-opening
+values are <a href="/hammerite/docs/api/HammeriteAudioPortalProperties.html"><code>HammeriteAudioPortalProperties</code></a>, and the name is
+<a href="/hammerite/docs/api/HammeritePortal.html"><code>HammeritePortal.set_portal_name()</code></a>.</p>
+<p>A player leaning on a door to listen hears through it better. Do it for gameplay with the receiver
+and for what is played with the autoload:</p>
+<pre><code class="language-gdscript">_ears.press_ear_to_portal(&quot;vault_door&quot;, 12.0)
+HammeriteAudio.press_ear_to_portal(&quot;vault_door&quot;, 12.0, self)
+</code></pre>
+<h2 id="6-rebaking">6. Rebaking</h2>
+<p>The graph is baked from the compiled world and saved with the map. A map that already has one is not
+rebaked behind the author's back when the level changes: a stale graph still works, following the old
+layout, and the editor and the log say it is out of date. Rebuild it from the Audio Portals tool, or
+from code when your game changes the level itself:</p>
+<pre><code class="language-gdscript">var report: HammeriteAudioBakeReport = HammeriteAudio.bake(map_3d)
+print(report.summary())
+</code></pre>
+<p>A rebake keeps the names and attenuations already authored. Headless, in a build step, use
+<code>HammeriteAudioRuntime.bake(map)</code>, which names no autoload; see <a href="/hammerite/docs/baking.html">Baking from a script</a>.</p>
+<p>Without any graph, hearing falls back to a straight line: a guard hears only what they could see.</p>
+<h2 id="see-also">See also</h2>
+<ul>
+<li><a href="/hammerite/docs/guides/rooms-and-sight.html">Rooms, portals and line of sight</a> - the rooms and openings sound travels through.</li>
+<li><a href="/hammerite/docs/guides/stealth-light-level.html">Sampling the light level</a> - the other half of being noticed.</li>
+<li><a href="/hammerite/docs/api/HammeriteAudio.html"><code>HammeriteAudio</code></a>, <a href="/hammerite/docs/api/HammeriteAudioHearing.html"><code>HammeriteAudioHearing</code></a>,
+  and the <span class="unlinked">hammerite-audio README</span>.</li>
+</ul>
+		</article>
+	</main>
+</div>
+
+<footer class="studio-foot">
+	<a href="/"><img src="/assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>

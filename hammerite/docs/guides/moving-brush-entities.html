@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Moving brush entities — Hammerite 3D docs</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="/hammerite/assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="/hammerite/assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/hammerite/assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@300&display=swap">
+<link rel="stylesheet" href="/hammerite/hammerite.css">
+<link rel="stylesheet" href="/hammerite/docs/docs.css">
+</head>
+<body class="docs">
+
+<header class="studio">
+	<a class="studio-logo" href="/"><img src="/assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="/hammerite/">Hammerite 3D</a>
+		<a href="/hammerite/docs/">Docs</a>
+		<a href="/hammerite/docs/guides/">Guides</a>
+		<a href="/hammerite/docs/api/">API</a>
+	</nav>
+</header>
+
+<div class="docs-layout">
+	<aside class="docs-side">
+		<a class="docs-brand" href="/hammerite/docs/"><img src="/hammerite/assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
+		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="/hammerite/docs/install.html">Installing Hammerite</a></li><li><a href="/hammerite/docs/getting-started.html">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="/hammerite/docs/guides/writing-an-entity.html">Writing an entity class</a></li><li><a href="/hammerite/docs/guides/rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="/hammerite/docs/guides/stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="/hammerite/docs/guides/stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="/hammerite/docs/guides/probe-lighting.html">Probe lighting</a></li><li><a href="/hammerite/docs/guides/moving-brush-entities.html" aria-current="page">Moving brush entities</a></li><li><a href="/hammerite/docs/guides/guard-navigation.html">Navigation for guards</a></li><li><a href="/hammerite/docs/guides/brush-materials.html">Brush materials and shaders</a></li><li><a href="/hammerite/docs/guides/brush-properties.html">Properties on brushes</a></li></ul><h2>Reference</h2><ul><li><a href="/hammerite/docs/api/">API reference</a></li><li><a href="/hammerite/docs/baking.html">Baking from a script</a></li><li><a href="/hammerite/docs/performance.html">Performance and limits</a></li><li><a href="/hammerite/docs/troubleshooting.html">Troubleshooting</a></li><li><a href="/hammerite/docs/api-stability.html">API stability</a></li></ul></nav>
+	</aside>
+	<main class="docs-main">
+		<article class="prose">
+<h1 id="moving-brush-entities">Moving brush entities</h1>
+<p>A door, a lift or a secret wall is brushwork that moves. While it stands where it was baked, a
+lightmap lights it best: the shadow of the frame, the lamp across the hall. The moment it moves, that
+lightmap is a picture of somewhere it no longer is. So a brush entity hands its faces over to the
+<a href="/hammerite/docs/guides/probe-lighting.html">light probes</a> as it starts to move, and - if it comes back exactly where it was -
+hands them back.</p>
+<h2 id="1-is-it-in-the-bake">1. Is it in the bake?</h2>
+<p>By default a brush entity's brushwork is <em>not</em> lightmapped: the bake treats it as something that is
+somewhere else as often as not, and does not let it cast shadows it will not be there to cast. A door
+or a lift should stay that way, and be lit by the probes from the start.</p>
+<p>Something that is flush with the world nearly all the time - a secret door in a panelled wall - wants
+the lightmap while it is shut. Say so on the type, and every brush of every such entity is baked:</p>
+<pre><code class="language-gdscript">HammeriteEntityTypeRegistry.register_brush(&amp;&quot;secret_door&quot;, {
+    &amp;&quot;classname&quot;: &amp;&quot;SecretDoor&quot;,
+    &amp;&quot;bake_static&quot;: true,
+})
+</code></pre>
+<p>An author can say the same of one brush, with <strong>Bake into the world</strong> (<code>lighting/bake_static</code>) in
+its Lighting properties. <code>get_lighting().is_baked_static()</code> answers which it is.</p>
+<h2 id="2-hand-over-as-it-starts-moving">2. Hand over as it starts moving</h2>
+<p>Every <code>HammeriteBrushEntity*</code> base class carries the handover. Call <code>hand_over_to_probes()</code> as the
+movement <em>starts</em>, so the quarter-second blend from lightmap to probes happens under the motion rather
+than as a pop once it has moved:</p>
+<pre><code class="language-gdscript">class_name SecretDoor
+extends HammeriteBrushEntityStaticBody3D
+
+const SLIDE: Vector3 = Vector3(0, 0, 64)
+
+func open() -&gt; void:
+    hand_over_to_probes()
+    create_tween().tween_property(self, ^&quot;position&quot;, SLIDE, 1.5)
+
+func set_editor_active(_active: bool) -&gt; void:
+    pass
+
+func apply_entity_property(_prop_name: StringName, _value: Variant) -&gt; void:
+    pass
+</code></pre>
+<p>The node of a brush entity stands at the map's origin with its brushwork in map space, so moving the
+node by <code>SLIDE</code> moves the brushwork by <code>SLIDE</code>.</p>
+<p>From then on, each frame, the entity finds the probes around the middle of its brushwork - again as it
+moves far enough - and writes them into its faces' materials, following every lamp that is switched.
+Nothing needs driving: the base class's lighting runs itself while there is anything to blend.</p>
+<p>Call it for an entity that is not baked too. It has no lightmap to leave, but probes light it far
+better than the flat ambient it otherwise wears.</p>
+<h2 id="3-hand-back-only-when-it-is-flush-again">3. Hand back only when it is flush again</h2>
+<pre><code class="language-gdscript">func close() -&gt; void:
+    var slide := create_tween()
+    slide.tween_property(self, ^&quot;position&quot;, Vector3.ZERO, 1.5)
+    slide.finished.connect(hand_back_to_lightmap)
+</code></pre>
+<p><code>hand_back_to_lightmap()</code> blends back to the bake, and the entity stops costing anything per frame.
+Only call it when the brushwork is back exactly where it was baked: a door left ajar is not where its
+lightmap says it is, and should stay on the probes.</p>
+<h2 id="4-in-the-editor">4. In the editor</h2>
+<p>The handover belongs to the running world: put it in the movement, which runs while the world is
+simulating, and <code>reset_simulation()</code> puts the entity back where the map built it - flush, so hand back
+there too:</p>
+<pre><code class="language-gdscript">func reset_simulation() -&gt; void:
+    position = Vector3.ZERO
+    hand_back_to_lightmap()
+</code></pre>
+<h2 id="5-driving-it-yourself">5. Driving it yourself</h2>
+<p><code>get_lighting()</code> returns the entity's <a href="/hammerite/docs/api/HammeriteBrushEntityLighting.html"><code>HammeriteBrushEntityLighting</code></a>,
+made the first time it is asked for. <code>get_blend()</code> says how far over it is - <code>0.0</code> all lightmap,
+<code>1.0</code> all probes. After a rebake replaces the brushwork's meshes, the lighting finds the new materials
+itself.</p>
+<h2 id="see-also">See also</h2>
+<ul>
+<li><a href="/hammerite/docs/guides/probe-lighting.html">Probe lighting</a> - what the faces are lit by once handed over.</li>
+<li><a href="/hammerite/docs/guides/writing-an-entity.html">Writing an entity class</a> - brushwork entities, and the rest of the interface.</li>
+<li><a href="/hammerite/docs/api/HammeriteBrushEntityStaticBody3D.html"><code>HammeriteBrushEntityStaticBody3D</code></a>,
+  <a href="/hammerite/docs/api/HammeriteBrushEntityNode3D.html"><code>HammeriteBrushEntityNode3D</code></a>.</li>
+</ul>
+		</article>
+	</main>
+</div>
+
+<footer class="studio-foot">
+	<a href="/"><img src="/assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>
