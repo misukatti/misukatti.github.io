@@ -36,13 +36,13 @@ That rewrites every `.html` in `hammerite/api/` (and Hammerite's own `docs/api/`
 
 - The **Buy** button on the Hammerite page points at `#buy`. Replace the `href` with the store page
   and drop "Store link coming soon".
-- `hello@misukatti.fi` only receives mail once the domain is bought and has mail set up.
+- `hello@misukatti.fi` only receives mail once the domain has a mail provider and its MX records.
 
 ## Publishing
 
-GitHub Pages: Settings → Pages → Deploy from a branch → `main`, `/ (root)`. It is then at
-<https://misukatti.github.io>.
+GitHub Pages serves `main` from the root at <https://misukatti.fi>. `CNAME` names the domain, and
+misukatti.github.io and www.misukatti.fi redirect there.
 
-For misukatti.fi, once bought: add a `CNAME` file containing `misukatti.fi`, point the domain's DNS at
-GitHub (`A` records for the apex to GitHub Pages' addresses, and a `CNAME` for `www` to
-`misukatti.github.io`), then tick **Enforce HTTPS** in the Pages settings.
+DNS is at iwantmyname: four `A` records for the apex to GitHub Pages' addresses
+(`185.199.108.153` to `185.199.111.153`), a `CNAME` from `www` to `misukatti.github.io`, and the
+`_github-pages-challenge-misukatti` TXT record that verifies the domain for the organisation.
