@@ -52,7 +52,8 @@ then the guides. Needs Godot and Python's `markdown` package (`pip install markd
 ## Publishing
 
 GitHub Pages serves `main` from the root at <https://misukatti.fi>. `CNAME` names the domain, and
-misukatti.github.io and www.misukatti.fi redirect there.
+misukatti.github.io and www.misukatti.fi redirect there. HTTPS is enforced, with a certificate GitHub
+issues and renews itself, so http:// redirects to https://.
 
 DNS is at iwantmyname: four `A` records for the apex to GitHub Pages' addresses
 (`185.199.108.153` to `185.199.111.153`), a `CNAME` from `www` to `misukatti.github.io`, and the
