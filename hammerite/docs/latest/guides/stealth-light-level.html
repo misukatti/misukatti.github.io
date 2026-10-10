@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sampling the light level for stealth gameplay — Hammerite 3D latest docs</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="/hammerite/assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="/hammerite/assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/hammerite/assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@300&display=swap">
+<link rel="stylesheet" href="/hammerite/hammerite.css">
+<link rel="stylesheet" href="/hammerite/docs/docs.css">
+<script src="/hammerite/docs/versions.js" defer></script>
+</head>
+<body class="docs" data-docs-version="latest">
+
+<header class="studio">
+	<a class="studio-logo" href="/"><img src="/assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="/hammerite/">Hammerite 3D</a>
+		<a href="/hammerite/docs/latest/">Docs</a>
+		<a href="/hammerite/docs/latest/guides/">Guides</a>
+		<a href="/hammerite/docs/latest/api/">API</a>
+	</nav>
+</header>
+
+<div class="docs-banner" hidden></div>
+
+<div class="docs-layout">
+	<aside class="docs-side">
+		<a class="docs-brand" href="/hammerite/docs/latest/"><img src="/hammerite/assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
+		<label class="docs-version">Version
+			<select aria-label="Docs version"><option value="latest" selected>latest</option></select>
+		</label>
+		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="/hammerite/docs/latest/install.html">Installing Hammerite</a></li><li><a href="/hammerite/docs/latest/getting-started.html">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="/hammerite/docs/latest/guides/writing-an-entity.html">Writing an entity class</a></li><li><a href="/hammerite/docs/latest/guides/rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="/hammerite/docs/latest/guides/stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="/hammerite/docs/latest/guides/stealth-light-level.html" aria-current="page">Sampling the light level for stealth gameplay</a></li><li><a href="/hammerite/docs/latest/guides/probe-lighting.html">Probe lighting</a></li><li><a href="/hammerite/docs/latest/guides/moving-brush-entities.html">Moving brush entities</a></li><li><a href="/hammerite/docs/latest/guides/guard-navigation.html">Navigation for guards</a></li><li><a href="/hammerite/docs/latest/guides/brush-materials.html">Brush materials and shaders</a></li><li><a href="/hammerite/docs/latest/guides/brush-properties.html">Properties on brushes</a></li></ul><h2>Reference</h2><ul><li><a href="/hammerite/docs/latest/api/">API reference</a></li><li><a href="/hammerite/docs/latest/baking.html">Baking from a script</a></li><li><a href="/hammerite/docs/latest/performance.html">Performance and limits</a></li><li><a href="/hammerite/docs/latest/troubleshooting.html">Troubleshooting</a></li><li><a href="/hammerite/docs/latest/api-stability.html">API stability</a></li></ul></nav>
+	</aside>
+	<main class="docs-main">
+		<article class="prose">
+<h1 id="sampling-the-light-level-for-stealth-gameplay">Sampling the light level for stealth gameplay</h1>
+<p>How visible is the player? In a stealth game that is mostly a question of how much light falls where
+they stand. The bake already knows: every light probe carries the light that reaches it, and
+<a href="/hammerite/docs/latest/api/HammeriteMap.html#method-light_level_at"><code>HammeriteMap.light_level_at()</code></a> reads them at any
+point - including what the lamps switched since the bake no longer give.</p>
+<p>Hammerite measures; what counts as <em>dark enough</em> is your game's to decide.</p>
+<h2 id="1-read-it">1. Read it</h2>
+<pre><code class="language-gdscript">var level: float = map.light_level_at(point)
+</code></pre>
+<p><code>point</code> is in <strong>map space</strong>, where the brushes are authored. Under a <code>HammeriteMap3D</code> that has been
+moved or turned, convert first:</p>
+<pre><code class="language-gdscript">func level_at(map_3d: HammeriteMap3D, world_point: Vector3) -&gt; float:
+    return map_3d.map.light_level_at(map_3d.to_local(world_point))
+</code></pre>
+<p>The number is the light the nearest probes that can <em>see</em> the point carry, weighted by distance as the
+shaders weight them - so what is measured is what is drawn, and a wall between the point and a bright
+probe keeps that probe out of it. It counts:</p>
+<ul>
+<li>every baked light, switchable or not;</li>
+<li>each switchable light at its <strong>current</strong> strength - turn a lamp off and the reading drops at once;</li>
+<li>the bounce light the bake worked out.</li>
+</ul>
+<p>It reads <code>0.0</code> where no probe can see the point: in the dark, and where the bake never reached.</p>
+<h2 id="2-make-it-mean-something">2. Make it mean something</h2>
+<p>The level is not normalised to anything. It is in the bake's own units, so a sunlit courtyard may read
+in the tens, a lamplit room a few, and a back room well under one. Measure it in a place whose
+brightness you know - a spot you would call <em>fully lit</em> - and put your curve there:</p>
+<pre><code class="language-gdscript">@export var fully_lit_level: float = 6.0   # light_level_at, measured under the hall's lamps
+
+func visibility(level: float) -&gt; float:
+    return clampf(level / fully_lit_level, 0.0, 1.0)
+</code></pre>
+<p>A game wanting a finer feel shapes that further - a <code>Curve</code>, a few thresholds for a light gem. Retune
+it when the lighting is retuned: doubling every lamp's energy doubles every reading.</p>
+<p><a href="/hammerite/docs/latest/api/HammeriteLightCurve.html"><code>HammeriteLightCurve</code></a> is <em>not</em> that curve. It shapes how surfaces
+look to the eye, on the surface's scale, and nothing in it touches this reading.</p>
+<h2 id="3-sample-the-body-not-a-point">3. Sample the body, not a point</h2>
+<p>A player crouched with their head in a pool of lamplight is seen. Read a few points up the body and
+take what the game wants - the brightest, for a strict guard; the mean, for a forgiving one:</p>
+<pre><code class="language-gdscript">const HEIGHTS: Array[float] = [8.0, 36.0, 64.0]   # feet, waist, head, in map units
+
+func body_level(map: HammeriteMap, at: Vector3) -&gt; float:
+    var brightest: float = 0.0
+    for height: float in HEIGHTS:
+        brightest = maxf(brightest, map.light_level_at(at + Vector3.UP * height))
+    return brightest
+</code></pre>
+<p>Keep the points inside the room: one exactly on the floor, or inside a wall, sees no probe and reads
+dark.</p>
+<p>Each reading is a probe lookup and a line-of-sight test per probe found - microseconds with the
+native kernel, more without. A few points a few times a second is plenty for a light gem; ask on the
+main thread.</p>
+<h2 id="4-lights-the-game-switches">4. Lights the game switches</h2>
+<p>A lamp entity of the switchable types (<code>light_point_dynamic</code>, <code>light_directional_dynamic</code>) is baked
+into its own slot and can be dimmed or put out while the game runs. Every switch reaches
+<code>light_level_at()</code> immediately, so a player who puts out a torch is darker to the guards that same
+frame:</p>
+<pre><code class="language-gdscript">map_3d.trigger_named(&quot;hall_torch&quot;, false)   # off; true is on, null toggles
+</code></pre>
+<p>Or through what the bake recorded of it, by entity or by light group:</p>
+<pre><code class="language-gdscript">var torches: HammeriteBakedLight = map.get_baked_light_for_group(&amp;&quot;hall_torches&quot;)
+if torches:
+    torches.set_modulation(0.25)
+</code></pre>
+<p><code>modulation</code> is <code>0.0</code> for none of its light and <code>1.0</code> for all of it. Lights in one group share a
+slot and are switched together. A light that is not switchable is in the reading too, but stays as
+baked.</p>
+<h2 id="5-when-there-is-something-to-read">5. When there is something to read</h2>
+<p>Probes are placed and lit by the bake (<a href="/hammerite/docs/latest/baking.html">Baking from a script</a>), and saved with the map:
+a baked map reads correctly as soon as it is loaded. An unbaked map reads <code>0.0</code> everywhere.</p>
+<p>A new bake or a variant switch replaces the map's probes. Anything you derived from the readings - a
+cached darkness map for guard AI, say - should be rebuilt on <code>map.light_probes_baked</code> and
+<code>map.light_probes_changed</code>.</p>
+<h2 id="see-also">See also</h2>
+<ul>
+<li><a href="/hammerite/docs/latest/guides/probe-lighting.html">Probe lighting</a> - the probes themselves, and lighting a character with them.</li>
+<li><a href="/hammerite/docs/latest/guides/stealth-hearing.html">Hearing for stealth gameplay</a> - the other half of being noticed.</li>
+<li><a href="/hammerite/docs/latest/api/HammeriteBakedLight.html"><code>HammeriteBakedLight</code></a>,
+  <a href="/hammerite/docs/latest/api/HammeriteDynamicLight3D.html"><code>HammeriteDynamicLight3D</code></a>,
+  <a href="/hammerite/docs/latest/api/HammeriteEyeAdaptation3D.html"><code>HammeriteEyeAdaptation3D</code></a>, which reads the same level at the
+  camera to set the exposure.</li>
+</ul>
+		</article>
+		<p class="docs-source">Hammerite latest · built from a6dd634, 2026-10-10</p>
+	</main>
+</div>
+
+<footer class="studio-foot">
+	<a href="/"><img src="/assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>

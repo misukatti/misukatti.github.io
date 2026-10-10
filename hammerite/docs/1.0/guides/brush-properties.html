@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Properties on brushes — Hammerite 3D 1.0 docs</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="/hammerite/assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="/hammerite/assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/hammerite/assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@300&display=swap">
+<link rel="stylesheet" href="/hammerite/hammerite.css">
+<link rel="stylesheet" href="/hammerite/docs/docs.css">
+<script src="/hammerite/docs/versions.js" defer></script>
+</head>
+<body class="docs" data-docs-version="1.0">
+
+<header class="studio">
+	<a class="studio-logo" href="/"><img src="/assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="/hammerite/">Hammerite 3D</a>
+		<a href="/hammerite/docs/1.0/">Docs</a>
+		<a href="/hammerite/docs/1.0/guides/">Guides</a>
+		<a href="/hammerite/docs/1.0/api/">API</a>
+	</nav>
+</header>
+
+<div class="docs-banner" hidden></div>
+
+<div class="docs-layout">
+	<aside class="docs-side">
+		<a class="docs-brand" href="/hammerite/docs/1.0/"><img src="/hammerite/assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
+		<label class="docs-version">Version
+			<select aria-label="Docs version"><option value="1.0" selected>1.0</option></select>
+		</label>
+		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="/hammerite/docs/1.0/install.html">Installing Hammerite</a></li><li><a href="/hammerite/docs/1.0/getting-started.html">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="/hammerite/docs/1.0/guides/writing-an-entity.html">Writing an entity class</a></li><li><a href="/hammerite/docs/1.0/guides/rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="/hammerite/docs/1.0/guides/stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="/hammerite/docs/1.0/guides/stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="/hammerite/docs/1.0/guides/probe-lighting.html">Probe lighting</a></li><li><a href="/hammerite/docs/1.0/guides/moving-brush-entities.html">Moving brush entities</a></li><li><a href="/hammerite/docs/1.0/guides/guard-navigation.html">Navigation for guards</a></li><li><a href="/hammerite/docs/1.0/guides/brush-materials.html">Brush materials and shaders</a></li><li><a href="/hammerite/docs/1.0/guides/brush-properties.html" aria-current="page">Properties on brushes</a></li></ul><h2>Reference</h2><ul><li><a href="/hammerite/docs/1.0/api/">API reference</a></li><li><a href="/hammerite/docs/1.0/baking.html">Baking from a script</a></li><li><a href="/hammerite/docs/1.0/performance.html">Performance and limits</a></li><li><a href="/hammerite/docs/1.0/troubleshooting.html">Troubleshooting</a></li><li><a href="/hammerite/docs/1.0/api-stability.html">API stability</a></li></ul></nav>
+	</aside>
+	<main class="docs-main">
+		<article class="prose">
+<h1 id="properties-on-brushes">Properties on brushes</h1>
+<p>A room has things to say beyond its shape: what its floor is made of, how it sounds, how dear it is to
+cross. Core does not know any of that, and should not. An addon or a game declares the properties it
+needs, and the inspector shows them on exactly the brushes they apply to.</p>
+<p>Derived things - rooms, portals, walls - are replaced every time the level compiles, so anything an
+author sets has to live on something authored: a brush, a face, or an entity.</p>
+<h2 id="1-declare">1. Declare</h2>
+<p>A <a href="/hammerite/docs/1.0/api/HammeriteBrushPropertySchema.html"><code>HammeriteBrushPropertySchema</code></a> is one section of the
+inspector: a namespace, a label, which brushes it applies to, and its properties with their defaults.</p>
+<pre><code class="language-gdscript">var stealth := HammeriteBrushPropertySchema.new(&amp;&quot;stealth&quot;, &quot;Stealth&quot;)
+stealth.tier = HammeriteBrushPropertySchema.Tier.AIR
+stealth.structural_only = true
+stealth.add(&amp;&quot;floor&quot;, &quot;Floor&quot;, &quot;stone&quot;).set_tooltip(&quot;What footsteps on it sound like&quot;)
+stealth.add(&amp;&quot;cover&quot;, &quot;Cover&quot;, 0.0).set_range(0.0, 1.0, 0.05)
+HammeriteBrushPropertyRegistry.register(stealth)
+</code></pre>
+<ul>
+<li>The <strong>tier</strong> filter says where it appears: <code>AIR</code> for rooms, <code>SOLID</code> for walls, <code>ANY</code> for both.
+  <code>structural_only</code> leaves out detail brushwork - a schema about a <em>room</em> wants it.</li>
+<li>The <strong>default</strong> decides the type, and so the control: a float makes a spin box, a string a text
+  field, a bool a check box. <code>add_enum()</code> makes a list.</li>
+<li>The stored key is <code>&lt;namespace&gt;/&lt;name&gt;</code>: <code>stealth/floor</code>.</li>
+</ul>
+<p>Register from the running game - an autoload's <code>_ready()</code> - before a map is built, not only when the
+editor is up. The declared default is what an untouched brush reads, and a shipped game without the
+registration reads null.</p>
+<h2 id="2-read">2. Read</h2>
+<p>Storage is <strong>sparse</strong>: a brush holds only the values an author changed, and setting one back to its
+default erases it. So read through the brush, which falls back to the declared default:</p>
+<pre><code class="language-gdscript">var floor_kind: String = brush.get_property(&amp;&quot;stealth/floor&quot;)
+</code></pre>
+<p>never <code>brush.properties["stealth/floor"]</code>, which is null on every brush nobody touched.</p>
+<p>A room's properties are those of the air brush that carved it:</p>
+<pre><code class="language-gdscript">var cell: HammeriteCell = map.point_in_cell(map_3d.to_local(player.global_position + Vector3.UP * 32.0))
+if cell:
+    var cover: float = map.get_cell_property(cell, &amp;&quot;stealth/cover&quot;)
+</code></pre>
+<p>A change is announced on the brush (<code>property_changed</code>) and the map (<code>brush_property_changed</code>). It does
+not recompile the world: a property is data on the room, not part of its shape.</p>
+<p>A side effect worth knowing: changing a declared default changes it on every map that never set the
+property. That is the trade sparse storage makes - choose defaults you will not want to move.</p>
+<h2 id="3-on-a-face">3. On a face</h2>
+<p><a href="/hammerite/docs/1.0/api/HammeriteFace.html"><code>HammeriteFace.properties</code></a> is the same kind of bag, with no registry and no
+inspector: the reader supplies the default. It is where a value lives that belongs to one wall, or
+that must outlast something derived from it - a doorway's name is stored on the faces it is punched
+from, because the <a href="/hammerite/docs/1.0/guides/rooms-and-sight.html">portal</a> itself is replaced on every compile.</p>
+<pre><code class="language-gdscript">face.set_property(&amp;&quot;stealth/creaks&quot;, true)
+var creaks: bool = face.get_property(&amp;&quot;stealth/creaks&quot;, false)
+</code></pre>
+<h2 id="4-in-the-editor">4. In the editor</h2>
+<p>A property whose legal values are a list the game knows - patrol groups, surface kinds - gets a
+dropdown:</p>
+<pre><code class="language-gdscript">map_editor.register_brush_property_choices(&amp;&quot;stealth/floor&quot;,
+    func(_map: HammeriteMap) -&gt; PackedStringArray: return PackedStringArray([&quot;stone&quot;, &quot;wood&quot;, &quot;carpet&quot;, &quot;gravel&quot;]))
+</code></pre>
+<p>A control of your own replaces the built-in one with <code>register_brush_property_editor(key, factory)</code>,
+whose factory returns a <a href="/hammerite/docs/1.0/api/HammeritePropertyControl.html"><code>HammeritePropertyControl</code></a>.</p>
+<p>To see a property across the whole level, colour the 2D floorplan by it. An overlay is offered under
+<strong>Cells:</strong> on the toolbar; a fully transparent colour leaves a room plain:</p>
+<pre><code class="language-gdscript">map_editor.register_cell_overlay(&amp;&quot;stealth_cover&quot;, &quot;Cover&quot;, _cover_colour)
+
+func _cover_colour(cell: HammeriteCell, map: HammeriteMap) -&gt; Color:
+    var cover: float = map.get_cell_property(cell, &amp;&quot;stealth/cover&quot;)
+    return Color(0.2, 0.3, 0.8, 0.6 * cover)
+</code></pre>
+<p><code>map_editor</code> is the <a href="/hammerite/docs/1.0/api/HammeriteMapEditor.html"><code>HammeriteMapEditor</code></a> that
+<code>HammeriteEditor.integrate()</code> builds.</p>
+<h2 id="see-also">See also</h2>
+<ul>
+<li><a href="/hammerite/docs/1.0/guides/writing-an-entity.html">Writing an entity class</a> - properties on entities, whose defaults live in
+  their type.</li>
+<li><a href="/hammerite/docs/1.0/api/HammeriteBrushPropertyDef.html"><code>HammeriteBrushPropertyDef</code></a>,
+  <a href="/hammerite/docs/1.0/api/HammeriteBrushPropertyRegistry.html"><code>HammeriteBrushPropertyRegistry</code></a>,
+  <a href="/hammerite/docs/1.0/api/HammeriteBrush.html"><code>HammeriteBrush</code></a>, and
+  <a href="/hammerite/docs/1.0/api/HammeriteReferences.html"><code>HammeriteReferences</code></a> for a property that names a texture, a sound
+  or anything else the game provides.</li>
+</ul>
+		</article>
+		<p class="docs-source">Hammerite 1.0 · built from a6dd634, 2026-10-10</p>
+	</main>
+</div>
+
+<footer class="studio-foot">
+	<a href="/"><img src="/assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rooms, portals and line of sight — Hammerite 3D 1.0 docs</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="/hammerite/assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="/hammerite/assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/hammerite/assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@300&display=swap">
+<link rel="stylesheet" href="/hammerite/hammerite.css">
+<link rel="stylesheet" href="/hammerite/docs/docs.css">
+<script src="/hammerite/docs/versions.js" defer></script>
+</head>
+<body class="docs" data-docs-version="1.0">
+
+<header class="studio">
+	<a class="studio-logo" href="/"><img src="/assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="/hammerite/">Hammerite 3D</a>
+		<a href="/hammerite/docs/1.0/">Docs</a>
+		<a href="/hammerite/docs/1.0/guides/">Guides</a>
+		<a href="/hammerite/docs/1.0/api/">API</a>
+	</nav>
+</header>
+
+<div class="docs-banner" hidden></div>
+
+<div class="docs-layout">
+	<aside class="docs-side">
+		<a class="docs-brand" href="/hammerite/docs/1.0/"><img src="/hammerite/assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
+		<label class="docs-version">Version
+			<select aria-label="Docs version"><option value="1.0" selected>1.0</option></select>
+		</label>
+		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="/hammerite/docs/1.0/install.html">Installing Hammerite</a></li><li><a href="/hammerite/docs/1.0/getting-started.html">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="/hammerite/docs/1.0/guides/writing-an-entity.html">Writing an entity class</a></li><li><a href="/hammerite/docs/1.0/guides/rooms-and-sight.html" aria-current="page">Rooms, portals and line of sight</a></li><li><a href="/hammerite/docs/1.0/guides/stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="/hammerite/docs/1.0/guides/stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="/hammerite/docs/1.0/guides/probe-lighting.html">Probe lighting</a></li><li><a href="/hammerite/docs/1.0/guides/moving-brush-entities.html">Moving brush entities</a></li><li><a href="/hammerite/docs/1.0/guides/guard-navigation.html">Navigation for guards</a></li><li><a href="/hammerite/docs/1.0/guides/brush-materials.html">Brush materials and shaders</a></li><li><a href="/hammerite/docs/1.0/guides/brush-properties.html">Properties on brushes</a></li></ul><h2>Reference</h2><ul><li><a href="/hammerite/docs/1.0/api/">API reference</a></li><li><a href="/hammerite/docs/1.0/baking.html">Baking from a script</a></li><li><a href="/hammerite/docs/1.0/performance.html">Performance and limits</a></li><li><a href="/hammerite/docs/1.0/troubleshooting.html">Troubleshooting</a></li><li><a href="/hammerite/docs/1.0/api-stability.html">API stability</a></li></ul></nav>
+	</aside>
+	<main class="docs-main">
+		<article class="prose">
+<h1 id="rooms-portals-and-line-of-sight">Rooms, portals and line of sight</h1>
+<p>A Hammerite level is carved, not built: solid rock everywhere, and air brushes cut the rooms out of it.
+The compiler works out from those brushes which rooms there are and where they open into each other,
+and a game can ask the same questions its AI needs - <em>which room am I in</em>, <em>where are the doors out of
+it</em>, <em>can that guard see me</em>. The <span class="unlinked">manual</span> explains the
+model as an author meets it.</p>
+<p>All of it is in <strong>map space</strong>, the coordinates the brushes are authored in. Under a <code>HammeriteMap3D</code>
+that has been moved, convert with <code>map_3d.to_local(world_point)</code> first.</p>
+<h2 id="1-which-room">1. Which room</h2>
+<p>A <a href="/hammerite/docs/1.0/api/HammeriteCell.html"><code>HammeriteCell</code></a> is one <em>convex piece</em> of carved air. A room is a group of
+them - a pillar splits a hall into four cells that are still one room - and <code>cell.key()</code> names the
+room, not the piece:</p>
+<pre><code class="language-gdscript">var cell: HammeriteCell = map.point_in_cell(map_3d.to_local(guard.global_position + Vector3.UP * 64.0))
+if cell:
+    var room: Vector2i = cell.key()
+</code></pre>
+<p><code>point_in_cell()</code> is null in rock. Ask from the head or the chest rather than the feet: a point
+exactly on a room's floor is in no cell.</p>
+<p>Cells are derived, and replaced every time the level is compiled. <strong>Keep the key, not the cell</strong>: the
+key is the same room after a recompile, and <code>map.get_region_cells(room)</code> finds its cells again.</p>
+<p>What a room is: its properties are those of the air brush that carved it -
+<code>map.get_cell_property(cell, &amp;"some/property")</code>. Whether it is indoors has two answers, deliberately
+different:</p>
+<ul>
+<li><code>map.cell_reaches_sky(cell)</code> - sky light reaches it, through a window if need be. The lighting
+  question.</li>
+<li><code>map.cell_is_open_to_sky(cell)</code> - it has open sky over it. A room with a window onto a courtyard is
+  not: its rain is at the window. The question for weather and acoustics.</li>
+</ul>
+<h2 id="2-what-joins-rooms">2. What joins rooms</h2>
+<p>A <a href="/hammerite/docs/1.0/api/HammeritePortal.html"><code>HammeritePortal</code></a> joins two rooms, in one of two ways:</p>
+<ul>
+<li>an <strong>aperture</strong> - the rooms abut on a shared wall, and the portal is the hole in it: a doorway, a
+  window. It has a <code>polygon</code> and a <code>plane</code>.</li>
+<li>an <strong>overlap</strong> - two air brushes interpenetrate, so they are one continuous space with no wall
+  between to hole. It has neither.</li>
+</ul>
+<p><code>portal.is_aperture()</code> tells them apart. The author's rule that follows: <em>overlap to extend a space,
+abut to divide one.</em></p>
+<pre><code class="language-gdscript">for portal: HammeritePortal in map.get_portals_for_cell(room.x):
+    var beyond: Vector2i = portal.other_region(room)
+    if beyond == Vector2i.ZERO or not portal.is_aperture():
+        continue
+    _doorways.append({&quot;to&quot;: beyond, &quot;name&quot;: portal.get_portal_name(), &quot;way&quot;: portal.normal_from(room)})
+</code></pre>
+<p><code>get_portals_for_cell()</code> takes the air brush's id and answers for every room carved from that brush,
+so <code>other_region()</code> returning <code>Vector2i.ZERO</code> means the portal is not one of <em>this</em> room's.</p>
+<p>A portal is replaced on every compile too. Its <code>key()</code> - the two air brushes and which of their
+openings it is - is what stays. An aperture can be <strong>named</strong> (<code>set_portal_name()</code>, or the Audio
+Portals tool); the name is stored on the wall faces it is cut from, so it survives every edit, and
+audio and navigation read the same one: <code>"vault_door"</code> is one door to every system. <code>map.aperture_at(point)</code>
+finds the opening a point stands in.</p>
+<h2 id="3-line-of-sight">3. Line of sight</h2>
+<pre><code class="language-gdscript">func can_see(map_3d: HammeriteMap3D, eye: Vector3, target: Vector3) -&gt; bool:
+    return map_3d.map.segment_in_air(map_3d.to_local(eye), map_3d.to_local(target))
+</code></pre>
+<p><a href="/hammerite/docs/1.0/api/HammeriteMap.html#method-segment_in_air"><code>segment_in_air()</code></a> walks the line from room to room
+through the openings, and is false as soon as it would enter rock - or if either end is in rock.</p>
+<p><strong>Never use a raycast against the brushes for this.</strong> In a carved world it is wrong both ways: the air
+brushes are in the tree, so open space reads as blocked; and a block of rock is one authored brush with
+rooms cut out of it, so a line straight through the rock crosses none of its faces and reads as clear.
+<code>bvh_raycast()</code> is for picking, not seeing.</p>
+<p><code>segment_in_air()</code> ignores detail brushwork - a table, a crate stack - and entities, by design. A guard
+that should lose the player behind a crate asks Godot's physics as well:</p>
+<pre><code class="language-gdscript">var seen: bool = can_see(map_3d, eye, target) \
+    and get_world_3d().direct_space_state.intersect_ray(
+        PhysicsRayQueryParameters3D.create(eye, target, 1, [self])).is_empty()
+</code></pre>
+<p>With the native kernel built, <code>segment_in_air()</code> costs microseconds and may be asked from several
+threads at once once the world is compiled.</p>
+<h2 id="4-when-the-world-changes">4. When the world changes</h2>
+<p>Compilation is lazy: an edit that changes the rooms emits <code>map.worldrep_changed</code>, and the next query
+compiles. Anything you hold that came from the rooms - a guard's patrol of room keys, a table of
+doorways - rebinds there, by key:</p>
+<pre><code class="language-gdscript">func _on_worldrep_changed() -&gt; void:
+    _patrol_cells = map.get_region_cells(_patrol_room)
+    _doorways.clear()
+</code></pre>
+<p>A variant switch changes what exists without an edit, and says so on <code>map.variant_changed</code>. A new map
+arrives on the <code>HammeriteMap3D</code>'s <code>map_changed</code>.</p>
+<h2 id="see-also">See also</h2>
+<ul>
+<li><a href="/hammerite/docs/1.0/guides/stealth-hearing.html">Hearing for stealth gameplay</a> - sound travels through these openings.</li>
+<li><a href="/hammerite/docs/1.0/guides/guard-navigation.html">Navigation for guards</a> - so do paths.</li>
+<li><a href="/hammerite/docs/1.0/api/HammeriteMap.html"><code>HammeriteMap</code></a>, <a href="/hammerite/docs/1.0/api/HammeriteBoundaryWall.html"><code>HammeriteBoundaryWall</code></a>,
+  and <a href="/hammerite/docs/1.0/api/HammeriteMap3D.html#method-is_room_seen_at"><code>HammeriteMap3D.is_room_seen_at()</code></a> for
+  deciding what is worth doing every frame.</li>
+</ul>
+		</article>
+		<p class="docs-source">Hammerite 1.0 · built from a6dd634, 2026-10-10</p>
+	</main>
+</div>
+
+<footer class="studio-foot">
+	<a href="/"><img src="/assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>

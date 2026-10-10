@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Brush materials and shaders — Hammerite 3D 1.0 docs</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="/hammerite/assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="/hammerite/assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/hammerite/assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@300&display=swap">
+<link rel="stylesheet" href="/hammerite/hammerite.css">
+<link rel="stylesheet" href="/hammerite/docs/docs.css">
+<script src="/hammerite/docs/versions.js" defer></script>
+</head>
+<body class="docs" data-docs-version="1.0">
+
+<header class="studio">
+	<a class="studio-logo" href="/"><img src="/assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="/hammerite/">Hammerite 3D</a>
+		<a href="/hammerite/docs/1.0/">Docs</a>
+		<a href="/hammerite/docs/1.0/guides/">Guides</a>
+		<a href="/hammerite/docs/1.0/api/">API</a>
+	</nav>
+</header>
+
+<div class="docs-banner" hidden></div>
+
+<div class="docs-layout">
+	<aside class="docs-side">
+		<a class="docs-brand" href="/hammerite/docs/1.0/"><img src="/hammerite/assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
+		<label class="docs-version">Version
+			<select aria-label="Docs version"><option value="1.0" selected>1.0</option></select>
+		</label>
+		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="/hammerite/docs/1.0/install.html">Installing Hammerite</a></li><li><a href="/hammerite/docs/1.0/getting-started.html">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="/hammerite/docs/1.0/guides/writing-an-entity.html">Writing an entity class</a></li><li><a href="/hammerite/docs/1.0/guides/rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="/hammerite/docs/1.0/guides/stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="/hammerite/docs/1.0/guides/stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="/hammerite/docs/1.0/guides/probe-lighting.html">Probe lighting</a></li><li><a href="/hammerite/docs/1.0/guides/moving-brush-entities.html">Moving brush entities</a></li><li><a href="/hammerite/docs/1.0/guides/guard-navigation.html">Navigation for guards</a></li><li><a href="/hammerite/docs/1.0/guides/brush-materials.html" aria-current="page">Brush materials and shaders</a></li><li><a href="/hammerite/docs/1.0/guides/brush-properties.html">Properties on brushes</a></li></ul><h2>Reference</h2><ul><li><a href="/hammerite/docs/1.0/api/">API reference</a></li><li><a href="/hammerite/docs/1.0/baking.html">Baking from a script</a></li><li><a href="/hammerite/docs/1.0/performance.html">Performance and limits</a></li><li><a href="/hammerite/docs/1.0/troubleshooting.html">Troubleshooting</a></li><li><a href="/hammerite/docs/1.0/api-stability.html">API stability</a></li></ul></nav>
+	</aside>
+	<main class="docs-main">
+		<article class="prose">
+<h1 id="brush-materials-and-shaders">Brush materials and shaders</h1>
+<p>Every wall, floor and ceiling is drawn with Hammerite's brush shader: the face's texture, lit by its
+lightmap, through the exposure and light curve the rest of the world uses. A game changes how its world
+looks without taking any of that on, from least to most work:</p>
+<table>
+<thead>
+<tr>
+<th>To change</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>a surface that glows, is see-through, or is a window on the sky</td>
+<td>the texture's <a href="#1-what-a-texture-name-says">name</a></td>
+</tr>
+<tr>
+<td>the walls themselves - normal maps, detail textures, a glow of their own</td>
+<td>a <a href="#2-walls">wall shader</a> on Hammerite's surface contract</td>
+</tr>
+<tr>
+<td>what water looks like</td>
+<td>a <a href="#3-water">water shader</a> on Hammerite's water contract</td>
+</tr>
+<tr>
+<td>a room full of something else - lava, tar, fog</td>
+<td>a <a href="#4-a-fill-of-your-own">fill</a> with a material of your own</td>
+</tr>
+<tr>
+<td>the sky through the windows</td>
+<td>a <a href="#5-the-sky">sky shader</a></td>
+</tr>
+<tr>
+<td>a shader of your own that sits in the same light</td>
+<td>the <a href="#6-matching-the-world">shader globals</a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="1-what-a-texture-name-says">1. What a texture name says</h2>
+<p>A face stores a texture <em>name</em>, and <a href="/hammerite/docs/1.0/api/HammeriteTextureLibrary.html"><code>HammeriteTextureLibrary</code></a>
+resolves it. Three things about a surface are said by the name and the files beside it, so an author
+never sets them twice:</p>
+<ul>
+<li><strong><code>wall_01_emission.png</code></strong> beside <code>wall_01.png</code> makes every face of <code>wall_01</code> glow where the emission
+  texture is bright. The glow is radiance the surface gives off by itself: it is drawn, and it lights
+  the bake, bouncing onto the walls around it. It is static light - it cannot be switched off.
+  <a href="/hammerite/docs/1.0/api/HammeriteBakeSettings.html#property-emission_scale"><code>HammeriteBakeSettings.emission_scale</code></a>
+  sets how bright <em>fully white</em> glows.</li>
+<li><strong><code>!grate</code></strong> - a leading <code>!</code> marks an alpha mask: the texture's alpha cuts holes, in what is drawn and
+  in what the bake lets through.</li>
+<li><strong><code>sky_night</code></strong> - a leading <code>sky_</code> makes a face a hole to the outside, drawn as the
+  <a href="#5-the-sky">sky</a>.</li>
+</ul>
+<p>Textures a game makes itself - a mod's PNGs - come from a source of its own, asked before the search
+paths:</p>
+<pre><code class="language-gdscript">HammeriteTextureLibrary.add_source(
+    func(texture_name: StringName) -&gt; Texture2D: return _mod_textures.get(texture_name),
+    func() -&gt; Array: return _mod_textures.keys())
+</code></pre>
+<h2 id="2-walls">2. Walls</h2>
+<p>A game draws its walls with a shader of its own by writing one function, <code>brush_surface()</code>, between
+two includes. The includes do everything the bake and the editor need - the lightmap, caustics, the
+probes a moving brush entity hands over to, a torch in somebody's hand, the editor's views - and hand
+the function a <code>HammeriteSurface</code>, <code>s</code>, to change:</p>
+<pre><code class="language-glsl">shader_type spatial;
+render_mode depth_draw_always, cull_back, ambient_light_disabled, specular_disabled;
+#include &quot;res://addons/hammerite-core/resources/materials/hammerite_surface.gdshaderinc&quot;
+
+uniform sampler2D normal_texture : hint_normal;
+uniform float bumpiness = 1.0;
+
+void brush_surface(inout HammeriteSurface s) {
+    s.normal = surface_normal_from_map(s, texture(normal_texture, s.uv).rgb, bumpiness);
+}
+
+#include &quot;res://addons/hammerite-core/resources/materials/hammerite_surface_main.gdshaderinc&quot;
+</code></pre>
+<pre><code class="language-gdscript">HammeriteBrush.surface_material = preload(&quot;res://materials/our_walls.tres&quot;)
+</code></pre>
+<p><code>s</code> starts as Hammerite's own surface, and the function changes only what it wants to:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>albedo</code></td>
+<td>the colour the light falls on - the face's texture to begin with</td>
+</tr>
+<tr>
+<td><code>normal</code></td>
+<td>which way the surface faces, in world space - the face's own to begin with</td>
+</tr>
+<tr>
+<td><code>glow</code></td>
+<td>light it gives off by itself, added before the exposure; drawn, not baked</td>
+</tr>
+</tbody>
+</table>
+<p>and reads where it is: <code>uv</code> (the face's texture coordinates, so <code>color_texture</code> and anything of yours
+tiles with the texture), <code>uv2</code>, <code>position</code>, <code>face_normal</code>, <code>view_dir</code>, <code>time</code>, and <code>u_axis</code> and
+<code>v_axis</code>, the ways the texture runs across the face, which a normal map is written against.
+<code>surface_normal_from_map()</code> turns a texel of a tangent-space normal map into a world-space normal.</p>
+<p>A detail texture is a few lines more:</p>
+<pre><code class="language-glsl">uniform sampler2D detail_texture : source_color, repeat_enable;
+
+void brush_surface(inout HammeriteSurface s) {
+    s.albedo *= texture(detail_texture, s.uv * 8.0).rgb * 2.0;
+}
+</code></pre>
+<p><strong>What a normal map responds to.</strong> A lightmap holds how much light reaches a texel, not where it came
+from. So a normal turned away from the face's plane is shaded against the light that does know a
+direction:</p>
+<ul>
+<li>each <strong>switchable</strong> light, whose place the shader is told - a lamp the player can put out shades
+  the bumps it falls across;</li>
+<li><strong>carried lights</strong>, a torch in somebody's hand;</li>
+<li>the <strong>probes</strong>, on brushwork that moves.</li>
+</ul>
+<p>The <strong>static</strong> layer and the <strong>bounce</strong> stay as baked, flat across the texel. A level lit mostly by
+lamps that never switch shows its normal maps under torchlight, and as a switchable lamp is dimmed or
+lit.</p>
+<p>Each face is drawn with a copy of the material. A uniform Hammerite's own shader is given - the
+caustic and noise textures - that your material leaves unset is taken from Hammerite's, so a wall under
+a pool still ripples. Set the material once, before a map is built; <code>null</code> puts Hammerite's own back.
+Alpha-masked faces, the sky, the surfaces of fills and placed models (<code>prop_model</code>) are drawn as
+before. What the bake bounces is the face's texture, not your <code>albedo</code>: a detail texture that changes a
+wall's colour does not change the colour it throws on its neighbours.</p>
+<h2 id="3-water">3. Water</h2>
+<p>Hammerite's water shows how clear and how disturbed it is, and nothing else. A game draws its own by
+writing one function, <code>water_surface()</code>, between two includes. The includes do the plumbing - what is
+under the surface, the bake's light on it, which side it is seen from - and hand it a
+<code>HammeriteWater</code>, <code>w</code>, to fill in:</p>
+<pre><code class="language-glsl">shader_type spatial;
+render_mode blend_mix, depth_draw_never, cull_disabled, ambient_light_disabled, specular_disabled;
+#include &quot;res://addons/hammerite-core/resources/materials/hammerite_water.gdshaderinc&quot;
+
+void water_surface(inout HammeriteWater w) {
+    float through = water_transmittance(water_travelled(w), w.clarity);
+    vec3 below = water_below(w, water_slope(w, w.uv) * 0.002);
+    w.colour = mix(water_lit(w, w.tint), below, through);
+}
+
+#include &quot;res://addons/hammerite-core/resources/materials/hammerite_water_main.gdshaderinc&quot;
+</code></pre>
+<pre><code class="language-gdscript">HammeriteBrushFillRegistry.set_material(HammeriteBrushFillRegistry.WATER, preload(&quot;res://materials/our_water.tres&quot;))
+</code></pre>
+<p><code>w.clarity</code>, <code>w.tint</code> and <code>w.disturbance</code> are what the author set on the pool's brush. The helpers
+measure and the function decides: <code>water_travelled</code> is how much water the view crosses,
+<code>water_below</code> the scene behind the surface, <code>water_lit</code> the surface lit by the bake, <code>water_slope</code> the
+ripple, and <code>water_transmittance</code> and <code>water_fresnel</code> the usual optics. The whole list is the
+<a href="/hammerite/docs/1.0/api-stability.html#shader-contracts">water contract</a>, which is supported: a shader written against it
+keeps working.</p>
+<p>Register before the map is built. A built map redraws its filled rooms when a fill's material changes.</p>
+<h2 id="4-a-fill-of-your-own">4. A fill of your own</h2>
+<p>A fill is what an air brush is full of instead of air. Core ships water; a game adds its own - and the
+material its surface is drawn with:</p>
+<pre><code class="language-gdscript">HammeriteBrushFillRegistry.register_fill(&amp;&quot;lava&quot;, &quot;Lava&quot;, &amp;&quot;&quot;, Color.ORANGE_RED,
+    preload(&quot;res://materials/lava.tres&quot;))
+</code></pre>
+<p>The room is still a room: light, sound and agents pass through it, and a node of the game's
+(<code>classname</code>, here none) can be put over each one to burn whoever falls in.</p>
+<p>Each pool's surface gets its own copy of the material, with the face's texture as <code>color_texture</code>. A
+property declared for the fill reaches the copy as a uniform of the same name, <code>/</code> as <code>_</code> - so an
+author can make one pool hotter than another:</p>
+<pre><code class="language-gdscript">var lava := HammeriteBrushPropertySchema.new(&amp;&quot;lava&quot;, &quot;Lava&quot;)
+lava.fill = &amp;&quot;lava&quot;
+lava.add(&amp;&quot;glow&quot;, &quot;Glow&quot;, 0.5).set_range(0.0, 1.0, 0.05)
+HammeriteBrushPropertyRegistry.register(lava)
+</code></pre>
+<pre><code class="language-glsl">shader_type spatial;
+render_mode unshaded;
+
+global uniform float hammerite_exposure;
+uniform sampler2D color_texture : source_color;
+uniform float lava_glow = 0.5;
+
+void fragment() {
+    vec2 flow = UV + vec2(TIME * 0.02, 0.0);
+    ALBEDO = texture(color_texture, flow).rgb * (1.0 + 4.0 * lava_glow) * hammerite_exposure;
+}
+</code></pre>
+<p>Lava lights itself, so it is drawn unshaded and needs nothing of the bake. For it to light the room
+around it too, give its texture an emission partner - <code>lava_emission.png</code> - and the bake will.</p>
+<h2 id="5-the-sky">5. The sky</h2>
+<p>Through every <code>sky_</code> face, Hammerite draws a gradient from the horizon to the zenith, with the sun or
+moon in it. A game draws its own with a <code>shader_type sky</code> material, one for every map:</p>
+<pre><code class="language-gdscript">HammeriteSkybox.dome_material = preload(&quot;res://materials/our_sky.tres&quot;)
+</code></pre>
+<p>Every uniform it declares under one of the skybox's names is filled in: <code>horizon_color</code>,
+<code>zenith_color</code>, <code>body_direction</code>, <code>body_color</code>, <code>body_energy</code>, <code>body_is_moon</code>, <code>light_energy</code>. And a
+property a game declares on the sky reaches it the same way, <code>clouds/cover</code> as <code>clouds_cover</code>:</p>
+<pre><code class="language-gdscript">var clouds := HammeriteSkyPropertySchema.new(&amp;&quot;clouds&quot;, &quot;Clouds&quot;)
+clouds.add(&amp;&quot;cover&quot;, &quot;Cover&quot;, 0.45).set_range(0.0, 1.0, 0.01)
+HammeriteSkyPropertyRegistry.register(clouds)
+</code></pre>
+<pre><code class="language-glsl">shader_type sky;
+
+uniform vec3 horizon_color : source_color;
+uniform vec3 zenith_color : source_color;
+uniform float clouds_cover = 0.45;
+
+void sky() {
+    vec3 gradient = mix(horizon_color, zenith_color, clamp(EYEDIR.y, 0.0, 1.0));
+    COLOR = mix(gradient, vec3(0.6), clouds_cover * smoothstep(0.0, 0.3, EYEDIR.y));
+}
+</code></pre>
+<p>What the sky <em>lights the world with</em> is its gradient and its sun, in the bake. A cloudier sky that
+should also be darker is a greyer gradient, not just a shader that draws more cloud.</p>
+<h2 id="6-matching-the-world">6. Matching the world</h2>
+<p>A shader of your own - a prop's, a particle's, the lava's - sits in a world drawn through an eye that
+adapts. Read the same values, and it brightens and darkens with everything else. The names are
+<a href="/hammerite/docs/1.0/api/HammeriteShaderGlobals.html"><code>HammeriteShaderGlobals</code></a>, and they are supported:</p>
+<ul>
+<li><code>hammerite_exposure</code> - what the eye has adapted to. Multiply anything self-lit by it.</li>
+<li><code>hammerite_ambient_light</code> - the floor of darkness the game set.</li>
+<li>the <code>hammerite_light_curve*</code> five - how the world shapes its light for the eye.</li>
+</ul>
+<p>Enabling the core plugin declares them in the project settings. A shader reading one that is not
+declared does not compile.</p>
+<p>Something that moves, and should be lit by the bake rather than glow, is lit by the light probes; see
+<a href="/hammerite/docs/1.0/guides/probe-lighting.html">Probe lighting</a>.</p>
+<h2 id="contracts-and-promises">Contracts and promises</h2>
+<p>The three shader contracts - walls, water and the sky - are supported, as the classes are: a shader
+written against what <a href="/hammerite/docs/1.0/api-stability.html#shader-contracts">API stability</a> lists keeps working. The
+rest of what the includes declare, and Hammerite's own shaders (<code>brush.gdshader</code>,
+<code>brush_common.gdshaderinc</code>, the probe and light-curve includes), are the renderer's and may change in
+any release.</p>
+<h2 id="see-also">See also</h2>
+<ul>
+<li><a href="/hammerite/docs/1.0/guides/brush-properties.html">Properties on brushes</a> - declaring the properties a fill's material reads.</li>
+<li><a href="/hammerite/docs/1.0/api/HammeriteBrushFillRegistry.html"><code>HammeriteBrushFillRegistry</code></a>,
+  <a href="/hammerite/docs/1.0/api/HammeriteBrushFill.html"><code>HammeriteBrushFill</code></a>,
+  <a href="/hammerite/docs/1.0/api/HammeriteSkybox.html"><code>HammeriteSkybox</code></a>,
+  <a href="/hammerite/docs/1.0/api/HammeriteSkyPropertyRegistry.html"><code>HammeriteSkyPropertyRegistry</code></a>.</li>
+</ul>
+		</article>
+		<p class="docs-source">Hammerite 1.0 · built from a6dd634, 2026-10-10</p>
+	</main>
+</div>
+
+<footer class="studio-foot">
+	<a href="/"><img src="/assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>

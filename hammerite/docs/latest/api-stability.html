@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>API stability — Hammerite 3D latest docs</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="/hammerite/assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="/hammerite/assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/hammerite/assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@300&display=swap">
+<link rel="stylesheet" href="/hammerite/hammerite.css">
+<link rel="stylesheet" href="/hammerite/docs/docs.css">
+<script src="/hammerite/docs/versions.js" defer></script>
+</head>
+<body class="docs" data-docs-version="latest">
+
+<header class="studio">
+	<a class="studio-logo" href="/"><img src="/assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="/hammerite/">Hammerite 3D</a>
+		<a href="/hammerite/docs/latest/">Docs</a>
+		<a href="/hammerite/docs/latest/guides/">Guides</a>
+		<a href="/hammerite/docs/latest/api/">API</a>
+	</nav>
+</header>
+
+<div class="docs-banner" hidden></div>
+
+<div class="docs-layout">
+	<aside class="docs-side">
+		<a class="docs-brand" href="/hammerite/docs/latest/"><img src="/hammerite/assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
+		<label class="docs-version">Version
+			<select aria-label="Docs version"><option value="latest" selected>latest</option></select>
+		</label>
+		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="/hammerite/docs/latest/install.html">Installing Hammerite</a></li><li><a href="/hammerite/docs/latest/getting-started.html">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="/hammerite/docs/latest/guides/writing-an-entity.html">Writing an entity class</a></li><li><a href="/hammerite/docs/latest/guides/rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="/hammerite/docs/latest/guides/stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="/hammerite/docs/latest/guides/stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="/hammerite/docs/latest/guides/probe-lighting.html">Probe lighting</a></li><li><a href="/hammerite/docs/latest/guides/moving-brush-entities.html">Moving brush entities</a></li><li><a href="/hammerite/docs/latest/guides/guard-navigation.html">Navigation for guards</a></li><li><a href="/hammerite/docs/latest/guides/brush-materials.html">Brush materials and shaders</a></li><li><a href="/hammerite/docs/latest/guides/brush-properties.html">Properties on brushes</a></li></ul><h2>Reference</h2><ul><li><a href="/hammerite/docs/latest/api/">API reference</a></li><li><a href="/hammerite/docs/latest/baking.html">Baking from a script</a></li><li><a href="/hammerite/docs/latest/performance.html">Performance and limits</a></li><li><a href="/hammerite/docs/latest/troubleshooting.html">Troubleshooting</a></li><li><a href="/hammerite/docs/latest/api-stability.html" aria-current="page">API stability</a></li></ul></nav>
+	</aside>
+	<main class="docs-main">
+		<article class="prose">
+<h1 id="api-stability">API stability</h1>
+<p>Hammerite is versioned as one (<span class="unlinked"><code>HammeriteVersion.STRING</code></span>, and
+every addon's <code>plugin.cfg</code>), following <a href="https://semver.org">semantic versioning</a> over the classes
+listed here: their public properties, methods, signals and constants, the autoloads (<code>Hammerite</code>,
+<code>HammeriteEditor</code>, <code>HammeriteAudio</code>, <code>HammeriteNavigation</code>), and the <a href="#shader-contracts">shader contracts</a> a
+game's own shaders are written against. What changes is in <span class="unlinked">CHANGELOG.md</span>, and
+what each of them does is in the <a href="/hammerite/docs/latest/api/">API reference</a>.</p>
+<ul>
+<li>A <strong>patch</strong> release (1.0.x) fixes things and changes none of it.</li>
+<li>A <strong>minor</strong> release adds to it.</li>
+<li>Only a <strong>major</strong> release removes or changes any of it.</li>
+</ul>
+<p>Everything else is <strong>experimental</strong>: every other <code>class_name</code>, any member whose name starts with
+<code>_</code>, and any member of a supported class tagged <code>@experimental</code> on its own - much of
+<code>HammeriteMapEditor</code> is what its own menus and tools call, and is marked so. It is tagged
+<code>@experimental</code> in its class or member documentation, so Godot's built-in help and the API reference
+show the warning, and it may change in any release. If you need something that is only experimental, say so -
+that is how things get onto this list.</p>
+<p>A map saved by any earlier Hammerite opens in a later one; see "Compatibility" in the
+<span class="unlinked">core README</span>.</p>
+<h2 id="supported-classes">Supported classes</h2>
+<p><strong>Core: the map</strong></p>
+<p><code>HammeriteMap</code>, <code>HammeriteBrush</code>, <code>HammeriteFace</code>, <code>HammeriteEntity</code>, <code>HammeriteBrushEntity</code>, <code>HammeriteLayer</code>, <code>HammeriteCell</code>, <code>HammeritePortal</code>, <code>HammeriteBoundaryWall</code>, <code>HammeritePrefab</code>, <code>HammeritePrefabSet</code>, <code>HammeritePrefabInstance</code>, <code>HammeriteSkybox</code></p>
+<p><strong>Core: in the scene</strong></p>
+<p><code>HammeriteMap3D</code>, <code>HammeriteWorldrepCompile</code>, <code>HammeriteCompileProgress</code></p>
+<p><strong>Core: entities</strong></p>
+<p><code>HammeritePointEntityNode3D</code>, <code>HammeritePointEntityAnimatableBody3D</code>, <code>HammeritePointEntityRigidBody3D</code>, <code>HammeriteBrushEntityNode3D</code>, <code>HammeriteBrushEntityStaticBody3D</code>, <code>HammeriteBrushEntityArea3D</code>, <code>HammeriteEntityNodes</code>, <code>HammeritePointLight3D</code>, <code>HammeriteDynamicLight3D</code>, <code>HammeriteDynamicPointLight3D</code>, <code>HammeriteDirectionalLight3D</code>, <code>HammeriteDynamicDirectionalLight3D</code>, <code>HammeriteGenericBrushEntity</code>, <code>HammeritePropModel</code>, <code>HammeriteDecal3D</code>, <code>HammeriteGizmoBuffer</code>, <code>HammeriteEditorHandle</code></p>
+<p><strong>Core: lighting</strong></p>
+<p><code>HammeriteLightmapper</code>, <code>HammeriteBakeSettings</code>, <code>HammeriteLightmapBakeReport</code>, <code>HammeriteBakedLight</code>, <code>HammeriteLightProbeSet</code>, <code>HammeriteLightCurve</code>, <code>HammeriteEyeAdaptation3D</code>, <code>HammeriteBakeOccluders</code>, <code>HammeriteBakeOccluder</code>, <code>HammeriteBrushEntityLighting</code>, <code>HammeriteShaderGlobals</code></p>
+<p><strong>Core: files, names and extension</strong></p>
+<p><code>HammeriteDataFile</code>, <code>HammeriteUnknownData</code>, <code>HammeriteReferences</code>, <code>HammeriteReferenceChange</code>, <code>HammeriteTextureLibrary</code>, <code>HammeriteModelLibrary</code>, <code>HammeriteAssetLibrary</code>, <code>HammeriteBrushPropertySchema</code>, <code>HammeriteBrushPropertyDef</code>, <code>HammeriteBrushPropertyRegistry</code>, <code>HammeriteBrushFill</code>, <code>HammeriteBrushFillRegistry</code>, <code>HammeriteSkyPropertySchema</code>, <code>HammeriteSkyPropertyRegistry</code>, <code>HammeriteEntityTypeRegistry</code>, <code>HammeriteUtils</code>, <code>HammeriteVersion</code></p>
+<p><strong>Editor</strong></p>
+<p><code>HammeriteMapEditor</code>, <code>HammeriteMapEditorSettings</code>, <code>HammeriteEditorColors</code>, <code>HammeriteEditorTheme</code>, <code>HammeriteEditorCommand</code>, <code>HammeriteEditorCommands</code>, <code>HammeriteEditorTool</code>, <code>HammeritePropertyControl</code>, <code>HammeriteEditorWorkspaces</code>, <code>HammeriteManual</code>, <code>HammeriteManualSection</code>, <code>HammeriteManualPage</code>, <code>HammeriteNotableSizes</code></p>
+<p><strong>Audio</strong></p>
+<p><code>HammeriteAudioRuntime</code>, <code>HammeriteAudioManager</code>, <code>HammeriteAudioHearing</code>, <code>HammeriteAudioMixSettings</code>, <code>HammeriteAudioSoundSpec</code>, <code>HammeriteAudioBakeReport</code>, <code>HammeriteAudioEmitter3D</code>, <code>HammeriteAudioReceiver3D</code>, <code>HammeriteAudioSoundTypes</code>, <code>HammeriteAudioSoundType</code>, <code>HammeriteAudioSoundEvent</code>, <code>HammeriteAudioPreset</code>, <code>HammeriteAudioMaterials</code>, <code>HammeriteAudioMaterial</code>, <code>HammeriteAudioBrushProperties</code>, <code>HammeriteAudioPortalProperties</code>, <code>HammeriteAudioEditorExtension</code></p>
+<p><strong>Navigation</strong></p>
+<p><code>HammeriteNavigationRuntime</code>, <code>HammeriteNavigationAgentProfile</code>, <code>HammeriteNavigationAgentProfiles</code>, <code>HammeriteNavigationBrushProperties</code>, <code>HammeriteNavigationEditorExtension</code>, <code>HammeriteNavigationLinkEntity3D</code>, <code>HammeriteNavigationBakeReport</code>, <code>HammeriteNavigationSurface</code>, <code>HammeriteNavigationLinkData</code>, <code>HammeriteNavigationBuilder</code>, <code>HammeriteNavigationLinkBuilder</code>, <code>HammeriteNavigationMeshWriter</code></p>
+<h2 id="shader-contracts">Shader contracts</h2>
+<p>A game draws its own water and its own sky with shaders of its own, and those are written against
+names in Hammerite's shaders rather than against a class. These are covered by the same promise.</p>
+<p><strong>Water</strong> - a <code>shader_type spatial</code> shader that includes
+<code>res://addons/hammerite-core/resources/materials/hammerite_water.gdshaderinc</code>, defines
+<code>void water_surface(inout HammeriteWater w)</code>, and then includes <code>hammerite_water_main.gdshaderinc</code>
+(see "Water's look" in the <span class="unlinked">core README</span>).</p>
+<ul>
+<li><code>struct HammeriteWater</code>. What the surface is handed: <code>time</code>, <code>uv</code>, <code>uv2</code>, <code>screen_uv</code>, <code>depth</code>,
+  <code>position</code>, <code>normal</code>, <code>view_dir</code>, <code>ndotv</code>, <code>from_above</code>, <code>inv_view</code>, <code>inv_projection</code>, <code>vertex</code>, and
+  the brush's <code>clarity</code>, <code>tint</code> and <code>disturbance</code>. What it gives back: <code>colour</code>, <code>alpha</code>, <code>carried</code>.</li>
+<li>The helpers: <code>water_travelled</code>, <code>water_below</code>, <code>water_lit</code>, <code>water_lit_from_below</code>, <code>water_slope</code>,
+  <code>water_height</code>, <code>water_view_position</code>, <code>water_transmittance</code>, <code>water_fresnel</code>.</li>
+</ul>
+<p>Anything else those files declare - their uniforms, and what they include in turn - is not part of it.</p>
+<p><strong>Walls</strong> - a <code>shader_type spatial</code> shader that includes
+<code>res://addons/hammerite-core/resources/materials/hammerite_surface.gdshaderinc</code>, defines
+<code>void brush_surface(inout HammeriteSurface s)</code>, and then includes <code>hammerite_surface_main.gdshaderinc</code>,
+handed over as <code>HammeriteBrush.surface_material</code> (see "Walls' look" in the
+<span class="unlinked">core README</span>).</p>
+<ul>
+<li><code>struct HammeriteSurface</code>. What the surface is handed: <code>time</code>, <code>uv</code>, <code>uv2</code>, <code>position</code>,
+  <code>face_normal</code>, <code>view_dir</code>, <code>u_axis</code>, <code>v_axis</code>, <code>has_uv_axes</code>. What it gives back: <code>albedo</code>,
+  <code>normal</code>, <code>glow</code>.</li>
+<li>The helper <code>surface_normal_from_map</code>.</li>
+</ul>
+<p><strong>Sky</strong> - a <code>shader_type sky</code> material assigned to <code>HammeriteSkybox.dome_material</code>. A uniform it
+declares under one of these names is set from the skybox: <code>horizon_color</code>, <code>zenith_color</code>,
+<code>body_direction</code>, <code>body_color</code>, <code>body_energy</code>, <code>body_is_moon</code>, <code>light_energy</code>. And one named after
+each property declared on the sky (<a href="/hammerite/docs/latest/api/HammeriteSkyPropertyRegistry.html"><code>HammeriteSkyPropertyRegistry</code></a>),
+with <code>/</code> as <code>_</code>: <code>clouds/cover</code> is <code>clouds_cover</code>.</p>
+<p><strong>Shader globals</strong> - the names <a href="/hammerite/docs/latest/api/HammeriteShaderGlobals.html"><code>HammeriteShaderGlobals</code></a> declares.</p>
+		</article>
+		<p class="docs-source">Hammerite latest · built from a6dd634, 2026-10-10</p>
+	</main>
+</div>
+
+<footer class="studio-foot">
+	<a href="/"><img src="/assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>

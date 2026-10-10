@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Navigation for guards — Hammerite 3D 1.0 docs</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="/hammerite/assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="/hammerite/assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/hammerite/assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@300&display=swap">
+<link rel="stylesheet" href="/hammerite/hammerite.css">
+<link rel="stylesheet" href="/hammerite/docs/docs.css">
+<script src="/hammerite/docs/versions.js" defer></script>
+</head>
+<body class="docs" data-docs-version="1.0">
+
+<header class="studio">
+	<a class="studio-logo" href="/"><img src="/assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="/hammerite/">Hammerite 3D</a>
+		<a href="/hammerite/docs/1.0/">Docs</a>
+		<a href="/hammerite/docs/1.0/guides/">Guides</a>
+		<a href="/hammerite/docs/1.0/api/">API</a>
+	</nav>
+</header>
+
+<div class="docs-banner" hidden></div>
+
+<div class="docs-layout">
+	<aside class="docs-side">
+		<a class="docs-brand" href="/hammerite/docs/1.0/"><img src="/hammerite/assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
+		<label class="docs-version">Version
+			<select aria-label="Docs version"><option value="1.0" selected>1.0</option></select>
+		</label>
+		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="/hammerite/docs/1.0/install.html">Installing Hammerite</a></li><li><a href="/hammerite/docs/1.0/getting-started.html">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="/hammerite/docs/1.0/guides/writing-an-entity.html">Writing an entity class</a></li><li><a href="/hammerite/docs/1.0/guides/rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="/hammerite/docs/1.0/guides/stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="/hammerite/docs/1.0/guides/stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="/hammerite/docs/1.0/guides/probe-lighting.html">Probe lighting</a></li><li><a href="/hammerite/docs/1.0/guides/moving-brush-entities.html">Moving brush entities</a></li><li><a href="/hammerite/docs/1.0/guides/guard-navigation.html" aria-current="page">Navigation for guards</a></li><li><a href="/hammerite/docs/1.0/guides/brush-materials.html">Brush materials and shaders</a></li><li><a href="/hammerite/docs/1.0/guides/brush-properties.html">Properties on brushes</a></li></ul><h2>Reference</h2><ul><li><a href="/hammerite/docs/1.0/api/">API reference</a></li><li><a href="/hammerite/docs/1.0/baking.html">Baking from a script</a></li><li><a href="/hammerite/docs/1.0/performance.html">Performance and limits</a></li><li><a href="/hammerite/docs/1.0/troubleshooting.html">Troubleshooting</a></li><li><a href="/hammerite/docs/1.0/api-stability.html">API stability</a></li></ul></nav>
+	</aside>
+	<main class="docs-main">
+		<article class="prose">
+<h1 id="navigation-for-guards">Navigation for guards</h1>
+<p>hammerite-nav derives a level's walkable ground from the carved rooms - no voxels, no cell size - and
+hands it to Godot's navigation server as ordinary regions and links. A guard then walks it with a
+<code>NavigationAgent3D</code> as in any Godot game. What Hammerite adds is <em>measurement</em>: every patch of ground
+knows its headroom and width, every windowsill and drop knows its height, and your game's agent
+profiles decide who fits where. That is how a thief climbs through the scullery window and the guard
+chasing them has to go round.</p>
+<h2 id="1-say-who-walks">1. Say who walks</h2>
+<p>An <a href="/hammerite/docs/1.0/api/HammeriteNavigationAgentProfile.html"><code>HammeriteNavigationAgentProfile</code></a> is one kind of body:
+how tall, how wide, how high it can climb and how far it will drop. Each profile gets a navigation
+layer of its own, and the ground is baked onto the layers of every profile that fits it.</p>
+<pre><code class="language-gdscript">var guard := HammeriteNavigationAgentProfile.new()
+guard.profile_name = &amp;&quot;guard&quot;
+guard.navigation_layer = 1
+guard.height = 96.0
+guard.climb_height = 32.0
+
+var thief := HammeriteNavigationAgentProfile.new()
+thief.profile_name = &amp;&quot;thief&quot;
+thief.navigation_layer = 2
+thief.height = 72.0
+thief.crouch_height = 40.0
+thief.climb_height = 96.0
+</code></pre>
+<p>Normally the table is a <code>.tres</code> <a href="/hammerite/docs/1.0/api/HammeriteNavigationAgentProfiles.html"><code>HammeriteNavigationAgentProfiles</code></a>
+edited in the inspector. Distances are in map units, the same as the brushes. Two profiles on one layer
+are a mistake that would otherwise be silent - <code>validate()</code> says so.</p>
+<h2 id="2-bake">2. Bake</h2>
+<p>Set the profiles before any map is assigned, then hand each <code>HammeriteMap3D</code> to the addon:</p>
+<pre><code class="language-gdscript">HammeriteNavigation.profiles = load(&quot;res://ai/agent_profiles.tres&quot;)
+HammeriteNavigation.integrate(map_3d)
+map_3d.map = map
+</code></pre>
+<p>Navigation is built as the map is, and again whenever it changes or another variant is made active;
+<code>HammeriteNavigation.navigation_built</code> reports each build. A level's ground is derived in a fraction
+of a second, and a map saved as a resource keeps a cache beside it (<code>save_cache()</code>, which the editor
+does on every save) so a shipped game loads it instead.</p>
+<h2 id="3-walk">3. Walk</h2>
+<p>The regions are ordinary Godot navigation regions, so a guard uses an ordinary agent, on its
+profile's layer:</p>
+<pre><code class="language-gdscript">@onready var _agent: NavigationAgent3D = $NavigationAgent3D
+
+func _ready() -&gt; void:
+    _agent.navigation_layers = HammeriteNavigation.layer_bit(&amp;&quot;guard&quot;)
+
+func go_to(point: Vector3) -&gt; void:
+    _agent.target_position = point
+
+func _physics_process(_delta: float) -&gt; void:
+    if _agent.is_navigation_finished():
+        return
+    velocity = global_position.direction_to(_agent.get_next_path_position()) * walk_speed
+    move_and_slide()
+</code></pre>
+<p>Keep the 3D direction rather than flattening it: a route through a window climbs.</p>
+<p>Before walking to a point that came from somewhere else - a sound's apparent position in a doorway,
+mid-air - snap it to the ground, and check the route arrives: the server returns the nearest it could
+manage rather than nothing.</p>
+<pre><code class="language-gdscript">var nav_map: RID = get_world_3d().navigation_map
+var goal: Vector3 = NavigationServer3D.map_get_closest_point(nav_map, heard_at)
+var path: PackedVector3Array = NavigationServer3D.map_get_path(nav_map, global_position, goal, true,
+    HammeriteNavigation.layer_bit(&amp;&quot;guard&quot;))
+var reachable: bool = path.size() &gt;= 2 and path[path.size() - 1].distance_to(goal) &lt; 40.0
+</code></pre>
+<p>A large level may need <code>NavigationAgent3D.path_search_max_polygons</code> raised from its default of 4096,
+or long routes come up short.</p>
+<h2 id="4-links">4. Links</h2>
+<p>Two rooms that abut join on their own: an ordinary doorway is not a link. A link is where the ground
+jumps - a step, a windowsill, a drop, a gap - and those are derived from the geometry and costed per
+profile, so a guard who cannot climb a sill never routes through the window.</p>
+<p>What geometry cannot show - a ladder, a rope - an author places as a <code>nav_link</code> entity, aimed at its
+far end with <code>nav_link_target</code>.</p>
+<p>A link can be switched while the game runs, by name. A window or a drop takes the name of the opening
+it goes through, the same name audio reads, so one name shuts both:</p>
+<pre><code class="language-gdscript">HammeriteAudio.set_portal_occlusion(&quot;scullery_window&quot;, 1.0, self)
+HammeriteNavigation.set_link_enabled(&quot;scullery_window&quot;, false)
+</code></pre>
+<p>A doorway is not a link, so shutting a door does not close the route through it. Whether a guard
+opens a door, or waits, or picks a lock, is your AI's to decide; navigation only says the floor goes on.</p>
+<h2 id="5-what-a-room-costs">5. What a room costs</h2>
+<p>An author can make a room dearer to cross - a lit hall a thief would rather go round - with the
+<strong>Navigation</strong> section of an air brush (<code>nav/travel_cost</code>, a multiplier on distance). A game that
+changes it while running rebuilds:</p>
+<pre><code class="language-gdscript">brush.set_property(HammeriteNavigationBrushProperties.KEY_TRAVEL_COST, 3.0)
+HammeriteNavigation.rebuild(map_3d)
+</code></pre>
+<p><code>rebuild()</code> is also the call after any other change navigation should notice at runtime - a door that
+has become a wall. Nothing is rebuilt behind your back.</p>
+<p>Props are inert to navigation until marked: a <code>prop_model</code>'s <code>nav_role</code> says whether it is an
+obstacle, something to stand on, or both, and the bake warns how many were left unmarked.</p>
+<h2 id="see-also">See also</h2>
+<ul>
+<li><a href="/hammerite/docs/1.0/guides/rooms-and-sight.html">Rooms, portals and line of sight</a> - the rooms the ground is cut from.</li>
+<li><a href="/hammerite/docs/1.0/guides/stealth-hearing.html">Hearing for stealth gameplay</a> - where a guard decides to go.</li>
+<li><a href="/hammerite/docs/1.0/api/HammeriteNavigation.html"><code>HammeriteNavigation</code></a>,
+  <a href="/hammerite/docs/1.0/api/HammeriteNavigationBakeReport.html"><code>HammeriteNavigationBakeReport</code></a>, and the
+  <span class="unlinked">hammerite-nav README</span>.</li>
+</ul>
+		</article>
+		<p class="docs-source">Hammerite 1.0 · built from a6dd634, 2026-10-10</p>
+	</main>
+</div>
+
+<footer class="studio-foot">
+	<a href="/"><img src="/assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>

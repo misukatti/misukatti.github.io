@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Getting started — Hammerite 3D 1.0 docs</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="/hammerite/assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="/hammerite/assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/hammerite/assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@300&display=swap">
+<link rel="stylesheet" href="/hammerite/hammerite.css">
+<link rel="stylesheet" href="/hammerite/docs/docs.css">
+<script src="/hammerite/docs/versions.js" defer></script>
+</head>
+<body class="docs" data-docs-version="1.0">
+
+<header class="studio">
+	<a class="studio-logo" href="/"><img src="/assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="/hammerite/">Hammerite 3D</a>
+		<a href="/hammerite/docs/1.0/">Docs</a>
+		<a href="/hammerite/docs/1.0/guides/">Guides</a>
+		<a href="/hammerite/docs/1.0/api/">API</a>
+	</nav>
+</header>
+
+<div class="docs-banner" hidden></div>
+
+<div class="docs-layout">
+	<aside class="docs-side">
+		<a class="docs-brand" href="/hammerite/docs/1.0/"><img src="/hammerite/assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
+		<label class="docs-version">Version
+			<select aria-label="Docs version"><option value="1.0" selected>1.0</option></select>
+		</label>
+		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="/hammerite/docs/1.0/install.html">Installing Hammerite</a></li><li><a href="/hammerite/docs/1.0/getting-started.html" aria-current="page">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="/hammerite/docs/1.0/guides/writing-an-entity.html">Writing an entity class</a></li><li><a href="/hammerite/docs/1.0/guides/rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="/hammerite/docs/1.0/guides/stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="/hammerite/docs/1.0/guides/stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="/hammerite/docs/1.0/guides/probe-lighting.html">Probe lighting</a></li><li><a href="/hammerite/docs/1.0/guides/moving-brush-entities.html">Moving brush entities</a></li><li><a href="/hammerite/docs/1.0/guides/guard-navigation.html">Navigation for guards</a></li><li><a href="/hammerite/docs/1.0/guides/brush-materials.html">Brush materials and shaders</a></li><li><a href="/hammerite/docs/1.0/guides/brush-properties.html">Properties on brushes</a></li></ul><h2>Reference</h2><ul><li><a href="/hammerite/docs/1.0/api/">API reference</a></li><li><a href="/hammerite/docs/1.0/baking.html">Baking from a script</a></li><li><a href="/hammerite/docs/1.0/performance.html">Performance and limits</a></li><li><a href="/hammerite/docs/1.0/troubleshooting.html">Troubleshooting</a></li><li><a href="/hammerite/docs/1.0/api-stability.html">API stability</a></li></ul></nav>
+	</aside>
+	<main class="docs-main">
+		<article class="prose">
+<h1 id="getting-started">Getting started</h1>
+<p>From an empty project to a room you can carve, light and walk around in. The finished result is
+<span class="unlinked"><code>examples/minimal</code></span>: open it in Godot from inside this repository (its
+<code>addons/</code> are links to the addons beside it) and press F5.</p>
+<p>Install the addons first: <a href="/hammerite/docs/1.0/install.html">Installing Hammerite</a>.</p>
+<h2 id="1-textures">1. Textures</h2>
+<p>Hammerite looks textures up by name. Put some in a folder - <code>res://textures/stone_wall.png</code> is the
+texture <code>stone_wall</code> - and tell the library where they are before any map is built:</p>
+<pre><code class="language-gdscript">HammeriteTextureLibrary.search_paths = [&quot;res://textures&quot;]
+</code></pre>
+<p>A face whose texture cannot be found draws the fallback checkerboard, so a missing texture is seen
+rather than silently wrong.</p>
+<h2 id="2-a-map-in-the-scene">2. A map in the scene</h2>
+<p>A map is data (<code>HammeriteMap</code>); <code>HammeriteMap3D</code> is the node that builds it into the world.</p>
+<pre><code class="language-gdscript">var map: HammeriteMap = HammeriteDataFile.read(&quot;res://maps/start.hmap&quot;) as HammeriteMap
+
+var map_3d := HammeriteMap3D.new()
+add_child(map_3d)
+map_3d.map = map
+</code></pre>
+<p>The world starts running as soon as it is built: anything in it that moves, flickers or plays does so
+without being told to. With the editor up over it, it is held still for the author. Entities are placed
+in the map's space, so <code>map_3d</code> can stand anywhere in your scene.</p>
+<p>A game's own entity types are registered before the map is built; see
+<a href="/hammerite/docs/1.0/guides/writing-an-entity.html">Custom entities</a>.</p>
+<p><code>.hmap</code> is Hammerite's own format: data only, safe to load from anywhere, and the one the editor
+saves a player's or a mod's map in. A map can also be a Godot <code>.tres</code> or <code>.res</code> inside the project.
+<code>HammeriteDataFile.last_error</code> says why a read returned null.</p>
+<h2 id="3-the-editor">3. The editor</h2>
+<p>The editor runs inside the game, over the level the game has loaded, so what you see while editing
+is the game itself. The game decides when it opens:</p>
+<pre><code class="language-gdscript">map_editor = HammeriteEditor.integrate(self)   # a node already in the tree
+map_editor.map_3d = map_3d                     # before the map
+map_editor.map = map
+map_editor.deactivate()                        # start in the game
+
+func _unhandled_input(event: InputEvent) -&gt; void:
+    if event is InputEventKey and event.pressed and event.keycode == KEY_F10:
+        if map_editor.is_active():
+            map_editor.deactivate()
+        else:
+            map_editor.activate()
+</code></pre>
+<p>Quitting is the game's too. Ask the editor first, so unsaved work is offered a save:</p>
+<pre><code class="language-gdscript">func _ready() -&gt; void:
+    get_tree().auto_accept_quit = false
+
+func _notification(what: int) -&gt; void:
+    if what == NOTIFICATION_WM_CLOSE_REQUEST and await map_editor.prompt_unsaved_changes():
+        get_tree().quit()
+</code></pre>
+<h2 id="4-carve-light-save">4. Carve, light, save</h2>
+<p>Run the game and press F10. The editor's own manual is under <strong>Help &gt; Manual</strong> (<code>Shift</code> <code>F1</code>), and its
+first page walks through a first room: press <code>B</code>, draw a box (new brushes are <strong>Air</strong> until you
+change the tier on the toolbar), <code>Enter</code> to keep it. The world is solid rock until you carve it; the manual's
+<span class="unlinked">The carved world</span> explains why that matters.</p>
+<p>Light with a <code>light_point</code> entity and the lightmap tool (<code>Cmd</code> <code>L</code>, <strong>Bake</strong>), then <strong>File &gt; Save
+Map</strong> (<code>Cmd</code> <code>S</code>). The bake is saved with the map; the game shows it without baking again.</p>
+<h2 id="5-your-own-things">5. Your own things</h2>
+<ul>
+<li>Entities of your own - doors, pickups, spawn points: <a href="/hammerite/docs/1.0/guides/writing-an-entity.html">Custom entities</a>.</li>
+<li>What each addon offers and how to extend the editor: the READMEs of
+  <span class="unlinked">core</span>, <span class="unlinked">editor</span>,
+  <span class="unlinked">audio</span> and <span class="unlinked">nav</span>.</li>
+<li>How big a level can get: <a href="/hammerite/docs/1.0/performance.html">Performance and limits</a>.</li>
+</ul>
+		</article>
+		<p class="docs-source">Hammerite 1.0 · built from a6dd634, 2026-10-10</p>
+	</main>
+</div>
+
+<footer class="studio-foot">
+	<a href="/"><img src="/assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>

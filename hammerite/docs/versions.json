@@ -1,0 +1,12 @@
+[
+	{
+		"id": "1.0",
+		"label": "1.0 (current)",
+		"stable": true
+	},
+	{
+		"id": "latest",
+		"label": "latest (unreleased)",
+		"stable": false
+	}
+]

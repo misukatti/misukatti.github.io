@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guides — Hammerite 3D 1.0 docs</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="/hammerite/assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="/hammerite/assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/hammerite/assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@300&display=swap">
+<link rel="stylesheet" href="/hammerite/hammerite.css">
+<link rel="stylesheet" href="/hammerite/docs/docs.css">
+<script src="/hammerite/docs/versions.js" defer></script>
+</head>
+<body class="docs" data-docs-version="1.0">
+
+<header class="studio">
+	<a class="studio-logo" href="/"><img src="/assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="/hammerite/">Hammerite 3D</a>
+		<a href="/hammerite/docs/1.0/">Docs</a>
+		<a href="/hammerite/docs/1.0/guides/">Guides</a>
+		<a href="/hammerite/docs/1.0/api/">API</a>
+	</nav>
+</header>
+
+<div class="docs-banner" hidden></div>
+
+<div class="docs-layout">
+	<aside class="docs-side">
+		<a class="docs-brand" href="/hammerite/docs/1.0/"><img src="/hammerite/assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
+		<label class="docs-version">Version
+			<select aria-label="Docs version"><option value="1.0" selected>1.0</option></select>
+		</label>
+		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="/hammerite/docs/1.0/install.html">Installing Hammerite</a></li><li><a href="/hammerite/docs/1.0/getting-started.html">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="/hammerite/docs/1.0/guides/writing-an-entity.html">Writing an entity class</a></li><li><a href="/hammerite/docs/1.0/guides/rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="/hammerite/docs/1.0/guides/stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="/hammerite/docs/1.0/guides/stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="/hammerite/docs/1.0/guides/probe-lighting.html">Probe lighting</a></li><li><a href="/hammerite/docs/1.0/guides/moving-brush-entities.html">Moving brush entities</a></li><li><a href="/hammerite/docs/1.0/guides/guard-navigation.html">Navigation for guards</a></li><li><a href="/hammerite/docs/1.0/guides/brush-materials.html">Brush materials and shaders</a></li><li><a href="/hammerite/docs/1.0/guides/brush-properties.html">Properties on brushes</a></li></ul><h2>Reference</h2><ul><li><a href="/hammerite/docs/1.0/api/">API reference</a></li><li><a href="/hammerite/docs/1.0/baking.html">Baking from a script</a></li><li><a href="/hammerite/docs/1.0/performance.html">Performance and limits</a></li><li><a href="/hammerite/docs/1.0/troubleshooting.html">Troubleshooting</a></li><li><a href="/hammerite/docs/1.0/api-stability.html">API stability</a></li></ul></nav>
+	</aside>
+	<main class="docs-main">
+		<article class="prose">
+<h1 id="guides">Guides</h1>
+<p>How Hammerite's classes are used together, one task at a time. Each guide shows the idea in a few
+lines of code and links to the <a href="/hammerite/docs/1.0/api/">API reference</a> for the rest.</p>
+<table>
+<thead>
+<tr>
+<th>Guide</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="/hammerite/docs/1.0/guides/writing-an-entity.html">Writing an entity class</a></td>
+<td>a thing of your game's own: authored properties, gizmos and handles, simulation, triggering, brushwork</td>
+</tr>
+<tr>
+<td><a href="/hammerite/docs/1.0/guides/rooms-and-sight.html">Rooms, portals and line of sight</a></td>
+<td>which room something is in, what joins rooms, and whether one point can see another</td>
+</tr>
+<tr>
+<td><a href="/hammerite/docs/1.0/guides/stealth-hearing.html">Hearing for stealth gameplay</a></td>
+<td>guards who hear footsteps through doorways and not through walls</td>
+</tr>
+<tr>
+<td><a href="/hammerite/docs/1.0/guides/stealth-light-level.html">Sampling the light level for stealth gameplay</a></td>
+<td>how lit the player stands, from the bake and the lamps switched since</td>
+</tr>
+<tr>
+<td><a href="/hammerite/docs/1.0/guides/probe-lighting.html">Probe lighting</a></td>
+<td>how what moves is lit by the same bake as the walls</td>
+</tr>
+<tr>
+<td><a href="/hammerite/docs/1.0/guides/moving-brush-entities.html">Moving brush entities</a></td>
+<td>a door or a lift that leaves its lightmap behind when it moves</td>
+</tr>
+<tr>
+<td><a href="/hammerite/docs/1.0/guides/guard-navigation.html">Navigation for guards</a></td>
+<td>navmeshes per kind of agent, links, and paths</td>
+</tr>
+<tr>
+<td><a href="/hammerite/docs/1.0/guides/brush-materials.html">Brush materials and shaders</a></td>
+<td>glowing and see-through textures, walls with normal maps and detail textures, water and fills of your own, the sky</td>
+</tr>
+<tr>
+<td><a href="/hammerite/docs/1.0/guides/brush-properties.html">Properties on brushes</a></td>
+<td>data of an addon's or a game's own on brushes and faces, shown where it applies</td>
+</tr>
+</tbody>
+</table>
+		</article>
+		<p class="docs-source">Hammerite 1.0 · built from a6dd634, 2026-10-10</p>
+	</main>
+</div>
+
+<footer class="studio-foot">
+	<a href="/"><img src="/assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>

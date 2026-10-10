@@ -207,3 +207,44 @@
 .prose td code { color: var(--bone); }
 
 .prose td a code, .prose .inherits a code { color: var(--red-bright); }
+
+.docs-banner {
+	padding: 0.7rem clamp(1rem, 4vw, 3rem);
+	background: #3a1714;
+	border-bottom: 1px solid var(--red);
+	color: var(--bone);
+	font-size: 0.92rem;
+}
+
+.docs-banner a { color: #ffb3a8; margin-left: 0.4rem; }
+
+.docs-version {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+	margin: 0 0 0.75rem;
+	font-size: 0.7rem;
+	letter-spacing: 0.15em;
+	text-transform: uppercase;
+	color: var(--bone-dim);
+}
+
+.docs-version select {
+	flex: 1;
+	padding: 0.35rem 0.5rem;
+	background: var(--stone-raised);
+	color: var(--bone);
+	border: 1px solid var(--line);
+	border-radius: 6px;
+	font: 0.85rem var(--sans);
+	letter-spacing: 0;
+	text-transform: none;
+}
+
+.docs-source {
+	margin-top: 3rem;
+	padding-top: 1rem;
+	border-top: 1px solid var(--line);
+	color: var(--bone-dim);
+	font-size: 0.8rem;
+}

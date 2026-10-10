@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Render Hammerite's guides into hammerite/docs/ with the same template as its API reference.
+"""Render one version's guides into hammerite/docs/<version>/ beside its API reference.
 
-    tools/import_hammerite_docs.py <hammerite checkout>
+    tools/import_hammerite_docs.py <hammerite source> <version> <page template>
 
-tools/import_hammerite_docs.sh runs this after the API reference. Pages come from the checkout's
+tools/import_hammerite_docs.sh runs this after the API reference, with the template it filled in
+for the version. Pages come from the source's
 docs/: the top-level guides (installing, getting started, baking...) and docs/guides/. A link to
 another of these pages or to the API reference becomes a link to its HTML page; a link to anything
 else in the repository - a README, the manual, a script - is left as plain text, since the
@@ -19,8 +20,6 @@ from pathlib import Path
 import markdown
 
 SITE = Path(__file__).resolve().parent.parent
-OUT = SITE / "hammerite" / "docs"
-TEMPLATE = SITE / "tools" / "docs-template.html"
 
 TOP = [
 	("Get started", ["install", "getting-started"]),
@@ -46,7 +45,7 @@ def render(text: str) -> str:
 		extension_configs={"toc": {"permalink": False}})
 
 
-def relink(content: str, source: str, pages: dict, api: set) -> str:
+def relink(content: str, source: str, pages: dict, api: set, base: str) -> str:
 	"""Point links at the published pages. [source] and the keys of [pages] are repo paths."""
 
 	def replace(match):
@@ -61,13 +60,13 @@ def relink(content: str, source: str, pages: dict, api: set) -> str:
 		if target.startswith("docs/api/") and target.endswith(".md"):
 			name = posixpath.basename(target)[:-3]
 			if name == "index" or name in api:
-				return f'<a href="/hammerite/api/{"" if name == "index" else name + ".html"}{fragment}">{label}</a>'
+				return f'<a href="{base}api/{"" if name == "index" else name + ".html"}{fragment}">{label}</a>'
 		return f'<span class="unlinked">{label}</span>'
 
 	return re.sub(r'<a href="([^"]+)">(.*?)</a>', replace, content, flags=re.DOTALL)
 
 
-def nav(guides: list, titles: dict, current: str) -> str:
+def nav(guides: list, titles: dict, current: str, base: str) -> str:
 	def item(href: str, label: str) -> str:
 		here = ' aria-current="page"' if href == current else ""
 		return f'<li><a href="{href}"{here}>{html.escape(label)}</a></li>'
@@ -75,14 +74,14 @@ def nav(guides: list, titles: dict, current: str) -> str:
 	parts = ['<nav class="api-nav">']
 	for heading, stems in TOP[:1]:
 		parts.append(f"<h2>{heading}</h2><ul>")
-		parts += [item(f"/hammerite/docs/{stem}.html", titles[stem]) for stem in stems]
+		parts += [item(f"{base}{stem}.html", titles[stem]) for stem in stems]
 		parts.append("</ul>")
 	parts.append('<h2>Guides</h2><ul>')
-	parts += [item(f"/hammerite/docs/guides/{stem}.html", title) for title, stem, _ in guides]
+	parts += [item(f"{base}guides/{stem}.html", title) for title, stem, _ in guides]
 	parts.append("</ul>")
 	parts.append('<h2>Reference</h2><ul>')
-	parts.append(item("/hammerite/api/", "API reference"))
-	parts += [item(f"/hammerite/docs/{stem}.html", titles[stem]) for stem in TOP[1][1]]
+	parts.append(item(f"{base}api/", "API reference"))
+	parts += [item(f"{base}{stem}.html", titles[stem]) for stem in TOP[1][1]]
 	parts.append("</ul></nav>")
 	return "".join(parts)
 
@@ -97,7 +96,7 @@ supported class and member.</p>
 <div class="doc-cards">
 <a class="doc-card" href="install.html"><h2>Install</h2><p>Requirements, the addon folders, enabling the plugins.</p></a>
 <a class="doc-card" href="getting-started.html"><h2>Getting started</h2><p>A map in your game with the editor over it, step by step.</p></a>
-<a class="doc-card" href="/hammerite/api/"><h2>API reference</h2><p>Every supported class, generated from the source's documentation.</p></a>
+<a class="doc-card" href="api/"><h2>API reference</h2><p>Every supported class, generated from the source's documentation.</p></a>
 </div>
 <h2>Guides</h2>
 <p>How the classes are used together, one task at a time.</p>
@@ -107,41 +106,39 @@ supported class and member.</p>
 
 
 def main() -> int:
-	if len(sys.argv) != 2:
+	if len(sys.argv) != 4:
 		print(__doc__, file=sys.stderr)
 		return 2
 	repo = Path(sys.argv[1]).resolve()
+	version = sys.argv[2]
+	template = Path(sys.argv[3]).read_text()
+	base = f"/hammerite/docs/{version}/"
+	out_dir = SITE / "hammerite" / "docs" / version
 	docs = repo / "docs"
-	template = TEMPLATE.read_text()
 	guides = guides_table((docs / "guides" / "index.md").read_text())
-	api = {p.stem for p in (SITE / "hammerite" / "api").glob("*.html")} - {"index"}
+	api = {p.stem for p in (out_dir / "api").glob("*.html")} - {"index"}
 
 	sources = {}
 	for _, stems in TOP:
 		for stem in stems:
-			sources[f"docs/{stem}.md"] = f"/hammerite/docs/{stem}.html"
-	sources["docs/guides/index.md"] = "/hammerite/docs/guides/"
+			sources[f"docs/{stem}.md"] = f"{base}{stem}.html"
+	sources["docs/guides/index.md"] = f"{base}guides/"
 	for _, stem, _ in guides:
-		sources[f"docs/guides/{stem}.md"] = f"/hammerite/docs/guides/{stem}.html"
+		sources[f"docs/guides/{stem}.md"] = f"{base}guides/{stem}.html"
 	titles = {Path(src).stem: title_of((repo / src).read_text()) for src in sources if src.count("/") == 1}
 
 	def write(path: Path, title: str, current: str, content: str) -> None:
 		path.parent.mkdir(parents=True, exist_ok=True)
 		path.write_text(template.replace("{title}", html.escape(title))
-			.replace("{nav}", nav(guides, titles, current)).replace("{content}", content))
+			.replace("{nav}", nav(guides, titles, current, base)).replace("{content}", content))
 
-	(OUT / "guides").mkdir(parents=True, exist_ok=True)
-	for stale in list(OUT.glob("*.html")) + list((OUT / "guides").glob("*.html")):
-		stale.unlink()
 	for source, url in sources.items():
 		text = (repo / source).read_text()
-		content = relink(render(text), source, sources, api)
-		out = OUT / (url.removeprefix("/hammerite/docs/") or "index.html")
-		if url.endswith("/"):
-			out = OUT / url.removeprefix("/hammerite/docs/") / "index.html"
-		write(out, title_of(text), url, content)
-	write(OUT / "index.html", "Docs", "/hammerite/docs/", home(guides, titles))
-	print(f"import_hammerite_docs: {len(sources) + 1} pages to {OUT}")
+		content = relink(render(text), source, sources, api, base)
+		page = url.removeprefix(base)
+		write(out_dir / (page + "index.html" if page.endswith("/") else page), title_of(text), url, content)
+	write(out_dir / "index.html", "Docs", base, home(guides, titles))
+	print(f"import_hammerite_docs: {len(sources) + 1} pages to {out_dir}")
 	return 0
 
 

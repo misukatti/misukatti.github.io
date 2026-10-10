@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Baking from a script — Hammerite 3D latest docs</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="/hammerite/assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="/hammerite/assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/hammerite/assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@300&display=swap">
+<link rel="stylesheet" href="/hammerite/hammerite.css">
+<link rel="stylesheet" href="/hammerite/docs/docs.css">
+<script src="/hammerite/docs/versions.js" defer></script>
+</head>
+<body class="docs" data-docs-version="latest">
+
+<header class="studio">
+	<a class="studio-logo" href="/"><img src="/assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="/hammerite/">Hammerite 3D</a>
+		<a href="/hammerite/docs/latest/">Docs</a>
+		<a href="/hammerite/docs/latest/guides/">Guides</a>
+		<a href="/hammerite/docs/latest/api/">API</a>
+	</nav>
+</header>
+
+<div class="docs-banner" hidden></div>
+
+<div class="docs-layout">
+	<aside class="docs-side">
+		<a class="docs-brand" href="/hammerite/docs/latest/"><img src="/hammerite/assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
+		<label class="docs-version">Version
+			<select aria-label="Docs version"><option value="latest" selected>latest</option></select>
+		</label>
+		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="/hammerite/docs/latest/install.html">Installing Hammerite</a></li><li><a href="/hammerite/docs/latest/getting-started.html">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="/hammerite/docs/latest/guides/writing-an-entity.html">Writing an entity class</a></li><li><a href="/hammerite/docs/latest/guides/rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="/hammerite/docs/latest/guides/stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="/hammerite/docs/latest/guides/stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="/hammerite/docs/latest/guides/probe-lighting.html">Probe lighting</a></li><li><a href="/hammerite/docs/latest/guides/moving-brush-entities.html">Moving brush entities</a></li><li><a href="/hammerite/docs/latest/guides/guard-navigation.html">Navigation for guards</a></li><li><a href="/hammerite/docs/latest/guides/brush-materials.html">Brush materials and shaders</a></li><li><a href="/hammerite/docs/latest/guides/brush-properties.html">Properties on brushes</a></li></ul><h2>Reference</h2><ul><li><a href="/hammerite/docs/latest/api/">API reference</a></li><li><a href="/hammerite/docs/latest/baking.html" aria-current="page">Baking from a script</a></li><li><a href="/hammerite/docs/latest/performance.html">Performance and limits</a></li><li><a href="/hammerite/docs/latest/troubleshooting.html">Troubleshooting</a></li><li><a href="/hammerite/docs/latest/api-stability.html">API stability</a></li></ul></nav>
+	</aside>
+	<main class="docs-main">
+		<article class="prose">
+<h1 id="baking-from-a-script">Baking from a script</h1>
+<p>The editor's lightmap tool (<code>Cmd</code> <code>L</code>, <strong>Bake</strong>) is the usual way to bake. A build pipeline that
+bakes every map without opening the editor runs the same calls:</p>
+<pre><code class="language-gdscript">extends SceneTree
+
+var map: HammeriteMap = null
+var _frames: int = 0
+
+func _initialize() -&gt; void:
+    HammeriteTextureLibrary.search_paths = [&quot;res://textures&quot;]
+    map = HammeriteDataFile.read(&quot;res://maps/level.hmap&quot;) as HammeriteMap
+    # Built into the scene as the game builds it: a light is found through the node its entity
+    # builds, so a map that is only read has nothing to bake with.
+    var map_3d := HammeriteMap3D.new()
+    root.add_child(map_3d)
+    map_3d.map = map
+
+func _process(_delta: float) -&gt; bool:
+    _frames += 1
+    if _frames &lt; 3:
+        return false                                  # let the scene finish building
+
+    _bake()
+    return true
+
+func _bake() -&gt; void:
+    var settings := HammeriteBakeSettings.new()        # or load one kept beside the map
+    settings.bounces = 4
+    var lightmapper := HammeriteLightmapper.new(map, settings)
+    if await lightmapper.bake(_progress) != OK:       # probes, patches, light, atlases
+        push_error(&quot;could not bake: this needs the GPU&quot;)
+        quit(1)
+        return
+    HammeriteDataFile.write(map, &quot;res://maps/level.hmap&quot;, false, true)
+    quit()
+
+func _progress(stage: String, current: int, total: int) -&gt; void:
+    print(&quot;%s %d/%d&quot; % [stage, current, total])
+</code></pre>
+<p>Run it with the GPU available - not <code>--headless</code>, which has no rendering device:</p>
+<pre><code>godot --path &lt;project&gt; --script res://tools/bake.gd
+</code></pre>
+<ul>
+<li>Everything a bake reads besides the map is a <code>HammeriteBakeSettings</code>: bounces, the light falloff,
+  how much bounce and emission, the probe grid. It is a resource, so a map's can be kept beside it and
+  every bake of the map made the same; each lightmapper reads only its own.</li>
+<li>A map with variants bakes the one in effect. Choose one with <code>map.set_active_variant()</code> before
+  baking; each variant's last bake is kept with the map.</li>
+<li><code>map.get_bake_warnings()</code> lists what the bake could not do: faces too large for an atlas, more than
+  four light groups on a face.</li>
+<li>Baking needs the Forward+ or Mobile renderer; see <a href="/hammerite/docs/latest/install.html">Installing</a>.</li>
+</ul>
+<h2 id="baking-while-a-game-or-tool-keeps-running">Baking while a game or tool keeps running</h2>
+<p>Set <code>yield_to</code> and the lightmapper gives that <code>SceneTree</code> a frame every tenth of a second or so, so a
+window can draw its progress; <code>bake()</code> is then awaited. <code>cancel()</code> stops it at the next of those frames,
+and the lighting the map had is put back as it was:</p>
+<pre><code class="language-gdscript">lightmapper.yield_to = get_tree()
+cancel_button.pressed.connect(lightmapper.cancel)
+match await lightmapper.bake(_progress):
+    OK: print(&quot;baked&quot;)
+    ERR_SKIP: print(&quot;cancelled; the lighting is as it was&quot;)
+    ERR_UNAVAILABLE: print(&quot;this renderer cannot bake&quot;)
+</code></pre>
+<p>The steps <code>bake()</code> takes are there for a tool that has to do something between them:
+<code>map.generate_light_probes()</code>, then <code>prepare()</code>, <code>transfer()</code>, <code>write_lightmaps()</code> and <code>write_probes()</code>,
+in that order and each awaited. A tool taking them itself puts the lighting back on a cancel
+(<code>map.snapshot_lighting()</code> before, <code>map.restore_lighting()</code> after).</p>
+<p>Nothing may edit the map while it runs: a bake lights the world as it was when it began.</p>
+		</article>
+		<p class="docs-source">Hammerite latest · built from a6dd634, 2026-10-10</p>
+	</main>
+</div>
+
+<footer class="studio-foot">
+	<a href="/"><img src="/assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>

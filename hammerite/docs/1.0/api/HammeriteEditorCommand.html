@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HammeriteEditorCommand — Hammerite 3D 1.0 docs</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="/hammerite/assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="/hammerite/assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/hammerite/assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@300&display=swap">
+<link rel="stylesheet" href="/hammerite/hammerite.css">
+<link rel="stylesheet" href="/hammerite/docs/docs.css">
+<script src="/hammerite/docs/versions.js" defer></script>
+</head>
+<body class="docs" data-docs-version="1.0">
+
+<header class="studio">
+	<a class="studio-logo" href="/"><img src="/assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="/hammerite/">Hammerite 3D</a>
+		<a href="/hammerite/docs/1.0/">Docs</a>
+		<a href="/hammerite/docs/1.0/guides/">Guides</a>
+		<a href="/hammerite/docs/1.0/api/">API</a>
+	</nav>
+</header>
+
+<div class="docs-banner" hidden></div>
+
+<div class="docs-layout">
+	<aside class="docs-side">
+		<a class="docs-brand" href="/hammerite/docs/1.0/"><img src="/hammerite/assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
+		<label class="docs-version">Version
+			<select aria-label="Docs version"><option value="1.0" selected>1.0</option></select>
+		</label>
+		<nav class="api-nav"><a class="api-home" href="index.html">API reference</a><h2>Autoloads</h2><ul><li><a href="Hammerite.html">Hammerite</a></li><li><a href="HammeriteEditor.html">HammeriteEditor</a></li><li><a href="HammeriteAudio.html">HammeriteAudio</a></li><li><a href="HammeriteNavigation.html">HammeriteNavigation</a></li></ul><h2>Core: the map</h2><ul><li><a href="HammeriteMap.html">HammeriteMap</a></li><li><a href="HammeriteBrush.html">HammeriteBrush</a></li><li><a href="HammeriteFace.html">HammeriteFace</a></li><li><a href="HammeriteEntity.html">HammeriteEntity</a></li><li><a href="HammeriteBrushEntity.html">HammeriteBrushEntity</a></li><li><a href="HammeriteLayer.html">HammeriteLayer</a></li><li><a href="HammeriteCell.html">HammeriteCell</a></li><li><a href="HammeritePortal.html">HammeritePortal</a></li><li><a href="HammeriteBoundaryWall.html">HammeriteBoundaryWall</a></li><li><a href="HammeritePrefab.html">HammeritePrefab</a></li><li><a href="HammeritePrefabSet.html">HammeritePrefabSet</a></li><li><a href="HammeritePrefabInstance.html">HammeritePrefabInstance</a></li><li><a href="HammeriteSkybox.html">HammeriteSkybox</a></li></ul><h2>Core: in the scene</h2><ul><li><a href="HammeriteMap3D.html">HammeriteMap3D</a></li><li><a href="HammeriteWorldrepCompile.html">HammeriteWorldrepCompile</a></li><li><a href="HammeriteCompileProgress.html">HammeriteCompileProgress</a></li></ul><h2>Core: entities</h2><ul><li><a href="HammeritePointEntityNode3D.html">HammeritePointEntityNode3D</a></li><li><a href="HammeritePointEntityAnimatableBody3D.html">HammeritePointEntityAnimatableBody3D</a></li><li><a href="HammeritePointEntityRigidBody3D.html">HammeritePointEntityRigidBody3D</a></li><li><a href="HammeriteBrushEntityNode3D.html">HammeriteBrushEntityNode3D</a></li><li><a href="HammeriteBrushEntityStaticBody3D.html">HammeriteBrushEntityStaticBody3D</a></li><li><a href="HammeriteBrushEntityArea3D.html">HammeriteBrushEntityArea3D</a></li><li><a href="HammeriteEntityNodes.html">HammeriteEntityNodes</a></li><li><a href="HammeritePointLight3D.html">HammeritePointLight3D</a></li><li><a href="HammeriteDynamicLight3D.html">HammeriteDynamicLight3D</a></li><li><a href="HammeriteDynamicPointLight3D.html">HammeriteDynamicPointLight3D</a></li><li><a href="HammeriteDirectionalLight3D.html">HammeriteDirectionalLight3D</a></li><li><a href="HammeriteDynamicDirectionalLight3D.html">HammeriteDynamicDirectionalLight3D</a></li><li><a href="HammeriteGenericBrushEntity.html">HammeriteGenericBrushEntity</a></li><li><a href="HammeritePropModel.html">HammeritePropModel</a></li><li><a href="HammeriteDecal3D.html">HammeriteDecal3D</a></li><li><a href="HammeriteGizmoBuffer.html">HammeriteGizmoBuffer</a></li><li><a href="HammeriteEditorHandle.html">HammeriteEditorHandle</a></li></ul><h2>Core: lighting</h2><ul><li><a href="HammeriteLightmapper.html">HammeriteLightmapper</a></li><li><a href="HammeriteBakeSettings.html">HammeriteBakeSettings</a></li><li><a href="HammeriteLightmapBakeReport.html">HammeriteLightmapBakeReport</a></li><li><a href="HammeriteBakedLight.html">HammeriteBakedLight</a></li><li><a href="HammeriteLightProbeSet.html">HammeriteLightProbeSet</a></li><li><a href="HammeriteLightCurve.html">HammeriteLightCurve</a></li><li><a href="HammeriteEyeAdaptation3D.html">HammeriteEyeAdaptation3D</a></li><li><a href="HammeriteBakeOccluders.html">HammeriteBakeOccluders</a></li><li><a href="HammeriteBakeOccluder.html">HammeriteBakeOccluder</a></li><li><a href="HammeriteBrushEntityLighting.html">HammeriteBrushEntityLighting</a></li><li><a href="HammeriteShaderGlobals.html">HammeriteShaderGlobals</a></li></ul><h2>Core: files, names and extension</h2><ul><li><a href="HammeriteDataFile.html">HammeriteDataFile</a></li><li><a href="HammeriteUnknownData.html">HammeriteUnknownData</a></li><li><a href="HammeriteReferences.html">HammeriteReferences</a></li><li><a href="HammeriteReferenceChange.html">HammeriteReferenceChange</a></li><li><a href="HammeriteTextureLibrary.html">HammeriteTextureLibrary</a></li><li><a href="HammeriteModelLibrary.html">HammeriteModelLibrary</a></li><li><a href="HammeriteAssetLibrary.html">HammeriteAssetLibrary</a></li><li><a href="HammeriteBrushPropertySchema.html">HammeriteBrushPropertySchema</a></li><li><a href="HammeriteBrushPropertyDef.html">HammeriteBrushPropertyDef</a></li><li><a href="HammeriteBrushPropertyRegistry.html">HammeriteBrushPropertyRegistry</a></li><li><a href="HammeriteBrushFill.html">HammeriteBrushFill</a></li><li><a href="HammeriteBrushFillRegistry.html">HammeriteBrushFillRegistry</a></li><li><a href="HammeriteSkyPropertySchema.html">HammeriteSkyPropertySchema</a></li><li><a href="HammeriteSkyPropertyRegistry.html">HammeriteSkyPropertyRegistry</a></li><li><a href="HammeriteEntityTypeRegistry.html">HammeriteEntityTypeRegistry</a></li><li><a href="HammeriteUtils.html">HammeriteUtils</a></li><li><a href="HammeriteVersion.html">HammeriteVersion</a></li></ul><h2>Editor</h2><ul><li><a href="HammeriteMapEditor.html">HammeriteMapEditor</a></li><li><a href="HammeriteMapEditorSettings.html">HammeriteMapEditorSettings</a></li><li><a href="HammeriteEditorColors.html">HammeriteEditorColors</a></li><li><a href="HammeriteEditorTheme.html">HammeriteEditorTheme</a></li><li><a href="HammeriteEditorCommand.html" aria-current="page">HammeriteEditorCommand</a></li><li><a href="HammeriteEditorCommands.html">HammeriteEditorCommands</a></li><li><a href="HammeriteEditorTool.html">HammeriteEditorTool</a></li><li><a href="HammeritePropertyControl.html">HammeritePropertyControl</a></li><li><a href="HammeriteEditorWorkspaces.html">HammeriteEditorWorkspaces</a></li><li><a href="HammeriteManual.html">HammeriteManual</a></li><li><a href="HammeriteManualSection.html">HammeriteManualSection</a></li><li><a href="HammeriteManualPage.html">HammeriteManualPage</a></li><li><a href="HammeriteNotableSizes.html">HammeriteNotableSizes</a></li></ul><h2>Audio</h2><ul><li><a href="HammeriteAudioRuntime.html">HammeriteAudioRuntime</a></li><li><a href="HammeriteAudioManager.html">HammeriteAudioManager</a></li><li><a href="HammeriteAudioHearing.html">HammeriteAudioHearing</a></li><li><a href="HammeriteAudioMixSettings.html">HammeriteAudioMixSettings</a></li><li><a href="HammeriteAudioSoundSpec.html">HammeriteAudioSoundSpec</a></li><li><a href="HammeriteAudioBakeReport.html">HammeriteAudioBakeReport</a></li><li><a href="HammeriteAudioEmitter3D.html">HammeriteAudioEmitter3D</a></li><li><a href="HammeriteAudioReceiver3D.html">HammeriteAudioReceiver3D</a></li><li><a href="HammeriteAudioSoundTypes.html">HammeriteAudioSoundTypes</a></li><li><a href="HammeriteAudioSoundType.html">HammeriteAudioSoundType</a></li><li><a href="HammeriteAudioSoundEvent.html">HammeriteAudioSoundEvent</a></li><li><a href="HammeriteAudioPreset.html">HammeriteAudioPreset</a></li><li><a href="HammeriteAudioMaterials.html">HammeriteAudioMaterials</a></li><li><a href="HammeriteAudioMaterial.html">HammeriteAudioMaterial</a></li><li><a href="HammeriteAudioBrushProperties.html">HammeriteAudioBrushProperties</a></li><li><a href="HammeriteAudioPortalProperties.html">HammeriteAudioPortalProperties</a></li><li><a href="HammeriteAudioEditorExtension.html">HammeriteAudioEditorExtension</a></li></ul><h2>Navigation</h2><ul><li><a href="HammeriteNavigationRuntime.html">HammeriteNavigationRuntime</a></li><li><a href="HammeriteNavigationAgentProfile.html">HammeriteNavigationAgentProfile</a></li><li><a href="HammeriteNavigationAgentProfiles.html">HammeriteNavigationAgentProfiles</a></li><li><a href="HammeriteNavigationBrushProperties.html">HammeriteNavigationBrushProperties</a></li><li><a href="HammeriteNavigationEditorExtension.html">HammeriteNavigationEditorExtension</a></li><li><a href="HammeriteNavigationLinkEntity3D.html">HammeriteNavigationLinkEntity3D</a></li><li><a href="HammeriteNavigationBakeReport.html">HammeriteNavigationBakeReport</a></li><li><a href="HammeriteNavigationSurface.html">HammeriteNavigationSurface</a></li><li><a href="HammeriteNavigationLinkData.html">HammeriteNavigationLinkData</a></li><li><a href="HammeriteNavigationBuilder.html">HammeriteNavigationBuilder</a></li><li><a href="HammeriteNavigationLinkBuilder.html">HammeriteNavigationLinkBuilder</a></li><li><a href="HammeriteNavigationMeshWriter.html">HammeriteNavigationMeshWriter</a></li></ul></nav>
+	</aside>
+	<main class="docs-main">
+		<article class="prose">
+<h1>HammeriteEditorCommand</h1>
+<p class="inherits">Editor. Inherits <a href="https://docs.godotengine.org/en/stable/classes/class_refcounted.html"><code>RefCounted</code></a></p>
+<p class="brief">One thing the editor can be asked to do, and how it is asked.</p>
+<p>The point of these existing at all is that a keystroke used to be the only handle on a command: the binding, the label and the code were the same <code>match</code> branch, so nothing could list what the editor could do, show what a key was bound to, or say whether it would work right now.</p>
+<h2>Properties</h2>
+<table class="members"><thead><tr><th>Type</th><th>Name</th><th>Default</th></tr></thead><tbody><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_stringname.html"><code>StringName</code></a></td><td><a href="#property-id"><code>id</code></a></td><td><code>&amp;&quot;&quot;</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_string.html"><code>String</code></a></td><td><a href="#property-label"><code>label</code></a></td><td><code>&quot;&quot;</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_stringname.html"><code>StringName</code></a></td><td><a href="#property-menu"><code>menu</code></a></td><td><code>&amp;&quot;&quot;</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_shortcut.html"><code>Shortcut</code></a></td><td><a href="#property-shortcut"><code>shortcut</code></a></td><td><code>null</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_callable.html"><code>Callable</code></a></td><td><a href="#property-action"><code>action</code></a></td><td><code>Callable()</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_callable.html"><code>Callable</code></a></td><td><a href="#property-enabled_predicate"><code>enabled_predicate</code></a></td><td><code>Callable()</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_callable.html"><code>Callable</code></a></td><td><a href="#property-checked_predicate"><code>checked_predicate</code></a></td><td><code>Callable()</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_stringname.html"><code>StringName</code></a></td><td><a href="#property-owner_tool"><code>owner_tool</code></a></td><td><code>&amp;&quot;&quot;</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_bool.html"><code>bool</code></a></td><td><a href="#property-before_tool"><code>before_tool</code></a></td><td><code>false</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_stringname.html"><code>StringName</code></a></td><td><a href="#property-radio_group"><code>radio_group</code></a></td><td><code>&amp;&quot;&quot;</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_stringname.html"><code>StringName[]</code></a></td><td><a href="#property-contexts"><code>contexts</code></a></td><td><code>[]</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_callable.html"><code>Callable</code></a></td><td><a href="#property-label_provider"><code>label_provider</code></a></td><td><code>Callable()</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_stringname.html"><code>StringName</code></a></td><td><a href="#property-action_id"><code>action_id</code></a></td><td><code>&amp;&quot;&quot;</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_string.html"><code>String</code></a></td><td><a href="#property-keywords"><code>keywords</code></a></td><td><code>&quot;&quot;</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_string.html"><code>String</code></a></td><td><a href="#property-typed"><code>typed</code></a></td><td><code>&quot;&quot;</code></td></tr></tbody></table>
+<h2>Methods</h2>
+<table class="members"><thead><tr><th>Returns</th><th>Method</th></tr></thead><tbody><tr><td><a href="HammeriteEditorCommand.html"><code>HammeriteEditorCommand</code></a></td><td><a href="#method-in_menu"><code>in_menu</code></a><code>(m: StringName)</code></td></tr><tr><td><a href="HammeriteEditorCommand.html"><code>HammeriteEditorCommand</code></a></td><td><a href="#method-bound_to"><code>bound_to</code></a><code>(keycode: int, command: bool = false, shift: bool = false, ctrl: bool = false, alt: bool = false)</code></td></tr><tr><td><a href="HammeriteEditorCommand.html"><code>HammeriteEditorCommand</code></a></td><td><a href="#method-bound_also_to"><code>bound_also_to</code></a><code>(keycode: int, command: bool = false, shift: bool = false, ctrl: bool = false, alt: bool = false)</code></td></tr><tr><td><a href="HammeriteEditorCommand.html"><code>HammeriteEditorCommand</code></a></td><td><a href="#method-bound_to_mouse"><code>bound_to_mouse</code></a><code>(button: int, command: bool = false, shift: bool = false, ctrl: bool = false, alt: bool = false)</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_bool.html"><code>bool</code></a></td><td><a href="#method-is_mac"><code>is_mac</code></a><code>()</code> <code>static</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_string.html"><code>String</code></a></td><td><a href="#method-command_key_name"><code>command_key_name</code></a><code>()</code> <code>static</code></td></tr><tr><td><a href="HammeriteEditorCommand.html"><code>HammeriteEditorCommand</code></a></td><td><a href="#method-typed_as"><code>typed_as</code></a><code>(character: String)</code></td></tr><tr><td><a href="HammeriteEditorCommand.html"><code>HammeriteEditorCommand</code></a></td><td><a href="#method-with_keywords"><code>with_keywords</code></a><code>(words: String)</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_bool.html"><code>bool</code></a></td><td><a href="#method-is_typed_by"><code>is_typed_by</code></a><code>(event: InputEvent)</code></td></tr><tr><td><a href="HammeriteEditorCommand.html"><code>HammeriteEditorCommand</code></a></td><td><a href="#method-owned_by"><code>owned_by</code></a><code>(tool_name: StringName)</code></td></tr><tr><td><a href="HammeriteEditorCommand.html"><code>HammeriteEditorCommand</code></a></td><td><a href="#method-running_before_tools"><code>running_before_tools</code></a><code>()</code></td></tr><tr><td><a href="HammeriteEditorCommand.html"><code>HammeriteEditorCommand</code></a></td><td><a href="#method-enabled_when"><code>enabled_when</code></a><code>(predicate: Callable)</code></td></tr><tr><td><a href="HammeriteEditorCommand.html"><code>HammeriteEditorCommand</code></a></td><td><a href="#method-checked_when"><code>checked_when</code></a><code>(predicate: Callable)</code></td></tr><tr><td><a href="HammeriteEditorCommand.html"><code>HammeriteEditorCommand</code></a></td><td><a href="#method-in_radio_group"><code>in_radio_group</code></a><code>(group: StringName)</code></td></tr><tr><td><a href="HammeriteEditorCommand.html"><code>HammeriteEditorCommand</code></a></td><td><a href="#method-in_context"><code>in_context</code></a><code>(names: StringName[])</code></td></tr><tr><td><a href="HammeriteEditorCommand.html"><code>HammeriteEditorCommand</code></a></td><td><a href="#method-labelled_by"><code>labelled_by</code></a><code>(f: Callable)</code></td></tr><tr><td><a href="HammeriteEditorCommand.html"><code>HammeriteEditorCommand</code></a></td><td><a href="#method-runs_action"><code>runs_action</code></a><code>(id: StringName)</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_bool.html"><code>bool</code></a></td><td><a href="#method-is_enabled"><code>is_enabled</code></a><code>()</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_bool.html"><code>bool</code></a></td><td><a href="#method-is_toggle"><code>is_toggle</code></a><code>()</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_bool.html"><code>bool</code></a></td><td><a href="#method-is_checked"><code>is_checked</code></a><code>()</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_string.html"><code>String</code></a></td><td><a href="#method-current_label"><code>current_label</code></a><code>()</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_string.html"><code>String</code></a></td><td><a href="#method-accelerator_text"><code>accelerator_text</code></a><code>()</code></td></tr></tbody></table>
+<h2>Property descriptions</h2>
+<h3 id="property-id">id</h3>
+<pre class="signature"><code>var id: StringName = &amp;&quot;&quot;</code></pre>
+<p>Stable name, for menus and addons to refer to a command by. Not shown to anyone.</p>
+<h3 id="property-label">label</h3>
+<pre class="signature"><code>var label: String = &quot;&quot;</code></pre>
+<p>What a menu calls it, drawn as given: pass it already translated (<code>tr(&quot;...&quot;)</code>), as the editor&#x27;s own table does.</p>
+<h3 id="property-menu">menu</h3>
+<pre class="signature"><code>var menu: StringName = &amp;&quot;&quot;</code></pre>
+<p>Which menu it belongs under, or empty for a command with a key and no menu entry.</p>
+<h3 id="property-shortcut">shortcut</h3>
+<pre class="signature"><code>var shortcut: Shortcut = null</code></pre>
+<p>What it is bound to: every key and click <a href="#method-bound_to"><code>bound_to()</code></a> and <a href="#method-bound_to_mouse"><code>bound_to_mouse()</code></a> added, the first of them drawn down the menu&#x27;s right-hand side.</p>
+<h3 id="property-action">action</h3>
+<pre class="signature"><code>var action: Callable = Callable()</code></pre>
+<p>What it does.</p>
+<h3 id="property-enabled_predicate">enabled_predicate</h3>
+<pre class="signature"><code>var enabled_predicate: Callable = Callable()</code></pre>
+<p>Asked whether it can be done right now: greys the menu item and refuses the keystroke. Unset means always. Ask through <a href="#method-is_enabled"><code>is_enabled()</code></a>.</p>
+<h3 id="property-checked_predicate">checked_predicate</h3>
+<pre class="signature"><code>var checked_predicate: Callable = Callable()</code></pre>
+<p>For a toggle, asked whether it is on now; unset means it is not a toggle. Ask through <a href="#method-is_checked"><code>is_checked()</code></a>.</p>
+<h3 id="property-owner_tool">owner_tool</h3>
+<pre class="signature"><code>var owner_tool: StringName = &amp;&quot;&quot;</code></pre>
+<p>Non-empty means the binding belongs to that tool and is never dispatched globally - the tool asks for it by id while it is running. This is how Space can be &quot;toggle selected lights&quot; everywhere and &quot;cycle clip mode&quot; inside the clip tool without the two fighting.</p>
+<h3 id="property-before_tool">before_tool</h3>
+<pre class="signature"><code>var before_tool: bool = false</code></pre>
+<p>Runs before the active tool sees the event, rather than after. Narrowing does: it is how you get out of a narrowed view, and a tool holding the keyboard must not be able to trap you in one.</p>
+<h3 id="property-radio_group">radio_group</h3>
+<pre class="signature"><code>var radio_group: StringName = &amp;&quot;&quot;</code></pre>
+<p>Non-empty makes this one option among several - the visualization modes - drawn as a radio item.</p>
+<h3 id="property-contexts">contexts</h3>
+<pre class="signature"><code>var contexts: StringName[] = []</code></pre>
+<p>Which right-click contexts offer this command, by <a href="HammeriteEditorCommands.html"><code>HammeriteEditorCommands</code></a> CTX_* name. Empty means the context menu never draws it. A command may name several: mirroring applies to a brush and to an entity alike.</p>
+<h3 id="property-label_provider">label_provider</h3>
+<pre class="signature"><code>var label_provider: Callable = Callable()</code></pre>
+<p>Asked what this command calls itself right now, when that depends on state - &quot;Resume Simulation&quot; once something is paused. Unset means <a href="#property-label"><code>label</code></a>. Ask through <a href="#method-current_label"><code>current_label()</code></a>.</p>
+<h3 id="property-action_id">action_id</h3>
+<pre class="signature"><code>var action_id: StringName = &amp;&quot;&quot;</code></pre>
+<p>The entity action (<code>get_actions()</code>) this command runs, if it runs one. The context menu offers every action the selection has that no command already covers, and this is how it knows which those are - otherwise Trigger is drawn twice, once from the table and once from the entity.</p>
+<h3 id="property-keywords">keywords</h3>
+<pre class="signature"><code>var keywords: String = &quot;&quot;</code></pre>
+<p>Other words an author might look for this command by in the launcher, when theirs is not the label&#x27;s: &quot;join&quot; for merging.</p>
+<h3 id="property-typed">typed</h3>
+<pre class="signature"><code>var typed: String = &quot;&quot;</code></pre>
+<p>A character that runs it when typed with no Cmd, Ctrl or Alt held, whatever key the layout puts it on: <code>/</code> is Shift-7 on a Nordic keyboard, and a binding to the slash KEY never fired there.</p>
+<h2>Method descriptions</h2>
+<h3 id="method-in_menu">in_menu()</h3>
+<pre class="signature"><code>func in_menu(m: StringName) -&gt; HammeriteEditorCommand</code></pre>
+<p>Files the command under menu <code>m</code> (see the menu names on <a href="HammeriteEditorCommands.html"><code>HammeriteEditorCommands</code></a>). Like every builder here it returns the command itself, so a table of commands reads as a table rather than as thirty blocks of assignment.</p>
+<h3 id="method-bound_to">bound_to()</h3>
+<pre class="signature"><code>func bound_to(keycode: int, command: bool = false, shift: bool = false, ctrl: bool = false, alt: bool = false) -&gt; HammeriteEditorCommand</code></pre>
+<p>Bind a keystroke to it, beside any it has: the numpad&#x27;s Enter as well as Enter, say. <code>command</code> is Cmd on macOS and Ctrl elsewhere. <code>ctrl</code> is Ctrl on macOS and Alt elsewhere, because there Ctrl is already taken by <code>command</code> and the Windows key is the system&#x27;s.</p>
+<h3 id="method-bound_also_to">bound_also_to()</h3>
+<pre class="signature"><code>func bound_also_to(keycode: int, command: bool = false, shift: bool = false, ctrl: bool = false, alt: bool = false) -&gt; HammeriteEditorCommand</code></pre>
+<p>The same as <a href="#method-bound_to"><code>bound_to()</code></a>, for a table that reads better saying so.</p>
+<h3 id="method-bound_to_mouse">bound_to_mouse()</h3>
+<pre class="signature"><code>func bound_to_mouse(button: int, command: bool = false, shift: bool = false, ctrl: bool = false, alt: bool = false) -&gt; HammeriteEditorCommand</code></pre>
+<p>Bind a click to it, beside any key or click it has: Alt+click and the like. No menu draws these, but they are bindings and they live in the table with the rest rather than in a second place.</p>
+<h3 id="method-is_mac">is_mac()</h3>
+<pre class="signature"><code>static func is_mac() -&gt; bool</code></pre>
+<p>Whether the editor is on a Mac, where Cmd is the command key. The web build asks the browser.</p>
+<h3 id="method-command_key_name">command_key_name()</h3>
+<pre class="signature"><code>static func command_key_name() -&gt; String</code></pre>
+<p>What the command key is called here, for text that names it.</p>
+<h3 id="method-typed_as">typed_as()</h3>
+<pre class="signature"><code>func typed_as(character: String) -&gt; HammeriteEditorCommand</code></pre>
+<p>Also run by typing <code>character</code> - see <a href="#property-typed"><code>typed</code></a>.</p>
+<h3 id="method-with_keywords">with_keywords()</h3>
+<pre class="signature"><code>func with_keywords(words: String) -&gt; HammeriteEditorCommand</code></pre>
+<p>Sets <a href="#property-keywords"><code>keywords</code></a>.</p>
+<h3 id="method-is_typed_by">is_typed_by()</h3>
+<pre class="signature"><code>func is_typed_by(event: InputEvent) -&gt; bool</code></pre>
+<p>Whether <code>event</code> types <a href="#property-typed"><code>typed</code></a>.</p>
+<h3 id="method-owned_by">owned_by()</h3>
+<pre class="signature"><code>func owned_by(tool_name: StringName) -&gt; HammeriteEditorCommand</code></pre>
+<p>Makes the binding <code>tool_name</code>&#x27;s alone; see <a href="#property-owner_tool"><code>owner_tool</code></a>. The tool asks for it with <code>HammeriteEditorCommands.matches()</code>.</p>
+<h3 id="method-running_before_tools">running_before_tools()</h3>
+<pre class="signature"><code>func running_before_tools() -&gt; HammeriteEditorCommand</code></pre>
+<p>Sets <a href="#property-before_tool"><code>before_tool</code></a>.</p>
+<h3 id="method-enabled_when">enabled_when()</h3>
+<pre class="signature"><code>func enabled_when(predicate: Callable) -&gt; HammeriteEditorCommand</code></pre>
+<p>Sets <a href="#property-enabled_predicate"><code>enabled_predicate</code></a>: <code>predicate</code> takes no arguments and returns a <a href="https://docs.godotengine.org/en/stable/classes/class_bool.html"><code>bool</code></a>.</p>
+<h3 id="method-checked_when">checked_when()</h3>
+<pre class="signature"><code>func checked_when(predicate: Callable) -&gt; HammeriteEditorCommand</code></pre>
+<p>Makes this a toggle, ticked while <code>predicate</code> (no arguments, returns a <a href="https://docs.godotengine.org/en/stable/classes/class_bool.html"><code>bool</code></a>) says so.</p>
+<h3 id="method-in_radio_group">in_radio_group()</h3>
+<pre class="signature"><code>func in_radio_group(group: StringName) -&gt; HammeriteEditorCommand</code></pre>
+<p>Sets <a href="#property-radio_group"><code>radio_group</code></a>. Ticked as <a href="#method-checked_when"><code>checked_when()</code></a> says, like any toggle.</p>
+<h3 id="method-in_context">in_context()</h3>
+<pre class="signature"><code>func in_context(names: StringName[]) -&gt; HammeriteEditorCommand</code></pre>
+<p>Offer this command when the right-click lands on one of <code>names</code>. See CTX_* on <a href="HammeriteEditorCommands.html"><code>HammeriteEditorCommands</code></a>.</p>
+<h3 id="method-labelled_by">labelled_by()</h3>
+<pre class="signature"><code>func labelled_by(f: Callable) -&gt; HammeriteEditorCommand</code></pre>
+<p>Sets <a href="#property-label_provider"><code>label_provider</code></a>: <code>f</code> takes no arguments and returns the label, or an empty string to fall back on <a href="#property-label"><code>label</code></a>.</p>
+<h3 id="method-runs_action">runs_action()</h3>
+<pre class="signature"><code>func runs_action(id: StringName) -&gt; HammeriteEditorCommand</code></pre>
+<p>Sets <a href="#property-action_id"><code>action_id</code></a>.</p>
+<h3 id="method-is_enabled">is_enabled()</h3>
+<pre class="signature"><code>func is_enabled() -&gt; bool</code></pre>
+<p>Whether it can be run now: asks <a href="#property-enabled_predicate"><code>enabled_predicate</code></a>, and true when that is unset.</p>
+<h3 id="method-is_toggle">is_toggle()</h3>
+<pre class="signature"><code>func is_toggle() -&gt; bool</code></pre>
+<p>Whether this is a toggle at all: whether it has a <a href="#property-checked_predicate"><code>checked_predicate</code></a>.</p>
+<h3 id="method-is_checked">is_checked()</h3>
+<pre class="signature"><code>func is_checked() -&gt; bool</code></pre>
+<p>Whether a toggle is on now: asks <a href="#property-checked_predicate"><code>checked_predicate</code></a>, and false when that is unset.</p>
+<h3 id="method-current_label">current_label()</h3>
+<pre class="signature"><code>func current_label() -&gt; String</code></pre>
+<p>What to draw it as. Asked at the moment a menu opens, never cached: a label that depends on state is only true for as long as the state is.</p>
+<h3 id="method-accelerator_text">accelerator_text()</h3>
+<pre class="signature"><code>func accelerator_text() -&gt; String</code></pre>
+<p>The keystroke, as a person would write it. For the menu, and for anything that has to say what a command is bound to without a menu to draw it in.</p>
+		</article>
+		<p class="docs-source">Hammerite 1.0 · built from a6dd634, 2026-10-10</p>
+	</main>
+</div>
+
+<footer class="studio-foot">
+	<a href="/"><img src="/assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>
