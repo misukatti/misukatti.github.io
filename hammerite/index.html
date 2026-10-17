@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Hammerite 3D — Misukatti Interactive</title>
-<meta name="description" content="A brush-based level editor that runs inside your Godot game. No edit-save-run loop: edit, then test, in the same running game. Retro radiosity lighting and sound that travels through the rooms.">
+<meta name="description" content="A brush-based level editor that runs inside your Godot game, so you edit and test the level in the same running game. It has a retro radiosity lightmapper and sound propagation through the rooms.">
 <meta property="og:title" content="Hammerite 3D">
-<meta property="og:description" content="A level editor inside your Godot game: edit, then test, with no reload in between.">
+<meta property="og:description" content="A level editor that runs inside your Godot game, so you edit and test in the same running game.">
 <meta property="og:image" content="https://misukatti.fi/hammerite/assets/editor.png">
 <meta property="og:url" content="https://misukatti.fi/hammerite/">
 <link rel="canonical" href="https://misukatti.fi/hammerite/">
@@ -35,9 +35,10 @@
 	<section class="hero">
 		<a class="news-pill" href="/blog/hammerite-2-0/"><strong>New</strong> Hammerite 2.0 is out →</a>
 		<img class="hero-logo" src="/hammerite/assets/hammerite-3d-dark.svg" alt="Hammerite 3D">
-		<p class="lede">The level editor that lives inside your game.</p>
-		<p class="sublede">Brush-based level editing for Godot, with a retro radiosity lightmapper and
-		sound that travels through the rooms you carve. No edit-save-run loop: edit, then test.</p>
+		<p class="lede">A level editor that runs inside your game.</p>
+		<p class="sublede">Brush-based level editing for Godot, with a retro radiosity lightmapper and sound propagation
+		through the rooms you carve. There is no edit-save-run loop: you edit and test in the same
+		running game.</p>
 		<div class="buy">
 			<!-- Placeholder: replace href with the store page when Hammerite goes on sale. -->
 			<a class="button" href="#buy" id="buy" aria-disabled="true">Buy Hammerite 3D</a>
@@ -50,10 +51,9 @@
 	</figure>
 
 	<section id="loop" class="loop">
-		<h2>Edit. Test. That's the loop.</h2>
-		<p class="loop-intro">Hammerite is embedded in the game itself, so the level you are editing is
-		the level you are playing. There is nothing to save, export or reload before you can try a
-		change.</p>
+		<h2>Edit and test in the same game</h2>
+		<p class="loop-intro">Hammerite runs inside the game itself, so the level you are editing is the level you are
+		playing. You do not need to save, export or reload anything before trying a change.</p>
 		<div class="loops">
 			<div class="loop-card loop-old">
 				<h3>The usual loop</h3>
@@ -79,41 +79,42 @@
 	</section>
 
 	<section class="carved">
-		<h2>Carved, not built</h2>
+		<h2>Subtractive workflow</h2>
 		<p>Solid is the default. Air brushes carve rooms out of it, and the compiler works out the rest:
-		which air is one room, where rooms open into each other, which walls are visible. Overlap to
-		extend a space, abut to divide one.</p>
-		<p>Lighting, sound and navigation are all read off that one compiled world, so a room is lit,
-		heard and walkable the moment it is carved.</p>
+		which air is one room, where rooms open into each other, and which walls are visible. Overlap
+		brushes to extend a space, and abut them to divide one.</p>
+		<p>Lighting, sound and navigation all use the same compiled world, so a room is lit, heard and
+		walkable as soon as it is carved. There is more about this in
+		<a href="/blog/carved-not-built/">Hammerite's subtractive workflow and compiler</a>.</p>
 	</section>
 
 	<section id="features" class="features">
 		<article>
 			<img src="/hammerite/assets/lighting-bake.png" alt="Two rooms lit by a single lamp after a lightmap bake, with the bake settings panel beside them" loading="lazy">
 			<h3>Retro radiosity lighting</h3>
-			<p>A GPU radiosity lightmapper in the spirit of the classic brush-based games: light that
-			bounces, bleeds colour from the walls, and pools in the corners.</p>
-			<p>Every surface keeps four light slots, so lamps can flicker, dim and switch at runtime
-			without a rebake: a guttering torch, a chandelier that goes out as one, a lightning flash
-			across every window. After an edit, a quick bake lights just the walls that changed.</p>
+			<p>A GPU radiosity lightmapper in the spirit of the classic brush-based games. Light bounces,
+			takes colour from the walls and collects in the corners.</p>
+			<p>Every surface has four light slots, so lamps can flicker, dim and switch on and off at runtime
+			without rebaking. For example a flickering torch, a chandelier that goes out all at once, or
+			lightning flashing in every window. After an edit, a quick bake lights only the walls that
+			changed.</p>
 		</article>
 		<article>
 			<img src="/hammerite/assets/audio-graph.png" alt="The acoustic tool over five rooms and a courtyard: a marker in each room, the doors and windows outlined, and green lines for the routes sound takes between them" loading="lazy">
-			<h3>Sound that travels like sound</h3>
-			<p>Sound finds its way through doorways and windows instead of through walls, so you hear it
-			from the opening it comes through. A closed door on the way muffles it, and AI hears by the
-			same rules.</p>
-			<p>Reverb comes from each room's size and surfaces, and weather is heard where it should be:
-			rain and wind all around you outdoors, and indoors through the nearest windows, muffled by
-			the roof.</p>
+			<h3>Sound propagation</h3>
+			<p>Sound travels through doorways and windows instead of through walls, so you hear it from the
+			opening it comes through. A closed door on the way muffles it, and AI hears sounds the same
+			way.</p>
+			<p>Reverb comes from each room's size and surfaces. Rain and wind are all around you outdoors, and
+			indoors you hear them through the nearest windows, muffled by the roof.</p>
 		</article>
 		<article class="plain">
-			<h3>An editor you can ship</h3>
+			<h3>Shipping the editor</h3>
 			<p>The editor comes with its own manual under Help. Games made with Hammerite may ship it, so
 			players can make maps too, royalty-free.</p>
 		</article>
 		<article class="plain">
-			<h3>Navigation from the same world</h3>
+			<h3>Navigation</h3>
 			<p>Walkable ground and traversal links come straight from the carved rooms, as Godot
 			navigation meshes.</p>
 		</article>
@@ -121,7 +122,7 @@
 
 	<section id="addons" class="addons">
 		<h2>Four addons, one native library</h2>
-		<p>Each is a standalone Godot addon; nothing in them depends on a particular game. All four are
+		<p>Each is a standalone Godot addon, and nothing in them depends on a particular game. All four are
 		C++, built into one GDExtension library, so there is no GDScript of Hammerite's to compile when
 		your game starts. The <a href="/hammerite/docs/">docs</a> have the guides and the full
 		<a href="/hammerite/api/">API reference</a>.</p>
@@ -129,14 +130,14 @@
 			<thead><tr><th>Addon</th><th>What it does</th><th>Package</th></tr></thead>
 			<tbody>
 				<tr><td>hammerite-core</td><td>Data model, subtractive compiler, runtime scene, radiosity lightmapper</td><td>runtime, full</td></tr>
-				<tr><td>hammerite-audio</td><td>Sound propagation through the rooms, weather, reverb; AI hearing</td><td>runtime, full</td></tr>
-				<tr><td>hammerite-nav</td><td>Walkable ground and traversal links; Godot navigation meshes</td><td>runtime, full</td></tr>
+				<tr><td>hammerite-audio</td><td>Sound propagation through the rooms, weather, reverb and AI hearing</td><td>runtime, full</td></tr>
+				<tr><td>hammerite-nav</td><td>Walkable ground, traversal links and Godot navigation meshes</td><td>runtime, full</td></tr>
 				<tr><td>hammerite-editor</td><td>The in-game level editor</td><td>full</td></tr>
 			</tbody>
 		</table>
 		<p class="kernel">Two packages: <strong>full</strong> has everything, and <strong>runtime</strong> leaves
 		out the editor, for a game whose players never open it. The library is built for macOS (Apple
-		silicon and Intel), Windows and Linux on x86-64; there is no web export.</p>
+		silicon and Intel), Windows and Linux on x86-64. There is no web export.</p>
 		<p class="kernel">Native code is what keeps the edit-test loop quick on a big level. In 2.0, 256
 		rooms compile in 303 ms instead of 626, a one-brush edit recompiles in 25 ms instead of 42, and a
 		large stealth level's navigation builds in 2.8 s instead of 5.7.</p>
