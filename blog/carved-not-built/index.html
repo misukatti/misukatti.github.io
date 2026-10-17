@@ -59,6 +59,11 @@
 		brush". Walls are slabs placed side by side, floors are slabs, and the faces where two slabs touch
 		are hidden by checking which ones lie flat against each other. There is no room anywhere in that
 		description. A room is only the space that happens to be left over between the slabs.</p>
+
+		<figure>
+			<img src="2026-08-walls-from-blocks.png" alt="A test room in the August 2026 Hammerite editor, made of four separate wall blocks standing around a floor" width="1400" height="1020" loading="lazy">
+			<figcaption>August 2026, a week before the refactor: a room as four wall blocks around a floor. Nothing in the editor knows there is a room.</figcaption>
+		</figure>
 		<p>Our first attempt at finding rooms tried to recover them automatically, by filling the level
 		with voxels and grouping them into zones. It was deleted the next day. What replaced it was the
 		honest version. You placed an audio <strong>zone</strong> by hand in every room, and a
@@ -72,9 +77,9 @@
 		anything that wasn't already in the level's geometry. It just made a person say it a second
 		time.</p>
 
-		<figure class="todo-figure">
-			<p><strong>Screenshot to come:</strong> the hand-placed audio zones and portal quads in a
-			City of Thieves test map (November 2025).</p>
+		<figure>
+			<img src="2025-11-hand-placed-audio.png" alt="The November 2025 Hammerite editor with the Acoustic Graph Builder open: a 3D view of the level as a closed shell of blocks, and three plan views with hand-placed zone markers and the graph between them" width="1600" height="900" loading="lazy">
+			<figcaption>November 2025: the Acoustic Graph Builder. The dots in the plan views are audio zones placed by hand, and the green lines are the graph built between them.</figcaption>
 		</figure>
 
 		<h2>Turning the world inside out</h2>
