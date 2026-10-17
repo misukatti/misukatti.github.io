@@ -49,6 +49,9 @@ then the guides. Needs Godot and Python's `markdown` package (`pip install markd
 Hammerite is sold on itch.io: <https://misukatti.itch.io/hammerite-3d>. The **Buy** button on the
 Hammerite page links there, and itch.io's `api.js` turns it into a checkout that opens in a popup.
 
+`hammerite/licence/` is Hammerite's `EULA.md`, rendered. When the EULA changes, render it again and
+update the summary in the Hammerite page's Licence section, and the itch.io page's, to match.
+
 ## Before going live
 
 - `hello@misukatti.fi` only receives mail once the domain has a mail provider and its MX records.

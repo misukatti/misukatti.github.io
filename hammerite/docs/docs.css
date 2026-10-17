@@ -248,3 +248,9 @@
 	color: var(--bone-dim);
 	font-size: 0.8rem;
 }
+
+.licence-page {
+	max-width: 78ch;
+	margin: 0 auto;
+	padding: 3rem 16px 4rem;
+}

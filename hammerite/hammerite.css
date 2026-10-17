@@ -294,3 +294,25 @@ td:first-child {
 }
 
 .news-pill:hover { background: rgba(179, 38, 30, 0.25); }
+
+.licence-lists {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+	gap: 1.25rem;
+	margin: 1.25rem 0;
+}
+
+.licence-lists > div {
+	padding: 1.25rem 1.5rem;
+	background: var(--stone-raised);
+	border: 1px solid var(--line);
+	border-radius: 10px;
+}
+
+.licence-lists h3 { margin-top: 0; }
+
+.licence-lists ul { margin: 0; padding-left: 1.2rem; color: var(--bone-dim); }
+
+.licence-lists li { margin-bottom: 0.5rem; }
+
+.buy-note + .buy-note { margin-top: 0.35rem; }
