@@ -40,9 +40,8 @@
 		through the rooms you carve. There is no edit-save-run loop: you edit and test in the same
 		running game.</p>
 		<div class="buy">
-			<!-- Placeholder: replace href with the store page when Hammerite goes on sale. -->
-			<a class="button" href="#buy" id="buy" aria-disabled="true">Buy Hammerite 3D</a>
-			<p class="buy-note">Store link coming soon · Version 2.0 · Godot 4.7 · macOS, Windows and Linux</p>
+			<a class="button" href="https://misukatti.itch.io/hammerite-3d" id="buy">Buy Hammerite 3D</a>
+			<p class="buy-note">Sold on <a href="https://misukatti.itch.io/hammerite-3d">itch.io</a> · Version 2.0 · Godot 4.7 · macOS, Windows and Linux</p>
 		</div>
 	</section>
 
@@ -155,5 +154,12 @@
 	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
 </footer>
 
+<script src="https://static.itch.io/api.js"></script>
+<script>
+	// Opens itch.io's checkout in a popup; without the script the button is a plain link to the store page.
+	if (window.Itch) {
+		Itch.attachBuyButton(document.getElementById("buy"), { user: "misukatti", game: "hammerite-3d" });
+	}
+</script>
 </body>
 </html>

@@ -44,10 +44,13 @@ then the guides. Needs Godot and Python's `markdown` package (`pip install markd
 - Links to files in the Hammerite repository outside `docs/` are shown as plain text, since that
   repository is private.
 
+## Selling
+
+Hammerite is sold on itch.io: <https://misukatti.itch.io/hammerite-3d>. The **Buy** button on the
+Hammerite page links there, and itch.io's `api.js` turns it into a checkout that opens in a popup.
+
 ## Before going live
 
-- The **Buy** button on the Hammerite page points at `#buy`. Replace the `href` with the store page
-  and drop "Store link coming soon".
 - `hello@misukatti.fi` only receives mail once the domain has a mail provider and its MX records.
 
 ## Publishing
