@@ -45,27 +45,14 @@
 			rooms and the doorways between them are something the editor works out for itself.</p>
 		</header>
 
-		<h2>Two and a half years in brushes</h2>
-		<p>Hammerite started in March 2024 as a small brush editor: boxes and cylinders, a clip tool,
-		extrude, a texture browser. It was built the way Valve's Hammer and the Quake editors build
-		worlds. The level begins as empty space, and you add convex solids to it until there is
-		something to stand on.</p>
-		<p>A CPU lightmapper followed that May, doing radiosity on the brushes' faces. In November 2024
-		Hammerite became a Godot addon, and on the same day it went into City of Thieves, the stealth
-		game we are making with it. City of Thieves is still the place it gets tested every day. Moving
-		the lightmapper to the GPU took most of 2025, and on 28 August 2025 the commit log simply says
-		<em>"Working radiosity!"</em></p>
-
-		<figure class="todo-figure">
-			<p><strong>Screenshot to come:</strong> an early build, the Cornell box test map lit by the first
-			GPU lightmapper (January 2025).</p>
-		</figure>
-
-		<p>Then came sound. A stealth game lives on it: footsteps through a doorway, a guard who hears
-		you in the next room but not through a metre of stone. In November 2025 City of Thieves got an
-		audio system inspired by the one in the Thief games, where sound travels room to room through the
-		openings between them. For that, the game has to know what the rooms are and where the doorways
-		are.</p>
+		<p>Hammerite started as a brush editor in the mould of Valve's Hammer and the Quake editors: the
+		level begins as empty space, and you add convex solid blocks to it until there's something to stand
+		on. (How it got from there to here is <a href="/blog/hammerite-so-far/">a story of its own</a>.)
+		That worked well enough until City of Thieves, the stealth game we're making with it, needed sound.</p>
+		<p>A stealth game lives on sound: footsteps through a doorway, a guard who hears you in the next
+		room but not through a metre of stone. In November 2025 we gave City of Thieves an audio system
+		inspired by the one in the Thief games, where sound travels room to room through the openings
+		between them. For that, the game has to know what the rooms are and where the doorways are.</p>
 
 		<h2>The trouble with adding</h2>
 		<p>In an additive world, the editor doesn't know any of that. "Solid" just means "inside some
