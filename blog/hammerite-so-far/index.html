@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Hammerite so far: two and a half years in brushes — Misukatti Interactive</title>
+<title>Brief history of Hammerite — Misukatti Interactive</title>
 <meta name="robots" content="noindex">
 <meta name="description" content="How Hammerite grew from a small brush editor into a level editor, lightmapper, sound and navigation toolkit for Godot: the CPU lightmapper that didn't scale, the audio wired up by hand, the week the world turned inside out, and two releases in one week.">
-<meta property="og:title" content="Hammerite so far: two and a half years in brushes">
+<meta property="og:title" content="Brief history of Hammerite: two and a half years in brushes">
 <meta property="og:image" content="https://misukatti.fi/hammerite/assets/editor.png">
 <meta property="og:url" content="https://misukatti.fi/blog/hammerite-so-far/">
 <meta property="og:type" content="article">
@@ -38,63 +38,66 @@
 
 		<header class="post-head">
 			<p class="post-meta">Draft · Hammerite · History</p>
-			<h1>Hammerite so far: two and a half years in brushes</h1>
-			<p class="post-lede">Hammerite began in March 2024 as a small brush editor. It's now a level
-			editor, a lightmapper, a sound system and a navigation builder for Godot, written in C++, and it
-			has just had two releases in a single week. This is how it got here, including the parts we
+			<h1>Brief history of Hammerite: two and a half years in brushes</h1>
+			<p class="post-lede">I started Hammerite in March 2024 as a small brush editor. It is now a
+			level editor, a lightmapper, a sound system and a navigation builder for Godot, written in
+			C++, and it just had two releases in one week. This is how it got here, including the parts I
 			had to throw away.</p>
 		</header>
 
 		<h2>2024: a brush editor</h2>
-		<p>The first commit is from 17 March 2024. Within a month there were boxes and cylinders, a clip
-		tool, extrude and a texture browser. It worked the way Valve's Hammer and the Quake editors do: the
-		level starts as empty space, and you add convex solid blocks to it until there's something to stand
-		on.</p>
-		<p>In November 2024 Hammerite became a Godot addon. The same day, it went into the first commit of
-		City of Thieves, the stealth game we're making with it, as a git submodule. Every feature since has
-		been tried in that game first.</p>
+		<p>The first commit is from 17 March 2024. Within a month I had boxes and cylinders, a clip tool,
+		extrude and a texture browser. It worked like Valve's Hammer and the Quake editors: the level
+		starts as empty space, and you add solid blocks to it until there is something to stand on.</p>
+		<p>In November 2024 Hammerite became a Godot addon, and on the same day it went into the first
+		commit of City of Thieves, the stealth game I am making with it. Pretty much every feature since
+		has been tried in that game first.</p>
 
 		<figure>
 			<img src="2025-01-additive-editor.png" alt="The January 2025 Hammerite editor: a test room whose walls are stacked up from solid blocks, on a grid, with the early toolbar down the left" width="1600" height="900" loading="lazy">
-			<figcaption>January 2025: a test room in the additive editor, its walls stacked up from solid blocks.</figcaption>
+			<figcaption>January 2025: a test room in the additive editor, walls stacked up from solid blocks.</figcaption>
 		</figure>
 
 		<h2>The lightmapper that didn't scale</h2>
-		<p>Lighting came early. In May 2024 Hammerite got a lightmapper: each face cut into patches, light
-		from the lamps, then radiosity, light bouncing from patch to patch, all on the CPU. It looked right
-		on a test room. It did not scale at all. Radiosity has every patch trading light with every other
-		patch it can see, so the work grows much faster than the level, and a real level is a great many
-		patches. Spreading it over threads, that December, didn't change the shape of the problem.</p>
-		<p>In January 2025 we started again on the GPU, as compute shaders. It took until August to get
-		right: on 26 August the commit says <em>"Working GPU lightmapper"</em>, the next day the CPU path
-		was deleted, and the day after that radiosity itself was running on the GPU. The commit message
-		was <em>"Working radiosity!"</em></p>
+		<p>Lighting came early. In May 2024 I wrote a lightmapper that did radiosity on the CPU: every
+		face is cut into patches, the lamps light them, and then the light bounces from patch to patch.
+		It looked right on a test room. It did not scale at all.</p>
+		<p>The problem is that in radiosity every patch trades light with every other patch it can see,
+		so the work grows a lot faster than the level does. A real level has a lot of patches. I spread
+		the work over threads in December, but that did not change the shape of the problem.</p>
+		<p>In January 2025 I started over on the GPU, with compute shaders. It took until August to get
+		it right. On 26 August the commit message says "Working GPU lightmapper", the next day I deleted
+		the CPU path, and the day after that radiosity was running on the GPU too. That commit message
+		was "Working radiosity!"</p>
 
 		<h2>Sound, by hand</h2>
-		<p>In November 2025 City of Thieves got its sound. A stealth game lives on it: footsteps through a
-		doorway, a guard who hears you in the next room but not through a metre of stone. We built it the
-		way the Thief games did, with sound travelling room to room through the openings between them. That
-		needs to know what the rooms are and where the doorways are, which an additive editor doesn't.</p>
-		<p>So every room got an audio zone placed by hand, and every doorway a portal, a quad sized to fit
-		it. It worked, carefully, and every change to a level meant checking the markers again.</p>
+		<p>In November 2025 City of Thieves got sound. A stealth game needs it to work properly: you
+		should hear footsteps through a doorway, and a guard should hear you in the next room but not
+		through a metre of stone. I built it the way the Thief games did, with sound travelling from room
+		to room through the openings between them.</p>
+		<p>For that the game has to know what the rooms are and where the doorways are, and an additive
+		editor does not know either. So every room got an audio zone placed by hand, and every doorway a
+		portal, a quad sized to fit it. It worked, but every change to a level meant checking the markers
+		again.</p>
 
 		<figure>
 			<img src="2025-11-hand-placed-audio.png" alt="The November 2025 Hammerite editor with the Acoustic Graph Builder open: a 3D view of the level as a closed shell of blocks, and three plan views with hand-placed zone markers and the graph between them" width="1600" height="900" loading="lazy">
-			<figcaption>November 2025: the Acoustic Graph Builder. The dots in the plan views are audio zones placed by hand, and the green lines are the graph built between them.</figcaption>
+			<figcaption>November 2025: the Acoustic Graph Builder. The dots in the plan views are audio zones placed by hand, and the green lines are the graph between them.</figcaption>
 		</figure>
 
 		<h2>August 2026: four addons, and the world inside out</h2>
-		<p>By then the game and the editor had grown into each other: the sound system, for one, was
-		written inside City of Thieves. On 17 August we pulled them apart. Hammerite became separate addons,
-		core, editor and audio, and the sound system moved out of the game into the last of them. Nothing in
-		Hammerite may depend on a particular game, and its test suites check that it doesn't.</p>
-		<p>A week later came the biggest change in its history. We turned the world inside out: solid
-		became the default, and rooms are carved out of it with air brushes, the way Looking Glass's Dromed
-		built the Thief games. The compiler works out the rooms and the openings between them by itself, so
-		the hand-placed audio zones went, and so did the tool that placed them. That week was 188 commits,
-		and it gets <a href="/blog/carved-not-built/">a post of its own</a>.</p>
-		<p>The fourth addon, navigation, was written the same week, on the carved world from its first
-		commit: walkable ground is simply the floor of the air.</p>
+		<p>By then the game and the editor had grown into each other. The sound system, for example, was
+		written inside City of Thieves. On 17 August I pulled them apart: Hammerite became separate
+		addons for the core, the editor and audio, and the sound system moved out of the game into the
+		audio addon. Nothing in Hammerite may depend on a particular game, and the test suites check
+		that.</p>
+		<p>A week later came the biggest change so far. I turned the world inside out: solid is the
+		default, and rooms are carved out of it with air brushes, like in Looking Glass's Dromed. The
+		compiler works out the rooms and the openings between them by itself, so the hand-placed audio
+		zones went, and so did the tool for placing them. That week was 188 commits, and it gets
+		<a href="/blog/carved-not-built/">a post of its own</a>.</p>
+		<p>I wrote the fourth addon, navigation, the same week. It was built on the carved world from the
+		first commit: walkable ground is just the floor of the air.</p>
 
 		<figure>
 			<img src="/blog/carved-not-built/graph-tool.png" alt="The audio tool in the Hammerite editor showing four rooms and a courtyard, a marker in each room and the openings between them outlined" width="1092" height="709" loading="lazy">
@@ -106,26 +109,26 @@
 			<li><time datetime="2026-09-29">29 September</time> <strong>0.9.</strong> The first tagged
 			version, the day after the last of the additive display code was removed.</li>
 			<li><time datetime="2026-09-30">30 September</time> <strong>A native kernel.</strong> The
-			heaviest geometry, carving and the walls, moved to optional C++, with GDScript doing the same
-			work where it wasn't installed.</li>
-			<li><time datetime="2026-10-10">10 October</time> <strong>1.0.</strong> The first release, with
-			a supported API and a promise to keep it.</li>
+			heaviest geometry work, carving and walls, moved to optional C++, with GDScript doing the same
+			work when the kernel was not installed.</li>
+			<li><time datetime="2026-10-10">10 October</time> <strong>1.0.</strong> The first release,
+			with a supported API and a promise to keep it.</li>
 			<li><time datetime="2026-10-17">17 October</time> <strong>2.0.</strong> Every class native, in
-			one library, seven days after 1.0. The <a href="/blog/hammerite-2-0/">release post</a> has the
+			one library, a week after 1.0. The <a href="/blog/hammerite-2-0/">release post</a> has the
 			details.</li>
 		</ul>
 
-		<h2>What we learned</h2>
+		<h2>What I learned</h2>
 		<ul>
-			<li><strong>Don't make a person say what the geometry already knows.</strong> The hand-placed
-			zones worked, but every one was a second copy of the level to keep true.</li>
-			<li><strong>Some algorithms need the right machine.</strong> Radiosity on the CPU wasn't a slow
-			version of the right thing; it was the wrong place to do it.</li>
-			<li><strong>A real game is the best test suite.</strong> Nearly every decision in Hammerite was
-			made because City of Thieves needed something and the editor couldn't give it yet.</li>
+			<li><strong>Don't make people say what the geometry already knows.</strong> The hand-placed
+			zones worked, but each one was a second copy of the level to keep up to date.</li>
+			<li><strong>Some work belongs on different hardware.</strong> CPU radiosity was not a slow
+			version of the right thing. It was the wrong place to do it.</li>
+			<li><strong>A real game is the best test suite.</strong> Almost every decision in Hammerite was
+			made because City of Thieves needed something the editor could not do yet.</li>
 		</ul>
 
-		<p class="post-sign">— Misukatti Interactive</p>
+		<p class="post-sign">- Elli</p>
 	</article>
 </main>
 

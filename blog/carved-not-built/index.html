@@ -39,42 +39,43 @@
 		<header class="post-head">
 			<p class="post-meta">Draft · Hammerite · How it's made</p>
 			<h1>Carved, not built: how Hammerite learned to dig</h1>
-			<p class="post-lede">For most of its life, Hammerite built levels the way most editors do: you
-			placed solid blocks in empty space. Every room's sound then had to be wired up by hand. Last
-			August we turned the world inside out. Now solid is the default and you carve the air, and the
-			rooms and the doorways between them are something the editor works out for itself.</p>
+			<p class="post-lede">For most of its life Hammerite built levels the way most editors do: you placed solid blocks
+			in empty space. That meant the sound for every room had to be wired up by hand. In August I
+			turned the world inside out. Now solid is the default and you carve out the air, and the editor
+			works out the rooms and the doorways between them by itself.</p>
 		</header>
 
-		<p>Hammerite started as a brush editor in the mould of Valve's Hammer and the Quake editors: the
-		level begins as empty space, and you add convex solid blocks to it until there's something to stand
-		on. (How it got from there to here is <a href="/blog/hammerite-so-far/">a story of its own</a>.)
-		That worked well enough until City of Thieves, the stealth game we're making with it, needed sound.</p>
-		<p>A stealth game lives on sound: footsteps through a doorway, a guard who hears you in the next
-		room but not through a metre of stone. In November 2025 we gave City of Thieves an audio system
-		inspired by the one in the Thief games, where sound travels room to room through the openings
-		between them. For that, the game has to know what the rooms are and where the doorways are.</p>
+		<p>Hammerite started as a brush editor like Valve's Hammer and the Quake editors: the level is
+		empty space, and you add solid blocks to it until there is something to stand on. (How it got
+		from there to here is <a href="/blog/hammerite-so-far/">a story of its own</a>.) That worked
+		well enough until City of Thieves, the stealth game I am making with it, needed sound.</p>
+		<p>A stealth game needs sound to work properly. You should hear footsteps through a doorway, and a
+		guard should hear you in the next room but not through a metre of stone. In November 2025 I gave
+		City of Thieves an audio system inspired by the Thief games, where sound travels from room to
+		room through the openings between them. For that the game has to know what the rooms are and
+		where the doorways are.</p>
 
 		<h2>The trouble with adding</h2>
-		<p>In an additive world, the editor doesn't know any of that. "Solid" just means "inside some
+		<p>In an additive world the editor does not know any of that. "Solid" just means "inside some
 		brush". Walls are slabs placed side by side, floors are slabs, and the faces where two slabs touch
 		are hidden by checking which ones lie flat against each other. There is no room anywhere in that
-		description. A room is only the space that happens to be left over between the slabs.</p>
+		description. A room is just the space that is left over between the slabs.</p>
 
 		<figure>
 			<img src="2026-08-walls-from-blocks.png" alt="A test room in the August 2026 Hammerite editor, made of four separate wall blocks standing around a floor" width="1400" height="1020" loading="lazy">
 			<figcaption>August 2026, a week before the refactor: a room as four wall blocks around a floor. Nothing in the editor knows there is a room.</figcaption>
 		</figure>
-		<p>Our first attempt at finding rooms tried to recover them automatically, by filling the level
-		with voxels and grouping them into zones. It was deleted the next day. What replaced it was the
-		honest version. You placed an audio <strong>zone</strong> by hand in every room, and a
-		<strong>portal</strong> in every doorway: a quad with a position, a normal, a width and a height.
-		The graph builder then cast rays out from each portal to guess which zones it joined.</p>
-		<p>It worked, in the sense that Thief's sound worked: carefully. But every change to a level meant
-		checking the markers again. Moving a wall meant moving the portal in it. A new corridor needed its
-		own zone, and as the commit that finally retired the system put it:</p>
+		<p>My first attempt tried to find the rooms automatically, by filling the level with voxels and
+		grouping them into zones. I deleted it the next day. What replaced it was the honest version: you
+		placed an audio <strong>zone</strong> by hand in every room, and a <strong>portal</strong> in
+		every doorway, a quad with a position, a normal, a width and a height. The graph builder then cast
+		rays out from each portal to guess which zones it connected.</p>
+		<p>It worked, but it needed care. Every change to a level meant checking the markers again. Moving
+		a wall meant moving the portal in it, and a new corridor needed its own zone. Or as the commit
+		that finally retired the system put it:</p>
 		<blockquote>A designer could also simply forget a room.</blockquote>
-		<p>The tool for placing all of this was over a thousand lines of code. Nothing it produced said
-		anything that wasn't already in the level's geometry. It just made a person say it a second
+		<p>The tool for placing all of this was over a thousand lines of code, and nothing it produced said
+		anything that was not already in the level's geometry. It just made a person say it a second
 		time.</p>
 
 		<figure>
@@ -83,21 +84,22 @@
 		</figure>
 
 		<h2>Turning the world inside out</h2>
-		<p>The idea was older than Hammerite: Looking Glass's editor for the Thief games, Dromed, started
-		every level as solid rock. You don't build a room there; you dig it. And a dug room is exactly the
-		thing an audio system wants: a volume of air, with the openings into its neighbours where two dug
-		spaces meet.</p>
-		<p>So in August 2026 we wrote an 1,800-line design document and spent a week, 188 commits, turning
+		<p>The idea is a lot older than Hammerite. Dromed, Looking Glass's editor for the Thief games,
+		starts every level as solid rock. You don't build a room there, you dig it. And a dug room is
+		exactly what an audio system wants: a volume of air, with openings to its neighbours where two
+		dug spaces meet.</p>
+		<p>So in August 2026 I wrote an 1,800-line design document and spent a week, 188 commits, turning
 		Hammerite into a subtractive editor. The document was clear that this was not a new tool mode:</p>
 		<blockquote>It is baked into the definition of solidity itself.</blockquote>
 		<p>Solid became the default. <strong>Air brushes</strong> carve rooms out of it, and solid brushes
-		put rock back. And every room, every opening and every visible wall is <em>derived</em>, recompiled
-		from the brushes on each edit and never saved. The point was a world that always knows its own
-		rooms and keeps that knowledge up to date while you work. In the document's words, "the compiler's
-		output has a consumer waiting": the audio system that had been fed by hand until then.</p>
+		put rock back. Every room, every opening and every visible wall is <em>derived</em>: recompiled
+		from the brushes on each edit and never saved. The goal was a world that always knows its own
+		rooms and keeps that up to date while you work. In the document's words, "the compiler's output
+		has a consumer waiting". That consumer was the audio system, which had been fed by hand until
+		then.</p>
 		<p>The additive editor had a subtract tool too, which cut pieces out of solid brushes. But cutting
-		holes in slabs still leaves you with slabs. What changed was what the editor considers the world to
-		be made of.</p>
+		holes in slabs still leaves you with slabs. What changed was what the editor thinks the world is
+		made of.</p>
 
 		<figure>
 			<img src="carved-world-one-room.png" alt="A single room carved out of solid rock in the Hammerite editor" width="784" height="709" loading="lazy">
@@ -170,16 +172,16 @@
 		</figure>
 
 		<p>None of this is saved. A map stores only what an author made: brushes, faces and entities.
-		Anything an author attaches to a derived thing lives on something authored. A doorway's name, for
-		example, is stored on the faces it was cut from, so the name survives the doorway being recompiled
-		from scratch.</p>
-		<p>Recompiling everything on every edit would be slow on a large level, so it doesn't. An edit
+		Anything attached to a derived thing has to live on something authored. A doorway's name, for
+		example, is stored on the faces it was cut from, so it survives the doorway being recompiled from
+		scratch.</p>
+		<p>Recompiling everything on every edit would be slow on a big level, so it doesn't. An edit
 		recompiles only what the changed brush could have reached: where it was, and where it is now. The
 		work is spread over every core, and since Hammerite 2.0 all of it is native code. On a 256-room
-		test level, a one-brush edit recompiles in 25 milliseconds.</p>
+		test level a one-brush edit recompiles in 25 milliseconds.</p>
 
-		<h2>What we got for free</h2>
-		<p>Once the world knows its rooms, everything that needs rooms can simply ask.</p>
+		<h2>What I got for free</h2>
+		<p>Once the world knows its rooms, everything that needs rooms can just ask.</p>
 		<ul>
 			<li><strong>Sound.</strong> An audio zone is now just a room, and a portal is just an
 			opening. The thousand-line tool for placing them was replaced by one less than half its size,
@@ -201,19 +203,19 @@
 		</figure>
 
 		<h2>Prior art</h2>
-		<p>None of the ideas here are new. Hammerite owes most of them to a handful of editors and one
+		<p>None of these ideas are new. Hammerite owes most of them to a handful of editors and one
 		paper.</p>
 		<ul>
 			<li><strong>Dromed</strong>, Looking Glass Studios' editor for <em>Thief: The Dark Project</em>
-			(1998) and its sequels. The world starts solid; terrain brushes fill space with air, solid or
+			(1998) and its sequels. The world starts solid, terrain brushes fill space with air, solid or
 			water, and later brushes win. Changes to the brushes show up only after <em>portalizing</em>,
 			a full rebuild of the level. Its sound travels room to room, around corners and through doors,
 			but the rooms are <em>room brushes</em> an author places by hand, with a pair around every door
 			so the door can block sound
 			(<a href="https://thiefmissions.com/tutorials/Spike14CompleteTut.html.20030423">Spike14's DROMED
 			tutorial</a>; <a href="https://www.ttlg.com/forums/showthread.php?t=30143">room brush advice on
-			TTLG</a>). Hammerite's audio is, in a sense, Dromed's room brushes worked out from the
-			terrain brushes, and its compiler is a portalize small enough to run on every edit.</li>
+			TTLG</a>). You could say Hammerite's audio is Dromed's room brushes worked out from the terrain brushes,
+			and its compiler is a portalize small enough to run on every edit.</li>
 			<li><strong>UnrealEd</strong>, whose world was solid by default too: you subtract the spaces
 			players move through and add detail back inside them
 			(<a href="https://unrealarchive.org/wikis/unreal-wiki/Legacy:Subtraction_And_Addition.html">Unreal
@@ -228,12 +230,12 @@
 			uses the same graph for sound, light and navigation, not for visibility.</li>
 		</ul>
 
-		<h2>Where it goes from here</h2>
-		<p>The audio system that started all this now gets its rooms for nothing, and so does everything
-		built since. If you'd like to try carving a few rooms yourself, the
-		<a href="/hammerite/docs/">Hammerite docs</a> start with exactly that.</p>
+		<h2>What next</h2>
+		<p>The audio system that started all this now gets its rooms for free, and so does everything built
+		since. If you want to try carving a few rooms yourself, the <a href="/hammerite/docs/">Hammerite
+		docs</a> start with exactly that.</p>
 
-		<p class="post-sign">— Misukatti Interactive</p>
+		<p class="post-sign">- Elli</p>
 	</article>
 </main>
 
