@@ -49,9 +49,15 @@
 		<p>The first commit is from March 2024. Within a month I had boxes and cylinders, a clip tool,
 		extrude and a texture browser. It worked like Valve's Hammer and the Quake editors: the level
 		starts as empty space, and you add solid blocks to it until there is something to stand on.</p>
+		<p>The editor has run inside the game from the very beginning. The first version was not a plugin
+		for Godot's own editor, it was a Godot project whose main scene was the level editor itself. So
+		you edit the level in the same program that runs it.</p>
 		<p>In November 2024 Hammerite became a Godot addon, and on the same day it went into the first
-		commit of City of Thieves, the stealth game I am making with it. Pretty much every feature since
-		has been tried in that game first.</p>
+		commit of City of Thieves, the stealth game I am making with it. That first commit already had a
+		key for switching between editing and playing in the same running game: change a room, press
+		the key and walk into it, without saving, exporting or restarting anything. That edit-test loop
+		has been the core idea of Hammerite ever since, and pretty much every feature has been tried in
+		City of Thieves first.</p>
 
 		<figure>
 			<img src="2025-01-additive-editor.png" alt="The January 2025 Hammerite editor: a test room whose walls are stacked up from solid blocks, on a grid, with the early toolbar down the left" width="1600" height="900" loading="lazy">
