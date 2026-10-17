@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Carved, not built: how Hammerite learned to dig — Misukatti Interactive</title>
+<title>Hammerite's subtractive workflow and compiler — Misukatti Interactive</title>
 <meta name="robots" content="noindex">
-<meta name="description" content="Hammerite started as an additive brush editor where every room's sound had to be wired up by hand. Turning the world inside out, so that solid is the default and air is carved, made rooms and doorways something the compiler finds for itself.">
-<meta property="og:title" content="Carved, not built: how Hammerite learned to dig">
+<meta name="description" content="Hammerite started as an additive brush editor where the sound for every room had to be set up by hand. With the subtractive workflow, solid is the default and air is carved out, and the compiler finds the rooms and doorways by itself.">
+<meta property="og:title" content="Hammerite's subtractive workflow and compiler">
 <meta property="og:image" content="https://misukatti.fi/blog/carved-not-built/graph-tool.png">
 <meta property="og:url" content="https://misukatti.fi/blog/carved-not-built/">
 <meta property="og:type" content="article">
@@ -38,10 +38,9 @@
 
 		<header class="post-head">
 			<p class="post-meta">Draft · Hammerite · How it's made</p>
-			<h1>Carved, not built: how Hammerite learned to dig</h1>
+			<h1>Hammerite's subtractive workflow and compiler</h1>
 			<p class="post-lede">For most of its life Hammerite built levels the way most editors do: you placed solid blocks
-			in empty space. That meant the sound for every room had to be wired up by hand. In August I
-			turned the world inside out. Now solid is the default and you carve out the air, and the editor
+			in empty space. That meant the sound for every room had to be wired up by hand. In August 2026 I switched it to a subtractive workflow. Now solid is the default and you carve out the air, and the editor
 			works out the rooms and the doorways between them by itself.</p>
 		</header>
 
@@ -55,7 +54,7 @@
 		room through the openings between them. For that the game has to know what the rooms are and
 		where the doorways are.</p>
 
-		<h2>The trouble with adding</h2>
+		<h2>The problem with additive levels</h2>
 		<p>In an additive world the editor does not know any of that. "Solid" just means "inside some
 		brush". Walls are slabs placed side by side, floors are slabs, and the faces where two slabs touch
 		are hidden by checking which ones lie flat against each other. There is no room anywhere in that
@@ -66,8 +65,7 @@
 			<figcaption>August 2026, a week before the refactor: a room as four wall blocks around a floor. Nothing in the editor knows there is a room.</figcaption>
 		</figure>
 		<p>My first attempt tried to find the rooms automatically, by filling the level with voxels and
-		grouping them into zones. I deleted it the next day. What replaced it was the honest version: you
-		placed an audio <strong>zone</strong> by hand in every room, and a <strong>portal</strong> in
+		grouping them into zones. I deleted it the next day. What replaced it was the manual version: you placed an audio <strong>zone</strong> by hand in every room, and a <strong>portal</strong> in
 		every doorway, a quad with a position, a normal, a width and a height. The graph builder then cast
 		rays out from each portal to guess which zones it connected.</p>
 		<p>It worked, but it needed care. Every change to a level meant checking the markers again. Moving
@@ -83,7 +81,7 @@
 			<figcaption>November 2025: the Acoustic Graph Builder. The dots in the plan views are audio zones placed by hand, and the green lines are the graph built between them.</figcaption>
 		</figure>
 
-		<h2>Turning the world inside out</h2>
+		<h2>The subtractive workflow</h2>
 		<p>The idea is a lot older than Hammerite. Dromed, Looking Glass's editor for the Thief games,
 		starts every level as solid rock. You don't build a room there, you dig it. And a dug room is
 		exactly what an audio system wants: a volume of air, with openings to its neighbours where two
@@ -180,7 +178,7 @@
 		work is spread over every core, and since Hammerite 2.0 all of it is native code. On a 256-room
 		test level a one-brush edit recompiles in 25 milliseconds.</p>
 
-		<h2>What I got for free</h2>
+		<h2>What it gives for free</h2>
 		<p>Once the world knows its rooms, everything that needs rooms can just ask.</p>
 		<ul>
 			<li><strong>Sound.</strong> An audio zone is now just a room, and a portal is just an
