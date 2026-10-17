@@ -45,6 +45,21 @@
 			had to throw away.</p>
 		</header>
 
+		<h2>Before Hammerite</h2>
+		<p>Before Hammerite I tried to make Godot's own CSG nodes work for the kind of levels I wanted to
+		build. In 2022 I opened a few pull requests for them: a
+		<a href="https://github.com/godotengine/godot/pull/59381">fix for CSG gizmos</a>, which was
+		merged, and two bigger ones that added
+		<a href="https://github.com/godotengine/godot/pull/59266">per-face materials and UVs</a> and
+		<a href="https://github.com/godotengine/godot/pull/59386">physics materials</a> to CSG shapes.
+		Those two are still open.</p>
+		<p>I quickly realized that a brush-based level workflow is not something the Godot maintainers
+		want CSG to be, and that CSG nodes were not what was best for my game either. In 2023 I also
+		<a href="https://github.com/godotengine/godot-proposals/issues/8311">proposed lightmap layers</a>,
+		so that baked lights could be switched on and off or made to flicker, which a stealth game needs.
+		Hammerite's lightmapper does that now. So instead of bending Godot's tools to fit, I started
+		Hammerite as its own project.</p>
+
 		<h2>2024: a brush editor</h2>
 		<p>The first commit is from March 2024. Within a month I had boxes and cylinders, a clip tool,
 		extrude and a texture browser. It worked like Valve's Hammer and the Quake editors: the level
