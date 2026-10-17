@@ -23,7 +23,7 @@ SITE = Path(__file__).resolve().parent.parent
 
 TOP = [
 	("Get started", ["install", "getting-started"]),
-	("Going further", ["baking", "performance", "troubleshooting", "api-stability"]),
+	("Going further", ["migrating-to-2.0", "baking", "performance", "troubleshooting", "api-stability"]),
 ]
 
 
@@ -115,6 +115,8 @@ def main() -> int:
 	base = f"/hammerite/docs/{version}/"
 	out_dir = SITE / "hammerite" / "docs" / version
 	docs = repo / "docs"
+	global TOP
+	TOP = [(heading, [stem for stem in stems if (docs / f"{stem}.md").exists()]) for heading, stems in TOP]
 	guides = guides_table((docs / "guides" / "index.md").read_text())
 	api = {p.stem for p in (out_dir / "api").glob("*.html")} - {"index"}
 

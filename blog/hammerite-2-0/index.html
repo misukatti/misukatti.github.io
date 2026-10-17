@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hammerite 2.0: native from end to end — Misukatti Interactive</title>
+<meta name="description" content="Hammerite 2.0 moves every class into one native library: faster compiles and navigation, no script compile at startup, and runtime and full packages for macOS, Windows and Linux.">
+<meta property="og:title" content="Hammerite 2.0: native from end to end">
+<meta property="og:description" content="Every class in one native library: faster, lighter to start, and in runtime and full packages.">
+<meta property="og:image" content="https://misukatti.fi/hammerite/assets/editor.png">
+<meta property="og:url" content="https://misukatti.fi/blog/hammerite-2-0/">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://misukatti.fi/blog/hammerite-2-0/">
+<meta name="theme-color" content="#1d1b38">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Josefin+Sans:wght@300;400;600&family=JetBrains+Mono:wght@400&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<header class="bar">
+	<a class="bar-logo" href="/"><img src="/assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="/#games">Games</a>
+		<a href="/#tools">Tools</a>
+		<a href="/blog/">Blog</a>
+		<a href="/#contact">Contact</a>
+	</nav>
+</header>
+
+<main>
+	<article class="post">
+		<header class="post-head">
+			<p class="post-meta"><time datetime="2026-10-17">17 October 2026</time> · Hammerite</p>
+			<h1>Hammerite 2.0: native from end to end</h1>
+			<p class="post-lede">Hammerite 2.0 is out. Every class that was GDScript is now C++, in one
+			library: the compiler, the lightmapper, the sound, the navigation and the editor itself.
+			Levels compile faster, guards find their way sooner, and your game starts without compiling
+			a line of Hammerite's script.</p>
+		</header>
+
+		<h2>One native library</h2>
+		<p>Until now Hammerite was GDScript, with an optional native kernel for the heaviest geometry.
+		2.0 moves every class into one GDExtension library, under the same names and doing what it did.
+		Each class was held to its script, call for call, before the script was deleted, and the
+		fingerprints a 1.x map was baked against come out the same to the bit.</p>
+		<p>Only the plugins and the autoloads are still scripts, and two of those are a single line
+		over a native class.</p>
+
+		<h2>Faster where we measured it</h2>
+		<table class="post-table">
+			<thead><tr><th></th><th>1.x</th><th>2.0</th></tr></thead>
+			<tbody>
+				<tr><td>Compiling 256 rooms</td><td>626 ms</td><td>303 ms</td></tr>
+				<tr><td>Recompiling after a one-brush edit</td><td>42 ms</td><td>25 ms</td></tr>
+				<tr><td>Loading the largest test map</td><td>220 ms</td><td>113 ms</td></tr>
+				<tr><td>Building a large stealth level's navigation</td><td>5.7 s</td><td>2.8 s</td></tr>
+				<tr><td>Building a smaller level's navigation</td><td>1.5 s</td><td>0.56 s</td></tr>
+			</tbody>
+		</table>
+		<p>And no Hammerite script is compiled any more. On an M-series Mac that was 1.2 s of every
+		launch for the core addon alone, and another 1.4 s the first time the editor opened.</p>
+
+		<h2>Two packages</h2>
+		<p>A release now comes as two packages. <strong>Full</strong> has everything. <strong>Runtime</strong>
+		has core, audio and navigation without the editor, for a game whose players never open it. The
+		library is built for macOS (Apple silicon and Intel), Windows and Linux on x86-64, for Godot 4.7.
+		There is no web export.</p>
+
+		<h2>Upgrading from 1.x</h2>
+		<p>Your maps open as they did. A few things need doing once:</p>
+		<ul>
+			<li><strong>Migrate your resources.</strong> Scenes and resources saved with 1.x name script
+			classes that no longer exist, so they need rewriting to name the native ones before 2.0 opens
+			them. Use <strong>File → Migrate 1.x Resources…</strong> in the map editor,
+			<strong>Project → Tools → Migrate Hammerite 1.x Resources…</strong> in the Godot editor, or
+			<code>tools/migrate_to_2.sh</code>.</li>
+			<li><strong>Update your own entities and tools.</strong> The API changed where a native class
+			can't say what a script could: overridden methods are underscore virtuals, and constructors
+			that took arguments are <code>create()</code>. The
+			<a href="/hammerite/docs/2.0/migrating-to-2.0.html">migration guide</a> has every change as a
+			before and after.</li>
+			<li><strong>Bake maps with a sky once more.</strong> They report their lighting out of date
+			the first time.</li>
+			<li><strong>Open and save each map,</strong> or run your game's own cache tool, so its saved
+			rooms and navigation are written again.</li>
+		</ul>
+
+		<h2>Docs for every version</h2>
+		<p>The <a href="/hammerite/docs/">docs</a> now keep every release: 2.0 is the current one, 1.0
+		stays as it was, and <em>latest</em> follows what's being worked on. Every page has a switcher
+		between them.</p>
+
+		<p class="post-sign">— Misukatti Interactive</p>
+	</article>
+</main>
+
+<footer class="foot">
+	<img src="/assets/misukatti/mark-night.svg" alt="" width="36" height="36">
+	<p>© 2026 Misukatti Interactive</p>
+</footer>
+
+</body>
+</html>

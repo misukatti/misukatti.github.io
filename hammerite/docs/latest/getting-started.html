@@ -35,19 +35,20 @@
 		<label class="docs-version">Version
 			<select aria-label="Docs version"><option value="latest" selected>latest</option></select>
 		</label>
-		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="/hammerite/docs/latest/install.html">Installing Hammerite</a></li><li><a href="/hammerite/docs/latest/getting-started.html" aria-current="page">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="/hammerite/docs/latest/guides/writing-an-entity.html">Writing an entity class</a></li><li><a href="/hammerite/docs/latest/guides/rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="/hammerite/docs/latest/guides/stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="/hammerite/docs/latest/guides/stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="/hammerite/docs/latest/guides/probe-lighting.html">Probe lighting</a></li><li><a href="/hammerite/docs/latest/guides/moving-brush-entities.html">Moving brush entities</a></li><li><a href="/hammerite/docs/latest/guides/guard-navigation.html">Navigation for guards</a></li><li><a href="/hammerite/docs/latest/guides/brush-materials.html">Brush materials and shaders</a></li><li><a href="/hammerite/docs/latest/guides/brush-properties.html">Properties on brushes</a></li></ul><h2>Reference</h2><ul><li><a href="/hammerite/docs/latest/api/">API reference</a></li><li><a href="/hammerite/docs/latest/baking.html">Baking from a script</a></li><li><a href="/hammerite/docs/latest/performance.html">Performance and limits</a></li><li><a href="/hammerite/docs/latest/troubleshooting.html">Troubleshooting</a></li><li><a href="/hammerite/docs/latest/api-stability.html">API stability</a></li></ul></nav>
+		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="/hammerite/docs/latest/install.html">Installing Hammerite</a></li><li><a href="/hammerite/docs/latest/getting-started.html" aria-current="page">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="/hammerite/docs/latest/guides/writing-an-entity.html">Writing an entity class</a></li><li><a href="/hammerite/docs/latest/guides/rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="/hammerite/docs/latest/guides/stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="/hammerite/docs/latest/guides/stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="/hammerite/docs/latest/guides/probe-lighting.html">Probe lighting</a></li><li><a href="/hammerite/docs/latest/guides/entity-sets.html">Entity sets</a></li><li><a href="/hammerite/docs/latest/guides/moving-brush-entities.html">Moving brush entities</a></li><li><a href="/hammerite/docs/latest/guides/guard-navigation.html">Navigation for guards</a></li><li><a href="/hammerite/docs/latest/guides/brush-materials.html">Brush materials and shaders</a></li><li><a href="/hammerite/docs/latest/guides/brush-properties.html">Properties on brushes</a></li></ul><h2>Reference</h2><ul><li><a href="/hammerite/docs/latest/api/">API reference</a></li><li><a href="/hammerite/docs/latest/migrating-to-2.0.html">Migrating to Hammerite 2.0</a></li><li><a href="/hammerite/docs/latest/baking.html">Baking from a script</a></li><li><a href="/hammerite/docs/latest/performance.html">Performance and limits</a></li><li><a href="/hammerite/docs/latest/troubleshooting.html">Troubleshooting</a></li><li><a href="/hammerite/docs/latest/api-stability.html">API stability</a></li></ul></nav>
 	</aside>
 	<main class="docs-main">
 		<article class="prose">
 <h1 id="getting-started">Getting started</h1>
 <p>From an empty project to a room you can carve, light and walk around in. The finished result is
 <span class="unlinked"><code>examples/minimal</code></span>: open it in Godot from inside this repository (its
-<code>addons/</code> are links to the addons beside it) and press F5.</p>
-<p>Install the addons first: <a href="/hammerite/docs/latest/install.html">Installing Hammerite</a>.</p>
+<code>addons/</code> are links to the addons beside it) and press F5. It has the full package installed, since it
+puts the editor over its map, and enables the core and editor plugins.</p>
+<p>Install the full package first: <a href="/hammerite/docs/latest/install.html">Installing Hammerite</a>.</p>
 <h2 id="1-textures">1. Textures</h2>
 <p>Hammerite looks textures up by name. Put some in a folder - <code>res://textures/stone_wall.png</code> is the
 texture <code>stone_wall</code> - and tell the library where they are before any map is built:</p>
-<pre><code class="language-gdscript">HammeriteTextureLibrary.search_paths = [&quot;res://textures&quot;]
+<pre><code class="language-gdscript">HammeriteTextureLibrary.set_search_paths([&quot;res://textures&quot;])
 </code></pre>
 <p>A face whose texture cannot be found draws the fallback checkerboard, so a missing texture is seen
 rather than silently wrong.</p>
@@ -66,7 +67,7 @@ in the map's space, so <code>map_3d</code> can stand anywhere in your scene.</p>
 <a href="/hammerite/docs/latest/guides/writing-an-entity.html">Custom entities</a>.</p>
 <p><code>.hmap</code> is Hammerite's own format: data only, safe to load from anywhere, and the one the editor
 saves a player's or a mod's map in. A map can also be a Godot <code>.tres</code> or <code>.res</code> inside the project.
-<code>HammeriteDataFile.last_error</code> says why a read returned null.</p>
+<code>HammeriteDataFile.get_last_error()</code> says why a read returned null.</p>
 <h2 id="3-the-editor">3. The editor</h2>
 <p>The editor runs inside the game, over the level the game has loaded, so what you see while editing
 is the game itself. The game decides when it opens:</p>
@@ -106,7 +107,7 @@ Map</strong> (<code>Cmd</code> <code>S</code>). The bake is saved with the map; 
 <li>How big a level can get: <a href="/hammerite/docs/latest/performance.html">Performance and limits</a>.</li>
 </ul>
 		</article>
-		<p class="docs-source">Hammerite latest · built from a6dd634, 2026-10-10</p>
+		<p class="docs-source">Hammerite latest · built from d8d727be, 2026-10-17</p>
 	</main>
 </div>
 

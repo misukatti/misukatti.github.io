@@ -7,6 +7,7 @@ Misukatti Interactive's website: plain static HTML and CSS, no build step.
 | `index.html`, `assets/site.css` | The studio page: City of Thieves, Hammerite 3D, contact. Night and moon, DM Serif Display and Josefin Sans. |
 | `hammerite/` | Hammerite 3D's page, in Hammerite's own look: stone, red and Cinzel, with a slim Misukatti bar and footer. |
 | `assets/misukatti/` | Logos from [misukatti/brand](https://github.com/misukatti/brand): the `night` versions, which have no SVG mask. The `on-dark` ones are masked, and Safari on iOS blurs masks. |
+| `blog/` | The blog: `blog/index.html` lists the posts, newest first, and each post is `blog/<slug>/index.html`. A new post goes in both. Styles in `assets/site.css`. |
 | `hammerite/docs/<version>/` | Hammerite's docs, one folder per version: its guides and its API reference, generated from a Hammerite checkout; see below. Never edit the pages by hand. `hammerite/docs/docs.css`, `versions.js` and `tools/docs-template.html` are this site's own. |
 | `hammerite/api/`, the rest of `hammerite/docs/` | Redirects from the addresses the docs had before they had versions, to the current release. |
 | `hammerite/assets/` | Hammerite's logo, favicons and screenshots, from the Hammerite repo (`docs/logo/`, the editor manual's images). |
@@ -27,7 +28,7 @@ a switcher between them. `hammerite/docs/` goes to the current release.
 
 ```bash
 tools/import_hammerite_docs.sh latest          # master, rebuilt every time
-tools/import_hammerite_docs.sh 1.1             # tag v1.1.0, once
+tools/import_hammerite_docs.sh 2.1             # tag v2.1.0, once
 ```
 
 The pages come from the ref, exported with `git archive` from the checkout `HAMMERITE=` names

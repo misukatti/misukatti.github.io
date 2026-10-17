@@ -35,7 +35,7 @@
 		<label class="docs-version">Version
 			<select aria-label="Docs version"><option value="latest" selected>latest</option></select>
 		</label>
-		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="/hammerite/docs/latest/install.html">Installing Hammerite</a></li><li><a href="/hammerite/docs/latest/getting-started.html">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="/hammerite/docs/latest/guides/writing-an-entity.html" aria-current="page">Writing an entity class</a></li><li><a href="/hammerite/docs/latest/guides/rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="/hammerite/docs/latest/guides/stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="/hammerite/docs/latest/guides/stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="/hammerite/docs/latest/guides/probe-lighting.html">Probe lighting</a></li><li><a href="/hammerite/docs/latest/guides/moving-brush-entities.html">Moving brush entities</a></li><li><a href="/hammerite/docs/latest/guides/guard-navigation.html">Navigation for guards</a></li><li><a href="/hammerite/docs/latest/guides/brush-materials.html">Brush materials and shaders</a></li><li><a href="/hammerite/docs/latest/guides/brush-properties.html">Properties on brushes</a></li></ul><h2>Reference</h2><ul><li><a href="/hammerite/docs/latest/api/">API reference</a></li><li><a href="/hammerite/docs/latest/baking.html">Baking from a script</a></li><li><a href="/hammerite/docs/latest/performance.html">Performance and limits</a></li><li><a href="/hammerite/docs/latest/troubleshooting.html">Troubleshooting</a></li><li><a href="/hammerite/docs/latest/api-stability.html">API stability</a></li></ul></nav>
+		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="/hammerite/docs/latest/install.html">Installing Hammerite</a></li><li><a href="/hammerite/docs/latest/getting-started.html">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="/hammerite/docs/latest/guides/writing-an-entity.html" aria-current="page">Writing an entity class</a></li><li><a href="/hammerite/docs/latest/guides/rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="/hammerite/docs/latest/guides/stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="/hammerite/docs/latest/guides/stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="/hammerite/docs/latest/guides/probe-lighting.html">Probe lighting</a></li><li><a href="/hammerite/docs/latest/guides/entity-sets.html">Entity sets</a></li><li><a href="/hammerite/docs/latest/guides/moving-brush-entities.html">Moving brush entities</a></li><li><a href="/hammerite/docs/latest/guides/guard-navigation.html">Navigation for guards</a></li><li><a href="/hammerite/docs/latest/guides/brush-materials.html">Brush materials and shaders</a></li><li><a href="/hammerite/docs/latest/guides/brush-properties.html">Properties on brushes</a></li></ul><h2>Reference</h2><ul><li><a href="/hammerite/docs/latest/api/">API reference</a></li><li><a href="/hammerite/docs/latest/migrating-to-2.0.html">Migrating to Hammerite 2.0</a></li><li><a href="/hammerite/docs/latest/baking.html">Baking from a script</a></li><li><a href="/hammerite/docs/latest/performance.html">Performance and limits</a></li><li><a href="/hammerite/docs/latest/troubleshooting.html">Troubleshooting</a></li><li><a href="/hammerite/docs/latest/api-stability.html">API stability</a></li></ul></nav>
 	</aside>
 	<main class="docs-main">
 		<article class="prose">
@@ -52,9 +52,13 @@ post. It is two halves:</p>
 example - a box that spins while the game runs and vanishes when triggered - and then the hooks it
 does not need: gizmos, handles, brushwork and triggers of your own.</p>
 <h2 id="1-pick-a-base-class">1. Pick a base class</h2>
-<p>Extend the one matching what the node must <em>be</em>. Two methods are <code>@abstract</code> - <code>set_editor_active()</code>
-and <code>apply_entity_property()</code> - so forgetting either is a compile error. Every other hook has a
-default that does nothing, and you write only the ones your entity uses.</p>
+<p>Extend the one matching what the node must <em>be</em>. The bases are native, so you write the hooks as their
+underscore virtuals - <code>_set_editor_active()</code>, <code>_apply_entity_property()</code>, <code>_trigger()</code> - and the map, the
+editor and the game call the public methods of the same names, which call yours. Two are required -
+<code>_set_editor_active()</code> and <code>_apply_entity_property()</code> - and one missing is an error the first time it is
+called. Every other hook has a default that does nothing, and you write only the ones your entity uses.
+<code>_set_entity()</code>, <code>_update_properties()</code>, <code>_apply_entity_property()</code>, <code>_get_actions()</code> and <code>_run_action()</code> run
+after the base's own, so none of them calls <code>super()</code>.</p>
 <table>
 <thead>
 <tr>
@@ -82,6 +86,10 @@ default that does nothing, and you write only the ones your entity uses.</p>
 <tr>
 <td><a href="/hammerite/docs/latest/api/HammeriteBrushEntityStaticBody3D.html"><code>HammeriteBrushEntityStaticBody3D</code></a></td>
 <td>brushwork the player walks into</td>
+</tr>
+<tr>
+<td><code>HammeriteBrushEntityAnimatableBody3D</code></td>
+<td>brushwork that moves and carries what stands on it: a lift</td>
 </tr>
 <tr>
 <td><a href="/hammerite/docs/latest/api/HammeriteBrushEntityArea3D.html"><code>HammeriteBrushEntityArea3D</code></a></td>
@@ -114,9 +122,9 @@ a type to choose beside the value. For a property whose legal values are a list 
 entity's name - the editor can offer a dropdown: <code>register_property_choices(type, property,
 provider)</code>. The editor README lists the rest of its seams.</p>
 <h2 id="3-authored-properties">3. Authored properties</h2>
-<p>Every property the type declares reaches <code>apply_entity_property()</code> - when the entity is built, when
+<p>Every property the type declares reaches <code>_apply_entity_property()</code> - when the entity is built, when
 the map loads, and each time the author changes one in the editor:</p>
-<pre><code class="language-gdscript">func apply_entity_property(prop_name: StringName, value: Variant) -&gt; void:
+<pre><code class="language-gdscript">func _apply_entity_property(prop_name: StringName, value: Variant) -&gt; void:
     match prop_name:
         &amp;&quot;origin&quot;:
             position = value
@@ -132,18 +140,18 @@ has one, is applied for you before this is called.</p>
 <p><code>set_editor_active(active)</code> is told whether the editor is up over the world - as the node is built
 and on every change. It governs what the entity draws <em>for the author</em>, and says nothing about
 whether the game is running. A light shows a bulb icon; a spawn point with no mesh shows a marker:</p>
-<pre><code class="language-gdscript">func set_editor_active(active: bool) -&gt; void:
+<pre><code class="language-gdscript">func _set_editor_active(active: bool) -&gt; void:
     _marker_mesh.visible = active
 </code></pre>
-<p>The pickup's own box is all it needs, so its <code>set_editor_active()</code> does nothing.</p>
+<p>The pickup's own box is all it needs, so its <code>_set_editor_active()</code> does nothing.</p>
 <p><strong>Gizmos</strong> are lines over the level for what a mesh cannot show - how far something reaches, which
 way it looks. <code>draw_editor_gizmos()</code> is asked every frame the editor is up, and writes into a
 <a href="/hammerite/docs/latest/api/HammeriteGizmoBuffer.html"><code>HammeriteGizmoBuffer</code></a> in world space. Say which views a shape is
 for: the ortho views already outline the entity's box, so a second box there is noise.</p>
-<pre><code class="language-gdscript">func draws_editor_gizmos_only_when_picked() -&gt; bool:
+<pre><code class="language-gdscript">func _draws_editor_gizmos_only_when_picked() -&gt; bool:
     return true
 
-func draw_editor_gizmos(gizmos: HammeriteGizmoBuffer) -&gt; void:
+func _draw_editor_gizmos(gizmos: HammeriteGizmoBuffer) -&gt; void:
     var color: Color = Color.GREEN if entity.selected else Color.WHITE_SMOKE
     gizmos.box(get_aabb(), color, HammeriteGizmoBuffer.View.PERSPECTIVE)
     gizmos.sphere(global_position, _watch_radius, color)
@@ -157,31 +165,31 @@ something always and leave it <code>false</code>.</p>
 door travels - instead of typing numbers. Offer them with <code>get_editor_handles()</code>, positioned in world
 space; the editor picks, drags and snaps, and hands each new position to <code>move_editor_handle()</code>. What
 the position <em>means</em> is yours to say. Here it is a point the entity looks at, stored relative to it:</p>
-<pre><code class="language-gdscript">func get_editor_handles() -&gt; Array[HammeriteEditorHandle]:
-    return [HammeriteEditorHandle.new(&amp;&quot;look_at&quot;, to_global(_look_at), Color.ORANGE)]
+<pre><code class="language-gdscript">func _get_editor_handles() -&gt; Array[HammeriteEditorHandle]:
+    return [HammeriteEditorHandle.create(&amp;&quot;look_at&quot;, to_global(_look_at), Color.ORANGE)]
 
-func move_editor_handle(handle_id: StringName, to: Vector3) -&gt; void:
+func _move_editor_handle(handle_id: StringName, to: Vector3) -&gt; void:
     if handle_id == &amp;&quot;look_at&quot;:
         entity.set_property(&amp;&quot;look_at&quot;, to_local(to))
 </code></pre>
 <p>Write the value through <code>entity.set_property()</code>, not into the node: the authored property is what is
-saved, and the change comes back to <code>apply_entity_property()</code> like any other. The editor records the
+saved, and the change comes back to <code>_apply_entity_property()</code> like any other. The editor records the
 whole drag as one undo step by calling <code>move_editor_handle()</code> with the old position, so the method
 must work from any position, not only the next one along.</p>
 <h2 id="5-simulation">5. Simulation</h2>
 <p>The world runs from the moment <code>HammeriteMap3D</code> builds it, unless the editor is up over it. The
 editor can stop it, run it again, or run just the selection, and put it back. An entity that does
 anything while running says so with <code>can_simulate()</code>:</p>
-<pre><code class="language-gdscript">func can_simulate() -&gt; bool:
+<pre><code class="language-gdscript">func _can_simulate() -&gt; bool:
     return true
 
-func start_simulation() -&gt; void:
+func _start_simulation() -&gt; void:
     _simulating = true
 
-func stop_simulation() -&gt; void:
+func _stop_simulation() -&gt; void:
     _simulating = false
 
-func reset_simulation() -&gt; void:
+func _reset_simulation() -&gt; void:
     _simulating = false
     _taken = false
     _mesh.show()
@@ -193,37 +201,34 @@ author is editing.</p>
 <h2 id="6-runtime-properties-and-actions">6. Runtime properties and actions</h2>
 <p>What the inspector shows of the <em>running</em> thing, beside the authored properties (which are
 <code>entity.get_property()</code>). The author can watch them and set them while the world runs; none is saved.</p>
-<pre><code class="language-gdscript">func get_runtime_properties() -&gt; Dictionary[StringName, Variant]:
+<pre><code class="language-gdscript">func _get_runtime_properties() -&gt; Dictionary[StringName, Variant]:
     return {&amp;&quot;taken&quot;: _taken}
 
-func set_runtime_property(key: StringName, value: Variant) -&gt; void:
+func _set_runtime_property(key: StringName, value: Variant) -&gt; void:
     if key == &amp;&quot;taken&quot;:
         _taken = bool(value)
         _mesh.visible = !_taken
 
-func reset_runtime_properties() -&gt; void:
+func _reset_runtime_properties() -&gt; void:
     set_runtime_property(&amp;&quot;taken&quot;, false)
 </code></pre>
-<p><code>get_runtime_property(key, default)</code> reads one out of <code>get_runtime_properties()</code>.</p>
+<p><code>get_runtime_property(key, default)</code> reads one out of <code>get_runtime_properties()</code>; override <code>_get_runtime_property()</code> where that is not enough.</p>
 <p>An <strong>action</strong> is a button in the same panel: something done <em>to</em> the running entity, rather than a
-value set on it, and not undoable. Call <code>super()</code> to keep the Trigger every triggerable entity gets:</p>
-<pre><code class="language-gdscript">func get_actions() -&gt; Dictionary[StringName, String]:
-    var actions: Dictionary[StringName, String] = super()
-    actions[&amp;&quot;respawn&quot;] = &quot;Respawn&quot;
-    return actions
+value set on it, and not undoable. What <code>_get_actions()</code> answers is added to the Trigger every triggerable
+entity gets, and <code>_run_action()</code> is told after the base has run its own:</p>
+<pre><code class="language-gdscript">func _get_actions() -&gt; Dictionary[StringName, String]:
+    return {&amp;&quot;respawn&quot;: &quot;Respawn&quot;}
 
-func run_action(action_id: StringName) -&gt; void:
+func _run_action(action_id: StringName) -&gt; void:
     if action_id == &amp;&quot;respawn&quot;:
         reset_runtime_properties()
-    else:
-        super(action_id)
 </code></pre>
 <h2 id="7-triggering">7. Triggering</h2>
 <p>An entity that can be triggered says so, and says what triggering it does:</p>
-<pre><code class="language-gdscript">func can_trigger() -&gt; bool:
+<pre><code class="language-gdscript">func _can_trigger() -&gt; bool:
     return true
 
-func trigger(_impulse: Variant = null) -&gt; void:
+func _trigger(_impulse: Variant = null) -&gt; void:
     set_runtime_property(&amp;&quot;taken&quot;, true)
 </code></pre>
 <p>Three things trigger it:</p>
@@ -250,7 +255,7 @@ classes. The same hooks apply, with these differences:</p>
   (<code>get_brush_meshes()</code>), and - on a body or an area - a convex collision shape per brush
   (<code>get_brush_shapes()</code>). Their geometry is in map space, so the node stays at the map's origin.</li>
 <li>Nothing moves it for you: a brush entity's <code>origin</code>, where its type has one, moves nothing unless
-  <code>apply_entity_property()</code> moves something.</li>
+  <code>_apply_entity_property()</code> moves something.</li>
 <li>A brush entity is lightmapped where it stands. One that moves must hand its faces to the probes
   first; see <a href="/hammerite/docs/latest/guides/moving-brush-entities.html">Moving brush entities</a>.</li>
 </ul>
@@ -265,27 +270,27 @@ func _init() -&gt; void:
     body_entered.connect(func(body: Node3D) -&gt; void: body.add_to_group(&amp;&quot;in_shadow&quot;))
     body_exited.connect(func(body: Node3D) -&gt; void: body.remove_from_group(&amp;&quot;in_shadow&quot;))
 
-func can_simulate() -&gt; bool:
+func _can_simulate() -&gt; bool:
     return true
 
-func start_simulation() -&gt; void:
+func _start_simulation() -&gt; void:
     set_deferred(&amp;&quot;monitoring&quot;, true)
 
-func stop_simulation() -&gt; void:
+func _stop_simulation() -&gt; void:
     set_deferred(&amp;&quot;monitoring&quot;, false)
 
-func apply_entity_property(_prop_name: StringName, _value: Variant) -&gt; void:
+func _apply_entity_property(_prop_name: StringName, _value: Variant) -&gt; void:
     pass
 </code></pre>
 <p><code>set_deferred</code>, because a simulation can be started from inside a physics callback, where monitoring
-cannot change. <code>HammeriteBrushEntityArea3D</code> already writes <code>set_editor_active()</code>: it draws the brushes
+cannot change. <code>HammeriteBrushEntityArea3D</code> already has <code>_set_editor_active()</code>: it draws the brushes
 only while the editor is up, so the volume is invisible to whoever plays.</p>
 <h2 id="9-in-the-game">9. In the game</h2>
 <p>Nothing more: <code>HammeriteMap3D</code> builds the node from <code>classname</code> wherever the map has one of these,
 with or without the editor, and starts it. A map saved with a type your game no longer registers
 still loads; an entity whose <code>classname</code> no class answers to is reported and left out.</p>
 		</article>
-		<p class="docs-source">Hammerite latest · built from a6dd634, 2026-10-10</p>
+		<p class="docs-source">Hammerite latest · built from d8d727be, 2026-10-17</p>
 	</main>
 </div>
 

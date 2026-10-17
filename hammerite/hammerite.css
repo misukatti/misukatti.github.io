@@ -271,3 +271,26 @@ td:first-child {
 .studio-foot p { margin: 0; }
 
 .studio-foot a { color: #f3e2b3; }
+
+.news-pill {
+	display: inline-block;
+	margin-bottom: 1.75rem;
+	padding: 0.35rem 1rem;
+	border: 1px solid var(--red);
+	border-radius: 999px;
+	background: rgba(179, 38, 30, 0.12);
+	color: var(--bone);
+	font-size: 0.9rem;
+	text-decoration: none;
+}
+
+.news-pill strong {
+	margin-right: 0.4rem;
+	color: var(--red-bright);
+	font-weight: 600;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	font-size: 0.75rem;
+}
+
+.news-pill:hover { background: rgba(179, 38, 30, 0.25); }

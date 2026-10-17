@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Entity sets — Hammerite 3D latest docs</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="/hammerite/assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="/hammerite/assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/hammerite/assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@300&display=swap">
+<link rel="stylesheet" href="/hammerite/hammerite.css">
+<link rel="stylesheet" href="/hammerite/docs/docs.css">
+<script src="/hammerite/docs/versions.js" defer></script>
+</head>
+<body class="docs" data-docs-version="latest">
+
+<header class="studio">
+	<a class="studio-logo" href="/"><img src="/assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="/hammerite/">Hammerite 3D</a>
+		<a href="/hammerite/docs/latest/">Docs</a>
+		<a href="/hammerite/docs/latest/guides/">Guides</a>
+		<a href="/hammerite/docs/latest/api/">API</a>
+	</nav>
+</header>
+
+<div class="docs-banner" hidden></div>
+
+<div class="docs-layout">
+	<aside class="docs-side">
+		<a class="docs-brand" href="/hammerite/docs/latest/"><img src="/hammerite/assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
+		<label class="docs-version">Version
+			<select aria-label="Docs version"><option value="latest" selected>latest</option></select>
+		</label>
+		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="/hammerite/docs/latest/install.html">Installing Hammerite</a></li><li><a href="/hammerite/docs/latest/getting-started.html">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="/hammerite/docs/latest/guides/writing-an-entity.html">Writing an entity class</a></li><li><a href="/hammerite/docs/latest/guides/rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="/hammerite/docs/latest/guides/stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="/hammerite/docs/latest/guides/stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="/hammerite/docs/latest/guides/probe-lighting.html">Probe lighting</a></li><li><a href="/hammerite/docs/latest/guides/entity-sets.html" aria-current="page">Entity sets</a></li><li><a href="/hammerite/docs/latest/guides/moving-brush-entities.html">Moving brush entities</a></li><li><a href="/hammerite/docs/latest/guides/guard-navigation.html">Navigation for guards</a></li><li><a href="/hammerite/docs/latest/guides/brush-materials.html">Brush materials and shaders</a></li><li><a href="/hammerite/docs/latest/guides/brush-properties.html">Properties on brushes</a></li></ul><h2>Reference</h2><ul><li><a href="/hammerite/docs/latest/api/">API reference</a></li><li><a href="/hammerite/docs/latest/migrating-to-2.0.html">Migrating to Hammerite 2.0</a></li><li><a href="/hammerite/docs/latest/baking.html">Baking from a script</a></li><li><a href="/hammerite/docs/latest/performance.html">Performance and limits</a></li><li><a href="/hammerite/docs/latest/troubleshooting.html">Troubleshooting</a></li><li><a href="/hammerite/docs/latest/api-stability.html">API stability</a></li></ul></nav>
+	</aside>
+	<main class="docs-main">
+		<article class="prose">
+<h1 id="entity-sets">Entity sets</h1>
+<p>Entity types most games want and no game should have to write again: lights, things that decide when
+to trigger something, brushwork that moves, any Godot scene placed as a prop, and particle emitters.
+Each group is an entity set (<code>HammeriteEntitySet</code>) that a project takes or leaves on
+its own, and core ships them all as <code>HammeriteEntitySets</code>.</p>
+<h2 id="adding-them">Adding them</h2>
+<p>The lights are there by default, since every map has them. The rest are added by asking, before the
+map is built - with the editor, through it, so each set also gives the editor its pickers:</p>
+<pre><code class="language-gdscript">map_editor.add_entity_set(HammeriteEntitySets.everything())
+</code></pre>
+<p>A game without the editor asks core instead, with the same effect on the game:</p>
+<pre><code class="language-gdscript">HammeriteEntityTypeRegistry.add_set(HammeriteEntitySets.logic())
+HammeriteEntityTypeRegistry.add_set(HammeriteEntitySets.movers())
+</code></pre>
+<p><code>everything()</code> is a set of no types of its own that includes the other five: <code>lights()</code>, <code>logic()</code>,
+<code>movers()</code>, <code>scenes()</code> and <code>particles()</code>. A project that wants no lights takes them away with
+<code>HammeriteEntityTypeRegistry.remove_set(HammeriteEntitySets.lights_id())</code>. Core's own <code>group</code>, <code>trigger</code>,
+<code>prop_model</code> and <code>decal</code> belong to no set and are always there.</p>
+<p>A game that wants to refine one of these types does so as it refines any, after the set is in:</p>
+<pre><code class="language-gdscript">HammeriteEntityTypeRegistry.extend_brush(&amp;&quot;door&quot;, {&amp;&quot;key_item&quot;: &quot;&quot;})
+</code></pre>
+<p>A set never takes a type name that is already registered, so a game that already has its own <code>door</code>
+keeps it, and the movers set says it went without one.</p>
+<h2 id="wiring">Wiring</h2>
+<p>Every entity here that triggers something names it by <code>target</code>, as core's <code>trigger</code> does: every entity
+of that name that can be triggered is, with the <code>target_impulse</code> (<code>HammeriteMap3D.trigger_named</code>).
+What the impulse means is the receiver's to say; most types here read <code>true</code> and <code>false</code> as on and off
+or open and shut, and anything else as switch over. Select one in the editor and a dashed line runs
+to each entity it would trigger. Each target field offers the map's entity names to pick from, and a
+platform's <code>path</code> and a corner's <code>next</code> offer its <code>path_corner</code>s.</p>
+<h2 id="lights-lights">Lights (<code>lights</code>)</h2>
+<p><code>light_point</code>, <code>light_spot</code> and <code>light_directional</code> are baked; their <code>_dynamic</code> twins are baked and can
+be switched and dimmed; <code>light_point_movable</code> and <code>light_spot_movable</code> are real-time lights that move.
+See the core README's Lighting section.</p>
+<h2 id="logic-logic">Logic (<code>logic</code>)</h2>
+<p>Point entities with no body. Each has <code>target</code>, <code>target_impulse</code> and <code>delay</code> - seconds between deciding
+to fire and firing, counted only while the world runs and dropped by a reset.</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>logic_relay</code></td>
+<td>triggered, triggers its target. <code>pass_impulse</code> hands on the impulse it was given; <code>once</code> fires only the first time</td>
+</tr>
+<tr>
+<td><code>logic_timer</code></td>
+<td>fires every <code>interval</code> seconds, give or take <code>jitter</code>, while on. Starts on unless <code>start_on</code> is off</td>
+</tr>
+<tr>
+<td><code>logic_counter</code></td>
+<td>fires on reaching <code>count</code> triggers. A number as the impulse counts that many. <code>repeats</code> starts again</td>
+</tr>
+<tr>
+<td><code>logic_toggle</code></td>
+<td>on or off. A change triggers <code>target</code> with the new state, and <code>target_on</code> or <code>target_off</code> with the impulse</td>
+</tr>
+<tr>
+<td><code>logic_auto</code></td>
+<td>fires on the world's first frame, and again after each reset</td>
+</tr>
+</tbody>
+</table>
+<h2 id="movers-movers">Movers (<code>movers</code>)</h2>
+<p>Brushwork on <code>HammeriteBrushEntityAnimatableBody3D</code>, so whatever stands on it is carried. It hands its
+lighting from its lightmap to the probes as it leaves where it was authored, and back when it returns
+(see <span class="unlinked">Moving brush entities</span>).</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>door</code></td>
+<td>slides <code>distance</code> along <code>direction</code> and turns <code>angle</code> degrees about <code>rotation_axis</code> through its middle plus <code>pivot_offset</code>, together over <code>move_time</code>. Shuts itself after <code>wait</code> unless that is 0; <code>locked</code> refuses to open. Triggers <code>target_opened</code> and <code>target_closed</code> on arriving. Drag its handle to set the slide</td>
+</tr>
+<tr>
+<td><code>button</code></td>
+<td>a door whose opening is the press: triggers <code>target</code> when pressed home, comes back out after <code>wait</code> (0 stays in). Something presses it by triggering it - the game's use key, a trigger on a plate</td>
+</tr>
+<tr>
+<td><code>platform</code></td>
+<td>travels from the <code>path_corner</code> named in <code>path</code> along the corners' <code>next</code>, at <code>speed</code>, waiting <code>wait</code> at each. Author the brushwork where it stands at that first corner</td>
+</tr>
+<tr>
+<td><code>path_corner</code></td>
+<td>one point of a platform's path. Its own <code>wait</code> and <code>speed</code> override the platform's when not negative; <code>target</code> fires as a platform arrives. A path naming its first corner goes round for ever</td>
+</tr>
+</tbody>
+</table>
+<p>Each mover's runtime properties - how open, whether locked, where it is heading - are the inspector's
+while the world runs, and how the game reads and sets them.</p>
+<h2 id="scenes-scenes">Scenes (<code>scenes</code>)</h2>
+<p><code>prop_scene</code> places any <code>PackedScene</code>, turned and sized as a prop is. The editor offers every scene in
+the project to pick from, narrowed as you type; a scene saved since is listed within ten seconds. It is held still -
+not processed, its bodies out of the physics - until the world runs, and built afresh on a reset.
+Triggering it calls <code>trigger(impulse)</code> on the scene's root if the root has one, which is how a scene
+of the game's own becomes a working entity without an entity class.</p>
+<h2 id="particles-particles">Particles (<code>particles</code>)</h2>
+<p><code>env_particles</code> is a <code>GPUParticles3D</code> made from its properties: <code>amount</code>, <code>lifetime</code>, <code>speed</code>, <code>spread</code>,
+<code>gravity</code>, <code>emission_radius</code>, <code>size</code>, a colour that fades from <code>color</code> to <code>color_end</code>, an optional
+<code>texture</code> picked from the project's images, <code>additive</code> for sparks and fire, <code>shaded</code> for smoke. It emits up its own Y, so turning it
+aims it. Triggered it starts, stops or - <code>one_shot</code> - bursts again. Like the scene, it is held still
+until the world runs.</p>
+<h2 id="writing-a-set-of-your-own">Writing a set of your own</h2>
+<p>A genre's pickups, a game's own furniture - written as core's are:</p>
+<pre><code class="language-gdscript">extends HammeriteEntitySet
+
+func _init() -&gt; void:
+    id = &amp;&quot;pickups&quot;
+    title = &quot;Pickups&quot;
+    requires = [&amp;&quot;logic&quot;]
+
+func _register_types() -&gt; void:
+    register_point(&amp;&quot;pickup_health&quot;, {&amp;&quot;classname&quot;: &amp;&quot;HealthPickup&quot;, &amp;&quot;amount&quot;: 25})
+</code></pre>
+<p>A set gives the editor what only it shows of its types in <code>_extend_editor(editor)</code>, which
+hammerite-editor calls as it starts, or as the set is added through it - <code>offer_choices(editor, type, property, provider)</code> gives a string
+property a searchable list, unless the game gave it a control of its own first. The editor is passed
+untyped, so a set needs nothing but core.</p>
+<p>Add it as core's are. A set that <code>requires</code> another is refused until that one is added; one that
+<code>includes</code> others adds them along with it, so a pack can bring the sets it builds on.</p>
+<h2 id="not-yet">Not yet</h2>
+<ul>
+<li>Every class here is experimental.</li>
+<li>Wiring is one target per event, by name. Named inputs and several outputs per entity, each with its
+  own delay, are the next step.</li>
+<li>A map does not record which sets it was made with. Opened in a project that left one out, its
+  entities of that set's types still load, built from their own properties, but nothing says the set
+  is missing.</li>
+</ul>
+		</article>
+		<p class="docs-source">Hammerite latest · built from d8d727be, 2026-10-17</p>
+	</main>
+</div>
+
+<footer class="studio-foot">
+	<a href="/"><img src="/assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>

@@ -35,7 +35,7 @@
 		<label class="docs-version">Version
 			<select aria-label="Docs version"><option value="latest" selected>latest</option></select>
 		</label>
-		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="/hammerite/docs/latest/install.html">Installing Hammerite</a></li><li><a href="/hammerite/docs/latest/getting-started.html">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="/hammerite/docs/latest/guides/writing-an-entity.html">Writing an entity class</a></li><li><a href="/hammerite/docs/latest/guides/rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="/hammerite/docs/latest/guides/stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="/hammerite/docs/latest/guides/stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="/hammerite/docs/latest/guides/probe-lighting.html">Probe lighting</a></li><li><a href="/hammerite/docs/latest/guides/moving-brush-entities.html">Moving brush entities</a></li><li><a href="/hammerite/docs/latest/guides/guard-navigation.html">Navigation for guards</a></li><li><a href="/hammerite/docs/latest/guides/brush-materials.html">Brush materials and shaders</a></li><li><a href="/hammerite/docs/latest/guides/brush-properties.html">Properties on brushes</a></li></ul><h2>Reference</h2><ul><li><a href="/hammerite/docs/latest/api/">API reference</a></li><li><a href="/hammerite/docs/latest/baking.html">Baking from a script</a></li><li><a href="/hammerite/docs/latest/performance.html">Performance and limits</a></li><li><a href="/hammerite/docs/latest/troubleshooting.html" aria-current="page">Troubleshooting</a></li><li><a href="/hammerite/docs/latest/api-stability.html">API stability</a></li></ul></nav>
+		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="/hammerite/docs/latest/install.html">Installing Hammerite</a></li><li><a href="/hammerite/docs/latest/getting-started.html">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="/hammerite/docs/latest/guides/writing-an-entity.html">Writing an entity class</a></li><li><a href="/hammerite/docs/latest/guides/rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="/hammerite/docs/latest/guides/stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="/hammerite/docs/latest/guides/stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="/hammerite/docs/latest/guides/probe-lighting.html">Probe lighting</a></li><li><a href="/hammerite/docs/latest/guides/entity-sets.html">Entity sets</a></li><li><a href="/hammerite/docs/latest/guides/moving-brush-entities.html">Moving brush entities</a></li><li><a href="/hammerite/docs/latest/guides/guard-navigation.html">Navigation for guards</a></li><li><a href="/hammerite/docs/latest/guides/brush-materials.html">Brush materials and shaders</a></li><li><a href="/hammerite/docs/latest/guides/brush-properties.html">Properties on brushes</a></li></ul><h2>Reference</h2><ul><li><a href="/hammerite/docs/latest/api/">API reference</a></li><li><a href="/hammerite/docs/latest/migrating-to-2.0.html">Migrating to Hammerite 2.0</a></li><li><a href="/hammerite/docs/latest/baking.html">Baking from a script</a></li><li><a href="/hammerite/docs/latest/performance.html">Performance and limits</a></li><li><a href="/hammerite/docs/latest/troubleshooting.html" aria-current="page">Troubleshooting</a></li><li><a href="/hammerite/docs/latest/api-stability.html">API stability</a></li></ul></nav>
 	</aside>
 	<main class="docs-main">
 		<article class="prose">
@@ -46,13 +46,31 @@ Once, on the very first import of a project, this is expected: Godot imports bef
 declare the shader globals. If it goes on, the core plugin is not enabled - enable <strong>Hammerite Core</strong>
 in <strong>Project Settings &gt; Plugins</strong> - or the globals were removed; disabling and enabling the plugin
 declares them again. The <code>Hammerite</code> autoload lists any that are missing when the game starts.</p>
+<p><strong>"Can't open GDExtension dynamic library" / "Hammerite's native library is not loaded".</strong> The
+library is in <code>hammerite-core/bin/</code>, and core does not load without it - the parse errors that follow,
+about <code>HammeriteGeometry</code> and the rest, are what is left without it. Copy the folder whole, <code>bin/</code>
+included. A checkout of the Hammerite repository has no library until it builds one:
+<code>tools/build_native.sh</code>. A platform with no library in <code>bin/</code> - Web among them - is not supported.</p>
+<p><strong>"addons/hammerite-editor/ is installed, but Hammerite's native library is the runtime package" /
+"… which is built with addons/…, but it is not installed".</strong> The folders and the library came from
+different packages: a runtime library with the editor's folder beside it, or a full one with a folder
+missing. A package is installed whole - replace all of the folders with one package's. See
+<a href="/hammerite/docs/latest/install.html">Installing</a>. In a checkout, <code>tools/build_native.sh runtime</code> installs the runtime library
+under the full package's folders; <code>tools/build_native.sh</code> puts full back.</p>
+<p><strong>"Hammerite's native library, the full package, was built from other sources".</strong> Only in a
+checkout: the sources have changed since the library was built. Run <code>tools/build_native.sh</code> there.</p>
+<p><strong>"Failed loading resource: res://addons/hammerite-core/scripts/resources/map.gd"</strong>, or another script under
+<code>res://addons/hammerite-*/scripts/</code>, followed by a map, a bake or a scene of your own failing to load. The file was
+saved by Hammerite 1.x, which named its classes by those scripts, and 2.0 has none of them. Migrate the project:
+<code>tools/migrate_to_2.sh</code>, or <strong>Project → Tools → Migrate Hammerite 1.x Resources...</strong> in the Godot editor. See
+<a href="/hammerite/docs/latest/migrating-to-2.0.html#migrating-a-project">Migrating to 2.0</a>.</p>
 <p><strong>Errors about files under <code>res://addons/hammerite-core/…</code> not found.</strong> The addon folders must keep
 their names and sit directly under <code>res://addons/</code>. See <a href="/hammerite/docs/latest/install.html">Installing</a>.</p>
 <p><strong>"invalid UID … using text path instead".</strong> Harmless, and gone after the project's next import. It
 means an addon's <code>.import</code> file was not copied with its asset; copy the addon folders whole.</p>
 <h2 id="maps">Maps</h2>
 <p><strong>A map will not open.</strong> The editor's message log (hover the status bar's last section) says why;
-from code, <code>HammeriteDataFile.last_error</code>. The usual reasons:</p>
+from code, <code>HammeriteDataFile.get_last_error()</code>. The usual reasons:</p>
 <ul>
 <li><em>written by a newer Hammerite</em> - the file's format is newer than this copy of the addons.</li>
 <li><em>it points at a script</em> / <em>a file outside the game</em> - a map cannot name code, by design.</li>
@@ -64,7 +82,7 @@ a class no longer has (left out), a class this game does not have (kept, and sav
 typically an addon that has since been disabled), or a texture or model the game no longer provides.
 The Problems panel lists the last kind.</p>
 <p><strong>Faces show a magenta checkerboard.</strong> Their texture was not found. Set
-<code>HammeriteTextureLibrary.search_paths</code> before the map is built, and check the texture's file name
+<code>HammeriteTextureLibrary.get_search_paths()</code> before the map is built, and check the texture's file name
 matches the name the face holds.</p>
 <p><strong>An entity is missing in the game.</strong> The output has <em>could not find script for classname …</em>: no
 class has the <code>class_name</code> its <code>classname</code> property names. Check the spelling and that the script
@@ -89,7 +107,7 @@ the lightmap tool says so in its panel, and a script's <code>bake()</code> answe
 <p><strong>Baking is slow or runs out of memory.</strong> See <a href="/hammerite/docs/latest/performance.html">Performance and limits</a>: coarser
 lightmap scale on large dim surfaces is the main lever.</p>
 		</article>
-		<p class="docs-source">Hammerite latest · built from a6dd634, 2026-10-10</p>
+		<p class="docs-source">Hammerite latest · built from d8d727be, 2026-10-17</p>
 	</main>
 </div>
 

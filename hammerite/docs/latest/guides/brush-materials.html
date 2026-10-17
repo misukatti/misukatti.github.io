@@ -35,7 +35,7 @@
 		<label class="docs-version">Version
 			<select aria-label="Docs version"><option value="latest" selected>latest</option></select>
 		</label>
-		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="/hammerite/docs/latest/install.html">Installing Hammerite</a></li><li><a href="/hammerite/docs/latest/getting-started.html">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="/hammerite/docs/latest/guides/writing-an-entity.html">Writing an entity class</a></li><li><a href="/hammerite/docs/latest/guides/rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="/hammerite/docs/latest/guides/stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="/hammerite/docs/latest/guides/stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="/hammerite/docs/latest/guides/probe-lighting.html">Probe lighting</a></li><li><a href="/hammerite/docs/latest/guides/moving-brush-entities.html">Moving brush entities</a></li><li><a href="/hammerite/docs/latest/guides/guard-navigation.html">Navigation for guards</a></li><li><a href="/hammerite/docs/latest/guides/brush-materials.html" aria-current="page">Brush materials and shaders</a></li><li><a href="/hammerite/docs/latest/guides/brush-properties.html">Properties on brushes</a></li></ul><h2>Reference</h2><ul><li><a href="/hammerite/docs/latest/api/">API reference</a></li><li><a href="/hammerite/docs/latest/baking.html">Baking from a script</a></li><li><a href="/hammerite/docs/latest/performance.html">Performance and limits</a></li><li><a href="/hammerite/docs/latest/troubleshooting.html">Troubleshooting</a></li><li><a href="/hammerite/docs/latest/api-stability.html">API stability</a></li></ul></nav>
+		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="/hammerite/docs/latest/install.html">Installing Hammerite</a></li><li><a href="/hammerite/docs/latest/getting-started.html">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="/hammerite/docs/latest/guides/writing-an-entity.html">Writing an entity class</a></li><li><a href="/hammerite/docs/latest/guides/rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="/hammerite/docs/latest/guides/stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="/hammerite/docs/latest/guides/stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="/hammerite/docs/latest/guides/probe-lighting.html">Probe lighting</a></li><li><a href="/hammerite/docs/latest/guides/entity-sets.html">Entity sets</a></li><li><a href="/hammerite/docs/latest/guides/moving-brush-entities.html">Moving brush entities</a></li><li><a href="/hammerite/docs/latest/guides/guard-navigation.html">Navigation for guards</a></li><li><a href="/hammerite/docs/latest/guides/brush-materials.html" aria-current="page">Brush materials and shaders</a></li><li><a href="/hammerite/docs/latest/guides/brush-properties.html">Properties on brushes</a></li></ul><h2>Reference</h2><ul><li><a href="/hammerite/docs/latest/api/">API reference</a></li><li><a href="/hammerite/docs/latest/migrating-to-2.0.html">Migrating to Hammerite 2.0</a></li><li><a href="/hammerite/docs/latest/baking.html">Baking from a script</a></li><li><a href="/hammerite/docs/latest/performance.html">Performance and limits</a></li><li><a href="/hammerite/docs/latest/troubleshooting.html">Troubleshooting</a></li><li><a href="/hammerite/docs/latest/api-stability.html">API stability</a></li></ul></nav>
 	</aside>
 	<main class="docs-main">
 		<article class="prose">
@@ -116,7 +116,7 @@ void brush_surface(inout HammeriteSurface s) {
 
 #include &quot;res://addons/hammerite-core/resources/materials/hammerite_surface_main.gdshaderinc&quot;
 </code></pre>
-<pre><code class="language-gdscript">HammeriteBrush.surface_material = preload(&quot;res://materials/our_walls.tres&quot;)
+<pre><code class="language-gdscript">HammeriteBrush.set_surface_material(preload(&quot;res://materials/our_walls.tres&quot;))
 </code></pre>
 <p><code>s</code> starts as Hammerite's own surface, and the function changes only what it wants to:</p>
 <table>
@@ -187,7 +187,7 @@ void water_surface(inout HammeriteWater w) {
 
 #include &quot;res://addons/hammerite-core/resources/materials/hammerite_water_main.gdshaderinc&quot;
 </code></pre>
-<pre><code class="language-gdscript">HammeriteBrushFillRegistry.set_material(HammeriteBrushFillRegistry.WATER, preload(&quot;res://materials/our_water.tres&quot;))
+<pre><code class="language-gdscript">HammeriteBrushFillRegistry.set_material(HammeriteBrushFillRegistry.water(), preload(&quot;res://materials/our_water.tres&quot;))
 </code></pre>
 <p><code>w.clarity</code>, <code>w.tint</code> and <code>w.disturbance</code> are what the author set on the pool's brush. The helpers
 measure and the function decides: <code>water_travelled</code> is how much water the view crosses,
@@ -207,7 +207,7 @@ material its surface is drawn with:</p>
 <p>Each pool's surface gets its own copy of the material, with the face's texture as <code>color_texture</code>. A
 property declared for the fill reaches the copy as a uniform of the same name, <code>/</code> as <code>_</code> - so an
 author can make one pool hotter than another:</p>
-<pre><code class="language-gdscript">var lava := HammeriteBrushPropertySchema.new(&amp;&quot;lava&quot;, &quot;Lava&quot;)
+<pre><code class="language-gdscript">var lava := HammeriteBrushPropertySchema.create(&amp;&quot;lava&quot;, &quot;Lava&quot;)
 lava.fill = &amp;&quot;lava&quot;
 lava.add(&amp;&quot;glow&quot;, &quot;Glow&quot;, 0.5).set_range(0.0, 1.0, 0.05)
 HammeriteBrushPropertyRegistry.register(lava)
@@ -229,12 +229,12 @@ around it too, give its texture an emission partner - <code>lava_emission.png</c
 <h2 id="5-the-sky">5. The sky</h2>
 <p>Through every <code>sky_</code> face, Hammerite draws a gradient from the horizon to the zenith, with the sun or
 moon in it. A game draws its own with a <code>shader_type sky</code> material, one for every map:</p>
-<pre><code class="language-gdscript">HammeriteSkybox.dome_material = preload(&quot;res://materials/our_sky.tres&quot;)
+<pre><code class="language-gdscript">HammeriteSkybox.set_dome_material(preload(&quot;res://materials/our_sky.tres&quot;))
 </code></pre>
 <p>Every uniform it declares under one of the skybox's names is filled in: <code>horizon_color</code>,
 <code>zenith_color</code>, <code>body_direction</code>, <code>body_color</code>, <code>body_energy</code>, <code>body_is_moon</code>, <code>light_energy</code>. And a
 property a game declares on the sky reaches it the same way, <code>clouds/cover</code> as <code>clouds_cover</code>:</p>
-<pre><code class="language-gdscript">var clouds := HammeriteSkyPropertySchema.new(&amp;&quot;clouds&quot;, &quot;Clouds&quot;)
+<pre><code class="language-gdscript">var clouds := HammeriteSkyPropertySchema.create(&amp;&quot;clouds&quot;, &quot;Clouds&quot;)
 clouds.add(&amp;&quot;cover&quot;, &quot;Cover&quot;, 0.45).set_range(0.0, 1.0, 0.01)
 HammeriteSkyPropertyRegistry.register(clouds)
 </code></pre>
@@ -279,7 +279,7 @@ any release.</p>
   <a href="/hammerite/docs/latest/api/HammeriteSkyPropertyRegistry.html"><code>HammeriteSkyPropertyRegistry</code></a>.</li>
 </ul>
 		</article>
-		<p class="docs-source">Hammerite latest · built from a6dd634, 2026-10-10</p>
+		<p class="docs-source">Hammerite latest · built from d8d727be, 2026-10-17</p>
 	</main>
 </div>
 

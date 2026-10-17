@@ -160,3 +160,102 @@ main {
 }
 
 .foot p { margin: 0; }
+
+.bar nav a[aria-current="page"] { color: var(--moon); }
+
+.page-title {
+	margin: 0 0 0.5rem;
+	font-family: var(--serif);
+	font-weight: 400;
+	font-size: clamp(2.2rem, 6vw, 3.2rem);
+}
+
+.post-list { list-style: none; margin: 2rem 0 0; padding: 0; display: grid; gap: 1.25rem; }
+
+.post-list a {
+	display: block;
+	padding: clamp(1.25rem, 4vw, 2rem);
+	background: var(--night-raised);
+	border: 1px solid var(--line);
+	border-radius: 16px;
+	text-decoration: none;
+	transition: border-color 0.2s;
+}
+
+.post-list a:hover { border-color: var(--moon-dim); }
+
+.post-list h2 {
+	margin: 0.25rem 0 0.5rem;
+	font-family: var(--serif);
+	font-weight: 400;
+	font-size: clamp(1.5rem, 4vw, 2rem);
+	line-height: 1.15;
+}
+
+.post-list p { margin: 0; }
+
+.post-meta {
+	margin: 0;
+	font-size: 0.8rem;
+	letter-spacing: 0.15em;
+	text-transform: uppercase;
+	color: var(--moon-dim);
+}
+
+.post { max-width: 68ch; margin: 0 auto; padding: clamp(2.5rem, 8vw, 5rem) 0 2rem; }
+
+.post-head { margin-bottom: 2.5rem; }
+
+.post h1 {
+	margin: 0.5rem 0 1rem;
+	font-family: var(--serif);
+	font-weight: 400;
+	font-size: clamp(2.2rem, 6vw, 3.4rem);
+	line-height: 1.1;
+}
+
+.post-lede { font-size: 1.25rem; line-height: 1.55; margin: 0; }
+
+.post h2 {
+	margin: 2.5rem 0 0.75rem;
+	font-family: var(--serif);
+	font-weight: 400;
+	font-size: 1.7rem;
+}
+
+.post p, .post li { font-weight: 300; }
+
+.post li { margin-bottom: 0.6rem; }
+
+.post a { color: var(--moon); text-underline-offset: 3px; }
+
+.post code {
+	font-family: "JetBrains Mono", ui-monospace, Menlo, monospace;
+	font-size: 0.85em;
+	padding: 0.1em 0.35em;
+	background: var(--night-raised);
+	border: 1px solid var(--line);
+	border-radius: 4px;
+}
+
+.post-table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 1rem; }
+
+.post-table th, .post-table td {
+	padding: 0.6rem 0.75rem;
+	text-align: left;
+	border-bottom: 1px solid var(--line);
+}
+
+.post-table th {
+	font-weight: 600;
+	font-size: 0.75rem;
+	letter-spacing: 0.15em;
+	text-transform: uppercase;
+	color: var(--moon-dim);
+}
+
+.post-table td:not(:first-child), .post-table th:not(:first-child) { text-align: right; white-space: nowrap; }
+
+.post-table td:last-child { color: var(--moon); font-weight: 600; }
+
+.post-sign { margin-top: 3rem; color: var(--moon-dim); font-style: italic; }

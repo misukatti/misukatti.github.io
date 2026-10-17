@@ -33,6 +33,7 @@
 
 <main>
 	<section class="hero">
+		<a class="news-pill" href="/blog/hammerite-2-0/"><strong>New</strong> Hammerite 2.0: native from end to end →</a>
 		<img class="hero-logo" src="/hammerite/assets/hammerite-3d-dark.svg" alt="Hammerite 3D">
 		<p class="lede">The level editor that lives inside your game.</p>
 		<p class="sublede">Brush-based level editing for Godot, with a retro radiosity lightmapper and
@@ -40,7 +41,7 @@
 		<div class="buy">
 			<!-- Placeholder: replace href with the store page when Hammerite goes on sale. -->
 			<a class="button" href="#buy" id="buy" aria-disabled="true">Buy Hammerite 3D</a>
-			<p class="buy-note">Store link coming soon · Godot 4.7 · Version 0.9</p>
+			<p class="buy-note">Store link coming soon · Version 2.0 · Godot 4.7 · macOS, Windows and Linux</p>
 		</div>
 	</section>
 
@@ -119,23 +120,26 @@
 	</section>
 
 	<section id="addons" class="addons">
-		<h2>Four addons and a native kernel</h2>
-		<p>Each is a standalone Godot addon; nothing in them depends on a particular game. The
-		<a href="/hammerite/docs/">docs</a> have the guides and the full
+		<h2>Four addons, one native library</h2>
+		<p>Each is a standalone Godot addon; nothing in them depends on a particular game. All four are
+		C++, built into one GDExtension library, so there is no GDScript of Hammerite's to compile when
+		your game starts. The <a href="/hammerite/docs/">docs</a> have the guides and the full
 		<a href="/hammerite/api/">API reference</a>.</p>
 		<table>
-			<thead><tr><th>Addon</th><th>What it does</th><th>Needs</th></tr></thead>
+			<thead><tr><th>Addon</th><th>What it does</th><th>Package</th></tr></thead>
 			<tbody>
-				<tr><td>hammerite-core</td><td>Data model, subtractive compiler, runtime scene, radiosity lightmapper</td><td>—</td></tr>
-				<tr><td>hammerite-editor</td><td>The in-game level editor</td><td>core</td></tr>
-				<tr><td>hammerite-audio</td><td>Sound propagation through the rooms, weather, reverb; AI hearing</td><td>core</td></tr>
-				<tr><td>hammerite-nav</td><td>Walkable ground and traversal links; Godot navigation meshes</td><td>core</td></tr>
-				<tr><td>native kernel</td><td>Optional C++ for the heavy geometry: carving, compiling rooms and openings, navigation and bake preparation</td><td>core</td></tr>
+				<tr><td>hammerite-core</td><td>Data model, subtractive compiler, runtime scene, radiosity lightmapper</td><td>runtime, full</td></tr>
+				<tr><td>hammerite-audio</td><td>Sound propagation through the rooms, weather, reverb; AI hearing</td><td>runtime, full</td></tr>
+				<tr><td>hammerite-nav</td><td>Walkable ground and traversal links; Godot navigation meshes</td><td>runtime, full</td></tr>
+				<tr><td>hammerite-editor</td><td>The in-game level editor</td><td>full</td></tr>
 			</tbody>
 		</table>
-		<p class="kernel">The kernel is what keeps the edit-test loop quick on a big level. On our reference level
-		a cold compile drops from 40 s to 6.5 s, and an edit to a large room recompiles in 0.88 s instead
-		of 7.1 s. Without it, GDScript does the same work with the same results, to the bit.</p>
+		<p class="kernel">Two packages: <strong>full</strong> has everything, and <strong>runtime</strong> leaves
+		out the editor, for a game whose players never open it. The library is built for macOS (Apple
+		silicon and Intel), Windows and Linux on x86-64; there is no web export.</p>
+		<p class="kernel">Native code is what keeps the edit-test loop quick on a big level. In 2.0, 256
+		rooms compile in 303 ms instead of 626, a one-brush edit recompiles in 25 ms instead of 42, and a
+		large stealth level's navigation builds in 2.8 s instead of 5.7.</p>
 	</section>
 
 	<section id="licence" class="licence">

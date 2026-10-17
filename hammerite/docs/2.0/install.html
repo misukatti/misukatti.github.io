@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Installing Hammerite — Hammerite 3D 2.0 docs</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="/hammerite/assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="/hammerite/assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/hammerite/assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@300&display=swap">
+<link rel="stylesheet" href="/hammerite/hammerite.css">
+<link rel="stylesheet" href="/hammerite/docs/docs.css">
+<script src="/hammerite/docs/versions.js" defer></script>
+</head>
+<body class="docs" data-docs-version="2.0">
+
+<header class="studio">
+	<a class="studio-logo" href="/"><img src="/assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="/hammerite/">Hammerite 3D</a>
+		<a href="/hammerite/docs/2.0/">Docs</a>
+		<a href="/hammerite/docs/2.0/guides/">Guides</a>
+		<a href="/hammerite/docs/2.0/api/">API</a>
+	</nav>
+</header>
+
+<div class="docs-banner" hidden></div>
+
+<div class="docs-layout">
+	<aside class="docs-side">
+		<a class="docs-brand" href="/hammerite/docs/2.0/"><img src="/hammerite/assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
+		<label class="docs-version">Version
+			<select aria-label="Docs version"><option value="2.0" selected>2.0</option></select>
+		</label>
+		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="/hammerite/docs/2.0/install.html" aria-current="page">Installing Hammerite</a></li><li><a href="/hammerite/docs/2.0/getting-started.html">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="/hammerite/docs/2.0/guides/writing-an-entity.html">Writing an entity class</a></li><li><a href="/hammerite/docs/2.0/guides/rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="/hammerite/docs/2.0/guides/stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="/hammerite/docs/2.0/guides/stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="/hammerite/docs/2.0/guides/probe-lighting.html">Probe lighting</a></li><li><a href="/hammerite/docs/2.0/guides/entity-sets.html">Entity sets</a></li><li><a href="/hammerite/docs/2.0/guides/moving-brush-entities.html">Moving brush entities</a></li><li><a href="/hammerite/docs/2.0/guides/guard-navigation.html">Navigation for guards</a></li><li><a href="/hammerite/docs/2.0/guides/brush-materials.html">Brush materials and shaders</a></li><li><a href="/hammerite/docs/2.0/guides/brush-properties.html">Properties on brushes</a></li></ul><h2>Reference</h2><ul><li><a href="/hammerite/docs/2.0/api/">API reference</a></li><li><a href="/hammerite/docs/2.0/migrating-to-2.0.html">Migrating to Hammerite 2.0</a></li><li><a href="/hammerite/docs/2.0/baking.html">Baking from a script</a></li><li><a href="/hammerite/docs/2.0/performance.html">Performance and limits</a></li><li><a href="/hammerite/docs/2.0/troubleshooting.html">Troubleshooting</a></li><li><a href="/hammerite/docs/2.0/api-stability.html">API stability</a></li></ul></nav>
+	</aside>
+	<main class="docs-main">
+		<article class="prose">
+<h1 id="installing-hammerite">Installing Hammerite</h1>
+<h2 id="requirements">Requirements</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Godot</td>
+<td>4.7. The suites run on 4.7.1; earlier versions are not tested</td>
+</tr>
+<tr>
+<td>Renderer</td>
+<td>Forward+ or Mobile. Lightmap baking runs on the GPU through a local <code>RenderingDevice</code>, which the Compatibility renderer does not have</td>
+</tr>
+<tr>
+<td>Platforms</td>
+<td>macOS (Apple silicon and Intel), Windows x86_64 and Linux x86_64 editors and games: Hammerite's native library is built for those, in <code>hammerite-core/bin/</code>, and core does not load without it. Development and measurement happen on macOS</td>
+</tr>
+<tr>
+<td>Web</td>
+<td>not supported: the native library is not built for it</td>
+</tr>
+</tbody>
+</table>
+<p>Only baking needs the GPU compute path. A map baked under Forward+ displays under Compatibility, a
+little darker in the shadows (checked on macOS with OpenGL 3); there the lightmap tool says it cannot
+bake and its bake buttons are off.</p>
+<h2 id="the-packages">The packages</h2>
+<p>Hammerite is four addons with one native library between them, so it comes as two packages, each its
+addons' folders with the library built for exactly those:</p>
+<table>
+<thead>
+<tr>
+<th>Package</th>
+<th>Folders</th>
+<th>For</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>hammerite-runtime-&lt;version&gt;.zip</code></td>
+<td><code>hammerite-core</code>, <code>hammerite-audio</code>, <code>hammerite-nav</code></td>
+<td>a game whose players never open the map editor</td>
+</tr>
+<tr>
+<td><code>hammerite-full-&lt;version&gt;.zip</code></td>
+<td>those and <code>hammerite-editor</code></td>
+<td>a game that ships the editor, and making maps</td>
+</tr>
+</tbody>
+</table>
+<p>Beside them, <code>hammerite-docs-&lt;version&gt;.zip</code> is this documentation, the example project with the full package in it,
+<code>tools/migrate_to_2.sh</code> for a project coming from 1.x, and the native library's source, <code>native/</code>, with
+<code>BUILDING.md</code> saying how to build it yourself. It goes nowhere in your project.</p>
+<table>
+<thead>
+<tr>
+<th>Addon</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>hammerite-core</code></td>
+<td>the world: maps, brushes, the compiler, lighting, entities. Holds the native library, in <code>bin/</code></td>
+</tr>
+<tr>
+<td><code>hammerite-editor</code></td>
+<td>the map editor, in the game or over it</td>
+</tr>
+<tr>
+<td><code>hammerite-audio</code></td>
+<td>sound propagation through the compiled world; its editor tool needs the editor</td>
+</tr>
+<tr>
+<td><code>hammerite-nav</code></td>
+<td>navigation derived from the compiled world; its editor tool needs the editor</td>
+</tr>
+</tbody>
+</table>
+<p>A package is installed whole. Its library has the classes of its folders and no others, so a
+<code>hammerite-editor</code> folder beside the runtime package's library has none of its classes, and a full
+library without <code>hammerite-editor</code> is missing a folder; either is said in an error as the project
+starts. To go from one to the other, replace all of the folders with the other package's. An addon you
+do not use - audio, say - can stay installed with its plugin disabled: it costs nothing until it is
+enabled.</p>
+<ol>
+<li>Unzip the package into your project's root, so its folders are in <code>res://addons/</code>, keeping their
+   names: <code>res://addons/hammerite-core</code>, <code>res://addons/hammerite-editor</code> and so on. The addons refer
+   to their own files by those paths, so a renamed or nested folder does not load. Copy each whole:
+   <code>hammerite-core</code>'s <code>bin/</code> folder and <code>.gdextension</code> file are the native library, and its
+   <code>THIRD_PARTY_NOTICES.md</code> the licences of what is compiled into it, which a game ships with it.</li>
+<li>Open the project in Godot and enable the plugins you use in <strong>Project &gt; Project Settings &gt;
+   Plugins</strong>, core first. Each adds its autoload (<code>Hammerite</code>, <code>HammeriteEditor</code>, <code>HammeriteAudio</code>,
+   <code>HammeriteNavigation</code>).
+   Core also declares the shader globals its materials read; your own values for any of them are
+   left alone.</li>
+<li>The first import of a project prints a few shader compile errors, once: Godot imports before any
+   plugin can declare the globals. Reopening the project is clean.</li>
+</ol>
+<p>Hammerite adds no input actions and no project settings of its own beyond those.</p>
+<p><strong>Coming from 1.x.</strong> Replace all four 1.x addon folders with one package's, then migrate the project before
+opening it: a <code>.tres</code>, <code>.res</code> or scene that 1.x saved does not load in 2.0 until it is. <code>.hmap</code> maps need nothing.
+<a href="/hammerite/docs/2.0/migrating-to-2.0.html">Migrating to 2.0</a> says how, and what changed for a game's code.</p>
+<p><strong>Shipping a game.</strong> Core carries the Inter typeface, which a game exports with it, and the SIL Open
+Font License it is under asks that its licence go wherever the font does. Godot exports no <code>.txt</code> file
+it is not told to, so add <code>addons/hammerite-core/inter-OFL.txt</code> to your export preset's
+<strong>Filters to export non-resource files/folders</strong> (<code>include_filter</code>).</p>
+<h2 id="next">Next</h2>
+<ul>
+<li><a href="/hammerite/docs/2.0/getting-started.html">Getting started</a>: a map in your game, with the editor over it.</li>
+<li><a href="/hammerite/docs/2.0/troubleshooting.html">Troubleshooting</a> if something on the way did not go as described.</li>
+</ul>
+		</article>
+		<p class="docs-source">Hammerite 2.0 · built from 6d57ab2d, 2026-10-17</p>
+	</main>
+</div>
+
+<footer class="studio-foot">
+	<a href="/"><img src="/assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>

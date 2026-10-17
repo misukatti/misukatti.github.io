@@ -1,0 +1,1324 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Migrating to Hammerite 2.0 — Hammerite 3D latest docs</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="/hammerite/assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="/hammerite/assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/hammerite/assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@300&display=swap">
+<link rel="stylesheet" href="/hammerite/hammerite.css">
+<link rel="stylesheet" href="/hammerite/docs/docs.css">
+<script src="/hammerite/docs/versions.js" defer></script>
+</head>
+<body class="docs" data-docs-version="latest">
+
+<header class="studio">
+	<a class="studio-logo" href="/"><img src="/assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="/hammerite/">Hammerite 3D</a>
+		<a href="/hammerite/docs/latest/">Docs</a>
+		<a href="/hammerite/docs/latest/guides/">Guides</a>
+		<a href="/hammerite/docs/latest/api/">API</a>
+	</nav>
+</header>
+
+<div class="docs-banner" hidden></div>
+
+<div class="docs-layout">
+	<aside class="docs-side">
+		<a class="docs-brand" href="/hammerite/docs/latest/"><img src="/hammerite/assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
+		<label class="docs-version">Version
+			<select aria-label="Docs version"><option value="latest" selected>latest</option></select>
+		</label>
+		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="/hammerite/docs/latest/install.html">Installing Hammerite</a></li><li><a href="/hammerite/docs/latest/getting-started.html">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="/hammerite/docs/latest/guides/writing-an-entity.html">Writing an entity class</a></li><li><a href="/hammerite/docs/latest/guides/rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="/hammerite/docs/latest/guides/stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="/hammerite/docs/latest/guides/stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="/hammerite/docs/latest/guides/probe-lighting.html">Probe lighting</a></li><li><a href="/hammerite/docs/latest/guides/entity-sets.html">Entity sets</a></li><li><a href="/hammerite/docs/latest/guides/moving-brush-entities.html">Moving brush entities</a></li><li><a href="/hammerite/docs/latest/guides/guard-navigation.html">Navigation for guards</a></li><li><a href="/hammerite/docs/latest/guides/brush-materials.html">Brush materials and shaders</a></li><li><a href="/hammerite/docs/latest/guides/brush-properties.html">Properties on brushes</a></li></ul><h2>Reference</h2><ul><li><a href="/hammerite/docs/latest/api/">API reference</a></li><li><a href="/hammerite/docs/latest/migrating-to-2.0.html" aria-current="page">Migrating to Hammerite 2.0</a></li><li><a href="/hammerite/docs/latest/baking.html">Baking from a script</a></li><li><a href="/hammerite/docs/latest/performance.html">Performance and limits</a></li><li><a href="/hammerite/docs/latest/troubleshooting.html">Troubleshooting</a></li><li><a href="/hammerite/docs/latest/api-stability.html">API stability</a></li></ul></nav>
+	</aside>
+	<main class="docs-main">
+		<article class="prose">
+<h1 id="migrating-to-hammerite-20">Migrating to Hammerite 2.0</h1>
+<p><strong>Migrate a 1.x project before you open it in 2.0.</strong> Every <code>.tres</code>, <code>.res</code> and scene that 1.x saved names
+Hammerite's objects by the scripts they were - <code>res://addons/hammerite-core/scripts/resources/map.gd</code>, <code>brush.gd</code>,
+<code>map_3d.gd</code> and the rest - and 2.0 has none of those scripts: no stub at their paths, and no loader that reads such
+a file as the native classes. Until it is migrated a file naming one does not load at all. Godot says
+<code>Failed loading resource: res://addons/hammerite-core/scripts/resources/map.gd</code> for each script it names, and then
+the same of the file, so a map, a bake, a prefab set or a scene placing a <code>HammeriteMap3D</code> comes back null and the
+game does not start.</p>
+<ol>
+<li>Commit the project, or copy it.</li>
+<li>Install 2.0 in place of 1.x: every addon folder, with its library (<a href="#what-20-needs">What 2.0 needs</a>).</li>
+<li>Migrate it: <code>tools/migrate_to_2.sh path/to/project</code>, from the release's docs zip, or <strong>Project → Tools →
+   Migrate Hammerite 1.x Resources...</strong> in the Godot editor with the full package (<a href="#migrating-a-project">Migrating a project</a>). Opening the project
+   first writes nothing by itself, but when the Godot editor offers to open a scene with missing dependencies
+   anyway, or to fix them, decline: a scene saved that way has lost what it held of Hammerite's.</li>
+<li>Change the code 2.0's API breaks: the rest of this page.</li>
+</ol>
+<p>What needs nothing: a <code>.hmap</code> saved by any earlier Hammerite opens, and so does every other data file - a
+<code>.hcache</code> worldrep or navigation cache, a variant's bake, the editor's <code>.hworkspace</code> and its autosaves. They name
+classes, not scripts, and read as they did.</p>
+<p><strong>Caches</strong> are migrated with the rest, and one that is not is only a cache. <code>level.worldrep.res</code> and <code>level.nav.res</code>,
+which 1.x wrote beside a map saved as a <code>.res</code>, fail to load as anything else 1.x saved does - with the same
+errors, on every load - and are then treated as missing: the world is compiled from the map and its navigation
+built again, and both are written in 2.0's form the next time the editor saves the map. Migrate them, or delete
+them, rather than leave them to print errors. Hammerite writes nothing else of its own under <code>user://</code>: the
+editor's workspace and autosaves are data files, and the lightmapper's diagnostic reports are never read back.
+What a game keeps there itself - its players' maps saved as <code>.res</code>, say - is migrated by pointing the editor's
+dialog at that folder, or by running the command on it. A game can call <code>HammeriteMigration.migrate("user://maps")</code>
+itself, but the class is experimental: it may change in any 2.x release, where the command and the menu items will not.</p>
+<p>The rest of this page is what changed. 2.0 moves the addons' classes from GDScript into the native library (#263).
+A class keeps its name, its base class and what it does - checked against its script, call for call, before the
+script was deleted - but a native class cannot express everything a script could, and where it cannot, the API
+changes. Every such change is here, and every change of behaviour.</p>
+<ul>
+<li><a href="#what-20-needs">What 2.0 needs</a></li>
+<li><a href="#migrating-a-project">Migrating a project</a></li>
+<li><a href="#the-entity-interface">The entity interface</a></li>
+<li><a href="#required-virtuals">Required virtuals</a></li>
+<li><a href="#the-editor">The editor</a></li>
+<li><a href="#the-shapes-that-change">The shapes that change</a></li>
+<li><a href="#class-by-class">Class by class</a></li>
+<li><a href="#the-native-kernels-classes-and-switches">The native kernel's classes and switches</a></li>
+<li><a href="#what-the-suites-reached">What the suites reached</a></li>
+<li><a href="#experimental-classes">Experimental classes</a></li>
+<li><a href="#behaviour">Behaviour</a></li>
+</ul>
+<h2 id="what-20-needs">What 2.0 needs</h2>
+<ul>
+<li><strong>The native library, always.</strong> 1.x ran on GDScript and used its native kernel where one was built; 2.0's classes
+  are the library. It is <code>addons/hammerite-core/bin/libhammerite.&lt;platform&gt;</code>, loaded by <code>hammerite_core.gdextension</code>
+  for all four addons, and there is no GDScript to fall back on: a project without it does not load core, and says
+  "Hammerite's native library is not loaded". No <code>native_*</code> switch chooses any more
+  (<a href="#the-native-kernels-classes-and-switches">the kernel's classes and switches</a>).</li>
+<li><strong>One of two packages, installed whole</strong> (#273). <code>hammerite-runtime-&lt;version&gt;.zip</code> is core, audio and nav, for a game
+  whose players never open the map editor; <code>hammerite-full-&lt;version&gt;.zip</code> is those and the editor. 1.x's four addons
+  were installed one by one; 2.0's come as a package's folders with the library built for exactly those, so replace
+  all four 1.x folders with one package's. A <code>hammerite-editor</code> folder beside the runtime package's library has none
+  of its classes, and a full library without one is missing a folder: either is an error as the project starts.
+  An addon a game does not use stays installed with its plugin disabled. See <a href="/hammerite/docs/latest/install.html">Installing</a>.</li>
+<li><strong>macOS, Linux x86_64 and Windows x86_64.</strong> A release carries the library for macOS as one universal binary (Apple
+  silicon and Intel), for Linux x86_64 and for Windows x86_64, in every package. The <code>.gdextension</code> also names a
+  Linux arm64 library, which a checkout can build (<code>tools/build_native.sh</code>) but no release carries.</li>
+<li><strong>No web export.</strong> No library is built for the web, and without one core does not load, so a game exporting to
+  the web cannot use 2.0. None will be until GDExtension on the web is dependable (#263). 1.x did not support the
+  web either, but nothing stopped its GDScript loading there.</li>
+<li><strong>Godot 4.7</strong>, as 1.x. The library is built against godot-cpp's 4.5 API and its <code>.gdextension</code> loads in 4.5 or
+  later, but the suites run on 4.7.1 and nothing earlier is tested.</li>
+<li><strong>No hot reload.</strong> The library is not reloadable: restart the Godot editor after replacing it.</li>
+</ul>
+<h2 id="migrating-a-project">Migrating a project</h2>
+<p>Migrate a project once, after installing 2.0, from the command line or from either editor:</p>
+<pre><code class="language-sh">tools/migrate_to_2.sh path/to/project --dry-run   # what would change; writes nothing
+tools/migrate_to_2.sh path/to/project             # migrate, keeping each original as &lt;file&gt;.bak
+tools/migrate_to_2.sh path/to/project --no-backup # without the .bak files
+</code></pre>
+<p>The tool is not in either package, which hold only what goes into <code>addons/</code>: it is in <code>tools/</code> of
+<code>hammerite-docs-&lt;version&gt;.zip</code>, released beside them, and of this repository. Unzip the docs anywhere and run it
+from there, naming the project - <code>path/to/hammerite-docs/tools/migrate_to_2.sh path/to/project</code> - keeping
+<code>migrate_to_2.sh</code> and <code>migrate_to_2.gd</code> together. It is a bash script, so on Windows run it from Git Bash, or use
+the editor's command below. It runs Godot headless in the project - <code>/Applications/Godot.app</code> unless <code>GODOT=</code> names
+another binary, as it must on Linux and Windows - importing it first if the project has not
+been opened since 2.0 was installed - and calls <code>HammeriteMigration.migrate("res://")</code>. It lists each file it migrated, with the classes it was migrated for, and each it could not, with why,
+and exits 1 when there is any of those. Commit the project, or copy it, before running it.</p>
+<p>The editor does the same, with the dry run shown before anything is written: <strong>Project → Tools → Migrate Hammerite
+1.x Resources...</strong> in the Godot editor, which rescans the project afterwards and is the one to use while the game
+cannot start, and <strong>File → Migrate 1.x Resources…</strong> in Hammerite's editor, in the game. Each lists what it would
+migrate and what it cannot, with why, migrates on confirming - keeping the <code>.bak</code> files unless told not to - and
+lists what it did. It looks in <code>res://</code> and takes another <code>res://</code> or <code>user://</code> folder, such as where a game keeps
+its players' maps. Both are the editor's, so the full package has them and the runtime package does not: with the
+runtime package, use the command line. It migrates what core, audio and nav saved, and reports a file naming one of
+the editor's scripts - a scene placing an editor node, or the editor's settings saved as a <code>.tres</code> - as skipped, with its
+classes, for the full package to migrate.</p>
+<p><strong>What 2.x promises is the command and the two menu items</strong> - <code>tools/migrate_to_2.sh</code> with its options,
+<strong>File → Migrate 1.x Resources…</strong> and <strong>Project → Tools → Migrate Hammerite 1.x Resources...</strong> - and what they
+migrate (<a href="/hammerite/docs/latest/api-stability.html">API stability</a>). <code>HammeriteMigration</code>, the class all three call, and the editors' dialog
+are experimental: a script can call them, but they may change in any release.</p>
+<p>What it does to a file that names a 1.x script of Hammerite's, and nothing else:</p>
+<ul>
+<li>each object the file holds as a <code>Resource</code> carrying a 1.x script - a map, a brush, a bake, a probe set, a light
+  curve, a prefab, an audio graph, a navigation cache - is written as its native class, without the script;</li>
+<li>in a text scene (<code>.tscn</code>), each node carrying one of Hammerite's 1.x node scripts - <code>map_3d.gd</code>,
+  <code>eye_adaptation_3d.gd</code>, a light, a decal, a mover, a trigger, a logic entity, an entity base, audio's emitter,
+  receiver and sound entities, nav's link entity - is that node class, without the script or the
+  <code>_custom_type_script</code> the editor marked it with, keeping its place and its properties;</li>
+<li>the scripts go from the file's <code>[ext_resource]</code> lines or external table, and <code>load_steps</code> and the script class
+  of the file's main resource with them.</li>
+</ul>
+<p>Every other byte of the file is as it was: text stays text, binary stays binary, and a compressed <code>.res</code> is
+compressed again as it was, with its uid. The file is rewritten where it lies rather than loaded and saved, so
+nothing in the project is loaded - a game's own script that does not compile in a headless run would otherwise
+cost the objects carrying it their values - and the rewritten file is read back before it is kept. A file
+naming no 1.x script is not touched, nor is anything in a hidden folder, one holding a <code>.gdignore</code>, or
+Hammerite's own folders under <code>addons/</code>. A second run finds nothing to do.</p>
+<p>A file it cannot migrate it leaves as it was, and says why:</p>
+<ul>
+<li>it names a script of Hammerite's that has no class in 2.0. hammerite-audio's acoustic classes
+  (<code>acoustic_node_graph.gd</code> and the rest) were renamed to its audio ones before 1.0 (#249), so a
+  map still holding an acoustic graph loads neither in 1.0 nor in 2.0: re-save it from the Hammerite that wrote
+  it with its audio rebaked, or rebuild it;</li>
+<li>a node carries a 1.x script on a node the scene does not make itself (an instance's, or an inherited
+  scene's), or one whose class the native one does not extend: set the node's type in the Godot editor;</li>
+<li>a binary scene (<code>.scn</code>) places a node by its 1.x script: save it as a <code>.tscn</code> from the Godot editor, and run
+  the migration again.</li>
+</ul>
+<p>A script of the game's that extends one of Hammerite's by path (<code>extends "res://addons/hammerite-core/...gd"</code>)
+is the game's code, not a resource, and is not touched: extend the class by name.</p>
+<p>2.0 ships without the 1.x compatibility layer its development builds had - a stub script at each 1.x path and a
+loader that read 1.x files as the native classes (#272) - and the migration needs neither: it knows each 1.x script
+by the path and the uid 1.x gave it. It ships with every 2.x release (<a href="/hammerite/docs/latest/api-stability.html">API stability</a>).</p>
+<h2 id="the-entity-interface">The entity interface</h2>
+<p>Core's scene nodes are native (#268): <code>HammeriteMap3D</code>, the entity bases, and every entity class of core's own
+sets. A game's entity class still extends a base (<code>HammeritePointEntityNode3D</code>, <code>HammeritePointEntityAnimatableBody3D</code>,
+<code>HammeritePointEntityRigidBody3D</code>, <code>HammeriteBrushEntityNode3D</code>, <code>HammeriteBrushEntityStaticBody3D</code>,
+<code>HammeriteBrushEntityAnimatableBody3D</code>, <code>HammeriteBrushEntityArea3D</code>) or one of core's entity classes, but <strong>it
+overrides the interface under the engine's convention</strong>: a method a script overrides is a native virtual, and a
+native virtual is a name with an underscore. The public names stay, and are what everybody calls - the map, the
+editor, a game: each dispatches to the virtual.</p>
+<p><strong>Rename every override</strong> to its underscore name. The signatures are unchanged.</p>
+<pre><code class="language-gdscript"># 1.x
+extends HammeritePointEntityNode3D
+func set_editor_active(active: bool) -&gt; void: ...
+func apply_entity_property(prop_name: StringName, value: Variant) -&gt; void: ...
+func trigger(impulse: Variant = null) -&gt; void: ...
+
+# 2.0
+extends HammeritePointEntityNode3D
+func _set_editor_active(active: bool) -&gt; void: ...
+func _apply_entity_property(prop_name: StringName, value: Variant) -&gt; void: ...
+func _trigger(impulse: Variant = null) -&gt; void: ...
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>1.x override</th>
+<th>2.0 virtual</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>set_entity(new_entity)</code></td>
+<td><code>_set_entity(new_entity)</code></td>
+<td>after the base has bound the entity</td>
+</tr>
+<tr>
+<td><code>update_properties()</code></td>
+<td><code>_update_properties()</code></td>
+<td>after the base has applied every property</td>
+</tr>
+<tr>
+<td><code>apply_entity_property(prop_name, value)</code></td>
+<td><code>_apply_entity_property(prop_name, value)</code></td>
+<td>required of a script extending a base; after the class's own</td>
+</tr>
+<tr>
+<td><code>set_editor_active(active)</code></td>
+<td><code>_set_editor_active(active)</code></td>
+<td>required of a script extending a base, except <code>HammeriteBrushEntityArea3D</code></td>
+</tr>
+<tr>
+<td><code>draw_editor_gizmos(gizmos)</code></td>
+<td><code>_draw_editor_gizmos(gizmos)</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>draws_editor_gizmos_only_when_picked()</code></td>
+<td><code>_draws_editor_gizmos_only_when_picked()</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>get_editor_handles()</code></td>
+<td><code>_get_editor_handles()</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>move_editor_handle(handle_id, to)</code></td>
+<td><code>_move_editor_handle(handle_id, to)</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>get_aabb()</code></td>
+<td><code>_get_aabb()</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>can_simulate()</code>, <code>start_simulation()</code>, <code>stop_simulation()</code>, <code>reset_simulation()</code></td>
+<td><code>_can_simulate()</code>, ...</td>
+<td></td>
+</tr>
+<tr>
+<td><code>get_runtime_properties()</code>, <code>get_runtime_property(key, default_value)</code>, <code>set_runtime_property(key, value)</code>, <code>reset_runtime_properties()</code></td>
+<td><code>_get_runtime_properties()</code>, ...</td>
+<td></td>
+</tr>
+<tr>
+<td><code>can_trigger()</code>, <code>trigger(impulse)</code></td>
+<td><code>_can_trigger()</code>, <code>_trigger(impulse)</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>get_actions()</code></td>
+<td><code>_get_actions()</code></td>
+<td>merged over the class's own (Trigger)</td>
+</tr>
+<tr>
+<td><code>run_action(action_id)</code></td>
+<td><code>_run_action(action_id)</code></td>
+<td>after the class's own</td>
+</tr>
+<tr>
+<td><code>turn_to(facing)</code></td>
+<td><code>_turn_to(facing)</code></td>
+<td>point bases but the rigid body</td>
+</tr>
+<tr>
+<td><code>set_light_modulation(modulation)</code></td>
+<td><code>_set_light_modulation(modulation)</code></td>
+<td>point bases</td>
+</tr>
+<tr>
+<td><code>should_create_meshes()</code>, <code>should_create_colliders()</code></td>
+<td><code>_should_create_meshes()</code>, <code>_should_create_colliders()</code></td>
+<td>brush bases</td>
+</tr>
+</tbody>
+</table>
+<p>An override left under its old name does not compile: it would hide a native method the engine calls, which
+GDScript refuses (<a href="#required-virtuals">Required virtuals</a>).</p>
+<p><strong><code>super()</code> goes.</strong> GDScript cannot call <code>super()</code> into a native virtual, nor <code>super._init()</code>, <code>super._ready()</code> or
+<code>super._process()</code> on a native class. Where an override called <code>super()</code> first - <code>set_entity</code>, <code>update_properties</code>,
+<code>apply_entity_property</code> on one of core's classes, <code>get_actions</code>, <code>run_action</code> - the class's own now runs first by
+itself, and the script's override after it, so drop the call:</p>
+<pre><code class="language-gdscript"># 1.x
+func set_entity(new_entity: HammeriteEntity) -&gt; void:
+    super(new_entity)
+    _offer_a_hand()
+
+# 2.0
+func _set_entity(new_entity: HammeriteEntity) -&gt; void:
+    _offer_a_hand()
+</code></pre>
+<p>Work an override did <em>before</em> <code>super()</code> has to find another place: it runs after the base now. A flag raised
+around <code>super()</code> to quiet <code>_apply_entity_property</code> while the entity is being bound starts raised instead, and
+<code>_set_entity</code> lowers it. <code>get_actions()</code>'s override answers only the actions it adds. Any other override replaces
+what the class does, as before - with no <code>super()</code> to reach what it replaced. A script on one of core's own
+classes that called <code>super._process(delta)</code> drops it: the class does its per-frame work from its notification,
+after the script's <code>_process</code>.</p>
+<p>Overriding one of a <em>script's</em> virtuals is unchanged: a class extending a game's entity script still calls
+<code>super._apply_entity_property(...)</code>.</p>
+<p><strong>A native class of core's has hooks of its own</strong> under the same convention: a script on a dynamic light
+overrides <code>_get_lit_modulation()</code> and may follow <code>set_seen()</code> with <code>_set_seen()</code>; one on a logic entity or a mover
+<code>_get_icon()</code>, <code>_tick()</code>, <code>_reset()</code>, <code>_apply()</code> and <code>_wired_targets()</code>; one on <code>HammeritePropModel</code> may follow
+<code>set_room_seen()</code> with <code>_set_room_seen()</code>; one on <code>HammeriteThumbnailGenerator</code> takes over <code>_generate_thumbnail()</code>,
+<code>_generate_entity_thumbnail()</code> or <code>_generate_mesh_thumbnail()</code>.</p>
+<p><strong>A classname may name a native class.</strong> <code>HammeriteMap3D</code> builds an entity's node from a script class of that name
+or, where there is none, from a class the library registers; core's own (<code>HammeritePointLight3D</code>...) are native.</p>
+<h2 id="required-virtuals">Required virtuals</h2>
+<p>1.x marked what a subclass had to write <code>@abstract</code>, and a script that left one out did not compile. A native class
+has no <code>@abstract</code>: what a script must write is a <strong>required virtual</strong>, and every one of them has an underscore.</p>
+<table>
+<thead>
+<tr>
+<th>1.x, <code>@abstract</code></th>
+<th>2.0, required virtual</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>set_editor_active(active)</code> and <code>apply_entity_property(prop_name, value)</code> on <code>HammeritePointEntityNode3D</code>, <code>HammeritePointEntityAnimatableBody3D</code>, <code>HammeritePointEntityRigidBody3D</code>, <code>HammeriteBrushEntityNode3D</code> and <code>HammeriteBrushEntityStaticBody3D</code></td>
+<td><code>_set_editor_active(active)</code> and <code>_apply_entity_property(prop_name, value)</code>, on those and on <code>HammeriteBrushEntityAnimatableBody3D</code></td>
+</tr>
+<tr>
+<td><code>apply_entity_property(prop_name, value)</code> on <code>HammeriteBrushEntityArea3D</code></td>
+<td><code>_apply_entity_property(prop_name, value)</code>; <code>_set_editor_active</code> is optional there, as <code>set_editor_active</code> was</td>
+</tr>
+<tr>
+<td><code>HammeriteEditorTool</code>'s <code>_tool_input(event)</code>, <code>_tool_process(delta)</code>, <code>_tool_exit()</code> and <code>get_tool_name()</code></td>
+<td><code>_tool_input(event)</code>, <code>_tool_process(delta)</code>, <code>_tool_exit()</code> and <code>_get_tool_name()</code></td>
+</tr>
+<tr>
+<td><code>HammeritePropertyControl</code>'s <code>get_value()</code>, <code>set_value_no_signal(value)</code>, <code>set_disabled(disabled)</code> and <code>set_indeterminate(indeterminate)</code></td>
+<td><code>_get_value()</code>, <code>_set_value_no_signal(value)</code>, <code>_set_disabled(disabled)</code> and <code>_set_indeterminate(indeterminate)</code></td>
+</tr>
+<tr>
+<td><code>HammeriteDynamicLight3D._icon()</code></td>
+<td>none: the class is registered abstract, and only its own point, spot and directional lights extend it. A script that extended it extends <code>HammeriteDynamicPointLight3D</code> or one of the others, whose icon is theirs</td>
+</tr>
+<tr>
+<td>-</td>
+<td><code>HammeriteEntitySet._register_types()</code>, new since 1.0</td>
+</tr>
+</tbody>
+</table>
+<p>A script overrides one by declaring it under that name with the signature in the class reference, as it would any
+engine virtual (<code>func _set_editor_active(active: bool) -&gt; void:</code>). Where the public method of the same name is
+still what everybody calls, the class dispatches to the override.</p>
+<p><strong>One left out is an error when it is called</strong>, not when the script compiles. A script extending a base without
+<code>_set_editor_active</code> parses, and <code>new()</code> makes one where the <code>@abstract</code> script refused; the first call then
+reports</p>
+<pre><code>ERROR: Required virtual method HammeritePointEntityNode3D::_set_editor_active must be overridden before calling.
+</code></pre>
+<p>and does nothing - an engine error, which fails a suite. <code>HammeriteMap3D</code> still refuses a classname whose class
+does not extend a base, so a map never builds a base itself. The entity suites of a game should build every type
+it registers and call these once, which is what Hammerite's own do.</p>
+<p><strong>One written under its old public name does not compile</strong>:</p>
+<pre><code>Parse Error: The method &quot;set_editor_active()&quot; overrides a method from native class &quot;HammeritePointEntityNode3D&quot;. This won't be called by the engine and may not work as expected. (Warning treated as error.)
+</code></pre>
+<h2 id="the-editor">The editor</h2>
+<p>The level editor is native (#271): every class of hammerite-editor, and the editor tools and extensions of
+hammerite-audio and hammerite-nav, in the library's editor, audio_editor and nav_editor modules, which only the
+full package has. They keep their names and what they do - each was held to its script, call for call and node
+for node, before the scripts were deleted - and the shapes that change are <a href="#the-shapes-that-change">the same as core's</a>.
+What a game that extends or drives the editor changes:</p>
+<p><strong>A tool overrides the underscore names.</strong> The editor calls <code>tool_input(event)</code>, <code>tool_process(delta)</code> and
+<code>tool_exit()</code>, and <code>get_tool_name()</code>, <code>get_status_text()</code>, <code>holds_cursor()</code> and <code>get_manual_page()</code> as before; each
+dispatches to a virtual, which is what a script overrides, as an entity does. A tool is made with
+<code>create(editor)</code>, and a script's own constructor calls <code>setup(editor)</code> where it called <code>super(editor)</code>. The options
+panel is a class of its own.</p>
+<pre><code class="language-gdscript"># 1.x
+extends HammeriteEditorTool
+
+func _init(editor: HammeriteMapEditor) -&gt; void:
+    super(editor)
+
+func get_tool_name() -&gt; String:
+    return &quot;Patrol Route&quot;
+
+func get_status_text() -&gt; String:
+    return &quot;Click to add a point&quot;
+
+func _tool_input(event: InputEvent) -&gt; bool: ...
+
+var popup := HammeriteEditorTool.SimpleToolPopup.new()
+editor.set_active_tool(PatrolRouteTool.new(editor))
+tool._tool_process(delta)
+
+# 2.0
+extends HammeriteEditorTool
+
+func _init(editor: HammeriteMapEditor) -&gt; void:
+    setup(editor)
+
+func _get_tool_name() -&gt; String:
+    return &quot;Patrol Route&quot;
+
+func _get_status_text() -&gt; String:
+    return &quot;Click to add a point&quot;
+
+func _tool_input(event: InputEvent) -&gt; bool: ...
+
+var popup := HammeriteEditorToolSimpleToolPopup.new()
+editor.set_active_tool(PatrolRouteTool.new(editor))
+tool.tool_process(delta)
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>1.x</th>
+<th>2.0, what a script overrides</th>
+<th>what is called</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>_tool_input(event)</code></td>
+<td><code>_tool_input(event)</code></td>
+<td><code>tool_input(event)</code></td>
+</tr>
+<tr>
+<td><code>_tool_process(delta)</code></td>
+<td><code>_tool_process(delta)</code></td>
+<td><code>tool_process(delta)</code></td>
+</tr>
+<tr>
+<td><code>_tool_exit()</code></td>
+<td><code>_tool_exit()</code></td>
+<td><code>tool_exit()</code></td>
+</tr>
+<tr>
+<td><code>get_tool_name()</code></td>
+<td><code>_get_tool_name()</code></td>
+<td><code>get_tool_name()</code></td>
+</tr>
+<tr>
+<td><code>get_status_text()</code></td>
+<td><code>_get_status_text()</code></td>
+<td><code>get_status_text()</code></td>
+</tr>
+<tr>
+<td><code>holds_cursor()</code></td>
+<td><code>_holds_cursor()</code></td>
+<td><code>holds_cursor()</code></td>
+</tr>
+<tr>
+<td><code>get_manual_page()</code></td>
+<td><code>_get_manual_page()</code></td>
+<td><code>get_manual_page()</code></td>
+</tr>
+</tbody>
+</table>
+<p>The editor's own tools are made with <code>create(...)</code> where <code>new(...)</code> took arguments:
+<code>HammeriteTransformTool.create(editor, mode)</code>, <code>HammeriteFaceEditTool.create(editor, popup)</code>,
+<code>HammeriteFaceMoveTool.create(editor, origin)</code>, <code>HammeriteExtrudeTool.create(editor, origin)</code> and
+<code>create(editor)</code> for the rest, hammerite-audio's <code>HammeriteAudioPortalTool</code> and hammerite-nav's
+<code>HammeriteNavigationTool</code> among them.</p>
+<p><strong>A property control overrides the underscore names too.</strong> The panel calls <code>get_value()</code>,
+<code>set_value_no_signal(value)</code>, <code>set_disabled(disabled)</code> and <code>set_indeterminate(indeterminate)</code>, which dispatch to
+<code>_get_value()</code>, <code>_set_value_no_signal(value)</code>, <code>_set_disabled(disabled)</code> and <code>_set_indeterminate(indeterminate)</code>.
+<code>set_value(value)</code> is the class's own: it shows the value through <code>_set_value_no_signal</code> and emits <code>value_changed</code>
+with what <code>_get_value</code> then answers, so an override of it goes.</p>
+<pre><code class="language-gdscript"># 1.x
+extends HammeritePropertyControl
+
+func get_value() -&gt; Variant:
+    return _value
+
+func set_value(new_value: Variant) -&gt; void:
+    set_value_no_signal(new_value)
+    value_changed.emit(_value)
+
+func set_value_no_signal(new_value: Variant) -&gt; void:
+    _value = new_value
+    _refresh()
+
+func set_disabled(disabled: bool) -&gt; void: ...
+func set_indeterminate(indeterminate: bool) -&gt; void: ...
+
+# 2.0
+extends HammeritePropertyControl
+
+func _get_value() -&gt; Variant:
+    return _value
+
+func _set_value_no_signal(new_value: Variant) -&gt; void:
+    _value = new_value
+    _refresh()
+
+func _set_disabled(disabled: bool) -&gt; void: ...
+func _set_indeterminate(indeterminate: bool) -&gt; void: ...
+</code></pre>
+<p>A script extending <code>HammeriteChoiceProperty</code> calls <code>setup(initial, choices, allow_empty)</code> where it called
+<code>super(...)</code>, and one is made with <code>HammeriteChoiceProperty.create(initial, choices, allow_empty = true)</code>.
+Everything else a game hangs on the editor - <code>register_property_editor</code>, <code>register_property_choices</code>,
+<code>register_cell_overlay</code>, <code>add_toolbar_button</code>, <code>register_workspace</code> and the rest - takes a <code>Callable</code>, as before.</p>
+<p><strong>A coroutine answers a <code>Variant</code>.</strong> A native method cannot await, so the editor's coroutines run on a stack of
+their own on the main thread and give the thread back where the script awaited, as the lightmapper's do. Awaited,
+each answers what it did; not awaited, it answers its result when it never had to wait, and otherwise a
+<code>HammeriteEditorCoroutine</code>'s <code>finished</code> signal that carries it. <code>HammeriteMapEditor.save_map()</code>, <code>save_map_to()</code>,
+<code>prompt_save_map_as()</code>, <code>autosave()</code>, <code>new_map()</code>, <code>open_map_at()</code>, <code>prompt_load_map()</code> and
+<code>prompt_unsaved_changes()</code>, and <code>HammeriteTextureBrowser.refresh()</code>:</p>
+<pre><code class="language-gdscript">if await editor.save_map() == OK: ...    # as in 1.x
+</code></pre>
+<p><strong>Names that would hide the engine's</strong> take a suffix: a <code>Window</code>'s <code>min_size</code>, so <code>MIN_SIZE</code> of the texture
+browser, the command launcher, the entity search and the manual browser is <code>min_size_constant()</code>; and
+<code>Node.get_viewport()</code>, so <code>HammeriteMapEditor</code>'s and the editor cameras' <code>viewport</code> property has the accessors
+<code>get_viewport_value()</code> and <code>set_viewport_value()</code> (the property keeps its name; a tool's <code>viewport</code> is unchanged).</p>
+<p><strong>Static variables:</strong> <code>HammeritePropertyEditor.label_width</code> is <code>get_label_width()</code> / <code>set_label_width()</code>, and
+<code>HammeriteObjectSelection.individual_key</code> <code>get_individual_key()</code> / <code>set_individual_key()</code>.
+<code>HammeriteNavigationTool.CRAMPED_CLEARANCE</code>, a <code>static var</code> while the tool was a script, is <code>cramped_clearance()</code>.</p>
+<p><strong>Inner classes:</strong></p>
+<table>
+<thead>
+<tr>
+<th>1.x</th>
+<th>2.0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>HammeriteEditorTool.SimpleToolPopup</code></td>
+<td><code>HammeriteEditorToolSimpleToolPopup</code></td>
+</tr>
+<tr>
+<td><code>HammeriteManual.SearchHit</code></td>
+<td><code>HammeriteManualSearchHit</code></td>
+</tr>
+<tr>
+<td><code>HammeriteManualPage.Heading</code></td>
+<td><code>HammeriteManualPageHeading</code> (<code>HammeriteManualPage.headings</code> holds them)</td>
+</tr>
+<tr>
+<td><code>HammeriteCommandMatcher.Entry</code></td>
+<td><code>HammeriteCommandMatcherEntry</code></td>
+</tr>
+<tr>
+<td><code>HammeriteEditorHandles.Offered</code></td>
+<td><code>HammeriteEditorHandlesOffered</code></td>
+</tr>
+<tr>
+<td><code>HammeriteDarkMissionImporter.DarkObject</code></td>
+<td><code>HammeriteDarkMissionImporterDarkObject</code></td>
+</tr>
+<tr>
+<td><code>HammeriteDarkMissionImporter.DarkPatrol</code></td>
+<td><code>HammeriteDarkMissionImporterDarkPatrol</code></td>
+</tr>
+<tr>
+<td><code>HammeriteArchGeometry.ArchSpec</code></td>
+<td><code>HammeriteArchGeometryArchSpec</code></td>
+</tr>
+<tr>
+<td><code>HammeriteEntityBrowser.EntityBrowserItem</code></td>
+<td><code>HammeriteEntityBrowserEntityBrowserItem</code></td>
+</tr>
+<tr>
+<td><code>HammeriteMessageLog.LogEntry</code></td>
+<td><code>HammeriteMessageLogLogEntry</code></td>
+</tr>
+</tbody>
+</table>
+<p>The importer's objects and patrols are typed: <code>object.patrol</code> is a <code>HammeriteDarkMissionImporterDarkPatrol</code>, and
+<code>importer.objects</code>, <code>importer.patrols</code> and <code>importer.player_start</code> hold the two classes. After 2.0.0 the importer is in
+no release, only the dev package a checkout builds (<code>tools/build_native.sh dev</code>, #279). The other inner classes are
+internal, which nothing outside the library names: <code>HammeritePrefabBrowser.PrefabBrowserItem</code>,
+<code>HammeritePropBrowser.PropGrid</code>, <code>HammeriteManualTabs.Tab</code>, <code>HammeriteCellPreview2D.WallDrawing</code>,
+<code>HammeriteVertexTool.VertexIndex</code>, <code>HammeriteFaceEditTool.FaceAttributes</code>, the dock's <code>Strip</code>, <code>Chevron</code> and
+<code>DropZone</code>, the importer's <code>DarkSurface</code>, <code>DarkCell</code>, <code>WorldrepLayout</code>, <code>BrushRecord</code> and <code>Piece</code>, and the map
+editor's private <code>_GizmoPresenter</code> and <code>_SaveShield</code> and the save status's <code>_Spinner</code>.
+<code>HammeritePropertyEditor._DocumentedLabel</code> is <code>HammeritePropertyEditorDocumentedLabel</code>.</p>
+<p>A few signatures take one of these classes as a <code>RefCounted</code>, since an inner class could not be named where they
+are declared; the object passed is the class above, as before: <code>HammeriteArchGeometry</code>'s functions and
+<code>HammeriteArchBrushTool.build_spec()</code> a <code>HammeriteArchGeometryArchSpec</code>, <code>HammeriteCommandMatcher</code>,
+<code>HammeriteCommandLauncher</code> (and its <code>entry_chosen</code> signal) and <code>HammeriteMapEditor.launcher_entries()</code> and
+<code>remember_launched()</code> a <code>HammeriteCommandMatcherEntry</code>, <code>HammeriteEditorHandles</code> a <code>HammeriteEditorHandlesOffered</code>,
+and <code>HammeriteManualTabs.tabs</code> its tabs.</p>
+<p><strong>Made with <code>create()</code>:</strong> <code>HammeriteArchBrushTool.create(editor)</code>, <code>HammeriteAudioPortalTool.create(editor)</code>, <code>HammeriteBrush2D.create(brush, map_2d, cam_2d, settings)</code>, <code>HammeriteBrushTool.create(editor)</code>, <code>HammeriteCellPreview2D.create(map_2d, cam_2d)</code>, <code>HammeriteChoiceProperty.create(initial, choices, allow_empty = true)</code>, <code>HammeriteClipTool.create(editor)</code>, <code>HammeriteCommandMatcherEntry.create(entry_id, entry_label, entry_run)</code>, <code>HammeriteConeBrushTool.create(editor)</code>, <code>HammeriteContextMenu.create(map_editor)</code>, <code>HammeriteCubeBrushTool.create(editor)</code>, <code>HammeriteCurveProperty.create(initial = null)</code>, <code>HammeriteCylinderBrushTool.create(editor)</code>, <code>HammeriteDecalTool.create(editor)</code>, <code>HammeriteDockBox.create(box_id, box_title, box_content)</code>, <code>HammeriteDockColumn.create(column_side)</code>, <code>HammeriteEditorCamera.create(cam)</code>, <code>HammeriteEditorCommand.create(command_id, command_label, command_action)</code>, <code>HammeriteEditorHandles.create(editor)</code>, <code>HammeriteEditorHandlesOffered.create(handle_owner, offered)</code>, <code>HammeriteEditorTool.create(editor)</code>, <code>HammeriteEntity2D.create(entity, map_2d)</code>, <code>HammeriteEntityBrowserEntityBrowserItem.create(type_name, props)</code>, <code>HammeriteEntityFacing.create(turned, handle_color = Color(1, 0.8, 0.25, 1))</code>, <code>HammeriteEntityTool.create(editor)</code>, <code>HammeriteExtrudeTool.create(editor, origin)</code>, <code>HammeriteFaceEditTool.create(editor, popup)</code>, <code>HammeriteFaceHighlight3D.create(colors = null)</code>, <code>HammeriteFaceMoveTool.create(editor, origin)</code>, <code>HammeriteFragmentOutlines2D.create(chunks, layer, map_2d)</code>, <code>HammeriteGrid.create(div = 1.0)</code>, <code>HammeriteLightmapTool.create(editor)</code>, <code>HammeriteManualBrowser.create(the_manual, the_workspace = null)</code>, <code>HammeriteManualRenderer.create(manual)</code>, <code>HammeriteMap2D.create(editor, cam_2d)</code>, <code>HammeriteMapSave.create(of, to)</code>, <code>HammeriteMarqueeSelection2D.create(cam, mode)</code>, <code>HammeriteMessageLogLogEntry.create(msg, ts, t)</code>, <code>HammeriteNarrowState.create(map_ref, visible_brushes, visible_entities = null)</code>, <code>HammeriteNavigationTool.create(editor)</code>, <code>HammeritePickResult.create(e, b, f)</code>, <code>HammeritePolygonTool.create(editor)</code>, <code>HammeritePrefabTool.create(editor)</code>, <code>HammeritePropTool.create(editor)</code>, <code>HammeritePropertyItem.create(default_value, hint = null)</code>, <code>HammeriteQuadViewportContainer.create(editor)</code>, <code>HammeriteRampBrushTool.create(editor)</code>, <code>HammeriteScreenLines.create(dedupe = false, added = null)</code>, <code>HammeriteSelectTool.create(editor)</code>, <code>HammeriteSkyTool.create(editor)</code>, <code>HammeriteStairBrushTool.create(editor)</code>, <code>HammeriteTerrainTool.create(editor)</code>, <code>HammeriteTransformHelper.create(transform_origin, camera, transform_grid)</code>, <code>HammeriteTransformTool.create(editor, mode)</code>, <code>HammeriteVariantProperty.create(initial = null)</code>, <code>HammeriteVertexGizmo.create(editor)</code>, <code>HammeriteVertexTool.create(editor)</code> - every argument with the default it had. Without arguments, <code>new()</code> still works.</p>
+<p><strong>Constants that are methods now:</strong></p>
+<ul>
+<li><code>HammeriteAudioEditorExtension</code>: <code>MENU_COMMAND</code> → <code>menu_command()</code></li>
+<li><code>HammeriteAudioPortalTool</code>: <code>PICK_RADIUS</code> → <code>pick_radius()</code>, <code>OUTLINE_OFFSET</code> → <code>outline_offset()</code></li>
+<li><code>HammeriteTransformGizmo3D</code>: <code>AXIS_REACH</code> → <code>axis_reach()</code></li>
+<li><code>HammeriteVertexGizmo</code>: <code>PICK_RADIUS</code> → <code>pick_radius()</code>, <code>HANDLE_SIZE</code> → <code>handle_size()</code>, <code>HANDLE_HOVER_SCALE</code> → <code>handle_hover_scale()</code>, <code>HANDLE_TINT</code> → <code>handle_tint()</code>, <code>HANDLE_TINT_HOVERED</code> → <code>handle_tint_hovered()</code></li>
+<li><code>HammeriteVoidWindowOverlay3D</code>: <code>COLOR</code> → <code>color()</code>, <code>LIFT</code> → <code>lift()</code></li>
+<li><code>HammeriteBrush2D</code>: <code>DETAIL_OUTLINE</code> → <code>detail_outline()</code></li>
+<li><code>HammeriteCellPreview2D</code>: <code>WALL_HALF_WIDTH</code> → <code>wall_half_width()</code>, <code>PORTAL_HALF_WIDTH</code> → <code>portal_half_width()</code></li>
+<li><code>HammeriteCommandMatcher</code>: <code>NO_MATCH</code> → <code>no_match()</code>, <code>AT_LABEL_START</code> → <code>at_label_start()</code>, <code>AT_WORD_START</code> → <code>at_word_start()</code>, <code>AS_INITIALS</code> → <code>as_initials()</code>, <code>INSIDE_LABEL</code> → <code>inside_label()</code>, <code>IN_ORDER</code> → <code>in_order()</code>, <code>IN_MENU_OR_KEYWORDS</code> → <code>in_menu_or_keywords()</code>, <code>PER_WORD_ALONG</code> → <code>per_word_along()</code>, <code>RECENT</code> → <code>recent()</code></li>
+<li><code>HammeriteMapEditorCore</code>: <code>ANY_TYPE</code> → <code>any_type()</code></li>
+<li><code>HammeriteEditorCamera2D</code>: <code>CAMERA_OFFSET</code> → <code>camera_offset()</code>, <code>ENTITY_PICK_MARGIN_PX</code> → <code>entity_pick_margin_px()</code>, <code>DRAG_THRESHOLD</code> → <code>drag_threshold()</code>, <code>ZOOM_TIMEOUT</code> → <code>zoom_timeout()</code></li>
+<li><code>HammeriteEditorCamera3D</code>: <code>DRAG_THRESHOLD</code> → <code>drag_threshold()</code>, <code>MAX_PAN_DELTA</code> → <code>max_pan_delta()</code>, <code>ORBIT_DISTANCE</code> → <code>orbit_distance()</code>, <code>ORBIT_PITCH_LIMIT</code> → <code>orbit_pitch_limit()</code>, <code>PICK_DISTANCE</code> → <code>pick_distance()</code></li>
+<li><code>HammeriteEditorHandles</code>: <code>GRAB_RADIUS</code> → <code>grab_radius()</code>, <code>RADIUS</code> → <code>radius()</code>, <code>HOVER_LIGHTEN</code> → <code>hover_lighten()</code></li>
+<li><code>HammeriteEditorWorkspace</code>: <code>PATH</code> → <code>path()</code>, <code>SETTLE</code> → <code>settle()</code></li>
+<li><code>HammeriteEntity2D</code>: <code>DEFAULT_SIZE</code> → <code>default_size()</code>, <code>CENTRE_DOT</code> → <code>centre_dot()</code></li>
+<li><code>HammeriteEntityFacing</code>: <code>ID</code> → <code>id()</code>, <code>REACH_PAST_BOX</code> → <code>reach_past_box()</code>, <code>LEAST_REACH</code> → <code>least_reach()</code></li>
+<li><code>HammeriteFacePicking</code>: <code>COINCIDENT_DISTANCE</code> → <code>coincident_distance()</code></li>
+<li><code>HammeriteFragmentOutlines2D</code>: <code>HALF_WIDTH</code> → <code>half_width()</code></li>
+<li><code>HammeriteGrid</code>: <code>MIN_DIVISION</code> → <code>min_division()</code>, <code>MAX_DIVISION</code> → <code>max_division()</code></li>
+<li><code>HammeriteEditorCommands</code>: <code>FILE</code> → <code>file()</code>, <code>EDIT</code> → <code>edit()</code>, <code>SELECTION</code> → <code>selection()</code>, <code>VIEW</code> → <code>view()</code>, <code>VIEWPORT_3D</code> → <code>viewport_3d()</code>, <code>TOOLS</code> → <code>tools()</code>, <code>HELP</code> → <code>help()</code>, <code>MENU_ORDER</code> → <code>menu_order()</code>, <code>CTX_ENTITY</code> → <code>ctx_entity()</code>, <code>CTX_INSTANCE</code> → <code>ctx_instance()</code>, <code>CTX_BRUSH</code> → <code>ctx_brush()</code>, <code>CTX_FACE</code> → <code>ctx_face()</code>, <code>CTX_SELECTION</code> → <code>ctx_selection()</code>, <code>CTX_VIEW</code> → <code>ctx_view()</code>, <code>CONTEXT_ORDER</code> → <code>context_order()</code></li>
+<li><code>HammeriteDarkMissionImporter</code>: <code>TEXELS_PER_SPAN</code> → <code>texels_per_span()</code>, <code>SPAN_UNITS</code> → <code>span_units()</code>, <code>WORLDREP_CHUNK</code> → <code>worldrep_chunk()</code>, <code>FIXED_SPAN</code> → <code>fixed_span()</code>, <code>SURFACE_PLANE_SLACK</code> → <code>surface_plane_slack()</code>, <code>NOT_DRAWN_RENDER_TYPES</code> → <code>not_drawn_render_types()</code>, <code>MOVING_LIGHT_MODES</code> → <code>moving_light_modes()</code>, <code>MATERIAL_SKY</code> → <code>material_sky()</code>, <code>MATERIAL_WATER</code> → <code>material_water()</code>, <code>MATERIAL_DEFAULT</code> → <code>material_default()</code></li>
+<li><code>HammeriteDarkPrimals</code>: <code>CUBE_POINTS</code> → <code>cube_points()</code>, <code>CUBE_FACES</code> → <code>cube_faces()</code>, <code>WEDGE_POINTS</code> → <code>wedge_points()</code>, <code>WEDGE_FACES</code> → <code>wedge_faces()</code>, <code>DODECAHEDRON_POINTS</code> → <code>dodecahedron_points()</code>, <code>DODECAHEDRON_FACES</code> → <code>dodecahedron_faces()</code></li>
+<li><code>HammeriteManual</code>: <code>INDEX</code> → <code>index()</code></li>
+<li><code>HammeriteManualBrowser</code>: <code>MIN_SIZE</code> → <code>min_size_constant()</code>, <code>MONO_FACES</code> → <code>mono_faces()</code></li>
+<li><code>HammeriteManualExport</code>: <code>ADDON_MANUAL_DIR</code> → <code>addon_manual_dir()</code>, <code>EXTRA_ROOTS_SETTING</code> → <code>extra_roots_setting()</code></li>
+<li><code>HammeriteManualRenderer</code>: <code>MISSING</code> → <code>missing()</code></li>
+<li><code>HammeriteMap2D</code>: <code>CUT_REACH</code> → <code>cut_reach()</code>, <code>OFF_CUT_ALPHA</code> → <code>off_cut_alpha()</code></li>
+<li><code>HammeriteMap2DGizmos</code>: <code>DASH_PIXELS</code> → <code>dash_pixels()</code></li>
+<li><code>HammeriteQuadViewportContainer</code>: <code>ENTITY_DRAG_KEY</code> → <code>entity_drag_key()</code>, <code>PROP_DRAG_KEY</code> → <code>prop_drag_key()</code>, <code>VIEW_MENU_MARGIN</code> → <code>view_menu_margin()</code>, <code>VIEW_NAMES</code> → <code>view_names()</code>, <code>HOLD_MARGIN</code> → <code>hold_margin()</code></li>
+<li><code>HammeriteRulerInteraction</code>: <code>RULER_WIDTH</code> → <code>ruler_width()</code>, <code>TICK_MAJOR_SIZE</code> → <code>tick_major_size()</code>, <code>TICK_MINOR_SIZE</code> → <code>tick_minor_size()</code>, <code>SLICE_GRAB</code> → <code>slice_grab()</code>, <code>AXES</code> → <code>axes()</code></li>
+<li><code>HammeriteBrushTool</code>: <code>DEFAULT_PLANE</code> → <code>default_plane()</code>, <code>DEFAULT_THICKNESS</code> → <code>default_thickness()</code></li>
+<li><code>HammeriteArchGeometry</code>: <code>EPSILON</code> → <code>epsilon()</code>, <code>MIN_ARC_DEGREES</code> → <code>min_arc_degrees()</code>, <code>MAX_ARC_DEGREES</code> → <code>max_arc_degrees()</code></li>
+<li><code>HammeritePropTool</code>: <code>PROP_CLASSNAME</code> → <code>prop_classname()</code>, <code>PROP_TYPE</code> → <code>prop_type()</code>, <code>DRAG_THRESHOLD</code> → <code>drag_threshold()</code></li>
+<li><code>HammeriteSelectTool</code>: <code>DOUBLE_CLICK_DISTANCE</code> → <code>double_click_distance()</code></li>
+<li><code>HammeriteStairBrushTool</code>: <code>MAX_STEP_HEIGHT</code> → <code>max_step_height()</code>, <code>ANGLE_EPSILON</code> → <code>angle_epsilon()</code>, <code>FLAT_EPSILON</code> → <code>flat_epsilon()</code></li>
+<li><code>HammeriteTerrainTool</code>: <code>RADIUS_STEP</code> → <code>radius_step()</code></li>
+<li><code>HammeriteTransformHelper</code>: <code>FACE_ON_LIMIT</code> → <code>face_on_limit()</code>, <code>COHERENT_NORMAL_LIMIT</code> → <code>coherent_normal_limit()</code></li>
+<li><code>HammeriteActiveTexturePanel</code>: <code>SIDE_MIN</code> → <code>side_min()</code>, <code>SIDE_MAX</code> → <code>side_max()</code></li>
+<li><code>HammeriteChoiceProperty</code>: <code>NOTHING</code> → <code>nothing()</code>, <code>POPUP_LIST_HEIGHT</code> → <code>popup_list_height()</code>, <code>POPUP_MIN_WIDTH</code> → <code>popup_min_width()</code></li>
+<li><code>HammeriteCommandLauncher</code>: <code>MIN_SIZE</code> → <code>min_size_constant()</code></li>
+<li><code>HammeriteCurveProperty</code>: <code>HEIGHT</code> → <code>height()</code>, <code>REACH</code> → <code>reach()</code></li>
+<li><code>HammeriteDockBox</code>: <code>DRAG_KEY</code> → <code>drag_key()</code></li>
+<li><code>HammeriteEditorCanvas</code>: <code>STEPS</code> → <code>steps()</code>, <code>MIN_SCALE</code> → <code>min_scale()</code>, <code>MAX_SCALE</code> → <code>max_scale()</code></li>
+<li><code>HammeriteEditorTheme</code>: <code>CANVAS</code> → <code>canvas()</code>, <code>SURFACE</code> → <code>surface()</code>, <code>RAISED</code> → <code>raised()</code>, <code>LINE</code> → <code>line()</code>, <code>LINE_BRIGHT</code> → <code>line_bright()</code>, <code>TEXT</code> → <code>text()</code>, <code>TEXT_DIM</code> → <code>text_dim()</code>, <code>TEXT_FAINT</code> → <code>text_faint()</code>, <code>ACCENT</code> → <code>accent()</code>, <code>ACCENT_SUNK</code> → <code>accent_sunk()</code>, <code>WARNING</code> → <code>warning()</code>, <code>DANGER</code> → <code>danger()</code>, <code>VARIANT</code> → <code>variant()</code></li>
+<li><code>HammeriteEntityBrowser</code>: <code>CELL</code> → <code>cell()</code>, <code>PICTURE_HEIGHT</code> → <code>picture_height()</code></li>
+<li><code>HammeriteEntitySearchPopup</code>: <code>MIN_SIZE</code> → <code>min_size_constant()</code></li>
+<li><code>HammeriteFaceLoopHelper</code>: <code>EPSILON</code> → <code>epsilon()</code></li>
+<li><code>HammeriteMeasurementLabels3D</code>: <code>PIXEL_SIZE</code> → <code>pixel_size()</code>, <code>UPRIGHT_LEEWAY</code> → <code>upright_leeway()</code></li>
+<li><code>HammeriteLayerTree</code>: <code>COLUMN_ICONS</code> → <code>column_icons()</code>, <code>COLUMN_ICON_SIZE</code> → <code>column_icon_size()</code>, <code>DRAG_KEY</code> → <code>drag_key()</code>, <code>ABSENT_COLOR</code> → <code>absent_color()</code>, <code>STALE_COLOR</code> → <code>stale_color()</code>, <code>UNBAKED_COLOR</code> → <code>unbaked_color()</code>, <code>BAKE_CHECK_DELAY</code> → <code>bake_check_delay()</code>, <code>MIN_HEIGHT</code> → <code>min_height()</code>, <code>MAX_HEIGHT</code> → <code>max_height()</code></li>
+<li><code>HammeriteLightmapToolPopup</code>: <code>PARAMETERS</code> → <code>parameters()</code>, <code>FALLOFF_MODES</code> → <code>falloff_modes()</code></li>
+<li><code>HammeriteMapEditor</code>: <code>ANY_TYPE</code> → <code>any_type()</code>, <code>PANEL_WIDTH_MIN</code> → <code>panel_width_min()</code>, <code>BROWSER_SHARE</code> → <code>browser_share()</code>, <code>ENTITY_SEARCH_SHARE</code> → <code>entity_search_share()</code>, <code>WIRED</code> → <code>wired()</code>, <code>LAUNCHER_SHARE</code> → <code>launcher_share()</code>, <code>AUTOSAVE_SECONDS</code> → <code>autosave_seconds()</code></li>
+<li><code>HammeriteMessageLogStatusLabel</code>: <code>FLASH_SECONDS</code> → <code>flash_seconds()</code></li>
+<li><code>HammeriteProblemBrowser</code>: <code>MIN_HEIGHT</code> → <code>min_height()</code>, <code>GRAPH_KIND_ORDER</code> → <code>graph_kind_order()</code>, <code>BAKE_KIND_ORDER</code> → <code>bake_kind_order()</code></li>
+<li><code>HammeritePropBrowser</code>: <code>CELL</code> → <code>cell()</code>, <code>PICTURE_HEIGHT</code> → <code>picture_height()</code></li>
+<li><code>HammeritePropertyEditor</code>: <code>LABEL_WIDTH_DEFAULT</code> → <code>label_width_default()</code>, <code>LABEL_WIDTH_MIN</code> → <code>label_width_min()</code></li>
+<li><code>HammeritePropertyEditorDocumentedLabel</code>: <code>WIDTH</code> → <code>width()</code></li>
+<li><code>HammeriteSelectionPanel</code>: <code>ICONS</code> → <code>icons()</code>, <code>PREFAB_BADGE</code> → <code>prefab_badge()</code></li>
+<li><code>HammeriteSelectionPropertyEditor</code>: <code>ENTITY_DOC_PREFIX</code> → <code>entity_doc_prefix()</code>, <code>RUNTIME_REFRESH_INTERVAL</code> → <code>runtime_refresh_interval()</code></li>
+<li><code>HammeriteSkyToolPopup</code>: <code>NUMBERS</code> → <code>numbers()</code>, <code>COLOURS</code> → <code>colours()</code></li>
+<li><code>HammeriteTextureBrowser</code>: <code>MIN_SIZE</code> → <code>min_size_constant()</code>, <code>ZOOM_STEP</code> → <code>zoom_step()</code></li>
+<li><code>HammeriteTextureBrowserItem</code>: <code>PER_UNIT</code> → <code>per_unit()</code>, <code>SMALLEST</code> → <code>smallest()</code>, <code>LARGEST</code> → <code>largest()</code>, <code>CAPTION</code> → <code>caption()</code>, <code>bg_texture</code> → <code>bg_texture()</code></li>
+<li><code>HammeriteTextureBrowserLayout</code>: <code>COLUMN</code> → <code>column()</code>, <code>MIN_ZOOM</code> → <code>min_zoom()</code>, <code>MAX_ZOOM</code> → <code>max_zoom()</code></li>
+<li><code>HammeriteToolHelpPanel</code>: <code>KEY_PATTERN</code> → <code>key_pattern()</code>, <code>PARAMETERS_OPEN</code> → <code>parameters_open()</code></li>
+<li><code>HammeriteUvEditor</code>: <code>SHAPE_COLOR</code> → <code>shape_color()</code>, <code>SHAPE_FILL_COLOR</code> → <code>shape_fill_color()</code>, <code>HANDLE_COLOR</code> → <code>handle_color()</code>, <code>PIVOT_COLOR</code> → <code>pivot_color()</code>, <code>HANDLE_RADIUS</code> → <code>handle_radius()</code>, <code>ROTATE_HANDLE_OFFSET</code> → <code>rotate_handle_offset()</code>, <code>FIT_MARGIN</code> → <code>fit_margin()</code>, <code>ZOOM_SPEED</code> → <code>zoom_speed()</code>, <code>MIN_ZOOM</code> → <code>min_zoom()</code>, <code>MAX_ZOOM</code> → <code>max_zoom()</code>, <code>PAN_SPEED</code> → <code>pan_speed()</code></li>
+<li><code>HammeriteVariantProperty</code>: <code>TYPES</code> → <code>types()</code></li>
+<li><code>HammeriteVolumeWheel</code>: <code>DEADZONE</code> → <code>deadzone()</code>, <code>RADIUS_INNER</code> → <code>radius_inner()</code>, <code>RADIUS_OUTER</code> → <code>radius_outer()</code></li>
+<li><code>HammeriteNavigationTool</code>: <code>ROUTE_ARRIVAL_TOLERANCE</code> → <code>route_arrival_tolerance()</code>, <code>ROUTE_COLOR</code> → <code>route_color()</code>, <code>LINK_COLORS</code> → <code>link_colors()</code></li>
+<li><code>HammeriteNavigationEditorExtension</code>: <code>MENU_COMMAND</code> → <code>menu_command()</code></li>
+</ul>
+<p><strong>The editor's three scenes are gone</strong>: <code>scenes/ui/property_editor.tscn</code>, <code>scenes/3d/vertex_gizmo.tscn</code> and
+<code>scenes/3d/transform_gizmo_3d.tscn</code>. Each class builds the same nodes itself: <code>HammeritePropertyEditor.new()</code>,
+<code>HammeriteVertexGizmo.create(editor)</code> and <code>HammeriteTransformGizmo3D.new()</code> where a game instanced the scene.</p>
+<p><strong>The autoloads are thin scripts over native classes.</strong> <code>HammeriteAudio</code> is <code>scripts/hammerite_audio.gd</code>, one line
+extending <code>HammeriteAudioAutoload</code>, and <code>HammeriteNavigation</code> <code>scripts/hammerite_navigation.gd</code> extending
+<code>HammeriteNavigationAutoload</code>: the same paths and uids, so a <code>project.godot</code> naming them is unchanged, and the same
+members, which <a href="/hammerite/docs/latest/api/HammeriteAudio.html">the reference</a> documents. <code>HammeriteEditor</code> stays a script, and makes the
+editor's classes by name so that it compiles in a game installed without the editor: its <code>editor</code> and <code>workspaces</code>
+are typed <code>Control</code>, and <code>integrate()</code> answers one. Assign it to a <code>HammeriteMapEditor</code> to have it typed.</p>
+<pre><code class="language-gdscript">var map_editor: HammeriteMapEditor = HammeriteEditor.integrate(self)   # as in 1.x; a cast now, not a type
+</code></pre>
+<p><strong>The migration knows the editor's scripts.</strong> The editor's scripts are deleted: a 1.x scene or resource naming
+one does not load until it is <a href="#migrating-a-project">migrated</a>, and <code>tools/migrate_to_2.sh</code> rewrites it. It places each of the 60 editor scripts whose class is a <code>Node</code> (the three
+scenes' scripts among them) as its native class, and writes the four <code>Resource</code>s a user's settings were saved as -
+<code>HammeriteEditorWorkspace</code>, <code>HammeriteMapEditorSettings</code>, <code>HammeriteGrid</code> and <code>HammeriteEditorColors</code> - as theirs.
+The audio and nav editor scripts are <code>RefCounted</code>, which no scene places. A library without the editor (the
+runtime package) has none of those classes, so a file naming one is reported skipped, with its classes and that
+the full package migrates it, rather than failed. The autoload scripts stay where they were and are left alone.</p>
+<p><strong>Defaults are never shared instances.</strong> The engine takes a class's defaults from one instance it keeps, so a
+property a constructor filled was everybody's default, and the Godot editor printed "Instantiated ... used as
+default value" for each as it opened. <code>HammeriteMap.probe_set</code> is null until the map has one - once it is lit, or
+read from a file that has one - and a map made with <code>HammeriteMap.new()</code> and saved writes no probe set where it
+wrote an empty one. <code>HammeriteMapEditorSettings.colors</code> is null until an editor uses the settings; an editor's own
+always have them. <code>HammeriteMapEditor.settings</code> is made the first time it is asked for.</p>
+<p><strong>City of Thieves</strong>, a worked example: what it changed to run on the native editor.</p>
+<ul>
+<li><code>HammeriteEditorTheme.CANVAS</code>, <code>TEXT</code>, <code>TEXT_DIM</code>, <code>TEXT_FAINT</code>, <code>ACCENT</code>, <code>WARNING</code> and <code>DANGER</code> are <code>canvas()</code>,
+  <code>text()</code>, <code>text_dim()</code>, <code>text_faint()</code>, <code>accent()</code>, <code>warning()</code> and <code>danger()</code>.</li>
+<li><code>HammeriteMapEditor.ANY_TYPE</code> is <code>any_type()</code>, in <code>register_property_editor(HammeriteMapEditor.any_type(), ...)</code>.</li>
+<li><code>HammeriteChoiceProperty.new(...)</code> and <code>HammeriteCurveProperty.new(...)</code> are <code>create(...)</code>, and
+  <code>HammeriteEditorHandles.new(editor)</code> <code>create(editor)</code>.</li>
+<li>Its spawn flags and light preset property controls override <code>_get_value</code>, <code>_set_value_no_signal</code>,
+  <code>_set_disabled</code> and <code>_set_indeterminate</code>, and drop their <code>set_value</code>; its resource picker, extending
+  <code>HammeriteChoiceProperty</code>, calls <code>setup(...)</code> where it called <code>super(...)</code>.</li>
+<li>Its patrol route tool calls <code>setup(editor)</code>, overrides <code>_get_tool_name</code> and <code>_get_status_text</code>, and makes its
+  panel with <code>HammeriteEditorToolSimpleToolPopup.new()</code>.</li>
+<li>Its Dark mission import names <code>HammeriteDarkMissionImporterDarkObject</code> and <code>HammeriteDarkMissionImporterDarkPatrol</code>,
+  and <code>HammeriteEditorHandles.gather()</code> answers <code>Array[HammeriteEditorHandlesOffered]</code>.</li>
+</ul>
+<h2 id="the-shapes-that-change">The shapes that change</h2>
+<p><strong>A static variable</strong> becomes a pair of static methods, <code>get_&lt;name&gt;()</code> and <code>set_&lt;name&gt;(value)</code>: GDScript
+reaches no static property of a native class.</p>
+<pre><code class="language-gdscript">HammeriteDataFile.last_error            # 1.x
+HammeriteDataFile.get_last_error()      # 2.0
+HammeriteSkybox.dome_material = sky     # 1.x
+HammeriteSkybox.set_dome_material(sky)  # 2.0
+</code></pre>
+<p><strong>A constant that is not an integer</strong> becomes a static method of its name in lower case: ClassDB binds only
+integer constants and enums. Integer constants and enums are unchanged (<code>HammeriteBrush.VolumeType.AIR</code>,
+<code>HammeriteMap.BakeState.BAKED</code>, <code>HammeriteCarving.PLANE</code>).</p>
+<pre><code class="language-gdscript">HammeriteDataFile.MAP_EXTENSION         # 1.x
+HammeriteDataFile.map_extension()       # 2.0
+</code></pre>
+<p>A <code>const</code> of your own made from one is a constant expression no longer, since a method call is not: make
+it a <code>static var</code> or a literal.</p>
+<pre><code class="language-gdscript">const BASE: String = HammeriteReferences.BASE              # 1.x
+static var BASE: String = HammeriteReferences.base()       # 2.0
+</code></pre>
+<p>The same goes for a <code>match</code> pattern, which has to be a constant: match the value itself (<code>&amp;"rotation"</code>).</p>
+<p><strong>An inner class</strong> becomes a class of its own, named owner and inner: GDExtension has no nested classes.
+Change every type annotation, <code>is</code>, typed array and <code>.new()</code> that names one.</p>
+<table>
+<thead>
+<tr>
+<th>1.x</th>
+<th>2.0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>HammeriteMap.BakeWarning</code></td>
+<td><code>HammeriteMapBakeWarning</code></td>
+</tr>
+<tr>
+<td><code>HammeriteMap.GraphWarning</code></td>
+<td><code>HammeriteMapGraphWarning</code></td>
+</tr>
+<tr>
+<td><code>HammeriteMap.LightingSnapshot</code></td>
+<td><code>HammeriteMapLightingSnapshot</code></td>
+</tr>
+<tr>
+<td><code>HammeriteMap.BVHHitResult</code></td>
+<td><code>HammeriteMapBVHHitResult</code></td>
+</tr>
+<tr>
+<td><code>HammeriteFace.UvAnchor</code></td>
+<td><code>HammeriteFaceUvAnchor</code></td>
+</tr>
+<tr>
+<td><code>HammeriteDataFile.ReadReport</code></td>
+<td><code>HammeriteDataFileReadReport</code></td>
+</tr>
+<tr>
+<td><code>HammeriteBVHBuilder.BVHNode</code></td>
+<td><code>HammeriteBVHBuilderBVHNode</code></td>
+</tr>
+<tr>
+<td><code>HammeriteSubtractiveCompiler.Result</code></td>
+<td><code>HammeriteSubtractiveCompilerResult</code></td>
+</tr>
+<tr>
+<td><code>HammeriteGizmoBuffer.Primitives</code></td>
+<td><code>HammeriteGizmoBufferPrimitives</code></td>
+</tr>
+<tr>
+<td><code>HammeritePrefab.Placement</code></td>
+<td><code>HammeritePrefabPlacement</code></td>
+</tr>
+<tr>
+<td><code>HammeriteLightmapBakeReport.PassSnapshot</code></td>
+<td><code>HammeriteLightmapBakeReportPassSnapshot</code></td>
+</tr>
+<tr>
+<td><code>HammeriteLightmapperDiagnosticReport.PassData</code></td>
+<td><code>HammeriteLightmapperDiagnosticReportPassData</code></td>
+</tr>
+<tr>
+<td><code>HammeriteLightmapper._Patch</code></td>
+<td><code>HammeriteLightmapperPatch</code> (made with <code>create(face, rect, world_rect, normal)</code>)</td>
+</tr>
+<tr>
+<td><code>HammeriteLightmapper._BakedDecal</code></td>
+<td><code>HammeriteLightmapperBakedDecal</code></td>
+</tr>
+<tr>
+<td><code>HammeriteNavigationRuntime.Prepared</code></td>
+<td><code>HammeriteNavigationRuntimePrepared</code></td>
+</tr>
+<tr>
+<td><code>HammeriteAudioRuntime.Changes</code></td>
+<td><code>HammeriteAudioRuntimeChanges</code></td>
+</tr>
+<tr>
+<td><code>HammeriteAudioMaterialSampler.WallSurvey</code></td>
+<td><code>HammeriteAudioMaterialSamplerWallSurvey</code></td>
+</tr>
+<tr>
+<td><code>HammeriteAudioManager._SoundData</code></td>
+<td><code>HammeriteAudioManagerSoundData</code></td>
+</tr>
+<tr>
+<td><code>HammeriteAudioManager._PositionalSoundData</code></td>
+<td><code>HammeriteAudioManagerPositionalSoundData</code></td>
+</tr>
+<tr>
+<td><code>HammeriteAudioManager._EnvironmentalSoundData</code></td>
+<td><code>HammeriteAudioManagerEnvironmentalSoundData</code></td>
+</tr>
+</tbody>
+</table>
+<p>Core's, audio's and nav's other inner classes are internal: <code>HammeriteMap.AuthoredFaces</code> and <code>VariantWorld</code> (both
+experimental in 1.x), <code>HammeriteLightmapPacker.Group</code> and <code>Row</code>, <code>HammeriteLightmapperState.Grid</code>,
+<code>HammeriteLightmapper._EdgeNeighbour</code>, <code>HammeriteDataFile._Reader</code> and <code>_Writer</code>, the compiler's (below),
+<code>HammeriteAudioAmbience.Bed</code>, <code>HammeriteAudioNodeGraph._Search</code> and <code>HammeriteNavigationMeshWriter._RoomGround</code>.</p>
+<p><code>HammeriteEntitySets</code>' own sets (<code>Everything</code>, <code>Lights</code>, <code>Logic</code>, <code>Movers</code>, <code>Scenes</code>, <code>Particles</code>) are
+internal classes nothing outside names: make them with <code>HammeriteEntitySets.lights()</code> and the rest, as
+before. Their constants moved onto <code>HammeriteEntitySets</code>: <code>Logic.TINT</code> is <code>logic_tint()</code>, <code>Logic.RELAY_ICON</code>
+<code>logic_relay_icon()</code> (and <code>TIMER_ICON</code>, <code>COUNTER_ICON</code>, <code>TOGGLE_ICON</code>, <code>AUTO_ICON</code> likewise),
+<code>Movers.TINT</code> <code>movers_tint()</code>, <code>Scenes.EMPTY_BOX</code> <code>scenes_empty_box()</code>, <code>Particles.TINT</code> <code>particles_tint()</code>.</p>
+<p><strong>A constructor that takes arguments</strong> becomes <code>static create(...)</code>: a native object is made with none. The
+arguments are named for what they are (<code>origin</code>, not <code>p_origin</code>). Without arguments, <code>new()</code> still works.</p>
+<pre><code class="language-gdscript">HammeriteSkyPropertySchema.new(&amp;&quot;clouds&quot;, &quot;Clouds&quot;)      # 1.x
+HammeriteSkyPropertySchema.create(&amp;&quot;clouds&quot;, &quot;Clouds&quot;)   # 2.0
+</code></pre>
+<p><strong>A coroutine</strong> cannot be a native method. <code>HammeritePrefab.generate_thumbnail()</code> and
+<code>HammeritePrefabSet.regenerate_all_thumbnails()</code> were coroutines; awaited, they answer as they did:</p>
+<pre><code class="language-gdscript">await prefab.generate_thumbnail(generator)        # true once preview_texture is set, as in 1.x
+await prefab_set.regenerate_all_thumbnails(generator)
+</code></pre>
+<p>The lightmapper's <code>bake()</code>, <code>quick_bake()</code>, <code>prepare()</code>, <code>transfer()</code> and <code>write_lightmaps()</code> were coroutines
+too, and are awaited as before:</p>
+<pre><code class="language-gdscript">var lightmapper := HammeriteLightmapper.create(map, settings)   # new(map, settings) in 1.x
+lightmapper.yield_to = get_tree()
+if await lightmapper.bake(progress) == OK:
+    HammeriteDataFile.write(map, path)
+</code></pre>
+<p>They run on a stack of their own on the main thread and give <code>yield_to</code> a frame where the script awaited one. What
+they answer is their answer when they never had to wait for a frame, and otherwise the signal
+<code>HammeriteLightmapper.finished(result)</code>, which carries it. Their return type is <code>Variant</code>.</p>
+<p>Not awaited, what the prefab methods answer is a <code>Signal</code> to await - <code>HammeritePrefab.thumbnail_generated(has_thumbnail)</code> and
+<code>HammeritePrefabSet.thumbnails_regenerated()</code> - while a generator that is a coroutine is still drawing, and the
+answer itself when it answered at once.</p>
+<p><strong>A script that extends a native class</strong> still does, and still overrides its virtuals; but it cannot call a
+bare virtual on an object that does not override it, so a native class with one binds a public method that
+calls it (<code>HammeriteEntitySet.extend_editor(editor)</code> for <code>_extend_editor</code>).</p>
+<p><strong>Containers are shared, as a script's were.</strong> A getter answers the object's own array or dictionary, typed
+as before, so changing it in place is changing the object - <code>entity.properties[&amp;"name"] = "x"</code> works as it
+did. A typed array or dictionary of a moved class is typed by the class's name now, not by its script:
+<code>get_typed_class_name()</code> answers <code>&amp;"HammeriteBrush"</code> where <code>get_typed_script()</code> answered the script.</p>
+<h2 id="class-by-class">Class by class</h2>
+<p><strong>Static variables</strong></p>
+<ul>
+<li><code>HammeriteMap.local_cache_directory</code> → <code>get_local_cache_directory()</code> / <code>set_local_cache_directory()</code></li>
+<li><code>HammeriteBrush.surface_material</code>, <code>sky_material</code> → <code>get_</code>/<code>set_</code> each; <code>chroma_bleed</code> → <code>get_chroma_bleed()</code>,
+  set with the existing <code>set_chroma_bleed(value, map = null)</code></li>
+<li><code>HammeriteFace.looks_log</code> → <code>get_looks_log()</code>, the log itself (cleared in place); <code>looks_log_epoch</code> →
+  <code>get_looks_log_epoch()</code> / <code>set_looks_log_epoch()</code></li>
+<li><code>HammeriteSubtractiveCompiler.parallel</code>, <code>verify_program</code> → <code>get_</code>/<code>set_</code> each</li>
+<li><code>HammeriteDataFile.last_error</code>, <code>last_warnings</code> → <code>get_</code>/<code>set_</code> each</li>
+<li><code>HammeriteSkybox.dome_material</code> → <code>get_dome_material()</code> / <code>set_dome_material()</code></li>
+<li><code>HammeriteTextureLibrary.search_paths</code>, <code>fallback_name</code>, <code>generation</code> → <code>get_</code>/<code>set_</code> each (the array
+  <code>get_search_paths()</code> answers is the library's own); <code>HammeriteModelLibrary.library</code> → <code>get_library()</code> /
+  <code>set_library()</code></li>
+<li><code>HammeriteNavigationRuntime.profiles</code> → <code>get_profiles()</code> / <code>set_profiles()</code>, which warns of a bad table as the
+  setter did. The <code>HammeriteNavigation</code> autoload's <code>profiles</code> is unchanged.</li>
+<li><code>HammeriteAudioRuntime.changes</code>, <code>sound_types</code>, <code>mix_settings</code>, <code>materials</code>, <code>presets</code>, <code>material_resolver</code>,
+  <code>ambient_resolver</code>, <code>sounds</code> and <code>ambient_bus</code> → <code>get_</code>/<code>set_</code> each: <code>HammeriteAudioRuntime.get_sounds().search_paths
+  = [...]</code>, <code>HammeriteAudioRuntime.set_material_resolver(resolver)</code>. The setters do what assigning did (a new table
+  reaches every manager, new presets declare the brush schema again). The <code>HammeriteAudio</code> autoload's properties are
+  unchanged. A multi-line lambda assigned to one is given a name first and passed to the setter.</li>
+<li><code>HammeriteAudioPortalProperties.NAMESPACE</code> → <code>get_namespace()</code></li>
+</ul>
+<p><strong>Constants that are methods now</strong></p>
+<ul>
+<li><code>HammeriteBrush</code>: <code>BRUSH_MATERIAL</code> → <code>stock_brush_material()</code>, <code>GHOSTED_BRUSH_MATERIAL</code> → <code>stock_ghosted_brush_material()</code>, <code>TRANSPARENT_BRUSH_MATERIAL</code> → <code>stock_transparent_brush_material()</code>, <code>CLIP_EPSILON</code> → <code>clip_epsilon()</code>, <code>SKY_MATERIAL</code> → <code>stock_sky_material()</code>, <code>VERTEX_WELD_EPSILON</code> → <code>vertex_weld_epsilon()</code></li>
+<li><code>HammeriteDataFile</code>: <code>MAP_EXTENSION</code> → <code>map_extension()</code>, <code>CACHE_EXTENSION</code> → <code>cache_extension()</code>, <code>PREFAB_SET_EXTENSION</code> → <code>prefab_set_extension()</code>, <code>_MAGIC</code> → <code>_magic()</code>, <code>_TAG</code> → <code>_tag()</code></li>
+<li><code>HammeriteDecalProjection</code>: <code>SURFACE_OFFSET</code> → <code>surface_offset()</code>, <code>ENTITY_CLASSNAME</code> → <code>entity_classname()</code>, <code>PLANE_TOLERANCE</code> → <code>plane_tolerance()</code>, <code>FACING_TOLERANCE</code> → <code>facing_tolerance()</code></li>
+<li><code>HammeriteEntity</code>: <code>EDITOR_ONLY_PREFIX</code> → <code>editor_only_prefix()</code>, <code>KEY_BOX_BASIS</code> → <code>key_box_basis()</code>, <code>KEY_ROTATION</code> → <code>key_rotation()</code>, <code>KEY_SCALE</code> → <code>key_scale()</code>, <code>LEAST_SCALE</code> → <code>least_scale()</code></li>
+<li><code>HammeriteEntityFiles</code>: <code>SCENES</code> → <code>scenes()</code>, <code>IMAGES</code> → <code>images()</code></li>
+<li><code>HammeriteEntitySets</code>: <code>LIGHTS</code> → <code>lights_id()</code>, <code>LOGIC</code> → <code>logic_id()</code>, <code>MOVERS</code> → <code>movers_id()</code>, <code>SCENES</code> → <code>scenes_id()</code>, <code>PARTICLES</code> → <code>particles_id()</code>, <code>EVERYTHING</code> → <code>everything_id()</code></li>
+<li><code>HammeriteEntityTypeRegistry</code>: <code>KEY_ROTATION_AXES</code> → <code>key_rotation_axes()</code>, <code>POINT_ENTITY_BASES</code> → <code>point_entity_bases()</code>, <code>BRUSH_ENTITY_BASES</code> → <code>brush_entity_bases()</code></li>
+<li><code>HammeriteFace</code>: <code>TEXELS_PER_UNIT</code> → <code>texels_per_unit()</code>, <code>_FORMER_NAMES</code> → <code>_former_names()</code>, <code>UV_LOCK_PROPERTY</code> → <code>uv_lock_property()</code></li>
+<li><code>HammeriteLightingProperties</code>: <code>SCHEMA_ID</code> → <code>schema_id()</code>, <code>KEY_CASTS_SHADOW</code> → <code>key_casts_shadow()</code>, <code>KEY_BAKE_STATIC</code> → <code>key_bake_static()</code>, <code>KEY_ENTITY_BAKE_STATIC</code> → <code>key_entity_bake_static()</code>, <code>KEY_ENTITY_CASTS_SHADOW</code> → <code>key_entity_casts_shadow()</code>, <code>DEFAULT_CASTS_SHADOW</code> → <code>default_casts_shadow()</code>, <code>DEFAULT_BAKE_STATIC</code> → <code>default_bake_static()</code></li>
+<li><code>HammeriteMap</code>: <code>BASE_ENTITY_PROPS</code> → <code>base_entity_props()</code>, <code>BOUNDARY_NUDGE</code> → <code>boundary_nudge()</code>, <code>CELL_HASH_CELL_SIZE</code> → <code>cell_hash_cell_size()</code>, <code>LIGHT_TYPES</code> → <code>light_types()</code>, <code>PROBE_GATHER_RADIUS_CELLS</code> → <code>probe_gather_radius_cells()</code>, <code>PARTIAL_BAKE_FINGERPRINT</code> → <code>partial_bake_fingerprint()</code>, <code>WALL_OCCLUDER_THICKNESS</code> → <code>wall_occluder_thickness()</code>, <code>VOID_WALLS_KEY</code> → <code>void_walls_key()</code>, <code>SLIVER_GAP_MAX</code> → <code>sliver_gap_max()</code></li>
+<li><code>HammeritePortal</code>: <code>PROPERTY_NAMESPACE</code> → <code>property_namespace()</code>, <code>NAME_FIELD</code> → <code>name_field()</code></li>
+<li><code>HammeriteReferences</code>: <code>TEXTURE</code> → <code>texture()</code>, <code>DECAL</code> → <code>decal()</code>, <code>MODEL</code> → <code>model()</code>, <code>ENTITY_CLASS</code> → <code>entity_class()</code>, <code>BASE</code> → <code>base()</code></li>
+<li><code>HammeriteSkybox</code>: <code>STOCK_DOME_MATERIAL</code> → <code>stock_dome_material()</code>, <code>_FORMER_NAMES</code> → <code>_former_names()</code></li>
+<li><code>HammeriteSubtractiveCompiler</code>: <code>EPSILON_DIST</code> → <code>epsilon_dist()</code>, <code>MIN_CONTACT_AREA</code> → <code>min_contact_area()</code>, <code>WALL_GRID_CELL_SIZE</code> → <code>wall_grid_cell_size()</code>, <code>EXPOSURE_OFFSET</code> → <code>exposure_offset()</code>, <code>EXPOSURE_INSET</code> → <code>exposure_inset()</code></li>
+<li><code>HammeriteWaterProperties</code>: <code>SCHEMA_ID</code> → <code>schema_id()</code>, <code>KEY_CLARITY</code> → <code>key_clarity()</code>, <code>KEY_TINT</code> → <code>key_tint()</code>, <code>KEY_DISTURBANCE</code> → <code>key_disturbance()</code>, <code>DEFAULT_CLARITY</code> → <code>default_clarity()</code>, <code>DEFAULT_TINT</code> → <code>default_tint()</code>, <code>DEFAULT_DISTURBANCE</code> → <code>default_disturbance()</code></li>
+<li><code>HammeriteShaderGlobals</code>: every name, <code>EXPOSURE</code> → <code>exposure()</code>, <code>ALL</code> → <code>all()</code>, <code>DEFAULTS</code> → <code>defaults()</code> and so on</li>
+<li><code>HammeriteLightCurve</code>: <code>UNIFORM_LUT</code> → <code>uniform_lut()</code> and the rest of the <code>UNIFORM_*</code>, <code>MIN_LIT_LEVEL</code> → <code>min_lit_level()</code></li>
+<li><code>HammeriteTextureLibrary</code>: <code>DECALS</code> → <code>decals()</code>, <code>EXTENSIONS</code> → <code>extensions()</code></li>
+<li><code>HammeriteCompileProgress</code>: <code>STAGES</code> → <code>stages()</code></li>
+<li><code>HammeriteBrushFillRegistry</code>: <code>WATER</code> → <code>water()</code>, <code>STOCK_WATER_MATERIAL</code> → <code>stock_water_material()</code></li>
+<li><code>HammeriteVersion</code>: <code>STRING</code> → <code>string()</code></li>
+<li><code>HammeriteAABBGrid</code>: <code>DEFAULT_CELL_SIZE</code> → <code>default_cell_size()</code></li>
+<li><code>HammeriteGizmoBuffer</code>: <code>BOX_EDGES</code> → <code>box_edges()</code></li>
+<li><code>HammeriteTerrain</code>: <code>ID_PROPERTY</code> → <code>id_property()</code>, <code>CELL_PROPERTY</code> → <code>cell_property()</code>, <code>HALF_PROPERTY</code> → <code>half_property()</code>, <code>SPACING_PROPERTY</code> → <code>spacing_property()</code>, <code>MIN_THICKNESS</code> → <code>min_thickness()</code>, <code>UP_EPSILON</code> → <code>up_epsilon()</code>, <code>EDGE_EPSILON</code> → <code>edge_epsilon()</code> (<code>MAX_CELLS</code> is an integer and stays)</li>
+<li><code>HammeriteSkyPresets</code>: <code>EARLY_MORNING</code> → <code>early_morning()</code>, <code>NOON</code> → <code>noon()</code>, <code>EVENING</code> → <code>evening()</code>, <code>DUSK</code> → <code>dusk()</code>, <code>NIGHT</code> → <code>night()</code>, <code>OVERCAST_GREYING</code> → <code>overcast_greying()</code>, <code>OVERCAST_LIGHT</code> → <code>overcast_light()</code>, <code>OVERCAST_SUN</code> → <code>overcast_sun()</code>, <code>TIMES</code> → <code>times()</code></li>
+<li><code>HammeriteBrushEntityLighting</code>: <code>BLEND_SECONDS</code> → <code>blend_seconds()</code>, <code>REGATHER_DISTANCE</code> → <code>regather_distance()</code></li>
+<li><code>HammeriteDecalSurface</code>: <code>COVERAGE_THRESHOLD</code> → <code>coverage_threshold()</code></li>
+<li><code>HammeriteLightmapLight</code>: <code>STATIC_LIGHT_TYPES</code> → <code>static_light_types()</code>, <code>DIRECTIONAL_LIGHT_TYPES</code> → <code>directional_light_types()</code>, <code>SPOT_LIGHT_TYPES</code> → <code>spot_light_types()</code>, <code>DEFAULT_DIRECTION</code> → <code>default_direction()</code></li>
+<li><code>HammeriteLightmapPacker</code>: <code>SHARED_ATLAS_FILL</code> → <code>shared_atlas_fill()</code></li>
+<li><code>HammeriteLightmapperAntialias</code>: <code>RANGE_SIGMA</code> → <code>range_sigma()</code></li>
+<li><code>HammeriteLightmapperDiagnosticReport</code>: <code>DEFAULT_DIRECTORY</code> → <code>default_directory()</code></li>
+<li><code>HammeriteLightmapperState</code>: <code>WATER_CLUSTER_SIZE</code> → <code>water_cluster_size()</code>, <code>CLUSTER_SIZE</code> → <code>cluster_size()</code>, <code>CLUSTER_NEAR</code> → <code>cluster_near()</code></li>
+<li><code>HammeriteMeshTriangleBVH</code>: <code>BOX_SLACK</code> → <code>box_slack()</code></li>
+<li>
+<p><code>HammeriteLightmapper</code>: <code>_CAUSTIC_WATER_DEPTH_RANGE</code> → <code>_caustic_water_depth_range()</code></p>
+</li>
+<li>
+<p><code>HammeriteMap3D</code>: <code>NEAR_PLANE</code> → <code>near_plane()</code>, <code>FAR_PLANE</code> → <code>far_plane()</code></p>
+</li>
+<li><code>HammeriteCarriedLight3D</code>: <code>METRES_PER_UNIT</code> → <code>metres_per_unit()</code>, <code>UNITS_PER_METRE</code> → <code>units_per_metre()</code> (<code>SHADOW_LAYER_NUMBER</code> and <code>SHADOW_LAYER</code> are integers and stay)</li>
+<li><code>HammeriteSkyRenderer</code>: <code>SKY_MATERIAL</code> → <code>stock_sky_material()</code>; its static <code>sky_material</code> → <code>get_sky_material()</code> / <code>set_sky_material()</code></li>
+<li><code>HammeriteDecal3D</code>: <code>DECAL_MATERIAL</code> → <code>decal_material()</code>; <code>HammeriteSpotLight3D</code>: <code>UNBOUNDED_CONE_LENGTH</code> → <code>unbounded_cone_length()</code></li>
+<li><code>HammeriteStaticBrush3D</code>: <code>DETAIL_TINT</code> → <code>detail_tint()</code>; <code>HammeriteAirBrushPreview3D</code>: <code>IDLE_COLOR</code> → <code>idle_color()</code>, <code>SELECTED_COLOR</code> → <code>selected_color()</code></li>
+<li><code>HammeritePropModel</code>: <code>BRUSH_MATERIAL</code> → <code>brush_material()</code>, <code>TEXTURE_KEY_PREFIX</code> → <code>texture_key_prefix()</code>; <code>HammeritePropScene</code>: <code>EMPTY_BOX</code> → <code>empty_box()</code></li>
+<li><code>HammeriteThumbnailGenerator</code>: <code>THUMBNAIL_BACKGROUND</code> → <code>thumbnail_background()</code>, <code>DEFAULT_ENTITY_BOX</code> → <code>default_entity_box()</code>, <code>DEFAULT_ENTITY_TINT</code> → <code>default_entity_tint()</code>, <code>FRAMED_LOOSELY</code> → <code>framed_loosely()</code>, <code>FRAMED_TIGHTLY</code> → <code>framed_tightly()</code></li>
+<li>
+<p><code>HammeriteEntityTargets</code>: <code>WIRE_COLOR</code> → <code>wire_color()</code>; <code>HammeriteLogicEntity</code>, <code>HammeriteMover</code>, <code>HammeritePathCorner</code>: <code>TINT</code> → <code>tint()</code>; <code>HammeriteLogicAuto</code>, <code>HammeriteLogicCounter</code>, <code>HammeriteLogicRelay</code>, <code>HammeriteLogicTimer</code>, <code>HammeriteLogicToggle</code>: <code>ICON</code> → <code>icon()</code></p>
+</li>
+<li>
+<p><code>HammeriteNavigationBuilder</code>: <code>MAX_WALKABLE_SLOPE_DEGREES</code> → <code>max_walkable_slope_degrees()</code>, <code>NAV_ROLE_KEY</code> → <code>nav_role_key()</code> (<code>PropRole</code> is an enum and stays)</p>
+</li>
+<li><code>HammeriteNavigationLinkBuilder</code>: <code>DEFAULT_STEP_HEIGHT</code> → <code>default_step_height()</code>, <code>MAX_DROP</code> → <code>max_drop()</code>, <code>MAX_JUMP_SPAN</code> → <code>max_jump_span()</code>, <code>MAX_JUMP_RISE</code> → <code>max_jump_rise()</code>, <code>ENTITY_TYPE</code> → <code>entity_type()</code>, <code>TARGET_KEY</code> → <code>target_key()</code>, <code>NAME_KEY</code> → <code>name_key()</code>, <code>ONE_WAY_KEY</code> → <code>one_way_key()</code></li>
+<li><code>HammeriteNavigationLinkData</code>: <code>NO_PORTAL</code> → <code>no_portal()</code> (<code>Kind</code> is an enum and stays); <code>HammeriteNavigationAgentProfile</code>: <code>MEASURED_SHORT</code> → <code>measured_short()</code></li>
+<li><code>HammeriteNavigationBrushProperties</code>: <code>SCHEMA_ID</code> → <code>schema_id()</code>, <code>KEY_TRAVEL_COST</code> → <code>key_travel_cost()</code>, <code>DEFAULT_TRAVEL_COST</code> → <code>default_travel_cost()</code></li>
+<li><code>HammeriteNavigationRuntime</code>: <code>STAGES</code> → <code>stages()</code>, <code>DERIVED_KEY</code> → <code>derived_key()</code> (<code>CACHE_VERSION</code> is an integer and stays)</li>
+<li><code>HammeriteNavigationMeshWriter</code>: <code>LINK_NAME_META</code> → <code>link_name_meta()</code> (<code>DEFAULT_LAYERS</code> stays); <code>HammeriteNavigationFloorEdges</code>: <code>BUCKET_SIZE</code> → <code>bucket_size()</code></li>
+<li><code>HammeriteNavigationOverlay3D</code>: <code>LIFT</code> → <code>lift()</code>, <code>OPEN_COLOR</code> → <code>open_color()</code>, <code>CRAMPED_COLOR</code> → <code>cramped_color()</code>, <code>UNUSABLE_COLOR</code> → <code>unusable_color()</code>, <code>FALLBACK_CRAMPED_CLEARANCE</code> → <code>fallback_cramped_clearance()</code>; <code>HammeriteNavigationTool.CRAMPED_CLEARANCE</code>, made of it, is <code>cramped_clearance()</code></li>
+</ul>
+<p>A key used as a <code>match</code> pattern has to be a constant: match the property's own name (<code>&amp;"nav_link_target"</code>), or compare
+against <code>HammeriteNavigationLinkBuilder.target_key()</code> outside the <code>match</code>.</p>
+<ul>
+<li><code>HammeriteAudioRuntime</code>: <code>GRAPH_KEY</code> → <code>graph_key()</code>, <code>AMBIENCE</code> → <code>ambience()</code>, <code>SOUND_FILE</code> → <code>sound_file()</code></li>
+<li><code>HammeriteAudioBrushProperties</code>: <code>SCHEMA_ID</code> → <code>schema_id()</code>, <code>KEY_ZONE_TYPE</code> → <code>key_zone_type()</code>, <code>KEY_PRESET</code> → <code>key_preset()</code>, <code>KEY_WEATHER_EXPOSURE</code> → <code>key_weather_exposure()</code>, <code>KEY_EXCLUDE</code> → <code>key_exclude()</code>, <code>KEY_AMBIENT</code> → <code>key_ambient()</code>, <code>KEY_AMBIENT_VOLUME</code> → <code>key_ambient_volume()</code> (<code>PRESET_AUTO</code> and <code>ZoneTypeChoice</code> stay)</li>
+<li><code>HammeriteAudioManager</code>: <code>BUS_NAME</code> → <code>bus_name()</code>, <code>_SILENT_DB</code> → <code>_silent_db()</code>, <code>_MIN_PREDELAY_MSEC</code> → <code>_min_predelay_msec()</code>; a game's <code>const</code> made of <code>BUS_NAME</code> is a <code>static var</code></li>
+<li><code>HammeriteAudioCalculations</code>: <code>SPEED_OF_SOUND</code>, <code>AIR_ABSORPTION_COEFFICIENT</code>, <code>OPEN_AIR_CUTOFF_HZ</code>, <code>MIN_CUTOFF_HZ</code>, <code>OCCLUSION_DB_PER_OCTAVE</code>, <code>DETOUR_UNITS_PER_OCTAVE</code>, <code>AIR_UNITS_PER_OCTAVE</code> → the same in lower case (<code>open_air_cutoff_hz()</code>...)</li>
+<li><code>HammeriteAudioWater</code>: <code>SURFACE_LOSS_DB</code> → <code>surface_loss_db()</code>, <code>SURFACE_CUTOFF_HZ</code> → <code>surface_cutoff_hz()</code>, <code>UNDERWATER_CUTOFF_HZ</code> → <code>underwater_cutoff_hz()</code></li>
+<li><code>HammeriteAudioZone</code>: <code>METRES_PER_UNIT</code> → <code>metres_per_unit()</code>, <code>SPEED_OF_SOUND</code> → <code>speed_of_sound()</code> (<code>ZoneType</code> stays)</li>
+<li><code>HammeriteAudioMaterialSampler</code>: <code>SKY</code> → <code>sky()</code>, <code>OPEN_AIR_SKY_SHARE</code> → <code>open_air_sky_share()</code>, <code>SMALL_ROOM_SIZE</code> → <code>small_room_size()</code>, <code>LARGE_ROOM_SIZE</code> → <code>large_room_size()</code>, <code>CORRIDOR_ASPECT</code> → <code>corridor_aspect()</code>, <code>CORRIDOR_MAX_WIDTH</code> → <code>corridor_max_width()</code></li>
+<li><code>HammeriteAudioInterpolator</code>: <code>PRESET_BLEND_RADIUS</code> → <code>preset_blend_radius()</code>; <code>HammeriteAudioPortalProperties</code>: <code>DEFAULT_MAX_ATTENUATION_DB</code> → <code>default_max_attenuation_db()</code>, <code>DEFAULT_OCCLUSION</code> → <code>default_occlusion()</code></li>
+</ul>
+<p><strong>Made with <code>create()</code></strong></p>
+<p><code>HammeriteDecalProjection.create(origin, normal, size, angle)</code>, <code>HammeriteBrushPropertySchema.create(id,
+label = "")</code>, <code>HammeriteSkyPropertySchema.create(id, label = "")</code>, <code>HammeriteDataFileWrite.create(...)</code>,
+<code>HammeriteBrushFill.create(...)</code>, <code>HammeriteReferenceChange.create(...)</code>, <code>HammeriteEditorHandle.create(...)</code>,
+<code>HammeriteQuad3D.create(...)</code>, <code>HammeriteOrientedBoundingBox.create(...)</code>, <code>HammeriteAABBGrid.create(...)</code>,
+<code>HammeriteEntityBox.create(...)</code>, <code>HammeriteAssetLibrary.create(type, extensions, convert)</code>,
+<code>HammeriteVertex.create(position, faces = [])</code>, <code>HammeriteBakeOccluder.create(owner_entity, world_vertices)</code>,
+<code>HammeriteBrushEntityLighting.create(node, drives_itself = false)</code>, <code>HammeriteRoomVisibility.create(map)</code>,
+<code>HammeriteWorldrepCompile.create(map)</code>, <code>HammeriteLightmapper.create(map, bake_settings = null)</code>,
+<code>HammeriteLightmapperState.create(map)</code>, <code>HammeriteLightmapLight.create(entity)</code>,
+<code>HammeriteLightmapPacker.create(texture_size, padding)</code>, <code>HammeriteLightmapFaceData.create(face, bounds, world_bounds,
+verts_3d, verts_2d, lightmap_scale)</code>, <code>HammeriteMeshChartData.create(entity, chart_index, triangles)</code>,
+<code>HammeriteMeshTriangleData.create(entity, tri_index, surface_index, vertices, lightmap_scale, uvs = [], texture = null,
+normal = Vector3.ZERO)</code>, <code>HammeriteLightmapperPatch.create(face, rect, world_rect, normal)</code>,
+<code>HammeriteStaticBrush3D.create(brush)</code>, <code>HammeriteAirBrushPreview3D.create(brush)</code>,
+<code>HammeriteAudioMaterial.create(name, reverb, absorption, transmission_loss, freq_bias, category)</code>,
+<code>HammeriteAudioPreset.create(id, name, room_size, damping, spread, wet, dry, abs_low, abs_mid, abs_high)</code>,
+<code>HammeriteAudioNode.create(node_id, pos)</code>, <code>HammeriteAudioHearing.create(mixer)</code>, <code>HammeriteAudioAmbience.create(map,
+parent)</code> - every argument with the default it had.</p>
+<p><strong>Other signatures</strong></p>
+<ul>
+<li><code>HammeriteMap.native_cell_index()</code> answers a <code>RefCounted</code> rather than an <code>Object</code>. Handed out as a bare
+  <code>Object</code>, a reference-counted index lost a reference each time a script asked for it.</li>
+<li><code>HammeriteLayer</code>'s name is its <code>name</code> property as before; its accessors are <code>_get_name()</code>/<code>_set_name()</code>, so
+  as not to hide <code>Resource.get_name()</code>.</li>
+<li>
+<p><code>HammeriteBrushEntity._brushes</code> keeps its name - it is what a file stores - with <code>_get_brushes()</code>/
+  <code>_set_brushes()</code>, answering the stored array; <code>get_brushes()</code> answers a copy, as before.</p>
+</li>
+<li>
+<p><code>HammeriteEntityTypeRegistry.is_entity_class(class, brush)</code> takes a class's name (<code>&amp;"HammeriteSpotLight3D"</code>) as well
+  as a script, and <code>entity_classes()</code> lists the native entity classes beside the scripts'.</p>
+</li>
+<li>The thumbnail generator's <code>generate_thumbnail()</code>, <code>generate_entity_thumbnail()</code> and <code>generate_mesh_thumbnail()</code> were
+  coroutines: each answers the picture at once where it has it, and otherwise a signal to await - awaited, as before.</li>
+<li><code>HammeriteBrush3DHelper.BrushFollower</code> is the internal class <code>HammeriteBrushFollower</code>, which a script cannot name.</li>
+<li><code>HammeritePlatform.path</code> and <code>HammeritePathCorner.next</code> keep their names; their accessors are <code>get_path_name()</code>/
+  <code>set_path_name()</code> and <code>get_next_name()</code>/<code>set_next_name()</code>, since <code>Node</code> has <code>get_path()</code>.</li>
+<li><code>HammeriteAudioPreset</code>, <code>HammeriteAudioZone</code> and <code>HammeriteAudioPortal</code> keep their <code>name</code> property; its accessors
+  are <code>_get_name()</code>/<code>_set_name()</code>, so as not to hide <code>Resource.get_name()</code>.</li>
+<li><strong>A script on <code>HammeriteEnvSound</code> or <code>HammeriteEnvSoundEnvironment</code></strong> overrides <code>_play_sound()</code>, a virtual now, and
+  calls <code>play_sound()</code> - the class's own - where it called <code>super()</code>. It drops <code>super()</code> from <code>_apply_entity_property</code>
+  (the class applies its own properties first) and <code>super(delta)</code> from <code>_process</code> (the class does its frame from its
+  notification). The privates a game reached are bound under their own names: <code>_sound_file</code>, <code>_volume</code>, <code>_autoplay</code>,
+  <code>_loop</code>, <code>_sound_handle</code>, <code>_is_simulating</code>, <code>_runtime_properties</code>, and <code>_max_distance</code>, <code>_attenuation_scale</code>,
+  <code>_use_audio_propagation</code>, <code>_debug_draw</code> or <code>_direction</code>; <code>_stop_sound()</code> and <code>_get_map_3d()</code> are bound methods.</li>
+</ul>
+<p>```gdscript
+  # 1.x
+  func _play_sound() -&gt; void:
+    _sound_file = pick_a_recording()
+    super()</p>
+<p># 2.0
+  func _play_sound() -&gt; void:
+    _sound_file = pick_a_recording()
+    play_sound()
+  <code>``
+- **</code>HammeriteAudioReceiver3D<code>and</code>HammeriteAudioEmitter3D<code>** do their tree and frame work from notifications, so a
+  script on one keeps its own</code>_enter_tree<code>,</code>_ready<code>,</code>_process<code>and</code>_exit_tree<code>and cannot call</code>super()<code>in them.
+  A receiver registers again once ready, after a script's</code>_ready<code>has set its types, which is what</code>super()<code>at the end
+  of</code>_ready` was for: drop it.</p>
+<h2 id="the-native-kernels-classes-and-switches">The native kernel's classes and switches</h2>
+<p>1.x's native kernel was optional: a set of <code>HammeriteNative*</code> classes that GDScript called where one was built,
+each behind a switch that turned it off. In 2.0 the library is the classes, so the kernel's classes are their C++
+and the switches are gone with the GDScript they chose between. None of it was supported API - the classes were
+undocumented and the switches tagged experimental - and there is no project setting to remove: 1.x had none.</p>
+<table>
+<thead>
+<tr>
+<th>1.x kernel class</th>
+<th>In 2.0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>HammeriteNativeKernel</code>, and <code>HammeriteNative.KERNEL_VERSION</code>, <code>KERNEL_SOURCE</code>, <code>KERNEL_CLASS</code>, <code>OLDEST_CLASS</code> and <code>verdict()</code></td>
+<td><code>HammeriteLibrary</code>: the package the library was built as (<code>package()</code>), its <code>modules()</code>, and the hash of the sources it was built from (<code>source()</code>), which <code>HammeriteNative.problem()</code> compares with a checkout's. There is no version to raise: <code>tools/build_native.sh --bump</code> is gone, and <code>HammeriteNative.source_hash()</code> takes the modules too. Both are experimental</td>
+</tr>
+<tr>
+<td><code>HammeriteNativeAABBGrid</code></td>
+<td><code>HammeriteAABBGrid</code> itself</td>
+</tr>
+<tr>
+<td><code>HammeriteNativeCarver</code>, <code>HammeriteNativeWalls</code>, <code>HammeriteNativePortals</code></td>
+<td><code>HammeriteSubtractiveCompiler</code>'s own C++</td>
+</tr>
+<tr>
+<td><code>HammeriteNativePickIndex</code>, <code>HammeriteNativeOccluders</code></td>
+<td><code>HammeriteMap</code>'s own C++</td>
+</tr>
+<tr>
+<td><code>HammeriteNativeCellIndex</code></td>
+<td>still registered, as the index <code>HammeriteMap.native_cell_index()</code> answers (a <code>RefCounted</code>); internal</td>
+</tr>
+<tr>
+<td><code>HammeriteNativeBrushes</code></td>
+<td>still registered, as <code>HammeriteBrush</code>'s corners; internal</td>
+</tr>
+<tr>
+<td><code>HammeriteNativeProbeGrid</code></td>
+<td><code>HammeriteLightProbeSet</code>'s own C++</td>
+</tr>
+<tr>
+<td><code>HammeriteNativeTexels</code>, <code>HammeriteNativeGather</code>, <code>HammeriteNativeAtlas</code></td>
+<td>the lightmapper's own C++</td>
+</tr>
+<tr>
+<td><code>HammeriteNativeSoundRoutes</code>, <code>HammeriteNativePortalWalks</code></td>
+<td><code>HammeriteAudioNodeGraph</code>'s and <code>HammeriteAudioGraphBuilder</code>'s own C++, in the audio module</td>
+</tr>
+<tr>
+<td><code>HammeriteNativeNavGround</code>, <code>HammeriteNativeNavLinks</code></td>
+<td><code>HammeriteNavigationFloorEdges</code>' and <code>HammeriteNavigationLinkBuilder</code>'s own C++, in the nav module; <code>HammeriteNativeNavLinks.probe()</code> is <code>HammeriteNavigationLinkBuilder._probe()</code></td>
+</tr>
+<tr>
+<td><code>HammeriteNativeScreenLines</code></td>
+<td><code>HammeriteScreenLines</code>' own C++, in the editor module</td>
+</tr>
+</tbody>
+</table>
+<p>Kernel classes added after 1.0 went the same way: <code>HammeriteNativeDataReader</code> (<code>HammeriteDataFile</code>),
+<code>HammeriteNativeRoomMesh</code> (<code>HammeriteMap3D</code>), <code>HammeriteNativeSurfaceJoins</code> (the compiler), and
+<code>HammeriteNativeLegacyResources</code>, whose reading of 1.x files is <code>HammeriteMigration</code>'s now. <code>HammeriteNative</code>
+itself stays a script, experimental, saying whether the library is loaded and current (<code>available</code>, <code>has()</code>,
+<code>problem()</code>, <code>package()</code>, <code>modules()</code>).</p>
+<table>
+<thead>
+<tr>
+<th>1.x switch</th>
+<th>the kernel class it named</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>HammeriteAABBGrid.use_native</code>, <code>NATIVE_CLASS</code></td>
+<td><code>HammeriteNativeAABBGrid</code></td>
+</tr>
+<tr>
+<td><code>HammeriteBrush.native_corners</code>, <code>NATIVE_BRUSHES</code></td>
+<td><code>HammeriteNativeBrushes</code></td>
+</tr>
+<tr>
+<td><code>HammeriteMap.native_cells</code>, <code>NATIVE_CELL_INDEX</code></td>
+<td><code>HammeriteNativeCellIndex</code></td>
+</tr>
+<tr>
+<td><code>HammeriteMap.native_picking</code>, <code>NATIVE_PICK_INDEX</code></td>
+<td><code>HammeriteNativePickIndex</code></td>
+</tr>
+<tr>
+<td><code>HammeriteMap.native_occluders</code>, <code>NATIVE_OCCLUDERS</code></td>
+<td><code>HammeriteNativeOccluders</code></td>
+</tr>
+<tr>
+<td><code>HammeriteSubtractiveCompiler.native_walls</code>, <code>native_carving</code>, <code>native_portals</code> and their <code>NATIVE_WALLS</code>, <code>NATIVE_CARVER</code>, <code>NATIVE_PORTALS</code></td>
+<td>the walls, carver and portals</td>
+</tr>
+<tr>
+<td><code>HammeriteLightProbeSet.native_grid</code>, <code>NATIVE_PROBE_GRID</code></td>
+<td><code>HammeriteNativeProbeGrid</code></td>
+</tr>
+<tr>
+<td><code>HammeriteLightmapperAntialias.use_native</code>, <code>NATIVE_ATLAS</code></td>
+<td><code>HammeriteNativeAtlas</code></td>
+</tr>
+<tr>
+<td><code>HammeriteLightmapperState.native_gather</code>, <code>NATIVE_GATHER</code></td>
+<td><code>HammeriteNativeGather</code></td>
+</tr>
+<tr>
+<td><code>HammeriteLightmapper._native_texels</code>, <code>_NATIVE_TEXELS</code>, <code>_native_atlas</code></td>
+<td><code>HammeriteNativeTexels</code>, <code>HammeriteNativeAtlas</code></td>
+</tr>
+<tr>
+<td><code>HammeriteAudioNodeGraph.native_routes</code>, <code>NATIVE_SOUND_ROUTES</code></td>
+<td><code>HammeriteNativeSoundRoutes</code></td>
+</tr>
+<tr>
+<td><code>HammeriteAudioGraphBuilder.native_walks</code>, <code>NATIVE_PORTAL_WALKS</code></td>
+<td><code>HammeriteNativePortalWalks</code></td>
+</tr>
+<tr>
+<td><code>HammeriteNavigationFloorEdges.native</code>, <code>NATIVE_KERNEL</code></td>
+<td><code>HammeriteNativeNavGround</code></td>
+</tr>
+<tr>
+<td><code>HammeriteNavigationLinkBuilder._native_jumps</code>, <code>_NATIVE_NAV_LINKS</code></td>
+<td><code>HammeriteNativeNavLinks</code></td>
+</tr>
+<tr>
+<td><code>HammeriteScreenLines.native_lines</code>, <code>NATIVE_SCREEN_LINES</code>, <code>native_screen_lines()</code></td>
+<td><code>HammeriteNativeScreenLines</code></td>
+</tr>
+</tbody>
+</table>
+<p>And those added after 1.0: <code>HammeriteSubtractiveCompiler.native_joins</code>, <code>HammeriteDataFile.native_fill</code>,
+<code>HammeriteMap3D.native_room_mesh</code>, <code>NATIVE_ROOM_MESH</code>, <code>_use_native_rooms</code> and <code>_inward_surfaces_natively()</code>. What
+the suites held each kernel to against the GDScript is now a fixture of what the GDScript answered, recorded
+before it went (<code>tests/fixtures/kernels.json</code> in core, audio, nav and the editor).</p>
+<h2 id="what-the-suites-reached">What the suites reached</h2>
+<p>Private members are not API, but a game reaching into one should know where it went.</p>
+<ul>
+<li>Bound under the same name: <code>HammeriteMap._worldrep_compiler</code>, <code>_worldrep_valid</code>, <code>_graph_valid</code>,
+  <code>_lighting_memo</code>, <code>_void_chunks</code>, <code>_sliver_bounds</code>, <code>_sliver_gap_of</code>, <code>_rebuild_baked_light_registry()</code>,
+  <code>_as_variant()</code>, <code>_face_address()</code>, <code>_read_worldrep_cache()</code>, <code>_middles_of()</code>, <code>_sliver_gaps()</code>;
+  <code>HammeriteBrush._fill_uniforms()</code>; <code>HammeriteFace._plane</code>, <code>_texture</code>, <code>_lightmap</code>, <code>_uv_transform</code>,
+  <code>_lightmap_scale</code>, <code>_brush</code>; <code>HammeriteSubtractiveCompiler._program_memo</code>, <code>_brush_volume()</code>, <code>_air_regions()</code>,
+  <code>_punched()</code>, <code>_section()</code>; <code>HammeriteDataFile._replace_file()</code>.</li>
+<li>Bound under the same name, the lightmapper's: <code>HammeriteLightmapper._state</code>, <code>_packer</code>, <code>_map</code>, <code>_lightmaps</code>, <code>_rd</code>,
+  <code>_quick</code>, <code>_decals</code>, <code>_mesh_charts</code>, <code>_mesh_triangles_in</code> (read-only where only read), <code>_get_faces()</code>,
+  <code>_unwrap_mesh_entity()</code>, <code>_apply_decals()</code>, <code>_sky_radiance()</code>, <code>_report_bake_warnings()</code>, <code>_save_diagnostic_image()</code>,
+  <code>_swizzle_mesh_triangle_light_assignments()</code> and the statics <code>_fold_light()</code>, <code>_padding_light()</code>,
+  <code>_padding_sample_point()</code>, <code>_permute_patch_slots()</code>, <code>_caustic_water_color()</code>, <code>_dilate_caustic_water()</code>,
+  <code>_baked_light_of()</code>, <code>_write_face()</code>; <code>HammeriteLightmapperState._face_exterior_cache</code>, <code>_mesh_bvh</code>, <code>_pass_faces</code>,
+  <code>_water_emitter_rows</code>, <code>_face_is_exterior()</code>, <code>_fill_exterior_cache()</code>, <code>_gather_grids()</code> and the statics
+  <code>_face_transparency()</code>, <code>_face_uv_bytes()</code>, <code>_mask_layer_size()</code>; <code>HammeriteLightmapPatches._faces</code>, <code>_face_of</code>,
+  <code>_triangle_of</code>, <code>_texture_rects</code>, <code>_world_rects</code>, <code>_normals</code>, <code>_areas</code>, <code>_texture_centers</code>, <code>_flags</code>, <code>_padding_lights</code>
+  (read-only); <code>HammeriteLightmapLight._sky_followed()</code>. The rest of their private members are their own C++.</li>
+<li>Changed: <code>HammeriteMap._variant_worlds[id].compiler</code> → <code>_variant_compiler(id)</code>;
+  <code>HammeriteSubtractiveCompiler._solid_frag_cache</code> and <code>_air_frag_cache</code> → <code>_carve_fragments()</code> (every cached
+  fragment) and <code>_carve_serial(brush_id)</code> (0 when not cached, a number that changes on each carve);
+  <code>HammeriteBrush._warned_undeclared</code> → <code>_get_warned_undeclared()</code>; <code>HammeriteDataFile._MAGIC</code>, <code>_TAG</code> →
+  <code>_magic()</code>, <code>_tag()</code>; <code>HammeriteDataFile._upgrades</code> → <code>_get_upgrades()</code>; <code>HammeriteReferences._resolvers</code> →
+  <code>_get_resolvers()</code>; <code>HammeriteBakeOccluders._providers</code> → <code>_get_providers()</code>; <code>HammeriteWorldrepCompile._stages</code>
+  → <code>_get_stages()</code> (a copy, each stage <code>[names, run]</code> as before) and <code>_under_way</code> → <code>_get_under_way()</code>.</li>
+<li>
+<p>Gone: <code>HammeriteMap._pick_index</code>, <code>_rebuild_cell_hash()</code>; the compiler's <code>_bface_cache</code>, <code>_kept_by_air</code>,
+  <code>_air_region_grid()</code>, <code>_classify_fragment_faces()</code>, <code>_kept_owners()</code>, <code>FaceEntry</code>, <code>WallMachinery</code> and the
+  rest of its inner classes, which are its own C++.</p>
+</li>
+<li>
+<p>The node classes: what a test drove a frame with is a method of its own, since a native class answers
+  <code>_process</code> as a notification: <code>HammeriteMap3D._run_frame(delta)</code>, <code>HammeriteDynamicLight3D._run_frame(delta)</code>, and
+  <code>_step(delta)</code> on the logic entities and the movers (their <code>_process</code> and <code>_physics_process</code>). The privates the suites
+  read are bound under their own names (<code>HammeriteMap3D._entity_index</code>, <code>_room_meshes</code>, <code>_cull_from()</code>...), as
+  properties where they were variables. <code>HammeriteMap3D.native_room_mesh</code>, <code>NATIVE_ROOM_MESH</code>, <code>_use_native_rooms</code> and
+  <code>_inward_surfaces_natively()</code> are gone with the script they chose against, and <code>HammeriteNativeRoomMesh</code> is the
+  map's own C++, no longer registered.</p>
+</li>
+<li>
+<p>hammerite-nav (#270): <strong><code>HammeriteNavigationFloorEdges.native</code> and <code>NATIVE_KERNEL</code>, and
+  <code>HammeriteNavigationLinkBuilder._native_jumps</code> and <code>_NATIVE_NAV_LINKS</code>, are gone</strong> with the GDScript they chose
+  between, and <code>HammeriteNativeNavGround</code> and <code>HammeriteNativeNavLinks</code> are nav's own C++, no longer registered; what
+  the suite held them to is <code>hammerite-nav/tests/fixtures/kernels.json</code>, recorded from the GDScript. The arithmetic
+  check <code>HammeriteNativeNavLinks.probe()</code> is <code>HammeriteNavigationLinkBuilder._probe()</code>, and moved from core's suite
+  to nav's. <code>HammeriteNavigationRuntime._attached</code> → <code>_get_attached()</code>, the dictionary itself;
+  <code>HammeriteNavigationMeshWriter._BODY_SLACK</code> → <code>_body_slack()</code>. Bound under the same name:
+  <code>HammeriteNavigationLinkBuilder._index_surfaces()</code>, <code>_window_links()</code>, <code>_drop_links()</code>, <code>_jump_links()</code>,
+  <code>_authored_links()</code> and <code>_obstructions</code>, <code>HammeriteNavigationAgentProfiles._values_of()</code>,
+  <code>HammeriteNavigationLinkEntity3D._label</code> and <code>_editor_active</code>. Gone: the link builder's <code>_linked_pairs</code>, the GDScript
+  fallbacks the kernels had replaced (<code>_furthest_from</code>, <code>_edges_near</code>, <code>_weld_index</code>, <code>_split_edges</code>,
+  <code>_closest_points</code>, <code>_crossing_is_open</code>, <code>_ground_between</code>) and the mesh writer's <code>_RoomGround</code>.</p>
+</li>
+<li>
+<p>hammerite-audio (#269): <strong><code>HammeriteAudioNodeGraph.native_routes</code> and <code>NATIVE_SOUND_ROUTES</code>, and
+  <code>HammeriteAudioGraphBuilder.native_walks</code> and <code>NATIVE_PORTAL_WALKS</code>, are gone</strong> with the GDScript searches they chose
+  between, and <code>HammeriteNativeSoundRoutes</code> and <code>HammeriteNativePortalWalks</code> are audio's own C++, moved out of core and
+  no longer registered; what the suite held them to is <code>hammerite-audio/tests/fixtures/kernels.json</code>, recorded from the
+  GDScript. Bound under the same name: the manager's <code>_active_sounds</code>, <code>_audio_graph</code>, <code>_listener_position</code>,
+  <code>_ambience</code> and most of its private methods (<code>_hearing_path()</code>, <code>_voice_bus()</code>, <code>_voice_cutoff()</code>,
+  <code>_apply_absorption_tilt()</code>, <code>_hash_position_pair()</code>, <code>_use_graph()</code>, <code>_get_or_load_stream()</code>...); the emitter's and
+  the receiver's <code>_handle</code> and <code>_manager</code> (read-only); the graph's <code>node_map</code>, <code>zone_by_region</code> and <code>spatial_index</code>.
+  The graph's <code>_rank</code>, <code>_id_at</code>, <code>_preset_by_id</code> and <code>_Search</code>, and the builder's private steps, are their own C++.</p>
+</li>
+<li>
+<p>hammerite-editor (#271): <strong><code>HammeriteScreenLines.native_lines</code> and <code>native_screen_lines()</code> are gone</strong>, and core's
+  <code>HammeriteNativeScreenLines</code> with them: the editor's <code>HammeriteScreenLines</code> lays its lines itself, and what the suite
+  held the kernel to is <code>hammerite-editor/tests/fixtures/kernels.json</code>, recorded from the script. The editor's private
+  members are its own C++, but for those its suites and the audio and nav editor tools reach, which are bound under the
+  same names. A property the script wrote plainly, beside a <code>set_&lt;name&gt;()</code> that does more (a brush tool's remembered
+  <code>sides</code>, which <code>set_sides()</code> makes an undo step of; the map editor's <code>active_tool</code>, which <code>set_active_tool()</code>
+  switches), has <code>_set_&lt;name&gt;_value()</code> as its setter.</p>
+</li>
+</ul>
+<h2 id="experimental-classes">Experimental classes</h2>
+<p>The port kept the experimental classes' API as it kept the supported ones', with the same shapes changed. What
+else changed in them between 1.0 and 2.0, beside new members and arguments added with defaults:</p>
+<ul>
+<li><strong><code>HammeriteBrushTool</code> and the brush tools</strong> (the cube, cylinder, cone, ramp, stair, arch and polygon tools): their
+  <code>on_*</code> steps (<code>on_update_bounding_box()</code>, <code>on_finish()</code>...) are the classes' own and not virtuals, so a script cannot
+  override them, and one that does does not compile. A tool of a game's own extends <code>HammeriteEditorTool</code>.
+  <code>on_bounding_box_resized()</code> is gone: the tool calls <code>on_bounding_box_changed()</code> and shows the size itself. The
+  cylinder tool's Inverse is gone (<code>inverse</code>, <code>inverse_brushes</code>, <code>set_inverse()</code>, <code>update_inverse_brushes()</code>): an air
+  cylinder is the round hole it made.</li>
+<li><code>HammeriteClipTool</code>: <code>finish_pick_points_state()</code> is gone, and <code>add_preview_brush(brush)</code> takes no source brush id.</li>
+<li><code>HammeriteSubtractiveCompiler.surface_edge_key()</code> is gone: a surface's edges are keyed by their face and their index
+  in its vertices (<code>HammeriteMap.get_worldrep_surface_edges()</code>).</li>
+<li><code>HammeriteLightmapPacker.add_face()</code> answers nothing, and <code>get_texture_size()</code> a <code>Vector2</code>.</li>
+<li><code>HammeriteMapEditorCore.KEY_ROTATION_AXES</code> is <code>HammeriteEntityTypeRegistry.key_rotation_axes()</code>, and
+  <code>HammeriteDecalTool.DECAL_CLASSNAME</code> <code>HammeriteDecalProjection.entity_classname()</code>.</li>
+<li>Constants that held a loaded resource are gone, each class loading its own: <code>HammeriteEntity2D.FONT</code>,
+  <code>HammeriteMap2DGizmos.font</code>, <code>HammeriteGizmoRenderer3D.OUTLINE_MATERIAL</code>, <code>HammeriteScreenLines.SHADER</code>, and
+  <code>HammeriteVertexGizmo.HANDLE_TEXTURE</code> and <code>HANDLE_TEXTURE_SELECTED</code>.</li>
+<li><code>HammeriteFaceEditorPopup.UV_LOCK_DEFAULT</code>, <code>UV_LOCK_ON</code> and <code>UV_LOCK_OFF</code> are integer constants of the same values,
+  no longer an unnamed enum.</li>
+<li><code>HammeriteNative</code> (<a href="#the-native-kernels-classes-and-switches">above</a>).</li>
+</ul>
+<h2 id="behaviour">Behaviour</h2>
+<ul>
+<li><strong>A moved class has no script.</strong> <code>get_script()</code> is null, and <code>get_class()</code> answers the class's own name
+  rather than its native base's. <code>is HammeriteMap</code> works as before.</li>
+<li><strong>Every bake made before this reads STALE once, and wants baking again</strong>, if its map has a sky. A sky's
+  part of the lighting fingerprint (<code>HammeriteMap.lighting_fingerprint()</code>, which <code>get_bake_state()</code> compares
+  with the one a bake recorded) was every stored property of the skybox, by name and in its script's order,
+  the script's own uid and path among them - so renaming <code>colour</code> to <code>color</code> dated every bake there was,
+  though nothing lit had changed. It is now what the bake reads of the sky, worked out as the lightmapper
+  works it out, in a fixed order under a tag that says which line it is (<code>sky2|...</code>): what a sky aperture
+  emits (<code>ambient_color()</code> in linear colour times <code>light_energy</code>), whether that light claims a slot of its own
+  and with which group (<code>light_is_dynamic</code>, <code>light_group</code>), and - only when a directional light the bake reads
+  follows the sky - the sun's direction, colour and energy. A rename, a property added, the sky's name, its
+  model and where it is seen from, a game's own sky properties and a sun nothing follows date no bake from
+  now on; a change to what the bake reads of the sky still does, and changing what it reads changes the tag.
+  The brushes' and entities' parts of the fingerprint, and the program fingerprint, are unchanged to the bit,
+  so a map with no sky reads as it did.</li>
+<li><strong><code>HammeriteEntitySet</code> is a virtual class</strong>: <code>HammeriteEntitySet.new()</code> succeeds where the <code>@abstract</code>
+  script refused, and a set with no <code>_register_types</code> fails when it is added.</li>
+<li><strong><code>HammeriteEntitySets.any_name</code> and the other providers</strong> can no longer be passed as a <code>Callable</code> value
+  from GDScript: GDScript cannot make a <code>Callable</code> of a native static method.</li>
+<li><strong>The registries convert some bad values</strong> where the scripts raised a script error: <code>String()</code> of a
+  non-string <code>_editor_rotation_axes</code>, <code>bool()</code> of a null or a string <code>casts_shadow</code>/<code>bake_static</code>, <code>float()</code> of
+  a non-number clarity.</li>
+<li><strong><code>HammeriteBrush.volume_type</code> and <code>interior_exterior</code></strong> are 32-bit enums: a file holding a value beyond 32
+  bits reads back as another. Only absurd values are affected.</li>
+<li><strong>The data file keeps GDScript's typed-member refusals</strong> when reading a class that was a script: a value of
+  the wrong type leaves the member alone rather than being converted, so old files read as they did.</li>
+<li><strong><code>HammeriteAABBGrid.query_after</code></strong> with <code>after</code> below -1 no longer answers -1.</li>
+<li><strong><code>HammeritePrefab</code> and <code>HammeritePrefabSet</code></strong>: a 1.x <code>.tres</code> or <code>.res</code> of a prefab or a set, its array typed by the
+  prefab's script, is migrated to the native classes.</li>
+<li><strong><code>HammeriteBakeOccluder.from_mesh</code></strong> reads a surface of an <code>ArrayMesh</code> that has no index array straight through,
+  as it always said it did; the script stopped on a script error there and answered null.</li>
+<li><strong><code>HammeriteTerrain.convert</code></strong> of a brush whose top has no corners is an error and answers no prisms, where the
+  script stopped on a script error. <code>HammeriteTerrain.of()</code> answers a plain <code>null</code> for a brush that is not
+  terrain, which compares as the script's did.</li>
+<li><strong>A <code>Resource</code> of a moved class opened in the Godot editor</strong> runs its constructor there now: a new
+  <code>HammeriteMap</code> made in the inspector has its default layer.</li>
+<li><strong>Property docs</strong>: an inspector reading a class's <code>##</code> comments out of its script
+  (<code>HammeritePropertyDocs</code>) has no script to read for a moved class; its words are in the class reference,
+  Godot's own help.</li>
+<li><strong>Speed</strong>: nothing answers differently, but sooner. The compile benchmark's 256 rooms compile in 303 ms
+  rather than 626, and a one-brush edit in 25 rather than 42; the persist benchmark's largest loads from a .res in 113 ms
+  rather than 220.</li>
+<li><strong>A null an entity's signal hands on</strong> - <code>HammeriteTrigger.fired(by)</code> with nobody, <code>HammeriteMap3D.map_changed</code> with no
+  map - is a plain <code>null</code>, as the scripts' was.</li>
+<li><strong><code>map_3d.gd</code> and <code>eye_adaptation_3d.gd</code> are gone</strong>: a 1.x scene that names them by path is
+  <a href="#migrating-a-project">migrated</a> to name the class (<code>type="HammeriteMap3D"</code>), as a scene saved since does.</li>
+<li><strong>hammerite-nav's classes are native</strong> (#270): the ground, the links, the profiles and their table, the report, the
+  brush properties, the floor's edges, the cache, the mesh writer, the runtime and the link entity, in the library's nav
+  module, and the overlay the Navigation tool draws in its nav_editor module, which only the full package has. The
+  <code>HammeriteNavigation</code> autoload, <code>HammeriteNavigationTool</code> and <code>HammeriteNavigationEditorExtension</code> followed with the
+  editor (<a href="#the-editor">The editor</a>). A table of profiles or a <code>.nav.res</code> 1.x saved
+  is migrated to the native class. A navigation cache 1.x saved is taken up as it was: every fingerprint
+  is worked out to the byte as the scripts worked it out, and a <code>.nav.hcache</code> the native classes save is the scripts'
+  file byte for byte.</li>
+<li><strong>A <code>.nav.res</code> cache comes back without its report's warnings, as in 1.x</strong>: a resource keeps no array typed inside a
+  dictionary, and the report takes its <code>warnings</code> only as an <code>Array[String]</code>, as the script's member did when set by
+  name. Assigning an untyped array to <code>HammeriteNavigationBakeReport.warnings</code> leaves it as it was, where the script
+  raised an error.</li>
+<li><strong>Navigation is built in half the time or less</strong> (<code>HammeriteNavigationRuntime.prepare()</code>): a Thief mission's 5.7 s
+  is 2.8 s, a smaller one's 1.5 s is 0.56 s. Reading a saved cache costs what it did, most of it the fingerprint and
+  the data file.</li>
+<li><strong>hammerite-audio's classes are native</strong> (#269), in the library's audio module, <code>HammeriteEnvSound</code> and
+  <code>HammeriteEnvSoundEnvironment</code> as native subclasses of <code>HammeritePointEntityNode3D</code>. The <code>HammeriteAudio</code> autoload,
+  <code>HammeriteAudioPortalTool</code> and <code>HammeriteAudioEditorExtension</code> followed with the editor (<a href="#the-editor">The editor</a>). A graph baked into a 1.x map, or a
+  preset, material, mix or sound table saved by 1.x, is migrated to the native class. <code>HammeriteAudioGraphBuilder.fingerprint()</code> is the
+  script's to the byte, so a graph 1.x baked reads current where it did.</li>
+<li><strong>A native audio class has no script to read its property docs from</strong> (<code>HammeritePropertyDocs</code>): its words are in
+  the class reference.</li>
+<li><strong>An audio method given a null map refuses it with an error</strong> and returns what the script's call would have, where
+  1.x raised the error from the line that dereferenced it.</li>
+</ul>
+		</article>
+		<p class="docs-source">Hammerite latest · built from d8d727be, 2026-10-17</p>
+	</main>
+</div>
+
+<footer class="studio-foot">
+	<a href="/"><img src="/assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>
