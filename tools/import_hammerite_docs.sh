@@ -2,7 +2,8 @@
 # Publish one version of Hammerite's docs: its API reference, generated as HTML by that version's own
 # tools/make_api_docs.sh with this site's template, and its guides, rendered by
 # import_hammerite_docs.py - all into hammerite/docs/<version>/. Then index_hammerite_docs.py lists
-# the versions and points the old addresses at the current release.
+# the versions and points the old addresses at the current release, and relative_links.py makes the
+# pages' links relative, so they work opened from disk too.
 #
 #   tools/import_hammerite_docs.sh latest [ref]         default ref: master
 #   tools/import_hammerite_docs.sh 1.0 [ref]            default ref: v1.0.0
@@ -58,4 +59,5 @@ mkdir -p "$OUT"
 "$SRC/tools/make_api_docs.sh" --html "$OUT/api" --template "$SRC/page.html"
 "$PYTHON" "$SITE/tools/import_hammerite_docs.py" "$SRC" "$VERSION" "$SRC/page.html"
 "$PYTHON" "$SITE/tools/index_hammerite_docs.py"
+python3 "$SITE/tools/relative_links.py" "$SITE/hammerite/docs" "$SITE/hammerite/api"
 echo "hammerite/docs/$VERSION/ from Hammerite $REF ($COMMIT, $DATE)"

@@ -11,30 +11,30 @@
 <meta property="og:url" content="https://misukatti.fi/hammerite/">
 <link rel="canonical" href="https://misukatti.fi/hammerite/">
 <meta name="theme-color" content="#1f1b18">
-<link rel="icon" href="/hammerite/assets/favicon.ico" sizes="48x48">
-<link rel="icon" href="/hammerite/assets/favicon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="/hammerite/assets/apple-touch-icon.png">
+<link rel="icon" href="assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=Josefin+Sans:wght@300&display=swap">
-<link rel="stylesheet" href="/hammerite/hammerite.css">
+<link rel="stylesheet" href="hammerite.css">
 </head>
 <body>
 
 <header class="studio">
-	<a class="studio-logo" href="/"><img src="/assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<a class="studio-logo" href="../index.html"><img src="../assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
 	<nav>
 		<a href="#loop">Workflow</a>
 		<a href="#features">Features</a>
 		<a href="#licence">Licence</a>
-		<a href="/hammerite/docs/">Docs</a>
+		<a href="docs/index.html">Docs</a>
 	</nav>
 </header>
 
 <main>
 	<section class="hero">
-		<a class="news-pill" href="/blog/hammerite-2-0/"><strong>New</strong> Hammerite 2.0 is out →</a>
-		<img class="hero-logo" src="/hammerite/assets/hammerite-3d-dark.svg" alt="Hammerite 3D">
+		<a class="news-pill" href="../blog/hammerite-2-0/index.html"><strong>New</strong> Hammerite 2.0 is out →</a>
+		<img class="hero-logo" src="assets/hammerite-3d-dark.svg" alt="Hammerite 3D">
 		<p class="lede">The embedded level editor.</p>
 		<p class="sublede">Brush-based level editing for Godot, with a retro radiosity lightmapper and sound propagation
 		through the rooms you carve. There is no edit-save-run loop: you edit and test in the same
@@ -42,12 +42,12 @@
 		<div class="buy">
 			<a class="button" href="https://misukatti.itch.io/hammerite-3d" id="buy">Buy Hammerite 3D</a>
 			<p class="buy-note">Sold on <a href="https://misukatti.itch.io/hammerite-3d">itch.io</a> · Version 2.0 · Godot 4.7 · macOS, Windows and Linux</p>
-			<p class="buy-note">One licence per individual or company, perpetual and royalty-free. Buying means accepting the <a href="/hammerite/licence/">licence</a>.</p>
+			<p class="buy-note">One licence per individual or company, perpetual and royalty-free. Buying means accepting the <a href="licence/index.html">licence</a>.</p>
 		</div>
 	</section>
 
 	<figure class="shot">
-		<img src="/hammerite/assets/editor.png" alt="The Hammerite editor: a 3D view and three 2D views of two rooms joined by a passage, with the selection, layers and properties panels around them" width="1280" height="800">
+		<img src="assets/editor.png" alt="The Hammerite editor: a 3D view and three 2D views of two rooms joined by a passage, with the selection, layers and properties panels around them" width="1280" height="800">
 	</figure>
 
 	<section id="loop" class="loop">
@@ -85,12 +85,12 @@
 		brushes to extend a space, and abut them to divide one.</p>
 		<p>Lighting, sound and navigation all use the same compiled world, so a room is lit, heard and
 		walkable as soon as it is carved. There is more about this in
-		<a href="/blog/carved-not-built/">Hammerite's subtractive workflow and compiler</a>.</p>
+		<a href="../blog/carved-not-built/index.html">Hammerite's subtractive workflow and compiler</a>.</p>
 	</section>
 
 	<section id="features" class="features">
 		<article>
-			<img src="/hammerite/assets/lighting-bake.png" alt="Two rooms lit by a single lamp after a lightmap bake, with the bake settings panel beside them" loading="lazy">
+			<img src="assets/lighting-bake.png" alt="Two rooms lit by a single lamp after a lightmap bake, with the bake settings panel beside them" loading="lazy">
 			<h3>Retro radiosity lighting</h3>
 			<p>A GPU radiosity lightmapper in the spirit of the classic brush-based games. Light bounces,
 			takes colour from the walls and collects in the corners.</p>
@@ -100,7 +100,7 @@
 			changed.</p>
 		</article>
 		<article>
-			<img src="/hammerite/assets/audio-graph.png" alt="The acoustic tool over five rooms and a courtyard: a marker in each room, the doors and windows outlined, and green lines for the routes sound takes between them" loading="lazy">
+			<img src="assets/audio-graph.png" alt="The acoustic tool over five rooms and a courtyard: a marker in each room, the doors and windows outlined, and green lines for the routes sound takes between them" loading="lazy">
 			<h3>Sound propagation</h3>
 			<p>Sound travels through doorways and windows instead of through walls, so you hear it from the
 			opening it comes through. A closed door on the way muffles it, and AI hears sounds the same
@@ -124,8 +124,8 @@
 		<h2>Four addons, one native library</h2>
 		<p>Each is a standalone Godot addon, and nothing in them depends on a particular game. All four are
 		C++, built into one GDExtension library, so there is no GDScript of Hammerite's to compile when
-		your game starts. The <a href="/hammerite/docs/">docs</a> have the guides and the full
-		<a href="/hammerite/api/">API reference</a>.</p>
+		your game starts. The <a href="docs/index.html">docs</a> have the guides and the full
+		<a href="api/index.html">API reference</a>.</p>
 		<table>
 			<thead><tr><th>Addon</th><th>What it does</th><th>Package</th></tr></thead>
 			<tbody>
@@ -168,12 +168,12 @@
 			</div>
 		</div>
 		<p>Updates may come, but are not promised, and the software is provided as is. The agreement is
-		under Finnish law. Read the <a href="/hammerite/licence/">full licence</a> before buying.</p>
+		under Finnish law. Read the <a href="licence/index.html">full licence</a> before buying.</p>
 	</section>
 </main>
 
 <footer class="studio-foot">
-	<a href="/"><img src="/assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<a href="../index.html"><img src="../assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
 	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
 </footer>
 

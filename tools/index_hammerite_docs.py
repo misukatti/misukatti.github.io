@@ -34,7 +34,7 @@ def redirect(to: str) -> str:
 <head>
 <meta charset="utf-8">
 <title>Hammerite 3D docs</title>
-<link rel="canonical" href="{target}">
+<link rel="canonical" href="https://misukatti.fi{target}">
 <meta http-equiv="refresh" content="0; url={target}">
 <script>location.replace({json.dumps(to)} + location.hash)</script>
 </head>

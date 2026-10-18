@@ -12,8 +12,12 @@ Misukatti Interactive's website: plain static HTML and CSS, no build step.
 | `hammerite/api/`, the rest of `hammerite/docs/` | Redirects from the addresses the docs had before they had versions, to the current release. |
 | `hammerite/assets/` | Hammerite's logo, favicons and screenshots, from the Hammerite repo (`docs/logo/`, the editor manual's images). |
 
-Links are root-relative (`/hammerite/`), so the site has to be served from a domain's root: the org
-Pages site or a custom domain, not a project path.
+Links are relative to each page (`../assets/site.css`, `../hammerite/index.html`), so the site works
+opened straight from disk as well as served. Links to pages name their `index.html`, because a browser
+reading files does not look for it in a folder. Write new links the same way, or run
+`tools/relative_links.py` to rewrite root-relative ones; it leaves absolute addresses, canonical links
+and `og:` tags alone. The docs import runs it on the pages it generates. The docs' version switcher
+only works served, since a browser will not fetch `versions.json` from disk.
 
 To look at it locally:
 
