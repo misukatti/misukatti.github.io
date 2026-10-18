@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hammerite's lightmapper — Misukatti Interactive</title>
+<meta name="robots" content="noindex">
+<meta name="description" content="How Hammerite's GPU radiosity lightmapper works: unwrapping and atlases, direct light and shadows, bounce through light probes, four switchable light slots per surface, colour bleed, and its limits.">
+<meta property="og:title" content="Hammerite's lightmapper">
+<meta property="og:image" content="https://misukatti.fi/blog/lightmapper/lit-scene.png">
+<meta property="og:url" content="https://misukatti.fi/blog/lightmapper/">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://misukatti.fi/blog/lightmapper/">
+<meta name="theme-color" content="#1d1b38">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Josefin+Sans:wght@300;400;600&family=JetBrains+Mono:wght@400&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<header class="bar">
+	<a class="bar-logo" href="/"><img src="/assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="/#games">Games</a>
+		<a href="/#tools">Tools</a>
+		<a href="/blog/">Blog</a>
+		<a href="/#contact">Contact</a>
+	</nav>
+</header>
+
+<main>
+	<article class="post">
+		<p class="draft-note">Draft. Not listed on the blog and not indexed.</p>
+
+		<header class="post-head">
+			<p class="post-meta">Draft · Hammerite</p>
+			<h1>Hammerite's lightmapper</h1>
+			<p class="post-lede">Hammerite bakes light into lightmaps on the GPU, with bounced light in the
+			style of the classic brush-based games. A stealth game also needs light that can change while
+			the game runs, so every surface can hold four switchable lights next to its static light. This
+			is an overview of how it works.</p>
+		</header>
+
+		<figure>
+			<img src="lit-scene.png" alt="Two rooms joined by a doorway in the Hammerite editor: the left room lit warm by a static lamp, the right room lit by a blue and a red lamp that can be switched at runtime" width="1200" height="660">
+			<figcaption>The scene used for the textures in this post: a static warm lamp on the left, and two switchable lamps, blue and red, on the right.</figcaption>
+		</figure>
+
+		<h2>Why lightmaps</h2>
+		<p>City of Thieves is a stealth game, so light is gameplay. The player hides in shadow, and the
+		guards see them depending on how lit they are. That needs light that looks good, but also light
+		the game can measure, and lamps that can be switched off, flicker or be put out.</p>
+		<p>Baked light does the first part well: soft bounced light and colour coming off the walls, at no
+		cost at runtime. Real-time lights do the second part, but they are expensive and don't bounce. So
+		Hammerite bakes everything it can, and makes the baked light switchable.</p>
+		<p>The first version, in 2024, did radiosity on the CPU, and it did not scale. In radiosity every
+		patch of every wall trades light with every other patch it can see, so the work grows a lot faster
+		than the level does. In 2025 I moved the whole bake to the GPU, as compute shaders.</p>
+
+		<h2>Unwrapping and atlases</h2>
+		<p>First every surface that takes light gets its own lightmap coordinates. Hammerite's walls are
+		flat polygons, so each one is simply projected onto its own plane at a fixed density: by default
+		one lightmap texel per 16 world units on walls, and one per 8 on props. A face can have its own
+		scale where it needs more or less detail.</p>
+		<p>The projected faces are then packed into atlases with a little padding around each one, so
+		light does not bleed from one face to its neighbour. Faces that share the same lights are packed
+		together, which keeps the number of atlases down.</p>
+
+		<figure>
+			<img src="baking-lightmap-scale.png" alt="A room in the editor with every surface showing a black and white checker pattern, one square per lightmap texel" width="784" height="709" loading="lazy">
+			<figcaption>The lightmap density view: one checker square is one lightmap texel.</figcaption>
+		</figure>
+
+		<h2>Direct light and shadows</h2>
+		<p>Each texel becomes a patch, with a reflectance taken from its texture. The direct pass lights
+		every patch from every lamp that can see it. Shadows are rays cast on the GPU through a bounding
+		volume hierarchy of the level's convex brushes, plus a separate one of triangles for props.</p>
+		<p>Each texel casts up to four shadow rays per light, spread over its area, so shadow edges come
+		out soft instead of stair-stepped. A ray can also pass through up to three surfaces that let light
+		through, such as masked textures, tinted glass or water.</p>
+		<p>Daylight works the same way. Faces textured as sky are openings, not blockers. A patch is in
+		sunlight when a ray toward the sun reaches a sky face before it hits rock, and every sky face also
+		gives off the sky's own light into the rooms that can see it.</p>
+
+		<figure>
+			<img src="lighting-sun.png" alt="A room lit by sunlight through a window, with a bright patch of sun on the floor and soft light on the walls" width="784" height="709" loading="lazy">
+			<figcaption>Sunlight through a window, and the sky's light bouncing around the room.</figcaption>
+		</figure>
+
+		<h2>Bounce</h2>
+		<p>Bounced light is what makes the result look like radiosity, and it is also the expensive part.
+		Instead of patches trading light with each other directly, Hammerite relays it through light
+		probes, points placed just off every wall and on a lattice through the air:</p>
+		<ol>
+			<li><strong>Gather.</strong> Each probe collects the light reflected by the patches it can see.
+			Far away patches are clustered together, so a probe does not cast a ray at each one.</li>
+			<li><strong>Bounce.</strong> The probes pass light between each other, once per bounce.</li>
+			<li><strong>Distribute.</strong> Every texel reads the light from the eight nearest probes it can
+			see.</li>
+		</ol>
+		<p>Every transfer uses the same form factor, the classic radiosity term for how much of one
+		surface another one sees. I checked the result against the theory: a room with dark walls bounces
+		about 12% of its direct light back into itself, close to the 11% that the walls' reflectance
+		predicts.</p>
+		<p>The same probes are saved with the map. Anything that moves, like a guard or a carried crate,
+		is lit from the nearest probes, so it gets the same light as the walls around it. The game can
+		also ask how lit a point is, which is what the stealth gameplay reads.</p>
+
+		<h2>Four light slots</h2>
+		<p>A lightmap is normally a single image. In Hammerite each atlas has two:</p>
+		<ul>
+			<li><strong>The static texture</strong> holds the light that never changes: static lamps,
+			daylight, glowing textures and all of their bounce.</li>
+			<li><strong>The slot texture</strong> holds up to four switchable lights, one in each of its
+			red, green, blue and alpha channels, each at full strength.</li>
+		</ul>
+
+		<figure class="atlas-row">
+			<div>
+				<img src="atlas-static.png" alt="The static lightmap atlas: rectangles of baked light, warm where the static lamp reaches" width="384" height="444" loading="lazy">
+				<p>Static</p>
+			</div>
+			<div>
+				<img src="atlas-slot-a.png" alt="The red channel of the slot atlas, shown in blue: only the faces the blue lamp reaches" width="384" height="444" loading="lazy">
+				<p>Slot: blue lamp</p>
+			</div>
+			<div>
+				<img src="atlas-slot-b.png" alt="The green channel of the slot atlas, shown in red: only the faces the red lamp reaches" width="384" height="444" loading="lazy">
+				<p>Slot: red lamp</p>
+			</div>
+			<figcaption>The atlas from the scene at the top, scaled up so the texels show. Each rectangle is one face. The slots hold light without colour. The colours here are the lamps' own.</figcaption>
+		</figure>
+
+		<p>When the level is drawn, the shader adds the static light to each slot's light times that
+		light's current strength and colour. Turning a lamp off, dimming it or making it flicker only
+		changes one number per light, and nothing is baked again. Lamps can share a slot by being in the
+		same light group, so a chandelier's candles flicker as one and a lightning flash lights every
+		window at once.</p>
+		<p>Four is the limit per surface. If more than four groups reach a surface, the bake keeps four
+		and warns about it. Lights that are not in view do no work at all, and visible ones update their
+		strength 30 times a second by default, which keeps a level full of flickering lamps cheap.</p>
+
+		<h2>Colour bleed</h2>
+		<p>Bounced light takes on the colour of what it bounced from, like a red carpet tinting a white
+		ceiling. Storing full colour for every slot would cost a lot of memory, so Hammerite stores colour bleed separately: one tint texture, and a weight per slot for how much of the
+		tint each light gets.</p>
+
+		<figure>
+			<img src="atlas-ct-tint.png" alt="The colour bleed tint atlas: the same rectangles in a flat warm tone" width="384" height="444" loading="lazy" class="small-figure">
+			<figcaption>The colour bleed tint for the same atlas. These walls are all plaster, so the tint is even.</figcaption>
+		</figure>
+
+		<p>How strong the colour bleed looks is set when the level is drawn, not when it is baked, so it
+		can be tuned without baking again.</p>
+
+		<h2>Baking while you work</h2>
+		<p>A full bake runs inside the editor, which runs inside the game, so you can look at the result
+		from where you stand. The editor stays responsive during the bake and can cancel it, and the old
+		light is put back if you do.</p>
+		<p>After an edit, walls that were moved or carved have no light until the next bake. A quick bake
+		lights just those walls with direct light, and leaves everything else as it was. On a large
+		imported level with 736 lamps a quick bake takes about a second.</p>
+
+		<figure>
+			<img src="lighting-bake.png" alt="The Hammerite editor with a lightmap tool panel showing the bake settings beside two lit rooms" width="1092" height="709" loading="lazy">
+			<figcaption>The lightmap tool in the editor.</figcaption>
+		</figure>
+
+		<h2>Numbers</h2>
+		<p>My reference level is large: 7,240 brushes, about 130,000 walls, 4.4 million patches, 54,000
+		probes and 736 lights. A full bake of it on a GTX 1070 Ti takes about 22 minutes. It used to take
+		over two and a half hours, before the gather clustering and before the atlases were written in
+		native code.</p>
+
+		<h2>Limits</h2>
+		<ul>
+			<li>A lightmap stores how much light reaches a texel, not where it came from. Normal maps only
+			react to switchable lights, carried lights and probes.</li>
+			<li>Baked surfaces have no specular reflections.</li>
+			<li>At most four switchable light groups can reach one surface.</li>
+			<li>Glowing textures are static. A light that has to move is a real-time light, not a baked
+			one.</li>
+			<li>Two bakes of the same level are not bit for bit identical yet. Which of two lights that
+			add nothing to a face gets its last slot can change between runs. The difference is tiny, but I want the bake to be fully reproducible, and I plan to fix it.</li>
+		</ul>
+
+		<p>The <a href="/hammerite/docs/">Hammerite docs</a> have more about lighting and baking, including
+		baking from a script in a build pipeline.</p>
+
+		<p class="post-sign">- Elli</p>
+	</article>
+</main>
+
+<footer class="foot">
+	<img src="/assets/misukatti/mark-night.svg" alt="" width="36" height="36">
+	<p>© 2026 Misukatti Interactive</p>
+</footer>
+
+</body>
+</html>
