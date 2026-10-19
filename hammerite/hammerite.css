@@ -325,7 +325,72 @@ td:first-child {
 	align-items: center;
 }
 
-.features .feature-wide img { aspect-ratio: 912 / 549; height: auto; object-fit: contain; }
+.compare {
+	position: relative;
+	overflow: hidden;
+	border-radius: 6px;
+	user-select: none;
+	touch-action: pan-y;
+	cursor: ew-resize;
+}
+
+.features .compare img { display: block; aspect-ratio: 3 / 2; height: auto; border-radius: 0; pointer-events: none; }
+
+.compare .compare-after {
+	position: absolute;
+	inset: 0;
+	clip-path: inset(0 0 0 var(--split));
+}
+
+.compare-label {
+	position: absolute;
+	top: 0.6rem;
+	left: 0.6rem;
+	padding: 0.15rem 0.5rem;
+	font-size: 0.8rem;
+	color: var(--bone);
+	background: rgb(23 20 17 / 0.75);
+	border-radius: 4px;
+	pointer-events: none;
+}
+
+.compare-label-after { left: auto; right: 0.6rem; }
+
+.compare-handle {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: var(--split);
+	width: 2px;
+	margin-left: -1px;
+	background: var(--bone);
+	pointer-events: none;
+}
+
+.compare-handle::after {
+	content: "";
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 2rem;
+	height: 2rem;
+	transform: translate(-50%, -50%);
+	border: 2px solid var(--bone);
+	border-radius: 50%;
+	background: var(--red) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M7 5 2 10l5 5M13 5l5 5-5 5' fill='none' stroke='%23e8dcc8' stroke-width='2'/%3E%3C/svg%3E") center / 1.1rem no-repeat;
+}
+
+.compare input {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	margin: 0;
+	opacity: 0;
+	pointer-events: none;
+}
+
+.compare:has(input:focus-visible) .compare-handle::after { outline: 2px solid var(--red-bright); outline-offset: 2px; }
 
 .features .feature-wide h3 { margin-top: 0; }
 
