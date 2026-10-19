@@ -8,7 +8,8 @@ and writes:
 
 - hammerite/docs/versions.json, which every page's version switcher reads: the newest release first
   and marked stable, older releases after it, latest last;
-- hammerite/docs/index.html, a redirect to the stable version's docs;
+- hammerite/docs/index.html, a redirect to the stable version's docs, and hammerite/docs/manual/ to
+  its manual;
 - a redirect for every page at its address from before the docs had versions - hammerite/docs/<page>
   and hammerite/api/<page> - to the same page in the stable version, so links made then still land.
 
@@ -66,6 +67,9 @@ def main() -> int:
 		shutil.rmtree(OLD_API)
 
 	(DOCS / "index.html").write_text(redirect(f"/hammerite/docs/{stable}/"))
+	if (DOCS / stable / "manual").is_dir():
+		(DOCS / "manual").mkdir(exist_ok=True)
+		(DOCS / "manual" / "index.html").write_text(redirect(f"/hammerite/docs/{stable}/manual/"))
 	count = 0
 	for page in sorted((DOCS / stable).rglob("*.html")):
 		relative = page.relative_to(DOCS / stable).as_posix()

@@ -37,9 +37,15 @@ img { max-width: 100%; display: block; }
 	background: var(--night);
 }
 
+.studio-logo { flex: none; }
+
 .studio-logo img { height: 36px; width: 36px; }
 
-.studio nav { display: flex; gap: clamp(0.75rem, 3vw, 1.75rem); }
+.studio nav { display: flex; flex-wrap: wrap; min-width: 0; gap: 0.35rem clamp(0.75rem, 3vw, 1.75rem); }
+
+@media (max-width: 480px) {
+	.studio nav a { letter-spacing: 0.12em; }
+}
 
 .studio nav a {
 	color: #c9bd9a;
