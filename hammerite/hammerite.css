@@ -316,3 +316,19 @@ td:first-child {
 .licence-lists li { margin-bottom: 0.5rem; }
 
 .buy-note + .buy-note { margin-top: 0.35rem; }
+
+.features .feature-wide {
+	grid-column: 1 / -1;
+	display: grid;
+	grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+	gap: 1.5rem;
+	align-items: center;
+}
+
+.features .feature-wide img { aspect-ratio: 912 / 549; height: auto; object-fit: contain; }
+
+.features .feature-wide h3 { margin-top: 0; }
+
+@media (max-width: 760px) {
+	.features .feature-wide { grid-template-columns: 1fr; }
+}
