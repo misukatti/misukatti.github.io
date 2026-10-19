@@ -69,7 +69,7 @@ def main() -> int:
 	count = 0
 	for page in sorted((DOCS / stable).rglob("*.html")):
 		relative = page.relative_to(DOCS / stable).as_posix()
-		if relative == "index.html":
+		if relative == "index.html" or relative.startswith("manual/"):
 			continue
 		old = OLD_API / relative.removeprefix("api/") if relative.startswith("api/") else DOCS / relative
 		old.parent.mkdir(parents=True, exist_ok=True)

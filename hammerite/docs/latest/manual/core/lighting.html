@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lighting — Hammerite 3D latest docs</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="../../../../assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="../../../../assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../../../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@300&display=swap">
+<link rel="stylesheet" href="../../../../hammerite.css">
+<link rel="stylesheet" href="../../../docs.css">
+<script src="../../../versions.js" defer></script>
+</head>
+<body class="docs" data-docs-version="latest">
+
+<header class="studio">
+	<a class="studio-logo" href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="../../../../index.html">Hammerite 3D</a>
+		<a href="../../index.html">Docs</a>
+		<a href="../../guides/index.html">Guides</a>
+		<a href="../../api/index.html">API</a>
+		<a href="../index.html">Manual</a>
+	</nav>
+</header>
+
+<div class="docs-banner" hidden></div>
+
+<div class="docs-layout">
+	<aside class="docs-side">
+		<a class="docs-brand" href="../../index.html"><img src="../../../../assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
+		<label class="docs-version">Version
+			<select aria-label="Docs version"><option value="latest" selected>latest</option></select>
+		</label>
+		<nav class="api-nav"><a class="api-home" href="../index.html">Manual</a><h2>Core</h2><ul><li><a href="index.html">Core</a></li><li><a href="carved-world.html">The carved world</a></li><li><a href="rooms-and-portals.html">Rooms and portals</a></li><li><a href="fills.html">Fills</a></li><li><a href="entities.html">Entities</a></li><li><a href="textures.html">Textures</a></li><li><a href="lighting.html" aria-current="page">Lighting</a></li><li><a href="baking.html">Baking</a></li><li><a href="variants.html">Variants</a></li><li><a href="terrain.html">Terrain</a></li><li><a href="glossary.html">Glossary</a></li></ul><h2>Editor</h2><ul><li><a href="../editor/index.html">Editor</a></li><li><a href="../editor/interface.html">The interface</a></li><li><a href="../editor/camera.html">Camera</a></li><li><a href="../editor/selecting.html">Selecting</a></li><li><a href="../editor/building.html">Building</a></li><li><a href="../editor/editing.html">Editing</a></li><li><a href="../editor/texturing.html">Texturing</a></li><li><a href="../editor/terrain.html">Terrain</a></li><li><a href="../editor/entities.html">Entities</a></li><li><a href="../editor/props.html">Props</a></li><li><a href="../editor/decals.html">Decals</a></li><li><a href="../editor/prefabs.html">Prefabs</a></li><li><a href="../editor/layers.html">Layers</a></li><li><a href="../editor/sky.html">Sky</a></li><li><a href="../editor/lighting.html">Lighting</a></li><li><a href="../editor/problems.html">Problems</a></li><li><a href="../editor/files.html">Map files</a></li><li><a href="../editor/keys.html">Keyboard reference</a></li><li><a href="../editor/manual.html">Using the manual</a></li><li><a href="../editor/extending-the-manual.html">Extending the manual</a></li></ul><h2>Audio</h2><ul><li><a href="../audio/index.html">Audio</a></li><li><a href="../audio/rooms.html">Rooms</a></li><li><a href="../audio/doors.html">Doors and openings</a></li><li><a href="../audio/outdoors.html">Outdoors and weather</a></li><li><a href="../audio/graph.html">The audio graph</a></li></ul><h2>Navigation</h2><ul><li><a href="../nav/index.html">Navigation</a></li><li><a href="../nav/ground.html">Ground</a></li><li><a href="../nav/links.html">Links</a></li><li><a href="../nav/preview.html">The Navigation tool</a></li></ul><h2>Docs</h2><ul><li><a href="../../index.html">Docs home</a></li><li><a href="../../api/index.html">API reference</a></li></ul></nav>
+	</aside>
+	<main class="docs-main">
+		<article class="prose">
+<h1 id="lighting">Lighting</h1>
+<p>A level's lighting is baked: worked out once by the lightmapper and stored with the map. Lamps, sky, glowing textures and light bouncing off walls all go into it. What a bake produces and when to run it again: <a href="baking.html">Baking</a>. How to run one: <a href="../editor/lighting.html">Lighting</a> in the Editor section.</p>
+<h2 id="lights">Lights</h2>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Light</th>
+<th>Can the game change it?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>light_point</code></td>
+<td>A lamp, shining every way</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>light_point_dynamic</code></td>
+<td>A lamp, shining every way</td>
+<td>Yes: dim, brighten or switch it</td>
+</tr>
+<tr>
+<td><code>light_spot</code></td>
+<td>A lamp shining in a cone</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>light_spot_dynamic</code></td>
+<td>A lamp shining in a cone</td>
+<td>Yes: dim, brighten or switch it</td>
+</tr>
+<tr>
+<td><code>light_directional</code></td>
+<td>Sun or moon: parallel light from one direction</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>light_directional_dynamic</code></td>
+<td>Parallel light from one direction</td>
+<td>Yes, such as a flash of lightning</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Default</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>energy</code></td>
+<td>256</td>
+<td>How bright it is</td>
+</tr>
+<tr>
+<td><code>color</code></td>
+<td>white</td>
+<td>The colour of its light</td>
+</tr>
+<tr>
+<td><code>radius</code></td>
+<td>0</td>
+<td>Point and spot lights. How far it reaches, in world units. 0 lets the bake's falloff decide.</td>
+</tr>
+<tr>
+<td><code>rotation</code></td>
+<td>-90, 0, 0</td>
+<td>Spot lights. Where it is aimed: it shines down its own -Z, as Godot's SpotLight3D. Turn it with <code>R</code>. Put down, it shines straight down.</td>
+</tr>
+<tr>
+<td><code>spot_angle</code></td>
+<td>45</td>
+<td>Spot lights. The angle in degrees from the middle of its cone to the edge. Past it there is no light.</td>
+</tr>
+<tr>
+<td><code>spot_attenuation</code></td>
+<td>1</td>
+<td>Spot lights. How hard the cone's edge is. 1 fades from the middle out; more keeps it bright further out and cuts it off sharper.</td>
+</tr>
+<tr>
+<td><code>light_group</code></td>
+<td>empty</td>
+<td>Lights with the same group name share one switch. See below.</td>
+</tr>
+<tr>
+<td><code>direction</code></td>
+<td></td>
+<td>Directional lights. Which way the light travels.</td>
+</tr>
+<tr>
+<td><code>follow_sky</code></td>
+<td>on</td>
+<td>Directional lights. On: it is the sky's sun or moon, and its own direction, colour and energy are ignored.</td>
+</tr>
+<tr>
+<td><code>attenuation</code></td>
+<td>1</td>
+<td>Kept for older maps. Use <code>energy</code> instead.</td>
+</tr>
+</tbody>
+</table>
+<p>A spot is as bright down the middle of its cone as a point light of the same <code>energy</code> is in every direction; its cone takes light away rather than gathering it.</p>
+<h3 id="static-and-dynamic">Static and dynamic</h3>
+<p>A static light is baked into each surface for good. It costs nothing while the game runs and never changes.</p>
+<p>A dynamic light is baked too, into one of four <strong>light slots</strong> each surface has. The game can then dim or switch it. Static lights, glowing textures and static daylight use no slots.</p>
+<p>Lights with the same <code>light_group</code> share one slot and one switch: a chandelier's candles that flicker as one, the fan of lights in a lightning flash. Driving any light in the group drives them all.</p>
+<p>A surface reached by more than four dynamic groups keeps four and drops the rest. The bake warns about it. Group lights that belong to one effect, or give lamps a <code>radius</code>. See <a href="baking.html#bake-warnings">Baking</a>.</p>
+<h3 id="how-far-a-light-reaches">How far a light reaches</h3>
+<p>The bake has two falloff curves, chosen in the lightmap tool:</p>
+<table>
+<thead>
+<tr>
+<th>Falloff</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Realistic</td>
+<td>Brightness falls with the square of the distance and never quite reaches zero. A far lamp still washes a wall faintly and still takes one of its slots.</td>
+</tr>
+<tr>
+<td>Linear</td>
+<td>A straight ramp from the lamp to a hard edge, and darkness past it. Reach grows with energy.</td>
+</tr>
+</tbody>
+</table>
+<p>A point or spot light's <code>radius</code> gives it an end in either mode, and wins over the mode's own reach. Under realistic falloff it fades smoothly to nothing at the radius, with no visible edge.</p>
+<figure><img src="images/lighting-radius.png" alt="A lamp with a radius set: its light ends before the far wall" loading="lazy"><figcaption>A lamp with a radius set: its light ends before the far wall</figcaption></figure>
+<h3 id="movable-lights">Movable lights</h3>
+<p><code>light_point_movable</code> and <code>light_spot_movable</code> are not baked. Each is a real Godot light (<code>OmniLight3D</code>, <code>SpotLight3D</code>) with a shadow from the map, for a light that has to move: a lantern swinging on a chain, a searchlight a script sweeps. A script moves it by moving the entity's node, and <code>set_modulation()</code> on the node flickers it.</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Default</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>energy</code></td>
+<td>256</td>
+<td>How bright it is, in lumens. It lights as a baked light of the same <code>energy</code> under realistic falloff does.</td>
+</tr>
+<tr>
+<td><code>radius</code></td>
+<td>384</td>
+<td>How far it reaches, in world units. It fades to nothing exactly there.</td>
+</tr>
+<tr>
+<td><code>falloff</code></td>
+<td>2</td>
+<td>The exponent it falls off by. 2 is a baked light's curve; more keeps the light close and darkens the edge of its pool.</td>
+</tr>
+<tr>
+<td><code>color</code></td>
+<td>white</td>
+<td>The colour of its light</td>
+</tr>
+<tr>
+<td><code>shadows</code></td>
+<td>on</td>
+<td>Whether the map throws a shadow in it</td>
+</tr>
+<tr>
+<td><code>enabled</code></td>
+<td>on</td>
+<td>Whether it is on when the level starts. It can be switched while the game runs.</td>
+</tr>
+</tbody>
+</table>
+<p>A spot also has <code>rotation</code>, <code>spot_angle</code> and <code>spot_attenuation</code>, as the baked spot does.</p>
+<p>Every movable light costs every frame it is in view, and its shadow most of all. Use a few, for what moves. Bake the rest.</p>
+<h2 id="sky-sun-and-daylight">Sky, sun and daylight</h2>
+<p>Outside light enters only through sky faces: faces whose texture name starts with <code>sky_</code>. See <a href="textures.html#sky-faces">Textures</a>.</p>
+<ul>
+<li><strong>Sun and moon</strong> come from a directional light. With <code>follow_sky</code> on, it takes the sky's sun or moon: its direction, colour and strength. A surface is lit by it only where a straight line from the surface toward the sun leaves through a sky face before meeting rock.</li>
+<li><strong>Daylight</strong> is the sky's own glow. Every sky face gives off the sky's light, which falls on whatever can see that face and bounces on from there.</li>
+</ul>
+<p>Rooms sealed off from every sky face get neither. See <a href="rooms-and-portals.html#interior-and-exterior">Rooms and portals</a>.</p>
+<p>Daylight is static unless the sky's light is set dynamic in the <a href="../editor/sky.html">Sky</a> tool. A dynamic sky takes a slot on each surface it reaches, so the game can dim it as clouds pass. Give it the sun's <code>light_group</code> to dim both together.</p>
+<p>For lightning, place several <code>light_directional_dynamic</code> aimed from different sides, <code>follow_sky</code> off, all in one <code>light_group</code>. Every window then catches at least one, and one switch flashes them all.</p>
+<figure><img src="images/lighting-sun.png" alt="Sunlight through a courtyard&#x27;s sky ceiling and in at a window" loading="lazy"><figcaption>Sunlight through a courtyard&#x27;s sky ceiling and in at a window</figcaption></figure>
+<h2 id="emissive-surfaces">Emissive surfaces</h2>
+<p>A texture with an <code>_emission</code> partner glows. See <a href="textures.html#emissive-textures">Textures</a>.</p>
+<p>The glow lights the room with no lamp in it and bounces onto its neighbours. It is static: always on, never dimmed. <strong>Emission gain</strong> in the lightmap tool sets how bright a fully white emission texel glows.</p>
+<h2 id="decals-in-the-bake">Decals in the bake</h2>
+<p>A decal is ignored by the bake unless its <code>affects_lighting</code> is on. Then, where it covers a surface:</p>
+<ul>
+<li>Its colour changes the light that surface bounces. A black scorch mark stops the stone under it bouncing pale light into the room.</li>
+<li>If its picture has an <code>_emission</code> partner, it glows: a lit sign, a glowing rune.</li>
+</ul>
+<p>A decal that affects lighting is part of the bake. Moving it puts the bake out of date. Leave it off for decals that only need to be seen.</p>
+<h2 id="water-and-caustics">Water and caustics</h2>
+<p>Light meeting water is baked with the rest.</p>
+<ul>
+<li><strong>Caustics</strong>: rippling light under and around water. Stirred water throws sharp, fast filaments; still water throws none. Deeper water throws bigger ones.</li>
+<li><strong>Bending</strong>: light entering water bends toward the vertical, as it does in life.</li>
+<li><strong>Tint</strong>: light under water takes the water's colour the further it travels through it.</li>
+<li><strong>Reflection</strong>: a lit pool throws its own shape onto the walls and ceiling: a crisp patch off still water, a soft wash off running water.</li>
+<li><strong>The underside</strong>: the surface seen from under the water is lit by what is in the water, not by what is above it.</li>
+</ul>
+<p>All of these follow the water's <strong>Clarity</strong>, <strong>Tint</strong> and <strong>Disturbance</strong>. Changing them changes the caustics only after the next bake. See <a href="fills.html#water-properties">Fills</a>.</p>
+<figure><img src="images/lighting-caustics.png" alt="Caustics on the floor of a pool, seen through the water" loading="lazy"><figcaption>Caustics on the floor of a pool, seen through the water</figcaption></figure>
+<h2 id="bounce">Bounce</h2>
+<p>Light that reaches a surface bounces on from it, lighting what the lamp cannot see.</p>
+<ul>
+<li>How much bounces depends on how light the textures are. Dark stone bounces back only a small share of what hits it, so shadow stays shadow.</li>
+<li><strong>Bounce gain</strong> 1.0 is what light actually does. Lower it for a darker, starker level rather than turning the lamps down.</li>
+<li><strong>Colour bleed</strong> sets how far a surface takes the colour of light bounced onto it. It shows without a new bake.</li>
+<li><strong>Bounce floor</strong> drops a switchable light's bounce from a wall where it is fainter than this, so the wall keeps its four light slots for lights that matter to it.</li>
+<li><strong>Bounce range</strong> stops bounced light carrying further than a room or two, so a bright courtyard does not feed a cellar across the map.</li>
+</ul>
+<p>These are bake options. See <a href="../editor/lighting.html">Lighting</a>.</p>
+<h2 id="moving-brushwork">Moving brushwork</h2>
+<p>Entity brushwork is not baked by default: a door is somewhere else as often as not. It is lit like everything that moves (see below).</p>
+<p>Turn on <strong>Bake into the world</strong> in the brush's <strong>Lighting</strong> section for brushwork that stays put until something moves it, such as a secret door flush with its wall. It is then baked with the walls, lit exactly as the wall around it, and hands over to the light probes when it moves.</p>
+<p>Turn off <strong>Casts shadow</strong> for brushwork that is a marker, not matter: a trigger volume, a region a script watches. Light then passes through it. Leave it on for everything solid.</p>
+<h2 id="things-that-move">Things that move</h2>
+<p>The bake fills each room with <strong>light probes</strong>: points that record the light there. The player, guards, doors and anything else that moves are lit from the probes nearest them, so they darken in shadow and brighten under a lamp.</p>
+<p>Probes are made fresh at every bake. Your game can also ask them how lit a spot is, for example to decide whether a guard can see someone standing there.</p>
+<h2 id="lights-that-move">Lights that move</h2>
+<p>A light that moves, such as a torch a guard carries, cannot be baked. Your game adds these itself, as <strong>carried lights</strong>: real-time lights with a real shadow, set in lumens and a radius like the lights you place. A carried light shines every way, or in a cone as a spot light does. They light the walls on top of the bake, as a placed light of the same brightness would, and they count when the game asks how lit a spot is. Only the level throws their shadow: walls, brushwork that casts a shadow in the bake, and placed props. People do not.</p>
+<p>Each one draws its shadow every frame, so keep them few: the people carrying them, not every candle in a hall. Place the candles.</p>
+<p>A moving light that belongs to the level rather than to someone, such as a swinging lantern, is placed instead: see <a href="#movable-lights">Movable lights</a>.</p>
+		</article>
+		<p class="docs-source">Hammerite latest · built from 45a63b69, 2026-10-19</p>
+	</main>
+</div>
+
+<footer class="studio-foot">
+	<a href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>

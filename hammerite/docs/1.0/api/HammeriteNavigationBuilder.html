@@ -24,6 +24,7 @@
 		<a href="../index.html">Docs</a>
 		<a href="../guides/index.html">Guides</a>
 		<a href="index.html">API</a>
+		<a href="../manual/index.html">Manual</a>
 	</nav>
 </header>
 
@@ -75,7 +76,7 @@
 <pre class="signature"><code>static func obstruction_bounds(map: HammeriteMap) -&gt; AABB[]</code></pre>
 <p>Everything standing in the rooms, as bounds in the map&#x27;s space.  Exposed because measuring the ground is not the only thing that has to know about a crate: <a href="HammeriteNavigationLinkBuilder.html"><code>HammeriteNavigationLinkBuilder</code></a> asks whether the air between two ledges is really empty, and the crate that divided the floor into those two patches in the first place is exactly what would otherwise be jumped straight through. Warnings are dropped here - the caller that BUILT the ground has already reported them, and saying it twice per bake helps nobody.</p>
 		</article>
-		<p class="docs-source">Hammerite 1.0 · built from a6dd634, 2026-10-10</p>
+		<p class="docs-source">Hammerite 1.0 · built from 059fce03, 2026-10-10</p>
 	</main>
 </div>
 

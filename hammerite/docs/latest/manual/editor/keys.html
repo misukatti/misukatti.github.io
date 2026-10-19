@@ -1,0 +1,773 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Keyboard reference — Hammerite 3D latest docs</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="../../../../assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="../../../../assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../../../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@300&display=swap">
+<link rel="stylesheet" href="../../../../hammerite.css">
+<link rel="stylesheet" href="../../../docs.css">
+<script src="../../../versions.js" defer></script>
+</head>
+<body class="docs" data-docs-version="latest">
+
+<header class="studio">
+	<a class="studio-logo" href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="../../../../index.html">Hammerite 3D</a>
+		<a href="../../index.html">Docs</a>
+		<a href="../../guides/index.html">Guides</a>
+		<a href="../../api/index.html">API</a>
+		<a href="../index.html">Manual</a>
+	</nav>
+</header>
+
+<div class="docs-banner" hidden></div>
+
+<div class="docs-layout">
+	<aside class="docs-side">
+		<a class="docs-brand" href="../../index.html"><img src="../../../../assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
+		<label class="docs-version">Version
+			<select aria-label="Docs version"><option value="latest" selected>latest</option></select>
+		</label>
+		<nav class="api-nav"><a class="api-home" href="../index.html">Manual</a><h2>Core</h2><ul><li><a href="../core/index.html">Core</a></li><li><a href="../core/carved-world.html">The carved world</a></li><li><a href="../core/rooms-and-portals.html">Rooms and portals</a></li><li><a href="../core/fills.html">Fills</a></li><li><a href="../core/entities.html">Entities</a></li><li><a href="../core/textures.html">Textures</a></li><li><a href="../core/lighting.html">Lighting</a></li><li><a href="../core/baking.html">Baking</a></li><li><a href="../core/variants.html">Variants</a></li><li><a href="../core/terrain.html">Terrain</a></li><li><a href="../core/glossary.html">Glossary</a></li></ul><h2>Editor</h2><ul><li><a href="index.html">Editor</a></li><li><a href="interface.html">The interface</a></li><li><a href="camera.html">Camera</a></li><li><a href="selecting.html">Selecting</a></li><li><a href="building.html">Building</a></li><li><a href="editing.html">Editing</a></li><li><a href="texturing.html">Texturing</a></li><li><a href="terrain.html">Terrain</a></li><li><a href="entities.html">Entities</a></li><li><a href="props.html">Props</a></li><li><a href="decals.html">Decals</a></li><li><a href="prefabs.html">Prefabs</a></li><li><a href="layers.html">Layers</a></li><li><a href="sky.html">Sky</a></li><li><a href="lighting.html">Lighting</a></li><li><a href="problems.html">Problems</a></li><li><a href="files.html">Map files</a></li><li><a href="keys.html" aria-current="page">Keyboard reference</a></li><li><a href="manual.html">Using the manual</a></li><li><a href="extending-the-manual.html">Extending the manual</a></li></ul><h2>Audio</h2><ul><li><a href="../audio/index.html">Audio</a></li><li><a href="../audio/rooms.html">Rooms</a></li><li><a href="../audio/doors.html">Doors and openings</a></li><li><a href="../audio/outdoors.html">Outdoors and weather</a></li><li><a href="../audio/graph.html">The audio graph</a></li></ul><h2>Navigation</h2><ul><li><a href="../nav/index.html">Navigation</a></li><li><a href="../nav/ground.html">Ground</a></li><li><a href="../nav/links.html">Links</a></li><li><a href="../nav/preview.html">The Navigation tool</a></li></ul><h2>Docs</h2><ul><li><a href="../../index.html">Docs home</a></li><li><a href="../../api/index.html">API reference</a></li></ul></nav>
+	</aside>
+	<main class="docs-main">
+		<article class="prose">
+<h1 id="keyboard-reference">Keyboard reference</h1>
+<p><code>Cmd</code> is ⌘ on macOS and Control on Windows and Linux. In a key combination such as <code>Ctrl</code> <code>G</code>, <code>Ctrl</code> is Control on macOS and <code>Alt</code> on Windows and Linux. Held while you click, drag or fly, <code>Ctrl</code> is Control everywhere.</p>
+<p>A tool other than Select takes the plain keys while it runs, so a letter goes to the tool rather than to the menu below. Press <code>Esc</code> to leave the tool first. <code>Cmd</code>, <code>Ctrl</code> and <code>Alt</code> combinations, F-keys, <code>Tab</code>, <code>=</code>, <code>-</code>, and the view toggles marked <em>any tool</em> work in every tool.</p>
+<p>Keys do nothing while you are typing in a field.</p>
+<h2 id="file">File</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Keys</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Open Map…</td>
+<td><code>Cmd</code> <code>O</code></td>
+</tr>
+<tr>
+<td>Save Map</td>
+<td><code>Cmd</code> <code>S</code></td>
+</tr>
+<tr>
+<td>Save Map As…</td>
+<td><code>Cmd</code> <code>Shift</code> <code>S</code></td>
+</tr>
+<tr>
+<td>Save Modified Prefab Sets</td>
+<td></td>
+</tr>
+<tr>
+<td>Migrate 1.x Resources…</td>
+<td></td>
+</tr>
+<tr>
+<td>Close Editor</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="edit">Edit</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Keys</th>
+<th>Right-click on</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Undo</td>
+<td><code>Cmd</code> <code>Z</code></td>
+<td></td>
+</tr>
+<tr>
+<td>Redo</td>
+<td><code>Cmd</code> <code>Shift</code> <code>Z</code></td>
+<td></td>
+</tr>
+<tr>
+<td>Duplicate</td>
+<td><code>Cmd</code> <code>D</code></td>
+<td>any selection</td>
+</tr>
+<tr>
+<td>Duplicate Prefab Instance</td>
+<td><code>Cmd</code> <code>Shift</code> <code>D</code></td>
+<td>prefab instance</td>
+</tr>
+<tr>
+<td>Delete</td>
+<td><code>Backspace</code> or <code>Delete</code></td>
+<td>any selection</td>
+</tr>
+<tr>
+<td>Group</td>
+<td><code>Cmd</code> <code>G</code></td>
+<td>any selection</td>
+</tr>
+<tr>
+<td>Ungroup</td>
+<td><code>Cmd</code> <code>Shift</code> <code>G</code></td>
+<td>any selection</td>
+</tr>
+<tr>
+<td>Bring to Front</td>
+<td><code>Cmd</code> <code>Page Up</code></td>
+<td>structural brush</td>
+</tr>
+<tr>
+<td>Send to Back</td>
+<td><code>Cmd</code> <code>Page Down</code></td>
+<td>structural brush</td>
+</tr>
+<tr>
+<td>Reset Transforms</td>
+<td><code>Cmd</code> <code>R</code></td>
+<td></td>
+</tr>
+<tr>
+<td>Reset Instance Transform</td>
+<td><code>Cmd</code> <code>Shift</code> <code>R</code></td>
+<td>prefab instance</td>
+</tr>
+<tr>
+<td>Merge Brushes</td>
+<td><code>,</code></td>
+<td>brush</td>
+</tr>
+<tr>
+<td>Merge Brushes (keep originals)</td>
+<td><code>Cmd</code> <code>,</code></td>
+<td>brush</td>
+</tr>
+<tr>
+<td>Lock Texture to Geometry</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="selection">Selection</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Keys</th>
+<th>Right-click on</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pick Faces</td>
+<td><code>Q</code>; hold for faces only while it is down</td>
+<td></td>
+</tr>
+<tr>
+<td>Invert Selection</td>
+<td><code>Cmd</code> <code>I</code></td>
+<td>any selection</td>
+</tr>
+<tr>
+<td>Focus Camera on Selection</td>
+<td><code>Cmd</code> <code>A</code></td>
+<td>any selection</td>
+</tr>
+<tr>
+<td>Find Entity…</td>
+<td><code>Ctrl</code> <code>F</code></td>
+<td></td>
+</tr>
+<tr>
+<td>Grow Face Selection</td>
+<td></td>
+<td>face</td>
+</tr>
+<tr>
+<td>Select Face Loop</td>
+<td></td>
+<td>face</td>
+</tr>
+<tr>
+<td>Flood Fill Faces</td>
+<td><code>Cmd</code> <code>Shift</code> <code>F</code></td>
+<td>face</td>
+</tr>
+<tr>
+<td>Bridge Faces</td>
+<td><code>Cmd</code> <code>F</code></td>
+<td>face</td>
+</tr>
+<tr>
+<td>Pick Up Face UVs</td>
+<td><code>Cmd</code> <code>Shift</code> <code>C</code></td>
+<td>face</td>
+</tr>
+<tr>
+<td>Paint UVs onto Selected Faces</td>
+<td><code>Cmd</code> <code>Shift</code> <code>V</code></td>
+<td>face</td>
+</tr>
+<tr>
+<td>Drop Held Face UVs</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Painting UVs Carries the Texture</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Mirror on X / Y / Z</td>
+<td></td>
+<td>brush, entity</td>
+</tr>
+<tr>
+<td>Snap to Grid</td>
+<td></td>
+<td>brush, entity</td>
+</tr>
+<tr>
+<td>Apply Volume Tier to Selection</td>
+<td><code>U</code></td>
+<td>brush</td>
+</tr>
+<tr>
+<td>Move to Active Layer</td>
+<td><code>L</code></td>
+<td>any selection</td>
+</tr>
+<tr>
+<td>Trigger</td>
+<td><code>Space</code></td>
+<td>entity</td>
+</tr>
+<tr>
+<td>Simulate (Resume when paused)</td>
+<td></td>
+<td>entity</td>
+</tr>
+<tr>
+<td>Pause</td>
+<td></td>
+<td>entity</td>
+</tr>
+<tr>
+<td>Stop and Reset</td>
+<td></td>
+<td>entity</td>
+</tr>
+<tr>
+<td>Apply Active Texture</td>
+<td><code>Cmd</code> <code>T</code></td>
+<td>brush, face</td>
+</tr>
+<tr>
+<td>Make Brush Entity</td>
+<td><code>Ctrl</code> <code>T</code></td>
+<td>brush</td>
+</tr>
+<tr>
+<td>Convert to Terrain</td>
+<td></td>
+<td>brush</td>
+</tr>
+<tr>
+<td>Create Prefab from Selection</td>
+<td><code>Cmd</code> <code>[</code></td>
+<td>brush, entity</td>
+</tr>
+<tr>
+<td>Break Prefab Instance</td>
+<td><code>Ctrl</code> <code>[</code></td>
+<td>prefab instance</td>
+</tr>
+<tr>
+<td>Narrow to Selection</td>
+<td><code>Cmd</code> <code>N</code> (<em>any tool</em>)</td>
+<td>any selection</td>
+</tr>
+<tr>
+<td>Pop Narrow Level</td>
+<td><code>Cmd</code> <code>Shift</code> <code>N</code> (<em>any tool</em>)</td>
+<td></td>
+</tr>
+<tr>
+<td>Exit Narrowing</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><code>Cmd</code> <code>N</code> narrows to the selection, narrows further when already narrowed, and shows everything again when nothing is selected. <code>Cmd</code> <code>Shift</code> <code>N</code> narrows when not narrowed.</p>
+<h2 id="view">View</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Keys</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Warning Markers</td>
+<td><code>O</code></td>
+</tr>
+<tr>
+<td>Coarser Grid</td>
+<td><code>=</code> (<em>any tool</em>)</td>
+</tr>
+<tr>
+<td>Finer Grid</td>
+<td><code>-</code> (<em>any tool</em>)</td>
+</tr>
+<tr>
+<td>Bigger UI</td>
+<td><code>Cmd</code> <code>=</code></td>
+</tr>
+<tr>
+<td>Smaller UI</td>
+<td><code>Cmd</code> <code>-</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="3d-view-dropdown">3D view dropdown</h2>
+<p>The <strong>View</strong> dropdown in the 3D view's corner.</p>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Keys</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Unlit</td>
+<td><code>F1</code></td>
+</tr>
+<tr>
+<td>Lightmap</td>
+<td><code>F2</code></td>
+</tr>
+<tr>
+<td>Lightmap Scale</td>
+<td><code>F3</code></td>
+</tr>
+<tr>
+<td>Caustics</td>
+<td><code>F4</code></td>
+</tr>
+<tr>
+<td>Lit</td>
+<td><code>F5</code></td>
+</tr>
+<tr>
+<td>Grid</td>
+<td><code>Ctrl</code> <code>G</code> (<em>any tool</em>)</td>
+</tr>
+<tr>
+<td>3D Grid</td>
+<td></td>
+</tr>
+<tr>
+<td>Wireframes</td>
+<td><code>Ctrl</code> <code>B</code> (<em>any tool</em>)</td>
+</tr>
+<tr>
+<td>Detail Tint</td>
+<td></td>
+</tr>
+<tr>
+<td>WYSIWYG Tool Previews</td>
+<td><code>W</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="tools">Tools</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Keys</th>
+<th>Right-click on</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cube Brush</td>
+<td><code>B</code></td>
+<td></td>
+</tr>
+<tr>
+<td>Cylinder Brush</td>
+<td><code>C</code></td>
+<td></td>
+</tr>
+<tr>
+<td>Cone Brush</td>
+<td><code>Shift</code> <code>C</code></td>
+<td></td>
+</tr>
+<tr>
+<td>Ramp Brush</td>
+<td><code>Shift</code> <code>R</code></td>
+<td></td>
+</tr>
+<tr>
+<td>Stair Brush</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Arch Brush</td>
+<td><code>A</code></td>
+<td></td>
+</tr>
+<tr>
+<td>Polygon Brush</td>
+<td><code>Cmd</code> <code>P</code></td>
+<td></td>
+</tr>
+<tr>
+<td>Clip</td>
+<td><code>X</code></td>
+<td></td>
+</tr>
+<tr>
+<td>Face</td>
+<td><code>F</code></td>
+<td></td>
+</tr>
+<tr>
+<td>Vertex</td>
+<td><code>V</code></td>
+<td></td>
+</tr>
+<tr>
+<td>Extrude</td>
+<td><code>E</code></td>
+<td></td>
+</tr>
+<tr>
+<td>Entity</td>
+<td><code>Cmd</code> <code>E</code></td>
+<td></td>
+</tr>
+<tr>
+<td>Prop</td>
+<td><code>Cmd</code> <code>Shift</code> <code>E</code></td>
+<td></td>
+</tr>
+<tr>
+<td>Command Launcher…</td>
+<td><code>/</code> or <code>Cmd</code> <code>Shift</code> <code>P</code> (<em>any tool</em>)</td>
+<td></td>
+</tr>
+<tr>
+<td>Prefab</td>
+<td><code>Cmd</code> <code>Shift</code> <code>[</code></td>
+<td></td>
+</tr>
+<tr>
+<td>Lightmap</td>
+<td><code>Cmd</code> <code>L</code></td>
+<td></td>
+</tr>
+<tr>
+<td>Sky</td>
+<td><code>Cmd</code> <code>K</code></td>
+<td></td>
+</tr>
+<tr>
+<td>Move</td>
+<td><code>G</code></td>
+<td></td>
+</tr>
+<tr>
+<td>Rotate</td>
+<td><code>R</code></td>
+<td></td>
+</tr>
+<tr>
+<td>Scale</td>
+<td><code>S</code></td>
+<td></td>
+</tr>
+<tr>
+<td>Texture Browser…</td>
+<td><code>T</code></td>
+<td></td>
+</tr>
+<tr>
+<td>Decal</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Terrain</td>
+<td><code>H</code></td>
+<td></td>
+</tr>
+<tr>
+<td>Decal Browser…</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Edit Entity Properties</td>
+<td><code>P</code></td>
+<td>entity</td>
+</tr>
+<tr>
+<td>Pick Working Plane from Face</td>
+<td><code>.</code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><code>G</code> moves brushes and entities, or pushes faces when only faces are selected.</p>
+<h2 id="help">Help</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Keys</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Manual…</td>
+<td><code>Shift</code> <code>F1</code></td>
+</tr>
+<tr>
+<td>Welcome…</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="not-in-a-menu">Not in a menu</h2>
+<table>
+<thead>
+<tr>
+<th>Keys</th>
+<th>Does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Tab</code></td>
+<td>cycle the tier of new brushes; hold for the tier wheel</td>
+</tr>
+<tr>
+<td><code>M</code></td>
+<td>maximise the view under focus, or restore all four</td>
+</tr>
+<tr>
+<td><code>Esc</code></td>
+<td>leave the current tool; in the Select tool, clear the selection</td>
+</tr>
+</tbody>
+</table>
+<h2 id="mouse">Mouse</h2>
+<table>
+<thead>
+<tr>
+<th>Where</th>
+<th>Input</th>
+<th>Does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3D view</td>
+<td>hold right button, move</td>
+<td>look around</td>
+</tr>
+<tr>
+<td>3D view</td>
+<td>hold right button, <code>W</code> <code>A</code> <code>S</code> <code>D</code></td>
+<td>fly; <code>Shift</code> faster, <code>Ctrl</code> slower</td>
+</tr>
+<tr>
+<td>3D view</td>
+<td>two-finger drag / with <code>Shift</code> / with <code>Ctrl</code></td>
+<td>orbit / pan / dolly</td>
+</tr>
+<tr>
+<td>2D view</td>
+<td>right-drag, or two-finger drag</td>
+<td>pan</td>
+</tr>
+<tr>
+<td>2D view</td>
+<td>wheel, or <code>Ctrl</code> and two-finger drag</td>
+<td>zoom</td>
+</tr>
+<tr>
+<td>2D view</td>
+<td>drag from a ruler with the right mouse button</td>
+<td>move the cut of the view across from that ruler</td>
+</tr>
+<tr>
+<td>any view</td>
+<td>click</td>
+<td>select; a face in face mode (<code>Q</code>)</td>
+</tr>
+<tr>
+<td>any view</td>
+<td>hold <code>Q</code> and click</td>
+<td>select a face</td>
+</tr>
+<tr>
+<td>any view</td>
+<td><code>Cmd</code>-click</td>
+<td>add to or remove from the selection</td>
+</tr>
+<tr>
+<td>any view</td>
+<td><code>Alt</code>-click</td>
+<td>pick the far side</td>
+</tr>
+<tr>
+<td>any view</td>
+<td>hold <code>I</code> and click</td>
+<td>select one brush of a group or prefab instance</td>
+</tr>
+<tr>
+<td>any view</td>
+<td>double-click</td>
+<td>list everything under the cursor</td>
+</tr>
+<tr>
+<td>any view</td>
+<td><code>Shift</code>-click a prefab instance</td>
+<td>edit the prefab</td>
+</tr>
+<tr>
+<td>any view</td>
+<td><code>Shift</code>-click a face in face mode</td>
+<td>paint the picked-up UVs onto it</td>
+</tr>
+<tr>
+<td>any view</td>
+<td>press on a face in face mode, drag with <code>Shift</code> / <code>Alt</code></td>
+<td>move / extrude the face</td>
+</tr>
+<tr>
+<td>any view</td>
+<td>right-click</td>
+<td>the right-click menu</td>
+</tr>
+<tr>
+<td>2D view</td>
+<td>drag / <code>Cmd</code>-drag</td>
+<td>select / add in a box; faces in face mode</td>
+</tr>
+</tbody>
+</table>
+<h2 id="inside-tools">Inside tools</h2>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Keys</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cube, Cylinder, Cone, Ramp, Stair, Arch, Polygon</td>
+<td><code>Enter</code> keep; <code>Esc</code> take back the last click; <code>Cmd</code> <code>Z</code> / <code>Cmd</code> <code>Shift</code> <code>Z</code> undo / redo adjustments</td>
+</tr>
+<tr>
+<td>Cylinder</td>
+<td><code>Left</code> / <code>Right</code> sides</td>
+</tr>
+<tr>
+<td>Cone</td>
+<td><code>Left</code> / <code>Right</code> sides</td>
+</tr>
+<tr>
+<td>Ramp</td>
+<td><code>Space</code> turn the slope a quarter; <code>I</code> inverse</td>
+</tr>
+<tr>
+<td>Stair</td>
+<td><code>Space</code> turn a quarter</td>
+</tr>
+<tr>
+<td>Arch</td>
+<td><code>Left</code> / <code>Right</code> sides; <code>Space</code> span the other axis</td>
+</tr>
+<tr>
+<td>Polygon</td>
+<td><code>Backspace</code> or right-click remove the last point</td>
+</tr>
+<tr>
+<td>Move, Rotate, Scale</td>
+<td><code>X</code> / <code>Y</code> / <code>Z</code> lock an axis; click drop; <code>Alt</code>-click move the pivot; <code>Esc</code> cancel. Rotating: <code>Shift</code> 45°, <code>Ctrl</code> 5°</td>
+</tr>
+<tr>
+<td>Clip</td>
+<td><code>Space</code> what to keep; <code>Enter</code> cut; <code>Alt</code>-click a face to cut along it; hold <code>Alt</code> to highlight faces; <code>Esc</code> cancel</td>
+</tr>
+<tr>
+<td>Extrude, face move</td>
+<td><code>Space</code> uniform / projected; click or <code>Enter</code> finish; <code>Esc</code> cancel</td>
+</tr>
+<tr>
+<td>Vertex</td>
+<td><code>Cmd</code>-click add; <code>G</code> move; <code>X</code> / <code>Y</code> / <code>Z</code> lock an axis; <code>Enter</code> keep; <code>Esc</code> deselect, then discard</td>
+</tr>
+<tr>
+<td>Face</td>
+<td><code>G</code> / <code>R</code> / <code>S</code> offset / rotate / scale with the mouse; arrow keys nudge; <code>Enter</code> apply; <code>Esc</code> cancel</td>
+</tr>
+<tr>
+<td>Entity, Prefab</td>
+<td>click place; <code>Esc</code> finish</td>
+</tr>
+<tr>
+<td>Decal</td>
+<td>click place; <code>Tab</code> place / adjust; <code>Esc</code> leave</td>
+</tr>
+<tr>
+<td>Prop</td>
+<td>click place; <code>Tab</code> place / select; <code>Esc</code> leave</td>
+</tr>
+<tr>
+<td>Terrain</td>
+<td>drag raise; <code>Shift</code>-drag lower; <code>[</code> / <code>]</code> ring size; <code>Esc</code> leave</td>
+</tr>
+<tr>
+<td>Lightmap, Sky</td>
+<td><code>Esc</code> leave</td>
+</tr>
+</tbody>
+</table>
+<p>While dragging, <code>Shift</code> snaps to twice the grid and <code>Ctrl</code> to a quarter.</p>
+		</article>
+		<p class="docs-source">Hammerite latest · built from 45a63b69, 2026-10-19</p>
+	</main>
+</div>
+
+<footer class="studio-foot">
+	<a href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>

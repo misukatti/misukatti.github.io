@@ -154,6 +154,23 @@
 
 .prose .unlinked { color: var(--bone); }
 
+.prose figure { margin: 1.5rem 0; }
+
+.prose figure img { display: block; max-width: 100%; height: auto; border-radius: 6px; }
+
+.prose figcaption { margin-top: 0.5rem; font-size: 0.9rem; color: var(--bone-dim); }
+
+.prose .manual-missing {
+	padding: 2rem 1rem;
+	border: 1px dashed var(--line);
+	border-radius: 6px;
+	text-align: center;
+}
+
+.prose blockquote.callout { border-left-color: var(--bone-dim); background: var(--stone-raised); border-radius: 0 6px 6px 0; }
+
+.prose blockquote.callout-warning { border-left-color: var(--red); }
+
 .lede-doc { font-size: 1.15rem; color: var(--bone-dim); }
 
 .doc-cards {

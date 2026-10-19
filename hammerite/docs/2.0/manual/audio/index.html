@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Audio manual — Hammerite 3D 2.0 docs</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="../../../../assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="../../../../assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../../../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@300&display=swap">
+<link rel="stylesheet" href="../../../../hammerite.css">
+<link rel="stylesheet" href="../../../docs.css">
+<script src="../../../versions.js" defer></script>
+</head>
+<body class="docs" data-docs-version="2.0">
+
+<header class="studio">
+	<a class="studio-logo" href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="../../../../index.html">Hammerite 3D</a>
+		<a href="../../index.html">Docs</a>
+		<a href="../../guides/index.html">Guides</a>
+		<a href="../../api/index.html">API</a>
+		<a href="../index.html">Manual</a>
+	</nav>
+</header>
+
+<div class="docs-banner" hidden></div>
+
+<div class="docs-layout">
+	<aside class="docs-side">
+		<a class="docs-brand" href="../../index.html"><img src="../../../../assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
+		<label class="docs-version">Version
+			<select aria-label="Docs version"><option value="2.0" selected>2.0</option></select>
+		</label>
+		<nav class="api-nav"><a class="api-home" href="../index.html">Manual</a><h2>Core</h2><ul><li><a href="../core/index.html">Core</a></li><li><a href="../core/carved-world.html">The carved world</a></li><li><a href="../core/rooms-and-portals.html">Rooms and portals</a></li><li><a href="../core/fills.html">Fills</a></li><li><a href="../core/entities.html">Entities</a></li><li><a href="../core/textures.html">Textures</a></li><li><a href="../core/lighting.html">Lighting</a></li><li><a href="../core/baking.html">Baking</a></li><li><a href="../core/variants.html">Variants</a></li><li><a href="../core/terrain.html">Terrain</a></li><li><a href="../core/glossary.html">Glossary</a></li></ul><h2>Editor</h2><ul><li><a href="../editor/index.html">Editor</a></li><li><a href="../editor/interface.html">The interface</a></li><li><a href="../editor/camera.html">Camera</a></li><li><a href="../editor/selecting.html">Selecting</a></li><li><a href="../editor/building.html">Building</a></li><li><a href="../editor/editing.html">Editing</a></li><li><a href="../editor/texturing.html">Texturing</a></li><li><a href="../editor/terrain.html">Terrain</a></li><li><a href="../editor/entities.html">Entities</a></li><li><a href="../editor/props.html">Props</a></li><li><a href="../editor/decals.html">Decals</a></li><li><a href="../editor/prefabs.html">Prefabs</a></li><li><a href="../editor/layers.html">Layers</a></li><li><a href="../editor/sky.html">Sky</a></li><li><a href="../editor/lighting.html">Lighting</a></li><li><a href="../editor/problems.html">Problems</a></li><li><a href="../editor/files.html">Map files</a></li><li><a href="../editor/keys.html">Keyboard reference</a></li><li><a href="../editor/manual.html">Using the manual</a></li><li><a href="../editor/extending-the-manual.html">Extending the manual</a></li></ul><h2>Audio</h2><ul><li><a href="index.html" aria-current="page">Audio</a></li><li><a href="rooms.html">Rooms</a></li><li><a href="doors.html">Doors and openings</a></li><li><a href="outdoors.html">Outdoors and weather</a></li><li><a href="graph.html">The audio graph</a></li></ul><h2>Navigation</h2><ul><li><a href="../nav/index.html">Navigation</a></li><li><a href="../nav/ground.html">Ground</a></li><li><a href="../nav/links.html">Links</a></li><li><a href="../nav/preview.html">The Navigation tool</a></li></ul><h2>Docs</h2><ul><li><a href="../../index.html">Docs home</a></li><li><a href="../../api/index.html">API reference</a></li></ul></nav>
+	</aside>
+	<main class="docs-main">
+		<article class="prose">
+<h1 id="audio">Audio</h1>
+<p>The audio addon makes sound travel through your level the way the rooms allow. A sound in another room is heard from the doorway it reaches you by, quieter and duller for the way it came. Sound never goes through walls.</p>
+<p>You do not place sound zones or portals. Every room is a zone and every opening is a portal, derived from the carve. See <a href="../core/rooms-and-portals.html">Rooms and portals</a>.</p>
+<h2 id="what-you-author">What you author</h2>
+<table>
+<thead>
+<tr>
+<th>Where</th>
+<th>What</th>
+<th>Page</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Air brush, inspector <strong>Audio</strong></td>
+<td>how a room sounds: zone type, reverb, weather, ambience</td>
+<td><a href="rooms.html">Rooms</a></td>
+</tr>
+<tr>
+<td>Opening, <strong>Audio Portals</strong> tool</td>
+<td>a name, and how much a closed door blocks</td>
+<td><a href="doors.html">Doors and openings</a></td>
+</tr>
+<tr>
+<td>Entities <code>env_sound</code>, <code>env_sound_environment</code></td>
+<td>sounds placed in the level; rain and wind</td>
+<td><a href="rooms.html#placed-sounds">Rooms</a>, <a href="outdoors.html">Outdoors</a></td>
+</tr>
+<tr>
+<td>The map</td>
+<td>the audio graph, built with one button</td>
+<td><a href="graph.html">The audio graph</a></td>
+</tr>
+</tbody>
+</table>
+<p>Everything on an air brush defaults to <strong>Auto</strong>. A level where you touch nothing still sounds right once its graph is built. Override only where Auto is wrong.</p>
+<h2 id="what-your-game-defines">What your game defines</h2>
+<p>Sound types (a footstep, breaking glass), how loud each is, and how far guards hear it are your game's. So are the list of ambience ids and the door entity that closes an opening. This manual covers what Hammerite measures; ask your game's documentation for its vocabulary.</p>
+<h2 id="pages">Pages</h2>
+<ul>
+<li><a href="rooms.html">Rooms</a>: the acoustic character of a room, reverb, ambience, water.</li>
+<li><a href="doors.html">Doors and openings</a>: openings as sound paths, naming them, closed doors.</li>
+<li><a href="outdoors.html">Outdoors and weather</a>: open sky, covered spaces, rain heard at windows.</li>
+<li><a href="graph.html">The audio graph</a>: building it, knowing when it is out of date, the tool and overlays.</li>
+</ul>
+		</article>
+		<p class="docs-source">Hammerite 2.0 · built from 6d57ab2d, 2026-10-17</p>
+	</main>
+</div>
+
+<footer class="studio-foot">
+	<a href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>

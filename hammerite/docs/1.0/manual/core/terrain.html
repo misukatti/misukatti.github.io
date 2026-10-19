@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Terrain — Hammerite 3D 1.0 docs</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="../../../../assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="../../../../assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../../../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@300&display=swap">
+<link rel="stylesheet" href="../../../../hammerite.css">
+<link rel="stylesheet" href="../../../docs.css">
+<script src="../../../versions.js" defer></script>
+</head>
+<body class="docs" data-docs-version="1.0">
+
+<header class="studio">
+	<a class="studio-logo" href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="../../../../index.html">Hammerite 3D</a>
+		<a href="../../index.html">Docs</a>
+		<a href="../../guides/index.html">Guides</a>
+		<a href="../../api/index.html">API</a>
+		<a href="../index.html">Manual</a>
+	</nav>
+</header>
+
+<div class="docs-banner" hidden></div>
+
+<div class="docs-layout">
+	<aside class="docs-side">
+		<a class="docs-brand" href="../../index.html"><img src="../../../../assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
+		<label class="docs-version">Version
+			<select aria-label="Docs version"><option value="1.0" selected>1.0</option></select>
+		</label>
+		<nav class="api-nav"><a class="api-home" href="../index.html">Manual</a><h2>Core</h2><ul><li><a href="index.html">Core</a></li><li><a href="carved-world.html">The carved world</a></li><li><a href="rooms-and-portals.html">Rooms and portals</a></li><li><a href="fills.html">Fills</a></li><li><a href="entities.html">Entities</a></li><li><a href="textures.html">Textures</a></li><li><a href="lighting.html">Lighting</a></li><li><a href="baking.html">Baking</a></li><li><a href="variants.html">Variants</a></li><li><a href="terrain.html" aria-current="page">Terrain</a></li><li><a href="glossary.html">Glossary</a></li></ul><h2>Editor</h2><ul><li><a href="../editor/index.html">Editor</a></li><li><a href="../editor/interface.html">The interface</a></li><li><a href="../editor/camera.html">Camera</a></li><li><a href="../editor/selecting.html">Selecting</a></li><li><a href="../editor/building.html">Building</a></li><li><a href="../editor/editing.html">Editing</a></li><li><a href="../editor/texturing.html">Texturing</a></li><li><a href="../editor/terrain.html">Terrain</a></li><li><a href="../editor/entities.html">Entities</a></li><li><a href="../editor/props.html">Props</a></li><li><a href="../editor/decals.html">Decals</a></li><li><a href="../editor/prefabs.html">Prefabs</a></li><li><a href="../editor/layers.html">Layers</a></li><li><a href="../editor/sky.html">Sky</a></li><li><a href="../editor/lighting.html">Lighting</a></li><li><a href="../editor/problems.html">Problems</a></li><li><a href="../editor/files.html">Map files</a></li><li><a href="../editor/keys.html">Keyboard reference</a></li><li><a href="../editor/manual.html">Using the manual</a></li><li><a href="../editor/extending-the-manual.html">Extending the manual</a></li></ul><h2>Audio</h2><ul><li><a href="../audio/index.html">Audio</a></li><li><a href="../audio/rooms.html">Rooms</a></li><li><a href="../audio/doors.html">Doors and openings</a></li><li><a href="../audio/outdoors.html">Outdoors and weather</a></li><li><a href="../audio/graph.html">The audio graph</a></li></ul><h2>Navigation</h2><ul><li><a href="../nav/index.html">Navigation</a></li><li><a href="../nav/ground.html">Ground</a></li><li><a href="../nav/links.html">Links</a></li><li><a href="../nav/preview.html">The Navigation tool</a></li></ul><h2>Docs</h2><ul><li><a href="../../index.html">Docs home</a></li><li><a href="../../api/index.html">API reference</a></li></ul></nav>
+	</aside>
+	<main class="docs-main">
+		<article class="prose">
+<h1 id="terrain">Terrain</h1>
+<p><strong>Terrain</strong> is sculptable ground made of ordinary detail brushes. Converting a brush cuts it into a grid of cells, each cell into two triangular columns (prisms). The tops of the prisms meet at the grid points, and sculpting moves those points up and down.</p>
+<p>How to convert and sculpt: <a href="../editor/terrain.html">Terrain</a> in the Editor section.</p>
+<figure><img src="images/terrain-prisms.png" alt="Terrain after sculpting: a grid of prisms with a raised mound in the middle" loading="lazy"><figcaption>Terrain after sculpting: a grid of prisms with a raised mound in the middle</figcaption></figure>
+<h2 id="what-terrain-is">What terrain is</h2>
+<ul>
+<li>Every prism is a <strong>detail</strong> brush, whatever the brush it was converted from was. Terrain is dressing inside a room: it carves nothing and makes no openings. See <a href="carved-world.html#detail-is-dressing">The carved world</a>.</li>
+<li>It is drawn, collided with, walked on, lit and saved like any other detail.</li>
+<li>The walls between neighbouring prisms are hidden, so the ground reads as one surface.</li>
+<li>The heights live on the prisms and nowhere else. There is no separate heightmap.</li>
+</ul>
+<p>Put terrain inside a room. Carve the room tall enough for the ground you intend to raise.</p>
+<h2 id="which-brushes-can-be-converted">Which brushes can be converted</h2>
+<p>A brush can become terrain when:</p>
+<ul>
+<li>It is solid or detail. Air is a hole in the world, and ground is not.</li>
+<li>It has a flat top facing straight up.</li>
+<li>No other face points even slightly upward. Sides are upright or face partly down.</li>
+<li>It does not belong to an entity, and is not terrain already.</li>
+</ul>
+<p>Converting replaces the brush with its prisms, as detail, on the same layer.</p>
+<p>A room's own air brush is refused for the first of those reasons: terrain is solid, so converting the air would have replaced the room with ground. Convert a solid or detail slab standing in the room instead.</p>
+<h2 id="limits">Limits</h2>
+<table>
+<thead>
+<tr>
+<th>Limit</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Flat-topped columns only</td>
+<td>Each prism's top is one flat triangle over its footprint. No overhangs, caves or vertical cliffs within the terrain.</td>
+</tr>
+<tr>
+<td>At most 64 cells a side</td>
+<td>A larger footprint gets larger cells instead. More would be tens of thousands of brushes.</td>
+</tr>
+<tr>
+<td>Faceted</td>
+<td>Each cell is two flat triangles. A finer cell size gives a smoother surface and more brushes.</td>
+</tr>
+<tr>
+<td>At least 1 unit thick</td>
+<td>Lowering stops before a prism's top reaches its bottom.</td>
+</tr>
+</tbody>
+</table>
+<p>The cell size is set when converting, 32 units by default. To change it, convert again from a new brush.</p>
+		</article>
+		<p class="docs-source">Hammerite 1.0 · built from 059fce03, 2026-10-10</p>
+	</main>
+</div>
+
+<footer class="studio-foot">
+	<a href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>

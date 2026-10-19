@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The audio graph — Hammerite 3D latest docs</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="../../../../assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="../../../../assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../../../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@300&display=swap">
+<link rel="stylesheet" href="../../../../hammerite.css">
+<link rel="stylesheet" href="../../../docs.css">
+<script src="../../../versions.js" defer></script>
+</head>
+<body class="docs" data-docs-version="latest">
+
+<header class="studio">
+	<a class="studio-logo" href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="../../../../index.html">Hammerite 3D</a>
+		<a href="../../index.html">Docs</a>
+		<a href="../../guides/index.html">Guides</a>
+		<a href="../../api/index.html">API</a>
+		<a href="../index.html">Manual</a>
+	</nav>
+</header>
+
+<div class="docs-banner" hidden></div>
+
+<div class="docs-layout">
+	<aside class="docs-side">
+		<a class="docs-brand" href="../../index.html"><img src="../../../../assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
+		<label class="docs-version">Version
+			<select aria-label="Docs version"><option value="latest" selected>latest</option></select>
+		</label>
+		<nav class="api-nav"><a class="api-home" href="../index.html">Manual</a><h2>Core</h2><ul><li><a href="../core/index.html">Core</a></li><li><a href="../core/carved-world.html">The carved world</a></li><li><a href="../core/rooms-and-portals.html">Rooms and portals</a></li><li><a href="../core/fills.html">Fills</a></li><li><a href="../core/entities.html">Entities</a></li><li><a href="../core/textures.html">Textures</a></li><li><a href="../core/lighting.html">Lighting</a></li><li><a href="../core/baking.html">Baking</a></li><li><a href="../core/variants.html">Variants</a></li><li><a href="../core/terrain.html">Terrain</a></li><li><a href="../core/glossary.html">Glossary</a></li></ul><h2>Editor</h2><ul><li><a href="../editor/index.html">Editor</a></li><li><a href="../editor/interface.html">The interface</a></li><li><a href="../editor/camera.html">Camera</a></li><li><a href="../editor/selecting.html">Selecting</a></li><li><a href="../editor/building.html">Building</a></li><li><a href="../editor/editing.html">Editing</a></li><li><a href="../editor/texturing.html">Texturing</a></li><li><a href="../editor/terrain.html">Terrain</a></li><li><a href="../editor/entities.html">Entities</a></li><li><a href="../editor/props.html">Props</a></li><li><a href="../editor/decals.html">Decals</a></li><li><a href="../editor/prefabs.html">Prefabs</a></li><li><a href="../editor/layers.html">Layers</a></li><li><a href="../editor/sky.html">Sky</a></li><li><a href="../editor/lighting.html">Lighting</a></li><li><a href="../editor/problems.html">Problems</a></li><li><a href="../editor/files.html">Map files</a></li><li><a href="../editor/keys.html">Keyboard reference</a></li><li><a href="../editor/manual.html">Using the manual</a></li><li><a href="../editor/extending-the-manual.html">Extending the manual</a></li></ul><h2>Audio</h2><ul><li><a href="index.html">Audio</a></li><li><a href="rooms.html">Rooms</a></li><li><a href="doors.html">Doors and openings</a></li><li><a href="outdoors.html">Outdoors and weather</a></li><li><a href="graph.html" aria-current="page">The audio graph</a></li></ul><h2>Navigation</h2><ul><li><a href="../nav/index.html">Navigation</a></li><li><a href="../nav/ground.html">Ground</a></li><li><a href="../nav/links.html">Links</a></li><li><a href="../nav/preview.html">The Navigation tool</a></li></ul><h2>Docs</h2><ul><li><a href="../../index.html">Docs home</a></li><li><a href="../../api/index.html">API reference</a></li></ul></nav>
+	</aside>
+	<main class="docs-main">
+		<article class="prose">
+<h1 id="the-audio-graph">The audio graph</h1>
+<p>The audio graph is the map of routes sound can take: the zones, the openings between them and the way from each opening to the next. It is built once, from the level as it stands, and saved in the map.</p>
+<p>A map with no graph is not built one as it loads: its sounds go in straight lines, through walls,
+until you build one here, and the message log says so when you open the map. Building it here is how
+that graph is saved with the map - and it is the only way to change what the build read, since what
+you author about a room or an opening only reaches sound through a build.</p>
+<h2 id="building-it">Building it</h2>
+<ol>
+<li>Click <strong>Audio Portals</strong> on the toolbar, or choose it from the <strong>Tools</strong> menu.</li>
+<li>In the panel, click <strong>Build audio graph</strong>.</li>
+<li>Read the result under the button: zones, portals, how many are named, edges.</li>
+<li>Save the map.</li>
+</ol>
+<p>The result may also say:</p>
+<ul>
+<li><em>N openings skipped: room excluded.</em> One side of each is a room with <strong>Exclude from graph</strong> on.</li>
+<li><em>N openings are internal to one zone.</em> Each joins two rooms that are one zone anyway, for example through an overlap elsewhere.</li>
+</ul>
+<h2 id="variants">Variants</h2>
+<p>Each <a href="../core/variants.html">variant</a> is a separate world with its own graph. <strong>Build audio graph</strong> builds the variant you are looking at. When the map has more than one variant, <strong>Build for every variant</strong> appears below it and builds them all.</p>
+<h2 id="when-the-graph-is-out-of-date">When the graph is out of date</h2>
+<p>An edit after the build leaves the graph describing the old level. The graph still works, but sound follows the old layout. A graph built as the map loaded is not out of date, because it was built from the map in front of you - so the first thing you author about a room dates it, and the button asks to be pressed.</p>
+<p>These edits date it:</p>
+<ul>
+<li>moving, resizing, adding or deleting an air brush</li>
+<li>changing any value in an air brush's <strong>Audio</strong> section</li>
+<li>changing what can see the sky</li>
+<li>adding or removing a water fill</li>
+<li>naming an opening, or changing its <strong>Closed dB</strong> or <strong>Occlusion</strong></li>
+<li>changing an air brush's textures</li>
+</ul>
+<p>These do not: detail brushwork, and entities of any kind. Dressing a room never dates its acoustics.</p>
+<p>The editor tells you in three places:</p>
+<ul>
+<li>The build button reads <code>Rebuild audio graph *</code>. Its tooltip says the map has changed since the build.</li>
+<li>The message log warns once, when the tool is open and an edit dates the graph.</li>
+<li>The game warns when it loads a map whose graph is out of date.</li>
+</ul>
+<p>Rebuild, then save.</p>
+<h2 id="the-audio-portals-tool">The Audio Portals tool</h2>
+<p>The tool draws the graph over the 3D view.</p>
+<table>
+<thead>
+<tr>
+<th>Drawn</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>yellow outline, centre marker</td>
+<td>a named opening</td>
+</tr>
+<tr>
+<td>dim blue outline</td>
+<td>an unnamed opening</td>
+</tr>
+<tr>
+<td>white outline</td>
+<td>the selected opening</td>
+</tr>
+<tr>
+<td>orange sphere</td>
+<td>an Interior zone</td>
+</tr>
+<tr>
+<td>blue sphere</td>
+<td>an Exterior zone</td>
+</tr>
+<tr>
+<td>green sphere</td>
+<td>a Semi-exterior zone</td>
+</tr>
+<tr>
+<td>bright green line</td>
+<td>an edge between two openings that can see each other</td>
+</tr>
+<tr>
+<td>dark green line</td>
+<td>an edge that bends round a corner</td>
+</tr>
+</tbody>
+</table>
+<p>One sphere per zone. An L-shaped room made of two overlapping air brushes shows one sphere; if it shows two, the brushes abut rather than overlap.</p>
+<p>Turn the spheres and lines off with <strong>Show zones</strong> and <strong>Show graph edges</strong> in the panel.</p>
+<p>Openings are also outlined in the 2D views. Spheres and edges show the graph as last built, so they are missing until the first build and may be out of date after an edit.</p>
+<figure><img src="images/graph-tool.png" alt="Audio Portals tool over three rooms: zone spheres, openings, and green edges between them" loading="lazy"><figcaption>Audio Portals tool over three rooms: zone spheres, openings, and green edges between them</figcaption></figure>
+<figure><img src="images/graph-stale.png" alt="The build button reading Rebuild audio graph * after a room was moved" loading="lazy"><figcaption>The build button reading Rebuild audio graph * after a room was moved</figcaption></figure>
+<h2 id="the-acoustics-overlay">The Acoustics overlay</h2>
+<p>The <strong>Cells</strong> dropdown in each 2D view has <strong>Acoustics</strong>. It colours each room on the 2D floorplan by its zone type. It reads the brush settings directly, so it is current without a build. See <a href="outdoors.html#open-to-the-sky-is-not-the-same-as-lit-by-it">Outdoors</a> for the colours.</p>
+		</article>
+		<p class="docs-source">Hammerite latest · built from 45a63b69, 2026-10-19</p>
+	</main>
+</div>
+
+<footer class="studio-foot">
+	<a href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>

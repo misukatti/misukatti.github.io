@@ -24,6 +24,7 @@
 		<a href="index.html">Docs</a>
 		<a href="guides/index.html">Guides</a>
 		<a href="api/index.html">API</a>
+		<a href="manual/index.html">Manual</a>
 	</nav>
 </header>
 
@@ -35,7 +36,7 @@
 		<label class="docs-version">Version
 			<select aria-label="Docs version"><option value="latest" selected>latest</option></select>
 		</label>
-		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="install.html">Installing Hammerite</a></li><li><a href="getting-started.html">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="guides/writing-an-entity.html">Writing an entity class</a></li><li><a href="guides/rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="guides/stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="guides/stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="guides/probe-lighting.html">Probe lighting</a></li><li><a href="guides/entity-sets.html">Entity sets</a></li><li><a href="guides/moving-brush-entities.html">Moving brush entities</a></li><li><a href="guides/guard-navigation.html">Navigation for guards</a></li><li><a href="guides/brush-materials.html">Brush materials and shaders</a></li><li><a href="guides/brush-properties.html">Properties on brushes</a></li></ul><h2>Reference</h2><ul><li><a href="api/index.html">API reference</a></li><li><a href="migrating-to-2.0.html">Migrating to Hammerite 2.0</a></li><li><a href="baking.html">Baking from a script</a></li><li><a href="performance.html">Performance and limits</a></li><li><a href="troubleshooting.html" aria-current="page">Troubleshooting</a></li><li><a href="api-stability.html">API stability</a></li></ul></nav>
+		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="install.html">Installing Hammerite</a></li><li><a href="getting-started.html">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="guides/writing-an-entity.html">Writing an entity class</a></li><li><a href="guides/rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="guides/stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="guides/stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="guides/probe-lighting.html">Probe lighting</a></li><li><a href="guides/entity-sets.html">Entity sets</a></li><li><a href="guides/moving-brush-entities.html">Moving brush entities</a></li><li><a href="guides/guard-navigation.html">Navigation for guards</a></li><li><a href="guides/brush-materials.html">Brush materials and shaders</a></li><li><a href="guides/brush-properties.html">Properties on brushes</a></li></ul><h2>Reference</h2><ul><li><a href="api/index.html">API reference</a></li><li><a href="manual/index.html">Manual</a></li><li><a href="migrating-to-2.0.html">Migrating to Hammerite 2.0</a></li><li><a href="baking.html">Baking from a script</a></li><li><a href="performance.html">Performance and limits</a></li><li><a href="troubleshooting.html" aria-current="page">Troubleshooting</a></li><li><a href="api-stability.html">API stability</a></li></ul></nav>
 	</aside>
 	<main class="docs-main">
 		<article class="prose">
@@ -93,8 +94,8 @@ world as it was when baked. The Problems panel lists what the last bake could no
 <p><strong>Shortcuts do nothing.</strong> A tool other than Select takes the plain keys while it is running: press
 <code>Esc</code> first. Keys are also ignored while a text field has focus. On Windows and Linux, <code>Cmd</code> in the
 manual is <code>Ctrl</code>, and a <code>Ctrl</code> combination is <code>Alt</code>.</p>
-<p><strong>Clicking selects brushes, not faces.</strong> Faces are picked in face mode: tap <code>Q</code> or press <strong>Faces</strong> on
-the toolbar, or hold <code>Q</code> while clicking.</p>
+<p><strong>Clicking selects brushes, not faces.</strong> Faces are picked in face mode: tap <code>Q</code> or set <strong>Selection</strong> on
+the toolbar to <strong>Faces</strong>, or hold <code>Q</code> while clicking.</p>
 <p><strong>The UI is too small or too large.</strong> <strong>View &gt; Bigger UI / Smaller UI</strong> (<code>Cmd</code> <code>=</code> / <code>Cmd</code> <code>-</code>). It is
 remembered per machine.</p>
 <p><strong>The in-game manual is empty in an exported game.</strong> The editor plugin packs the addons' manual
@@ -107,7 +108,7 @@ the lightmap tool says so in its panel, and a script's <code>bake()</code> answe
 <p><strong>Baking is slow or runs out of memory.</strong> See <a href="performance.html">Performance and limits</a>: coarser
 lightmap scale on large dim surfaces is the main lever.</p>
 		</article>
-		<p class="docs-source">Hammerite latest · built from d8d727be, 2026-10-17</p>
+		<p class="docs-source">Hammerite latest · built from 45a63b69, 2026-10-19</p>
 	</main>
 </div>
 

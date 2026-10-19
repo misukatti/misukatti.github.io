@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Baking — Hammerite 3D latest docs</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="../../../../assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="../../../../assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../../../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@300&display=swap">
+<link rel="stylesheet" href="../../../../hammerite.css">
+<link rel="stylesheet" href="../../../docs.css">
+<script src="../../../versions.js" defer></script>
+</head>
+<body class="docs" data-docs-version="latest">
+
+<header class="studio">
+	<a class="studio-logo" href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="../../../../index.html">Hammerite 3D</a>
+		<a href="../../index.html">Docs</a>
+		<a href="../../guides/index.html">Guides</a>
+		<a href="../../api/index.html">API</a>
+		<a href="../index.html">Manual</a>
+	</nav>
+</header>
+
+<div class="docs-banner" hidden></div>
+
+<div class="docs-layout">
+	<aside class="docs-side">
+		<a class="docs-brand" href="../../index.html"><img src="../../../../assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
+		<label class="docs-version">Version
+			<select aria-label="Docs version"><option value="latest" selected>latest</option></select>
+		</label>
+		<nav class="api-nav"><a class="api-home" href="../index.html">Manual</a><h2>Core</h2><ul><li><a href="index.html">Core</a></li><li><a href="carved-world.html">The carved world</a></li><li><a href="rooms-and-portals.html">Rooms and portals</a></li><li><a href="fills.html">Fills</a></li><li><a href="entities.html">Entities</a></li><li><a href="textures.html">Textures</a></li><li><a href="lighting.html">Lighting</a></li><li><a href="baking.html" aria-current="page">Baking</a></li><li><a href="variants.html">Variants</a></li><li><a href="terrain.html">Terrain</a></li><li><a href="glossary.html">Glossary</a></li></ul><h2>Editor</h2><ul><li><a href="../editor/index.html">Editor</a></li><li><a href="../editor/interface.html">The interface</a></li><li><a href="../editor/camera.html">Camera</a></li><li><a href="../editor/selecting.html">Selecting</a></li><li><a href="../editor/building.html">Building</a></li><li><a href="../editor/editing.html">Editing</a></li><li><a href="../editor/texturing.html">Texturing</a></li><li><a href="../editor/terrain.html">Terrain</a></li><li><a href="../editor/entities.html">Entities</a></li><li><a href="../editor/props.html">Props</a></li><li><a href="../editor/decals.html">Decals</a></li><li><a href="../editor/prefabs.html">Prefabs</a></li><li><a href="../editor/layers.html">Layers</a></li><li><a href="../editor/sky.html">Sky</a></li><li><a href="../editor/lighting.html">Lighting</a></li><li><a href="../editor/problems.html">Problems</a></li><li><a href="../editor/files.html">Map files</a></li><li><a href="../editor/keys.html">Keyboard reference</a></li><li><a href="../editor/manual.html">Using the manual</a></li><li><a href="../editor/extending-the-manual.html">Extending the manual</a></li></ul><h2>Audio</h2><ul><li><a href="../audio/index.html">Audio</a></li><li><a href="../audio/rooms.html">Rooms</a></li><li><a href="../audio/doors.html">Doors and openings</a></li><li><a href="../audio/outdoors.html">Outdoors and weather</a></li><li><a href="../audio/graph.html">The audio graph</a></li></ul><h2>Navigation</h2><ul><li><a href="../nav/index.html">Navigation</a></li><li><a href="../nav/ground.html">Ground</a></li><li><a href="../nav/links.html">Links</a></li><li><a href="../nav/preview.html">The Navigation tool</a></li></ul><h2>Docs</h2><ul><li><a href="../../index.html">Docs home</a></li><li><a href="../../api/index.html">API reference</a></li></ul></nav>
+	</aside>
+	<main class="docs-main">
+		<article class="prose">
+<h1 id="baking">Baking</h1>
+<p>A <strong>bake</strong> works out the level's lighting and stores it with the map. Until a map is baked it has no lighting of its own. How to run a bake and set its options: <a href="../editor/lighting.html">Lighting</a>.</p>
+<h2 id="what-a-bake-produces">What a bake produces</h2>
+<ul>
+<li>A <strong>lightmap</strong> for every lit surface: room walls, detail, terrain, and entity brushwork set to <strong>Bake into the world</strong>.</li>
+<li>A lightmap for every prop.</li>
+<li><strong>Light probes</strong> through every room, which light what moves. See <a href="lighting.html#things-that-move">Lighting</a>.</li>
+<li>A list of <strong>bake warnings</strong>: what the bake could not do.</li>
+</ul>
+<p>Sky faces are not baked: they are holes. Entity brushwork is lit from the probes unless it is baked into the world.</p>
+<p>A map with variants has one bake per variant. A bake lights the variant in effect. See <a href="variants.html">Variants</a>.</p>
+<h2 id="when-a-bake-is-out-of-date">When a bake is out of date</h2>
+<p>The lightmap tool shows the variant in effect as <strong>baked</strong>, <strong>not baked</strong> or <strong>out of date</strong>.</p>
+<p>A bake goes out of date when anything it read changes:</p>
+<table>
+<thead>
+<tr>
+<th>Changes the bake</th>
+<th>Does not</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Moving, adding or removing brushes</td>
+<td>Moving a guard, a sound or any other entity that does not light</td>
+</tr>
+<tr>
+<td>Textures, texture alignment, lightmap scale</td>
+<td>Hiding a layer</td>
+</tr>
+<tr>
+<td>Brush properties, such as water clarity</td>
+<td>Colour bleed, which shows at once</td>
+</tr>
+<tr>
+<td>Lights, props, decals, the sky</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>An out-of-date bake stays on screen. A wall that has moved since the bake has no lighting to show and draws unlit until you bake again. Everything else keeps its old lighting.</p>
+<p>A <strong>quick bake</strong> lights those walls with direct light alone and leaves the rest as it is: no bounce onto them, no reflections from water, and props and light probes untouched. It fills the gaps while you work. The bake stays out of date until a full bake.</p>
+<p>A quick bake is rough on purpose:</p>
+<ul>
+<li>A surface a bake has already left dark is not tried again, even if an edit has since let light reach it.</li>
+<li>A lamp lights the new surfaces only if it can see the middle or a corner of one of them.</li>
+<li>The sun lights them only through sky within a couple of thousand units.</li>
+</ul>
+<h2 id="lightmap-scale">Lightmap scale</h2>
+<p>A face's <strong>lightmap scale</strong> is how many world units one lightmap texel covers. The default is 16 for faces and 8 for props.</p>
+<table>
+<thead>
+<tr>
+<th>Lower scale</th>
+<th>Higher scale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sharper shadows</td>
+<td>Blurrier shadows</td>
+</tr>
+<tr>
+<td>More lightmap space</td>
+<td>Less lightmap space</td>
+</tr>
+<tr>
+<td>Slower bake</td>
+<td>Faster bake</td>
+</tr>
+</tbody>
+</table>
+<p>Set it per face in the face tool, or per prop in its properties. The <strong>Lightmap Scale</strong> view mode shows every face's scale. See <a href="../editor/texturing.html">Texturing</a>.</p>
+<p>Lower it where shadows need edges: a lamp by a window frame, the bars of a grate. Raise it on large surfaces that are evenly lit or dark.</p>
+<figure><img src="images/baking-lightmap-scale.png" alt="Lightmap Scale view: fine texels on a lit wall, coarse on the floor" loading="lazy"><figcaption>Lightmap Scale view: fine texels on a lit wall, coarse on the floor</figcaption></figure>
+<h2 id="bake-warnings">Bake warnings</h2>
+<p>A bake lists what it could not do. Warnings appear as crosses in the 2D views and as rows in the <strong>Problems</strong> panel, where choosing one selects the face or prop and puts the views on it. See <a href="../editor/problems.html">Problems</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Warning</th>
+<th>What happened</th>
+<th>What to do</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Too large for an atlas</td>
+<td>The face needs more lightmap texels than a whole lightmap holds. It was skipped and draws unlit.</td>
+<td>Raise the face's lightmap scale, or split the face.</td>
+</tr>
+<tr>
+<td>More lights than four</td>
+<td>More than four dynamic light groups reach the face or prop. The extras were dropped from it.</td>
+<td>Put lights that belong to one effect in one <code>light_group</code>, give lamps a <code>radius</code>, or move a light.</td>
+</tr>
+<tr>
+<td>Atlas spent on black</td>
+<td>A large face got almost no light: at least 90% of its texels are unlit. Nothing looks wrong, but the space is wasted.</td>
+<td>Raise the face's lightmap scale, or light it.</td>
+</tr>
+</tbody>
+</table>
+<p>Each warning's detail says the numbers: how many texels were needed, how many times a dropped light reached one of the face's texels, what share was unlit.</p>
+<p>Bake warnings describe the last bake. They are replaced by the next one, and editing does not clear them.</p>
+<p>Warnings from the carve itself, <strong>Rooms that nearly touch</strong> and <strong>Rooms that overlap ambiguously</strong>, are circles rather than crosses. They say the world will bake wrong, not that it did. See <a href="carved-world.html#overlap-to-extend-abut-to-divide">The carved world</a>.</p>
+<figure><img src="images/baking-warnings.png" alt="A face too large for an atlas, marked with a cross in the 2D view and listed in the Problems panel" loading="lazy"><figcaption>A face too large for an atlas, marked with a cross in the 2D view and listed in the Problems panel</figcaption></figure>
+		</article>
+		<p class="docs-source">Hammerite latest · built from 45a63b69, 2026-10-19</p>
+	</main>
+</div>
+
+<footer class="studio-foot">
+	<a href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>

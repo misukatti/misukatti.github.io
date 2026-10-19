@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rooms — Hammerite 3D 2.0 docs</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="../../../../assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="../../../../assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../../../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@300&display=swap">
+<link rel="stylesheet" href="../../../../hammerite.css">
+<link rel="stylesheet" href="../../../docs.css">
+<script src="../../../versions.js" defer></script>
+</head>
+<body class="docs" data-docs-version="2.0">
+
+<header class="studio">
+	<a class="studio-logo" href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="../../../../index.html">Hammerite 3D</a>
+		<a href="../../index.html">Docs</a>
+		<a href="../../guides/index.html">Guides</a>
+		<a href="../../api/index.html">API</a>
+		<a href="../index.html">Manual</a>
+	</nav>
+</header>
+
+<div class="docs-banner" hidden></div>
+
+<div class="docs-layout">
+	<aside class="docs-side">
+		<a class="docs-brand" href="../../index.html"><img src="../../../../assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
+		<label class="docs-version">Version
+			<select aria-label="Docs version"><option value="2.0" selected>2.0</option></select>
+		</label>
+		<nav class="api-nav"><a class="api-home" href="../index.html">Manual</a><h2>Core</h2><ul><li><a href="../core/index.html">Core</a></li><li><a href="../core/carved-world.html">The carved world</a></li><li><a href="../core/rooms-and-portals.html">Rooms and portals</a></li><li><a href="../core/fills.html">Fills</a></li><li><a href="../core/entities.html">Entities</a></li><li><a href="../core/textures.html">Textures</a></li><li><a href="../core/lighting.html">Lighting</a></li><li><a href="../core/baking.html">Baking</a></li><li><a href="../core/variants.html">Variants</a></li><li><a href="../core/terrain.html">Terrain</a></li><li><a href="../core/glossary.html">Glossary</a></li></ul><h2>Editor</h2><ul><li><a href="../editor/index.html">Editor</a></li><li><a href="../editor/interface.html">The interface</a></li><li><a href="../editor/camera.html">Camera</a></li><li><a href="../editor/selecting.html">Selecting</a></li><li><a href="../editor/building.html">Building</a></li><li><a href="../editor/editing.html">Editing</a></li><li><a href="../editor/texturing.html">Texturing</a></li><li><a href="../editor/terrain.html">Terrain</a></li><li><a href="../editor/entities.html">Entities</a></li><li><a href="../editor/props.html">Props</a></li><li><a href="../editor/decals.html">Decals</a></li><li><a href="../editor/prefabs.html">Prefabs</a></li><li><a href="../editor/layers.html">Layers</a></li><li><a href="../editor/sky.html">Sky</a></li><li><a href="../editor/lighting.html">Lighting</a></li><li><a href="../editor/problems.html">Problems</a></li><li><a href="../editor/files.html">Map files</a></li><li><a href="../editor/keys.html">Keyboard reference</a></li><li><a href="../editor/manual.html">Using the manual</a></li><li><a href="../editor/extending-the-manual.html">Extending the manual</a></li></ul><h2>Audio</h2><ul><li><a href="index.html">Audio</a></li><li><a href="rooms.html" aria-current="page">Rooms</a></li><li><a href="doors.html">Doors and openings</a></li><li><a href="outdoors.html">Outdoors and weather</a></li><li><a href="graph.html">The audio graph</a></li></ul><h2>Navigation</h2><ul><li><a href="../nav/index.html">Navigation</a></li><li><a href="../nav/ground.html">Ground</a></li><li><a href="../nav/links.html">Links</a></li><li><a href="../nav/preview.html">The Navigation tool</a></li></ul><h2>Docs</h2><ul><li><a href="../../index.html">Docs home</a></li><li><a href="../../api/index.html">API reference</a></li></ul></nav>
+	</aside>
+	<main class="docs-main">
+		<article class="prose">
+<h1 id="rooms">Rooms</h1>
+<p>An acoustic <strong>zone</strong> is a room as sound hears it. Each <a href="../core/rooms-and-portals.html">region</a> of carved air is a zone. Air brushes that overlap merge into one zone; air brushes that abut stay separate zones joined by their opening. The rule from <a href="../core/carved-world.html">the carved world</a> holds for sound too: overlap to extend a space, abut to divide one.</p>
+<p>A pillared hall is one zone. An L-shaped room built from two overlapping air brushes is one zone. Two rooms either side of a doorway are two.</p>
+<h2 id="the-audio-section">The Audio section</h2>
+<p>Select a structural air brush. The inspector shows an <strong>Audio</strong> section. It does not appear for solid, detail, or several brushes of mixed tiers.</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>What it does</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Zone type</td>
+<td>Interior, Exterior or Semi-exterior. Auto makes a room Exterior when it is open to the sky itself, otherwise Interior. See <a href="outdoors.html">Outdoors</a>.</td>
+<td>Auto (open to the sky)</td>
+</tr>
+<tr>
+<td>Reverb preset</td>
+<td>How the room rings. Auto picks one from the room's size and textures.</td>
+<td>Auto (from materials)</td>
+</tr>
+<tr>
+<td>Weather exposure</td>
+<td>For a Semi-exterior room only: 0 fully sheltered, 1 fully open.</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Exclude from graph</td>
+<td>Leaves the room out of the audio graph. For spaces the player never enters.</td>
+<td>off</td>
+</tr>
+<tr>
+<td>Ambience</td>
+<td>The ambient bed heard while standing in the room, by your game's id for it. A dropdown when your game provides the list.</td>
+<td>empty (silent)</td>
+</tr>
+<tr>
+<td>Ambience volume</td>
+<td>Ambience level in this room, in dB, from -40 to 12.</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>Every air brush of one room shares these values. A value left at its default is not stored, so an improved Auto reaches old maps too.</p>
+<blockquote class="callout callout-note"><p><strong>Note:</strong> Changing any of these dates the audio graph. Rebuild it: see <a href="graph.html">The audio graph</a>.</p>
+</blockquote>
+<h2 id="reverb-presets">Reverb presets</h2>
+<p>Auto reads the textures of the room's walls and its volume. It is usually right. Override it where a room should sound unlike what it is built of.</p>
+<table>
+<thead>
+<tr>
+<th>Preset</th>
+<th>Use for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>stone_hall_large</code>, <code>stone_hall_medium</code></td>
+<td>halls, churches, large stone rooms</td>
+</tr>
+<tr>
+<td><code>stone_corridor</code></td>
+<td>stone passages</td>
+</tr>
+<tr>
+<td><code>stone_chamber_small</code></td>
+<td>cells, small stone rooms</td>
+</tr>
+<tr>
+<td><code>wood_room_large</code>, <code>wood_room_small</code>, <code>wood_corridor</code></td>
+<td>timber interiors</td>
+</tr>
+<tr>
+<td><code>metal_room</code>, <code>metal_corridor</code></td>
+<td>machinery, ducts</td>
+</tr>
+<tr>
+<td><code>outdoor</code></td>
+<td>open ground</td>
+</tr>
+<tr>
+<td><code>outdoor_courtyard</code></td>
+<td>enclosed yards</td>
+</tr>
+<tr>
+<td><code>cave_large</code>, <code>cave_small</code></td>
+<td>natural rock</td>
+</tr>
+<tr>
+<td><code>cloth_room</code></td>
+<td>carpets, tapestries, a bedroom</td>
+</tr>
+<tr>
+<td><code>tile_room</code></td>
+<td>baths, kitchens</td>
+</tr>
+<tr>
+<td><code>underwater</code></td>
+<td>used by water rooms automatically</td>
+</tr>
+</tbody>
+</table>
+<p>The presets are deliberately tight. Nothing rings like a cathedral.</p>
+<h2 id="ambience">Ambience</h2>
+<p>A room's ambience plays while the listener stands in it: a hum, distant traffic, dripping. It is flat stereo, not placed in the world, and guards do not hear it.</p>
+<ul>
+<li>Walking into a room with a different ambience crossfades over two seconds.</li>
+<li>Rooms naming the same ambience share one bed. Walking between them glides to the new room's volume without restarting.</li>
+<li>A room with no ambience fades to silence.</li>
+</ul>
+<h2 id="water">Water</h2>
+<p>A room most of whose volume is a water <a href="../core/fills.html">fill</a> is a water zone. It uses the <code>underwater</code> reverb. Its surface blocks most sound in either direction, and what gets through is dull.</p>
+<ul>
+<li>A pool that <strong>abuts</strong> its room is its own zone. The opening between them is the surface.</li>
+<li>A pool that <strong>overlaps</strong> its room shares one zone with it. The surface still costs what it costs; it just has no opening to show in the tool.</li>
+</ul>
+<p>A listener under the surface hears everything muffled.</p>
+<h2 id="placed-sounds">Placed sounds</h2>
+<p>Place a positional sound with the <code>env_sound</code> entity from the entity browser (see <a href="../editor/entities.html">Entities</a>). It plays from its position and travels through the rooms like any other sound.</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>What it does</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sound_file</code></td>
+<td>Path of the sound, relative to your game's sounds folder.</td>
+<td>empty</td>
+</tr>
+<tr>
+<td><code>volume</code></td>
+<td>Level in dB.</td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>max_distance</code></td>
+<td>How far the sound carries. Past it, nothing - measured along the route it took, so a reach is a reach through the world rather than through walls. 0 is no limit. The sphere drawn round the selected entity is this.</td>
+<td>2000</td>
+</tr>
+<tr>
+<td><code>attenuation_scale</code></td>
+<td>Scales what the route's openings and corners cost this sound. 0 ignores them.</td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>autoplay</code></td>
+<td>Starts when the map loads or the simulation starts.</td>
+<td>on</td>
+</tr>
+<tr>
+<td><code>loop</code></td>
+<td>Loops the sound.</td>
+<td>on</td>
+</tr>
+<tr>
+<td><code>use_audio_propagation</code></td>
+<td>Off plays it where it stands, ignoring walls.</td>
+<td>on</td>
+</tr>
+</tbody>
+</table>
+<p>For rain and wind, use <code>env_sound_environment</code>: see <a href="outdoors.html#weather">Outdoors</a>.</p>
+<figure><img src="images/rooms-audio-inspector.png" alt="Audio section of the inspector for a selected air brush, Reverb preset dropdown open" loading="lazy"><figcaption>Audio section of the inspector for a selected air brush, Reverb preset dropdown open</figcaption></figure>
+		</article>
+		<p class="docs-source">Hammerite 2.0 · built from 6d57ab2d, 2026-10-17</p>
+	</main>
+</div>
+
+<footer class="studio-foot">
+	<a href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>

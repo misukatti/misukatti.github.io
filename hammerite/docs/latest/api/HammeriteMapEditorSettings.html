@@ -24,6 +24,7 @@
 		<a href="../index.html">Docs</a>
 		<a href="../guides/index.html">Guides</a>
 		<a href="index.html">API</a>
+		<a href="../manual/index.html">Manual</a>
 	</nav>
 </header>
 
@@ -71,7 +72,7 @@
 <pre class="signature"><code>var wysiwyg_previews: bool = true</code></pre>
 <p>WYSIWYG tool previews: let the brush being drawn take part in the compiled world, so an air brush shows the room it is about to carve and a solid shows as real textured geometry, instead of a wireframe box.</p><p>Costs a full worldrep recompile every time the preview changes shape, and the compiler is superlinear in structural brush count. Measured per drag frame: ~15ms with 1 room, ~31ms with 10, ~205ms with 40. So it is comfortable on a small map and unusable on a large one - hence the switch (<code>W</code> in the editor). If levels routinely pass a few dozen structural brushes, flip this default.</p>
 		</article>
-		<p class="docs-source">Hammerite latest · built from d8d727be, 2026-10-17</p>
+		<p class="docs-source">Hammerite latest · built from 45a63b69, 2026-10-19</p>
 	</main>
 </div>
 

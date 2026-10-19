@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Extending the manual — Hammerite 3D 2.0 docs</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="../../../../assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="../../../../assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../../../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@300&display=swap">
+<link rel="stylesheet" href="../../../../hammerite.css">
+<link rel="stylesheet" href="../../../docs.css">
+<script src="../../../versions.js" defer></script>
+</head>
+<body class="docs" data-docs-version="2.0">
+
+<header class="studio">
+	<a class="studio-logo" href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="../../../../index.html">Hammerite 3D</a>
+		<a href="../../index.html">Docs</a>
+		<a href="../../guides/index.html">Guides</a>
+		<a href="../../api/index.html">API</a>
+		<a href="../index.html">Manual</a>
+	</nav>
+</header>
+
+<div class="docs-banner" hidden></div>
+
+<div class="docs-layout">
+	<aside class="docs-side">
+		<a class="docs-brand" href="../../index.html"><img src="../../../../assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
+		<label class="docs-version">Version
+			<select aria-label="Docs version"><option value="2.0" selected>2.0</option></select>
+		</label>
+		<nav class="api-nav"><a class="api-home" href="../index.html">Manual</a><h2>Core</h2><ul><li><a href="../core/index.html">Core</a></li><li><a href="../core/carved-world.html">The carved world</a></li><li><a href="../core/rooms-and-portals.html">Rooms and portals</a></li><li><a href="../core/fills.html">Fills</a></li><li><a href="../core/entities.html">Entities</a></li><li><a href="../core/textures.html">Textures</a></li><li><a href="../core/lighting.html">Lighting</a></li><li><a href="../core/baking.html">Baking</a></li><li><a href="../core/variants.html">Variants</a></li><li><a href="../core/terrain.html">Terrain</a></li><li><a href="../core/glossary.html">Glossary</a></li></ul><h2>Editor</h2><ul><li><a href="index.html">Editor</a></li><li><a href="interface.html">The interface</a></li><li><a href="camera.html">Camera</a></li><li><a href="selecting.html">Selecting</a></li><li><a href="building.html">Building</a></li><li><a href="editing.html">Editing</a></li><li><a href="texturing.html">Texturing</a></li><li><a href="terrain.html">Terrain</a></li><li><a href="entities.html">Entities</a></li><li><a href="props.html">Props</a></li><li><a href="decals.html">Decals</a></li><li><a href="prefabs.html">Prefabs</a></li><li><a href="layers.html">Layers</a></li><li><a href="sky.html">Sky</a></li><li><a href="lighting.html">Lighting</a></li><li><a href="problems.html">Problems</a></li><li><a href="files.html">Map files</a></li><li><a href="keys.html">Keyboard reference</a></li><li><a href="manual.html">Using the manual</a></li><li><a href="extending-the-manual.html" aria-current="page">Extending the manual</a></li></ul><h2>Audio</h2><ul><li><a href="../audio/index.html">Audio</a></li><li><a href="../audio/rooms.html">Rooms</a></li><li><a href="../audio/doors.html">Doors and openings</a></li><li><a href="../audio/outdoors.html">Outdoors and weather</a></li><li><a href="../audio/graph.html">The audio graph</a></li></ul><h2>Navigation</h2><ul><li><a href="../nav/index.html">Navigation</a></li><li><a href="../nav/ground.html">Ground</a></li><li><a href="../nav/links.html">Links</a></li><li><a href="../nav/preview.html">The Navigation tool</a></li></ul><h2>Docs</h2><ul><li><a href="../../index.html">Docs home</a></li><li><a href="../../api/index.html">API reference</a></li></ul></nav>
+	</aside>
+	<main class="docs-main">
+		<article class="prose">
+<h1 id="extending-the-manual">Extending the manual</h1>
+<p>For game developers. Your game can add a section of its own to this manual, and add pages to a section that is already here. Both are a directory of markdown pages and one call.</p>
+<h2 id="adding-a-section">Adding a section</h2>
+<ol>
+<li>Make a directory for the pages, for example <code>res://manual/</code>.</li>
+<li>Write an <code>index.md</code> in it: the section's first page.</li>
+<li>After integrating the editor, register the directory:</li>
+</ol>
+<pre><code>map_editor.register_manual_section(&amp;&quot;game&quot;, &quot;My Game&quot;, &quot;res://manual&quot;, 50)
+</code></pre>
+<p>The first argument is the section's id, used in links. The last places it in the index: core is 10, editor 20, audio 30, navigation 40. Leave it out to put the section last.</p>
+<p><code>unregister_manual_section(&amp;"game")</code> takes it away again.</p>
+<h2 id="adding-pages-to-a-section">Adding pages to a section</h2>
+<p>To document your own entities beside the editor's, add a directory of pages to the <code>editor</code> section, or to any other:</p>
+<pre><code>map_editor.register_manual_pages(&amp;&quot;editor&quot;, &quot;res://manual/editor&quot;)
+</code></pre>
+<p>The pages are listed in that section's index by their <code>order</code>, and link as if they were in the section's own directory. A page with the same file name as one the section already has is ignored. <code>unregister_manual_pages</code> takes them away again.</p>
+<h2 id="writing-a-page">Writing a page</h2>
+<p>One page is one <code>.md</code> file with a lowercase, hyphenated name: <code>guard-patrols.md</code>. It starts with front matter, then a single <code>#</code> title matching <code>title</code>:</p>
+<pre><code>---
+title: Guard patrols
+order: 40
+keywords: guards, patrol, route, waypoint
+---
+
+# Guard patrols
+</code></pre>
+<ul>
+<li><code>order</code> sorts the page in the index. <code>index.md</code> is always first. Leave gaps of 10.</li>
+<li><code>keywords</code> are optional. Search counts them after the title and before the headings.</li>
+</ul>
+<p>The manual renders a small part of markdown, and nothing else:</p>
+<ul>
+<li>Headings <code>##</code> and <code>###</code> below the title.</li>
+<li><strong>Bold</strong>, <em>italic</em> and <code>inline code</code>. Write keys as inline code: <code>Cmd</code> <code>S</code>.</li>
+<li>Bullet and numbered lists, one level of nesting (indent two spaces).</li>
+<li>Tables with a header row.</li>
+<li>Fenced code blocks.</li>
+<li>Callouts: a quote that starts with a bold word, such as <code>&gt; **Tip:**</code>, <code>&gt; **Note:**</code> or <code>&gt; **Warning:**</code>.</li>
+</ul>
+<p>No raw HTML, footnotes or task lists.</p>
+<blockquote class="callout callout-tip"><p><strong>Tip:</strong> Save a page while the manual is open on it, then open it again from the index. The manual reads a page again when its file has changed.</p>
+</blockquote>
+<h2 id="links">Links</h2>
+<p>Links are relative paths in a tree of <code>&lt;section id&gt;/&lt;page&gt;.md</code>, whatever directory a page is read from:</p>
+<table>
+<thead>
+<tr>
+<th>Link to</th>
+<th>Write</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>a page in the same section</td>
+<td><code>[Patrols](guard-patrols.md)</code></td>
+</tr>
+<tr>
+<td>a heading on it</td>
+<td><code>[Routes](guard-patrols.md#routes)</code></td>
+</tr>
+<tr>
+<td>a heading on this page</td>
+<td><code>[Routes](#routes)</code></td>
+</tr>
+<tr>
+<td>a page in another section</td>
+<td><code>[Doors](../audio/doors.md)</code></td>
+</tr>
+<tr>
+<td>a website</td>
+<td><code>[Godot](https://godotengine.org)</code></td>
+</tr>
+</tbody>
+</table>
+<p>A heading's anchor is its text in lowercase, with spaces turned into hyphens and punctuation dropped: <code>## Closed doors</code> is <code>#closed-doors</code>.</p>
+<h2 id="images">Images</h2>
+<p>Keep images in an <code>images/</code> directory beside the pages, as PNG, and reference them relatively. An image on a line of its own is a figure, and its alt text is the caption:</p>
+<pre><code>![A guard walking the courtyard route, seen from above](images/guard-patrols-courtyard.png)
+</code></pre>
+<p>An image that is not there yet is drawn as a box with its caption, so a page can be written before its pictures.</p>
+<h2 id="checking-pages">Checking pages</h2>
+<p>The editor's test suite checks every page the Hammerite addons ship: front matter with a title, one <code>#</code> title matching it, and every link and anchor leading somewhere. Run it alone with:</p>
+<pre><code>Godot --headless --path tests --script res://addons/hammerite-editor/tests/validate_manual.gd
+</code></pre>
+<p>For your own section, build the manual the way your game does and call <code>validate()</code> on it. It returns one line for each problem:</p>
+<pre><code>for problem in map_editor.manual.validate():
+    print(problem)
+</code></pre>
+<h2 id="publishing-on-a-website">Publishing on a website</h2>
+<p><code>docs/manual/publish.sh</code> in the Hammerite repository copies every addon's manual into one directory, one folder per section id, with an <code>index.md</code> that lists the sections. Links work unchanged, so any static site generator that renders markdown can publish it.</p>
+<pre><code>docs/manual/publish.sh site/manual
+docs/manual/publish.sh site/manual game=&quot;My Game&quot;:../my-game/manual
+docs/manual/publish.sh site/manual editor+=../my-game/manual/editor
+</code></pre>
+<p><code>id="Title":directory</code> adds a section after the addons'. <code>id+=directory</code> adds pages to a section.</p>
+<h2 id="exporting">Exporting</h2>
+<p>A <code>.md</code> file is not a resource, so an export would leave it out. Hammerite packs them itself: every installed addon's <code>manual/</code> directory goes into the export whether or not the preset's filters mention it.</p>
+<p>Pages of your own that live outside an addon are not found that way. List their directories in <strong>Project Settings → Hammerite → Manual → Export Directories</strong>, or add <code>*.md</code> to <strong>Filters to export non-resource files/folders</strong> in the export preset's <strong>Resources</strong> tab — either works.</p>
+<p>Only the pages directly in a listed directory are packed, which is the same set <a href="#adding-pages-to-a-section"><code>register_manual_pages</code></a> reads from it.</p>
+		</article>
+		<p class="docs-source">Hammerite 2.0 · built from 6d57ab2d, 2026-10-17</p>
+	</main>
+</div>
+
+<footer class="studio-foot">
+	<a href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>

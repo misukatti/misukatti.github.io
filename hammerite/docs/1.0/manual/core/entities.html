@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Entities — Hammerite 3D 1.0 docs</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="../../../../assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="../../../../assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../../../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@300&display=swap">
+<link rel="stylesheet" href="../../../../hammerite.css">
+<link rel="stylesheet" href="../../../docs.css">
+<script src="../../../versions.js" defer></script>
+</head>
+<body class="docs" data-docs-version="1.0">
+
+<header class="studio">
+	<a class="studio-logo" href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="../../../../index.html">Hammerite 3D</a>
+		<a href="../../index.html">Docs</a>
+		<a href="../../guides/index.html">Guides</a>
+		<a href="../../api/index.html">API</a>
+		<a href="../index.html">Manual</a>
+	</nav>
+</header>
+
+<div class="docs-banner" hidden></div>
+
+<div class="docs-layout">
+	<aside class="docs-side">
+		<a class="docs-brand" href="../../index.html"><img src="../../../../assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
+		<label class="docs-version">Version
+			<select aria-label="Docs version"><option value="1.0" selected>1.0</option></select>
+		</label>
+		<nav class="api-nav"><a class="api-home" href="../index.html">Manual</a><h2>Core</h2><ul><li><a href="index.html">Core</a></li><li><a href="carved-world.html">The carved world</a></li><li><a href="rooms-and-portals.html">Rooms and portals</a></li><li><a href="fills.html">Fills</a></li><li><a href="entities.html" aria-current="page">Entities</a></li><li><a href="textures.html">Textures</a></li><li><a href="lighting.html">Lighting</a></li><li><a href="baking.html">Baking</a></li><li><a href="variants.html">Variants</a></li><li><a href="terrain.html">Terrain</a></li><li><a href="glossary.html">Glossary</a></li></ul><h2>Editor</h2><ul><li><a href="../editor/index.html">Editor</a></li><li><a href="../editor/interface.html">The interface</a></li><li><a href="../editor/camera.html">Camera</a></li><li><a href="../editor/selecting.html">Selecting</a></li><li><a href="../editor/building.html">Building</a></li><li><a href="../editor/editing.html">Editing</a></li><li><a href="../editor/texturing.html">Texturing</a></li><li><a href="../editor/terrain.html">Terrain</a></li><li><a href="../editor/entities.html">Entities</a></li><li><a href="../editor/props.html">Props</a></li><li><a href="../editor/decals.html">Decals</a></li><li><a href="../editor/prefabs.html">Prefabs</a></li><li><a href="../editor/layers.html">Layers</a></li><li><a href="../editor/sky.html">Sky</a></li><li><a href="../editor/lighting.html">Lighting</a></li><li><a href="../editor/problems.html">Problems</a></li><li><a href="../editor/files.html">Map files</a></li><li><a href="../editor/keys.html">Keyboard reference</a></li><li><a href="../editor/manual.html">Using the manual</a></li><li><a href="../editor/extending-the-manual.html">Extending the manual</a></li></ul><h2>Audio</h2><ul><li><a href="../audio/index.html">Audio</a></li><li><a href="../audio/rooms.html">Rooms</a></li><li><a href="../audio/doors.html">Doors and openings</a></li><li><a href="../audio/outdoors.html">Outdoors and weather</a></li><li><a href="../audio/graph.html">The audio graph</a></li></ul><h2>Navigation</h2><ul><li><a href="../nav/index.html">Navigation</a></li><li><a href="../nav/ground.html">Ground</a></li><li><a href="../nav/links.html">Links</a></li><li><a href="../nav/preview.html">The Navigation tool</a></li></ul><h2>Docs</h2><ul><li><a href="../../index.html">Docs home</a></li><li><a href="../../api/index.html">API reference</a></li></ul></nav>
+	</aside>
+	<main class="docs-main">
+		<article class="prose">
+<h1 id="entities">Entities</h1>
+<p>An <strong>entity</strong> is anything in the map that is not the carve itself: a light, a prop, a decal, a door, a sound. Each has a <strong>type</strong> and a set of properties shown in the inspector.</p>
+<p>There are two kinds.</p>
+<table>
+<thead>
+<tr>
+<th>Kind</th>
+<th>What it is</th>
+<th>Examples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Point entity</td>
+<td>Something placed at a point</td>
+<td>Lights, props, decals, sounds</td>
+</tr>
+<tr>
+<td>Brush entity</td>
+<td>Something made of brushes you drew</td>
+<td>Doors, lifts, trigger volumes, secret doors</td>
+</tr>
+</tbody>
+</table>
+<p>How to place and edit them: <a href="../editor/entities.html">Entities</a> in the Editor section.</p>
+<h2 id="types-that-come-with-hammerite">Types that come with Hammerite</h2>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Kind</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>prop_model</code></td>
+<td>point</td>
+<td>A model: furniture, clutter, anything not built from brushes</td>
+</tr>
+<tr>
+<td><code>decal</code></td>
+<td>point</td>
+<td>A picture laid on a surface: a scorch mark, a poster, a rug</td>
+</tr>
+<tr>
+<td><code>light_point</code></td>
+<td>point</td>
+<td>A lamp whose light is baked for good</td>
+</tr>
+<tr>
+<td><code>light_point_dynamic</code></td>
+<td>point</td>
+<td>A lamp whose baked light the game can dim or switch</td>
+</tr>
+<tr>
+<td><code>light_point_movable</code></td>
+<td>point</td>
+<td>A lamp that is not baked: a real-time light with a shadow, that can move</td>
+</tr>
+<tr>
+<td><code>light_spot</code></td>
+<td>point</td>
+<td>A lamp shining in a cone, baked for good</td>
+</tr>
+<tr>
+<td><code>light_spot_dynamic</code></td>
+<td>point</td>
+<td>A cone of baked light the game can dim or switch</td>
+</tr>
+<tr>
+<td><code>light_spot_movable</code></td>
+<td>point</td>
+<td>A real-time light shining in a cone, with a shadow, that can move</td>
+</tr>
+<tr>
+<td><code>light_directional</code></td>
+<td>point</td>
+<td>Sun or moon</td>
+</tr>
+<tr>
+<td><code>light_directional_dynamic</code></td>
+<td>point</td>
+<td>A directional light the game can dim or switch, such as lightning</td>
+</tr>
+<tr>
+<td><code>group</code></td>
+<td>brush</td>
+<td>Brushwork grouped as one thing. Does nothing on its own.</td>
+</tr>
+<tr>
+<td><code>trigger</code></td>
+<td>brush</td>
+<td>A volume that triggers another entity when something walks into it</td>
+</tr>
+</tbody>
+</table>
+<p>The audio and navigation sections add their own: <code>env_sound</code> and <code>env_sound_environment</code> (<a href="../audio/rooms.html#placed-sounds">Rooms</a>, <a href="../audio/outdoors.html">Outdoors</a>), and <code>nav_link</code> (<a href="../nav/links.html">Links</a>).</p>
+<p>Your game adds the rest: doors, guards, pickups. What they do is your game's; see its documentation.</p>
+<h2 id="props">Props</h2>
+<p>A <code>prop_model</code> shows a model found where your game keeps its models.</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Default</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>model</code></td>
+<td>empty</td>
+<td>Which model, by name</td>
+</tr>
+<tr>
+<td><code>collision</code></td>
+<td>on</td>
+<td>Whether things stop against it and agents route around it</td>
+</tr>
+<tr>
+<td><code>lightmap_scale</code></td>
+<td>8</td>
+<td>World units per lightmap texel for its baked light. Bigger is cheaper and blurrier.</td>
+</tr>
+<tr>
+<td><code>rotation</code></td>
+<td>0, 0, 0</td>
+<td>How it is turned, in degrees about X, Y and Z</td>
+</tr>
+<tr>
+<td><code>scale</code></td>
+<td>1, 1, 1</td>
+<td>How far it is stretched along each of its own axes, before it is turned</td>
+</tr>
+</tbody>
+</table>
+<p>A prop can put another texture on one of its model's materials: a property called <code>texture/</code> and the
+material's name - lower-case, without an extension, so <code>texture/replace0</code> for a material <code>REPLACE0.GIF</code> -
+holding a texture's name. A model made to be dressed differently wherever it stands, such as a door or
+a banner, is one model with as many looks as there are props.</p>
+<p>The scale tool sizes a prop as it sizes brushes: each of the prop's own axes grows by as much as the
+drag stretches it, so a prop that is turned keeps its corners square. Bake again after sizing one.</p>
+<p>A prop is lit by the bake like a wall. See <a href="baking.html">Baking</a>.</p>
+<figure><img src="images/entities-prop.png" alt="A prop_model on a detail table, selected, with its box and turning handle" loading="lazy"><figcaption>A prop_model on a detail table, selected, with its box and turning handle</figcaption></figure>
+<h2 id="decals">Decals</h2>
+<p>A <code>decal</code> is a picture laid onto the surface under it, cut to that surface's shape. It is lit by that surface's baked light, so a decal in a dark corner is dark.</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Default</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>decal</code></td>
+<td>empty</td>
+<td>Which picture, by name, from your game's decals</td>
+</tr>
+<tr>
+<td><code>size</code></td>
+<td>64 x 64</td>
+<td>How big it is on the surface, in world units</td>
+</tr>
+<tr>
+<td><code>angle</code></td>
+<td>0</td>
+<td>How far it is turned on the surface, in radians</td>
+</tr>
+<tr>
+<td><code>normal</code></td>
+<td>up</td>
+<td>Which way the surface it was put on faced</td>
+</tr>
+<tr>
+<td><code>affects_lighting</code></td>
+<td>off</td>
+<td>Whether the bake reads it. See <a href="lighting.html#decals-in-the-bake">Lighting</a>.</td>
+</tr>
+</tbody>
+</table>
+<p>Decals come from their own library, separate from surface textures. See <a href="../editor/decals.html">Decals</a>.</p>
+<h2 id="lights">Lights</h2>
+<p>Every light type has <code>energy</code>, <code>color</code> and <code>light_group</code>. Point lights add <code>radius</code>; directional lights add <code>direction</code> and <code>follow_sky</code>. What they mean, and how static and dynamic lights differ, is in <a href="lighting.html#lights">Lighting</a>.</p>
+<h2 id="triggers">Triggers</h2>
+<p>A <code>trigger</code> is brushwork that triggers another entity when something walks into it: a lamp that comes on as the player enters a room, a door that opens. Draw its brushes, press <code>Ctrl</code> <code>T</code>, and pick <code>trigger</code> as its <strong>Entity type</strong>. Its brushwork shows only in the editor, and light passes through it.</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Default</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>target</code></td>
+<td>empty</td>
+<td>The name of the entity it triggers, chosen from the names in the map. Every entity of that name is triggered.</td>
+</tr>
+<tr>
+<td><code>target_impulse</code></td>
+<td>nothing</td>
+<td>What it hands the entity it triggers. Pick a type, then a value. What it means is up to that entity: a dynamic or movable light reads a bool as on or off and anything else as switch over; a sound reads a bool as play or stop.</td>
+</tr>
+<tr>
+<td><code>activator_group</code></td>
+<td>empty</td>
+<td>Only a body in this node group sets it off, such as your game's player. Empty for anything.</td>
+</tr>
+<tr>
+<td><code>once</code></td>
+<td>off</td>
+<td>Whether it fires only the first time, until the simulation is reset</td>
+</tr>
+</tbody>
+</table>
+<p>It notices nothing while the editor holds the world still. Run it (see <a href="../editor/entities.html#run-entities-in-the-editor">Entities</a>) to try it, or select it and press <code>Space</code> to fire it by hand.</p>
+<h2 id="brush-entities">Brush entities</h2>
+<p>A brush entity is made from brushes you select. Its brushwork belongs to it and moves with it.</p>
+<ul>
+<li>Entity brushwork is always detail. Making structural brushes into an entity turns them into detail.</li>
+<li>It carves nothing and fills nothing. A door does not close its doorway in the carve; the opening stays, and the door stands in it. See <a href="../audio/doors.html#closed-doors">Doors and openings</a>.</li>
+<li>Its faces are never hidden against a neighbour, and hide none: a door flush with its frame is flush only until it opens.</li>
+</ul>
+<p>Two brush properties in the inspector's <strong>Lighting</strong> section matter most for brush entities:</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Default</th>
+<th>Turn it...</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Casts shadow</td>
+<td>on</td>
+<td>Off for brushwork that is a marker rather than matter: a trigger volume, a region an entity claims. Light passes through it.</td>
+</tr>
+<tr>
+<td>Bake into the world</td>
+<td>off</td>
+<td>On for brushwork that is scenery until something moves it, such as a secret door flush with its wall. See <a href="lighting.html#moving-brushwork">Lighting</a>.</td>
+</tr>
+</tbody>
+</table>
+<p>A game's entity type can turn either on or off for all of its brushwork at once, as a <code>trigger</code> turns <strong>Casts shadow</strong> off.</p>
+<h2 id="entities-and-variants">Entities and variants</h2>
+<p>An entity exists only in the variants its layer belongs to. See <a href="variants.html">Variants</a>.</p>
+		</article>
+		<p class="docs-source">Hammerite 1.0 · built from 059fce03, 2026-10-10</p>
+	</main>
+</div>
+
+<footer class="studio-foot">
+	<a href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>

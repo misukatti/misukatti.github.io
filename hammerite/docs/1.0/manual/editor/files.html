@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Map files — Hammerite 3D 1.0 docs</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="../../../../assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="../../../../assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../../../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@300&display=swap">
+<link rel="stylesheet" href="../../../../hammerite.css">
+<link rel="stylesheet" href="../../../docs.css">
+<script src="../../../versions.js" defer></script>
+</head>
+<body class="docs" data-docs-version="1.0">
+
+<header class="studio">
+	<a class="studio-logo" href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="../../../../index.html">Hammerite 3D</a>
+		<a href="../../index.html">Docs</a>
+		<a href="../../guides/index.html">Guides</a>
+		<a href="../../api/index.html">API</a>
+		<a href="../index.html">Manual</a>
+	</nav>
+</header>
+
+<div class="docs-banner" hidden></div>
+
+<div class="docs-layout">
+	<aside class="docs-side">
+		<a class="docs-brand" href="../../index.html"><img src="../../../../assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
+		<label class="docs-version">Version
+			<select aria-label="Docs version"><option value="1.0" selected>1.0</option></select>
+		</label>
+		<nav class="api-nav"><a class="api-home" href="../index.html">Manual</a><h2>Core</h2><ul><li><a href="../core/index.html">Core</a></li><li><a href="../core/carved-world.html">The carved world</a></li><li><a href="../core/rooms-and-portals.html">Rooms and portals</a></li><li><a href="../core/fills.html">Fills</a></li><li><a href="../core/entities.html">Entities</a></li><li><a href="../core/textures.html">Textures</a></li><li><a href="../core/lighting.html">Lighting</a></li><li><a href="../core/baking.html">Baking</a></li><li><a href="../core/variants.html">Variants</a></li><li><a href="../core/terrain.html">Terrain</a></li><li><a href="../core/glossary.html">Glossary</a></li></ul><h2>Editor</h2><ul><li><a href="index.html">Editor</a></li><li><a href="interface.html">The interface</a></li><li><a href="camera.html">Camera</a></li><li><a href="selecting.html">Selecting</a></li><li><a href="building.html">Building</a></li><li><a href="editing.html">Editing</a></li><li><a href="texturing.html">Texturing</a></li><li><a href="terrain.html">Terrain</a></li><li><a href="entities.html">Entities</a></li><li><a href="props.html">Props</a></li><li><a href="decals.html">Decals</a></li><li><a href="prefabs.html">Prefabs</a></li><li><a href="layers.html">Layers</a></li><li><a href="sky.html">Sky</a></li><li><a href="lighting.html">Lighting</a></li><li><a href="problems.html">Problems</a></li><li><a href="files.html" aria-current="page">Map files</a></li><li><a href="keys.html">Keyboard reference</a></li><li><a href="manual.html">Using the manual</a></li><li><a href="extending-the-manual.html">Extending the manual</a></li></ul><h2>Audio</h2><ul><li><a href="../audio/index.html">Audio</a></li><li><a href="../audio/rooms.html">Rooms</a></li><li><a href="../audio/doors.html">Doors and openings</a></li><li><a href="../audio/outdoors.html">Outdoors and weather</a></li><li><a href="../audio/graph.html">The audio graph</a></li></ul><h2>Navigation</h2><ul><li><a href="../nav/index.html">Navigation</a></li><li><a href="../nav/ground.html">Ground</a></li><li><a href="../nav/links.html">Links</a></li><li><a href="../nav/preview.html">The Navigation tool</a></li></ul><h2>Docs</h2><ul><li><a href="../../index.html">Docs home</a></li><li><a href="../../api/index.html">API reference</a></li></ul></nav>
+	</aside>
+	<main class="docs-main">
+		<article class="prose">
+<h1 id="map-files">Map files</h1>
+<table>
+<thead>
+<tr>
+<th>Do</th>
+<th>How</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Start an empty map</td>
+<td><strong>File → New Map</strong></td>
+</tr>
+<tr>
+<td>Open a map</td>
+<td><strong>File → Open Map…</strong> (<code>Cmd</code> <code>O</code>)</td>
+</tr>
+<tr>
+<td>Save</td>
+<td><strong>File → Save Map</strong> (<code>Cmd</code> <code>S</code>)</td>
+</tr>
+<tr>
+<td>Save under a new name or format</td>
+<td><strong>File → Save Map As…</strong> (<code>Cmd</code> <code>Shift</code> <code>S</code>)</td>
+</tr>
+<tr>
+<td>Save edited prefabs</td>
+<td><strong>File → Save Modified Prefab Sets</strong></td>
+</tr>
+<tr>
+<td>Leave the editor and return to the game</td>
+<td><strong>File → Close Editor</strong></td>
+</tr>
+</tbody>
+</table>
+<p>The file dialogs browse the whole disk. A map that has never been saved asks for a name on <code>Cmd</code> <code>S</code>.</p>
+<p>Opening or starting another map with unsaved changes asks whether to save them first.</p>
+<h2 id="backups-and-autosave">Backups and autosave</h2>
+<ul>
+<li>Each save keeps the file it replaces beside it as <code>level.hmap.bak</code>. To go back one save, rename it to <code>level.hmap</code>.</li>
+<li>A save writes a new file first and only then puts it in place, so a crash while saving leaves the old file whole.</li>
+<li>Every five minutes with unsaved changes, the map is written to <code>level.autosave.hmap</code> beside it. A map not saved yet autosaves to the game's user folder. Saving deletes the autosave.</li>
+<li>Opening a map whose autosave is newer than the file offers to open the autosave instead. It opens as the map with its changes unsaved: save to keep them.</li>
+</ul>
+<h2 id="formats">Formats</h2>
+<table>
+<thead>
+<tr>
+<th>Extension</th>
+<th>What it is</th>
+<th>Where it can live</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.hmap</code></td>
+<td>a Hammerite map: data only</td>
+<td>anywhere</td>
+</tr>
+<tr>
+<td><code>.tres</code>, <code>.res</code></td>
+<td>a Godot resource</td>
+<td>inside the game's project only</td>
+</tr>
+</tbody>
+</table>
+<p>Use <code>.hmap</code> for maps you share or download. It holds values only, so opening one cannot run code. A <code>.tres</code> or <code>.res</code> can, which is why the editor refuses one from outside the project.</p>
+<p>To convert a map, open it and <strong>Save Map As…</strong> with the other extension.</p>
+<h2 id="what-else-is-saved">What else is saved</h2>
+<ul>
+<li>A <strong>worldrep cache</strong> beside the map, named after it: <code>level.worldrep.hcache</code> for <code>level.hmap</code>, <code>level.worldrep.res</code> for a resource. It holds the carved world so the map opens without carving it again. Saving writes the cache of the variant in effect; other variants get a file with their number in the name. Deleting a cache is safe: the map is carved on load instead.</li>
+<li>Every prefab set you changed.</li>
+<li>A record of what the map names that the game provides: textures, models, sounds.</li>
+</ul>
+<h2 id="when-the-game-has-changed">When the game has changed</h2>
+<p>When you open a map, the editor checks what it names against what the game provides now: a texture gone, a model now provided by something else. Each change is listed in the <strong>Problems</strong> panel, under <strong>Changed in the game since saving</strong>, until you save the map.</p>
+		</article>
+		<p class="docs-source">Hammerite 1.0 · built from 059fce03, 2026-10-10</p>
+	</main>
+</div>
+
+<footer class="studio-foot">
+	<a href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>

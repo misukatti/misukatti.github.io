@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Building — Hammerite 3D 1.0 docs</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="../../../../assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="../../../../assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../../../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@300&display=swap">
+<link rel="stylesheet" href="../../../../hammerite.css">
+<link rel="stylesheet" href="../../../docs.css">
+<script src="../../../versions.js" defer></script>
+</head>
+<body class="docs" data-docs-version="1.0">
+
+<header class="studio">
+	<a class="studio-logo" href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="../../../../index.html">Hammerite 3D</a>
+		<a href="../../index.html">Docs</a>
+		<a href="../../guides/index.html">Guides</a>
+		<a href="../../api/index.html">API</a>
+		<a href="../index.html">Manual</a>
+	</nav>
+</header>
+
+<div class="docs-banner" hidden></div>
+
+<div class="docs-layout">
+	<aside class="docs-side">
+		<a class="docs-brand" href="../../index.html"><img src="../../../../assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
+		<label class="docs-version">Version
+			<select aria-label="Docs version"><option value="1.0" selected>1.0</option></select>
+		</label>
+		<nav class="api-nav"><a class="api-home" href="../index.html">Manual</a><h2>Core</h2><ul><li><a href="../core/index.html">Core</a></li><li><a href="../core/carved-world.html">The carved world</a></li><li><a href="../core/rooms-and-portals.html">Rooms and portals</a></li><li><a href="../core/fills.html">Fills</a></li><li><a href="../core/entities.html">Entities</a></li><li><a href="../core/textures.html">Textures</a></li><li><a href="../core/lighting.html">Lighting</a></li><li><a href="../core/baking.html">Baking</a></li><li><a href="../core/variants.html">Variants</a></li><li><a href="../core/terrain.html">Terrain</a></li><li><a href="../core/glossary.html">Glossary</a></li></ul><h2>Editor</h2><ul><li><a href="index.html">Editor</a></li><li><a href="interface.html">The interface</a></li><li><a href="camera.html">Camera</a></li><li><a href="selecting.html">Selecting</a></li><li><a href="building.html" aria-current="page">Building</a></li><li><a href="editing.html">Editing</a></li><li><a href="texturing.html">Texturing</a></li><li><a href="terrain.html">Terrain</a></li><li><a href="entities.html">Entities</a></li><li><a href="props.html">Props</a></li><li><a href="decals.html">Decals</a></li><li><a href="prefabs.html">Prefabs</a></li><li><a href="layers.html">Layers</a></li><li><a href="sky.html">Sky</a></li><li><a href="lighting.html">Lighting</a></li><li><a href="problems.html">Problems</a></li><li><a href="files.html">Map files</a></li><li><a href="keys.html">Keyboard reference</a></li><li><a href="manual.html">Using the manual</a></li><li><a href="extending-the-manual.html">Extending the manual</a></li></ul><h2>Audio</h2><ul><li><a href="../audio/index.html">Audio</a></li><li><a href="../audio/rooms.html">Rooms</a></li><li><a href="../audio/doors.html">Doors and openings</a></li><li><a href="../audio/outdoors.html">Outdoors and weather</a></li><li><a href="../audio/graph.html">The audio graph</a></li></ul><h2>Navigation</h2><ul><li><a href="../nav/index.html">Navigation</a></li><li><a href="../nav/ground.html">Ground</a></li><li><a href="../nav/links.html">Links</a></li><li><a href="../nav/preview.html">The Navigation tool</a></li></ul><h2>Docs</h2><ul><li><a href="../../index.html">Docs home</a></li><li><a href="../../api/index.html">API reference</a></li></ul></nav>
+	</aside>
+	<main class="docs-main">
+		<article class="prose">
+<h1 id="building">Building</h1>
+<p>Every brush tool draws a box first and fills it with a shape. What the brush does to the world depends on its <strong>tier</strong>. What the tiers mean is in <a href="../core/carved-world.html">The carved world</a>.</p>
+<h2 id="choose-the-tier">Choose the tier</h2>
+<p>The tier dropdown on the toolbar sets the tier of new brushes: <strong>Solid</strong>, <strong>Air</strong> or <strong>Detail</strong>. It starts on <strong>Air</strong>, since the first thing you draw in solid rock is a room.</p>
+<ul>
+<li>Tap <code>Tab</code> to cycle Solid → Air → Detail.</li>
+<li>Hold <code>Tab</code> and a wheel of the three opens at the cursor. Move towards one and let go. Let go without moving to keep the current one; <code>Esc</code> cancels.</li>
+<li>Select brushes and press <code>U</code> to give them the current tier.</li>
+</ul>
+<p><code>Tab</code> works inside the brush tools, so you can switch between drawing a room and the wall inside it without leaving the tool.</p>
+<figure><img src="images/building-tier-wheel.png" alt="The tier wheel" loading="lazy"><figcaption>The tier wheel</figcaption></figure>
+<h2 id="draw-a-brush">Draw a brush</h2>
+<p>All brush tools draw the same way. The foot of the left panel says which step you are on.</p>
+<ol>
+<li>Choose the tool: <strong>Cube</strong> <code>B</code>, <strong>Cylinder</strong> <code>C</code>, <strong>Stair</strong> (<strong>Tools</strong> menu), <strong>Arch</strong> <code>A</code>.</li>
+<li>Click the first corner. In the 3D view, the brush starts on the surface under the cursor; in a 2D view, on that view's working plane.</li>
+<li>Move the mouse and click to set the base.</li>
+<li>Move the mouse to give it depth, and click.</li>
+<li>Adjust: drag any face of the box to resize it. The tool's panel shows the size and the shape's settings.</li>
+<li>Press <code>Enter</code> to keep it, or <code>Esc</code> to throw it away.</li>
+</ol>
+<p>While adjusting, <code>Cmd</code> <code>Z</code> and <code>Cmd</code> <code>Shift</code> <code>Z</code> undo and redo changes to the box and its settings.</p>
+<h2 id="cut-one-piece-of-dressing-out-of-another">Cut one piece of dressing out of another</h2>
+<p>In <strong>Detail</strong>, giving the box depth <em>downwards</em> into brushes you have selected cuts it out of them
+instead of leaving the two to overlap: a notch in a moulding, a slot in a beam. Select the brushes
+to cut first, then draw. Nothing is cut in <strong>Solid</strong> or <strong>Air</strong> — there, a brush is kept as drawn
+and what it does to the world is the tier's business, so cutting a hole through the level is what an
+air brush is for.</p>
+<p>New brushes take the active texture. Sizes snap to the grid; see <a href="editing.html#grid-and-snapping">Editing</a>.</p>
+<figure><img src="images/building-stair-preview.png" alt="Adjusting a stair before keeping it" loading="lazy"><figcaption>Adjusting a stair before keeping it</figcaption></figure>
+<h2 id="wysiwyg-previews">WYSIWYG previews</h2>
+<p>With <strong>WYSIWYG Tool Previews</strong> on (<code>W</code>, or the 3D view's <strong>View</strong> dropdown), the brush being drawn takes part in the world: an air brush carves as you drag it. On a large map this is slow. Turn it off and brushes preview as wireframes.</p>
+<h2 id="cube">Cube</h2>
+<p>A box. Its panel shows width, height and thickness.</p>
+<h2 id="cylinder">Cylinder</h2>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Left</code> / <code>Right</code></td>
+<td>fewer / more sides</td>
+</tr>
+<tr>
+<td><code>Space</code></td>
+<td>toggle <strong>Inverse</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Inverse</strong> builds the brushes around a cylinder instead of the cylinder itself: the box with a round hole through it.</p>
+<h2 id="stair">Stair</h2>
+<p>Steps inside the box. <code>Space</code> turns the stairs a quarter while adjusting.</p>
+<p>What the stair builds depends on the tier.</p>
+<ul>
+<li><strong>Solid</strong> or <strong>Detail</strong>: the steps, standing on the bottom of the box. Solid steps are part of the level's shape; Detail steps are furniture inside a room.</li>
+<li><strong>Air</strong>: the stairwell. It carves the space above each step, up to the top of the box, so a stair drawn through the rock between two floors is a passage you can walk up. Draw the box as high as the stairwell's ceiling. A spiral's centre is left as rock, and <strong>Floored</strong> and <strong>Step thickness</strong> do not apply.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Step height, Step depth</td>
+<td>size of each step</td>
+</tr>
+<tr>
+<td>Step thickness</td>
+<td>how deep each step is, when not <strong>Floored</strong></td>
+</tr>
+<tr>
+<td>Floored</td>
+<td>steps go all the way down to the bottom of the box</td>
+</tr>
+<tr>
+<td>Circular, Angle</td>
+<td>a spiral stair turning through that many degrees</td>
+</tr>
+<tr>
+<td>Pillar, Pillar radius, Pillar sides</td>
+<td>a central post for a spiral stair</td>
+</tr>
+<tr>
+<td>Outer sides</td>
+<td>how round the spiral's outer edge is</td>
+</tr>
+<tr>
+<td>Winder</td>
+<td>spiral steps stretched to fill the box</td>
+</tr>
+</tbody>
+</table>
+<h2 id="arch">Arch</h2>
+<p>What the arch builds depends on the tier.</p>
+<ul>
+<li><strong>Solid</strong> or <strong>Air</strong>: one brush filling the arch's opening. Use Air to carve an arched doorway or hall.</li>
+<li><strong>Detail</strong>: the arch itself, as a ring of brushes with a leg down each side. <strong>Thickness</strong> sets how thick the ring is.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Key or setting</th>
+<th>Does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Left</code> / <code>Right</code>, Sides</td>
+<td>fewer / more facets in the curve</td>
+</tr>
+<tr>
+<td><code>Space</code>, Rotate 90°</td>
+<td>span the other horizontal axis</td>
+</tr>
+<tr>
+<td>Arc angle</td>
+<td>how much of a circle the curve is</td>
+</tr>
+<tr>
+<td>Spring height</td>
+<td>height of the straight legs; the curve takes the rest</td>
+</tr>
+<tr>
+<td>Outward</td>
+<td>build the ring outside the box instead of inside it</td>
+</tr>
+</tbody>
+</table>
+<p>The arch always stands upright, whichever view you draw it in.</p>
+<figure><img src="images/building-arch.png" alt="An arched doorway: an air arch carved between two rooms, with a detail ring" loading="lazy"><figcaption>An arched doorway: an air arch carved between two rooms, with a detail ring</figcaption></figure>
+<h2 id="polygon">Polygon</h2>
+<p>Any outline, then depth. <code>Cmd</code> <code>P</code>. A concave outline becomes several convex brushes.</p>
+<ol>
+<li>Click to add points.</li>
+<li>Click the first point again to close the outline. <code>Backspace</code> or right-click takes the last point back.</li>
+<li>Move the mouse to give it depth, click, then <code>Enter</code>.</li>
+</ol>
+<p><strong>Thickness</strong> in the panel sets the depth by number.</p>
+<h2 id="building-rooms">Building rooms</h2>
+<ul>
+<li>Draw rooms in <strong>Air</strong>. Overlap two rooms to make one space; abut them on a shared wall to make two rooms with an opening. See <a href="../core/rooms-and-portals.html">Rooms and portals</a>.</li>
+<li>Draw walls, pillars and furniture inside rooms in <strong>Detail</strong>.</li>
+<li><strong>Solid</strong> puts rock back. Where solid and air overlap, the order they were drawn in decides; see <a href="../core/carved-world.html">The carved world</a>.</li>
+</ul>
+		</article>
+		<p class="docs-source">Hammerite 1.0 · built from 059fce03, 2026-10-10</p>
+	</main>
+</div>
+
+<footer class="studio-foot">
+	<a href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>

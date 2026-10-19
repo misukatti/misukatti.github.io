@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sky — Hammerite 3D 1.0 docs</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="../../../../assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="../../../../assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../../../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@300&display=swap">
+<link rel="stylesheet" href="../../../../hammerite.css">
+<link rel="stylesheet" href="../../../docs.css">
+<script src="../../../versions.js" defer></script>
+</head>
+<body class="docs" data-docs-version="1.0">
+
+<header class="studio">
+	<a class="studio-logo" href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="../../../../index.html">Hammerite 3D</a>
+		<a href="../../index.html">Docs</a>
+		<a href="../../guides/index.html">Guides</a>
+		<a href="../../api/index.html">API</a>
+		<a href="../index.html">Manual</a>
+	</nav>
+</header>
+
+<div class="docs-banner" hidden></div>
+
+<div class="docs-layout">
+	<aside class="docs-side">
+		<a class="docs-brand" href="../../index.html"><img src="../../../../assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
+		<label class="docs-version">Version
+			<select aria-label="Docs version"><option value="1.0" selected>1.0</option></select>
+		</label>
+		<nav class="api-nav"><a class="api-home" href="../index.html">Manual</a><h2>Core</h2><ul><li><a href="../core/index.html">Core</a></li><li><a href="../core/carved-world.html">The carved world</a></li><li><a href="../core/rooms-and-portals.html">Rooms and portals</a></li><li><a href="../core/fills.html">Fills</a></li><li><a href="../core/entities.html">Entities</a></li><li><a href="../core/textures.html">Textures</a></li><li><a href="../core/lighting.html">Lighting</a></li><li><a href="../core/baking.html">Baking</a></li><li><a href="../core/variants.html">Variants</a></li><li><a href="../core/terrain.html">Terrain</a></li><li><a href="../core/glossary.html">Glossary</a></li></ul><h2>Editor</h2><ul><li><a href="index.html">Editor</a></li><li><a href="interface.html">The interface</a></li><li><a href="camera.html">Camera</a></li><li><a href="selecting.html">Selecting</a></li><li><a href="building.html">Building</a></li><li><a href="editing.html">Editing</a></li><li><a href="texturing.html">Texturing</a></li><li><a href="terrain.html">Terrain</a></li><li><a href="entities.html">Entities</a></li><li><a href="props.html">Props</a></li><li><a href="decals.html">Decals</a></li><li><a href="prefabs.html">Prefabs</a></li><li><a href="layers.html">Layers</a></li><li><a href="sky.html" aria-current="page">Sky</a></li><li><a href="lighting.html">Lighting</a></li><li><a href="problems.html">Problems</a></li><li><a href="files.html">Map files</a></li><li><a href="keys.html">Keyboard reference</a></li><li><a href="manual.html">Using the manual</a></li><li><a href="extending-the-manual.html">Extending the manual</a></li></ul><h2>Audio</h2><ul><li><a href="../audio/index.html">Audio</a></li><li><a href="../audio/rooms.html">Rooms</a></li><li><a href="../audio/doors.html">Doors and openings</a></li><li><a href="../audio/outdoors.html">Outdoors and weather</a></li><li><a href="../audio/graph.html">The audio graph</a></li></ul><h2>Navigation</h2><ul><li><a href="../nav/index.html">Navigation</a></li><li><a href="../nav/ground.html">Ground</a></li><li><a href="../nav/links.html">Links</a></li><li><a href="../nav/preview.html">The Navigation tool</a></li></ul><h2>Docs</h2><ul><li><a href="../../index.html">Docs home</a></li><li><a href="../../api/index.html">API reference</a></li></ul></nav>
+	</aside>
+	<main class="docs-main">
+		<article class="prose">
+<h1 id="sky">Sky</h1>
+<p>The sky shows through faces textured <code>sky_*</code>, and daylight comes in through them when you bake. How the sky lights a level is in <a href="../core/lighting.html">Lighting</a>.</p>
+<p>Press <code>Cmd</code> <code>K</code> for the sky tool. Its panel opens at the bottom right. Every change shows in the 3D view as you make it.</p>
+<figure><img src="images/sky-panel.png" alt="The sky tool with a dusk preset" loading="lazy"><figcaption>The sky tool with a dusk preset</figcaption></figure>
+<h2 id="add-a-sky">Add a sky</h2>
+<p>A map with no sky draws its sky faces flat, and lets no daylight in.</p>
+<ol>
+<li>Press <code>Cmd</code> <code>K</code>.</li>
+<li>Click <strong>Give this map a sky</strong>.</li>
+<li>Pick a <strong>Preset</strong> to start from: a time of day, clear or overcast.</li>
+<li>Adjust the fields.</li>
+<li>Bake to light the level with it. See <a href="lighting.html">Lighting</a>.</li>
+</ol>
+<h2 id="settings">Settings</h2>
+<table>
+<thead>
+<tr>
+<th>Section</th>
+<th>Field</th>
+<th>Does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Scale model</td>
+<td>model, <strong>…</strong>, <strong>×</strong></td>
+<td>a small model of what stands outside the map, such as a city; <strong>×</strong> removes it</td>
+</tr>
+<tr>
+<td></td>
+<td>Viewpoint</td>
+<td>where in the model this map stands</td>
+</tr>
+<tr>
+<td></td>
+<td>Model scale</td>
+<td>how much smaller the model is than life</td>
+</tr>
+<tr>
+<td>Sky</td>
+<td>Horizon, Zenith</td>
+<td>the colours from the horizon to straight overhead</td>
+</tr>
+<tr>
+<td>Sun or moon</td>
+<td>Body</td>
+<td><strong>Sun</strong> or <strong>Moon</strong>; a moon gives a hundredth of a sun's light</td>
+</tr>
+<tr>
+<td></td>
+<td>Direction</td>
+<td>which way its light travels</td>
+</tr>
+<tr>
+<td></td>
+<td>the second <strong>Body</strong> (a colour)</td>
+<td>the colour of its light</td>
+</tr>
+<tr>
+<td></td>
+<td>Body light</td>
+<td>how much light it gives the ground</td>
+</tr>
+<tr>
+<td>Light</td>
+<td>Sky light</td>
+<td>how brightly the open sky lights what it can see</td>
+</tr>
+</tbody>
+</table>
+<p>Hover a field for more. <strong>Body light</strong> and <strong>Sky light</strong> show only after the next bake.</p>
+<p>Hammerite draws the sky as its gradient and nothing in it. Clouds, a sun's disc, the weather are your game's: it adds fields of its own below these, and draws them.</p>
+<p><strong>Remove the sky</strong> takes it away.</p>
+<h2 id="variants">Variants</h2>
+<p>Each variant can have its own sky: the same street at dusk has the day's sky with the sun lower.</p>
+<ol>
+<li>Switch to the variant in the Layers panel. See <a href="layers.html#variants">Layers</a>.</li>
+<li>In the sky tool, click <strong>Give</strong> <em>variant</em> <strong>its own sky</strong>. It starts as a copy of the sky it had.</li>
+<li>Edit it.</li>
+</ol>
+<p><strong>Use the sky it sits under again</strong> drops the variant's own sky.</p>
+<blockquote class="callout callout-note"><p><strong>Note:</strong> Adding or removing the sky, and changes to its fields, preset and model, are not in the undo history. Giving a variant its own sky, and dropping it, are.</p>
+</blockquote>
+		</article>
+		<p class="docs-source">Hammerite 1.0 · built from 059fce03, 2026-10-10</p>
+	</main>
+</div>
+
+<footer class="studio-foot">
+	<a href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>

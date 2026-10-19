@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lighting — Hammerite 3D 2.0 docs</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="../../../../assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="../../../../assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../../../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@300&display=swap">
+<link rel="stylesheet" href="../../../../hammerite.css">
+<link rel="stylesheet" href="../../../docs.css">
+<script src="../../../versions.js" defer></script>
+</head>
+<body class="docs" data-docs-version="2.0">
+
+<header class="studio">
+	<a class="studio-logo" href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="../../../../index.html">Hammerite 3D</a>
+		<a href="../../index.html">Docs</a>
+		<a href="../../guides/index.html">Guides</a>
+		<a href="../../api/index.html">API</a>
+		<a href="../index.html">Manual</a>
+	</nav>
+</header>
+
+<div class="docs-banner" hidden></div>
+
+<div class="docs-layout">
+	<aside class="docs-side">
+		<a class="docs-brand" href="../../index.html"><img src="../../../../assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
+		<label class="docs-version">Version
+			<select aria-label="Docs version"><option value="2.0" selected>2.0</option></select>
+		</label>
+		<nav class="api-nav"><a class="api-home" href="../index.html">Manual</a><h2>Core</h2><ul><li><a href="../core/index.html">Core</a></li><li><a href="../core/carved-world.html">The carved world</a></li><li><a href="../core/rooms-and-portals.html">Rooms and portals</a></li><li><a href="../core/fills.html">Fills</a></li><li><a href="../core/entities.html">Entities</a></li><li><a href="../core/textures.html">Textures</a></li><li><a href="../core/lighting.html">Lighting</a></li><li><a href="../core/baking.html">Baking</a></li><li><a href="../core/variants.html">Variants</a></li><li><a href="../core/terrain.html">Terrain</a></li><li><a href="../core/glossary.html">Glossary</a></li></ul><h2>Editor</h2><ul><li><a href="index.html">Editor</a></li><li><a href="interface.html">The interface</a></li><li><a href="camera.html">Camera</a></li><li><a href="selecting.html">Selecting</a></li><li><a href="building.html">Building</a></li><li><a href="editing.html">Editing</a></li><li><a href="texturing.html">Texturing</a></li><li><a href="terrain.html">Terrain</a></li><li><a href="entities.html">Entities</a></li><li><a href="props.html">Props</a></li><li><a href="decals.html">Decals</a></li><li><a href="prefabs.html">Prefabs</a></li><li><a href="layers.html">Layers</a></li><li><a href="sky.html">Sky</a></li><li><a href="lighting.html" aria-current="page">Lighting</a></li><li><a href="problems.html">Problems</a></li><li><a href="files.html">Map files</a></li><li><a href="keys.html">Keyboard reference</a></li><li><a href="manual.html">Using the manual</a></li><li><a href="extending-the-manual.html">Extending the manual</a></li></ul><h2>Audio</h2><ul><li><a href="../audio/index.html">Audio</a></li><li><a href="../audio/rooms.html">Rooms</a></li><li><a href="../audio/doors.html">Doors and openings</a></li><li><a href="../audio/outdoors.html">Outdoors and weather</a></li><li><a href="../audio/graph.html">The audio graph</a></li></ul><h2>Navigation</h2><ul><li><a href="../nav/index.html">Navigation</a></li><li><a href="../nav/ground.html">Ground</a></li><li><a href="../nav/links.html">Links</a></li><li><a href="../nav/preview.html">The Navigation tool</a></li></ul><h2>Docs</h2><ul><li><a href="../../index.html">Docs home</a></li><li><a href="../../api/index.html">API reference</a></li></ul></nav>
+	</aside>
+	<main class="docs-main">
+		<article class="prose">
+<h1 id="lighting">Lighting</h1>
+<p>Lighting is baked: the editor works out the light on every surface once and stores it. What a bake produces, and when it goes out of date, is in <a href="../core/baking.html">Baking</a>. How lights, sky and bounce behave is in <a href="../core/lighting.html">Lighting</a>.</p>
+<h2 id="bake">Bake</h2>
+<ol>
+<li>Place lights. See <a href="entities.html">Entities</a>.</li>
+<li>Press <code>Cmd</code> <code>L</code> for the lightmap tool. Its panel opens at the bottom right.</li>
+<li>Click <strong>Bake</strong>.</li>
+<li>Press <code>F5</code> to see the result.</li>
+</ol>
+<p>A window shows each stage while it bakes, and the map cannot be edited until it is done. The old lighting stays on the map until the new is ready: <strong>Cancel</strong>, or closing the window, stops the bake and leaves the map lit as it was. Cancelling <strong>Bake all variants</strong> stops it at the variant it was on; the ones already baked keep their new lighting. Bake again after changing geometry, lights or the sky.</p>
+<p>The panel's top line names the variant a bake will light and whether its bake is <strong>baked</strong>, <strong>not baked</strong> or <strong>out of date</strong>.</p>
+<figure><img src="images/lighting-bake.png" alt="The lightmap tool after a bake" loading="lazy"><figcaption>The lightmap tool after a bake</figcaption></figure>
+<h2 id="bake-settings">Bake settings</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Falloff</td>
+<td><strong>Realistic</strong>: light fades with the square of the distance and never quite ends. <strong>Linear</strong>: a straight ramp to darkness at the light's range</td>
+</tr>
+<tr>
+<td>Light range</td>
+<td>how far a light reaches, per unit of its energy; shown with Linear falloff only</td>
+</tr>
+<tr>
+<td>Bounces</td>
+<td>how many times light bounces; 0 is direct light only</td>
+</tr>
+<tr>
+<td>Bounce gain</td>
+<td>how much bounced light is kept; below 1 keeps rooms darker</td>
+</tr>
+<tr>
+<td>Bounce range</td>
+<td>how far bounced light carries, in world units; 0 is unlimited</td>
+</tr>
+<tr>
+<td>Bounce floor</td>
+<td>the faintest bounce of a switchable light a wall keeps, as a light level; 0 keeps all of it</td>
+</tr>
+<tr>
+<td>Colour bleed</td>
+<td>how much a surface takes the colour of light bounced onto it; shows at once, without a bake</td>
+</tr>
+<tr>
+<td>Emission gain</td>
+<td>how brightly glowing textures glow</td>
+</tr>
+<tr>
+<td>Shadow samples</td>
+<td>1 gives hard, stepped shadow edges; up to 4 softens them, at up to four times the cost</td>
+</tr>
+<tr>
+<td>Probe radius</td>
+<td>how far light probes reach; higher is smoother and slower</td>
+</tr>
+<tr>
+<td>Water reflections</td>
+<td>whether pools reflect the light falling on them back into the room; off bakes faster on a map with water</td>
+</tr>
+</tbody>
+</table>
+<p>Hover a field for more.</p>
+<p><strong>Bake direct pass</strong> bakes direct light only, with no bounces: the quick way to see where the lamps reach.</p>
+<p><strong>Quick bake</strong> lights only the surfaces that have no lighting: those an edit has moved, cut or added since the last bake. It uses direct light and leaves everything else as it was, so a changed room can be looked at without waiting for a full bake. The bake stays <strong>out of date</strong> until a full bake. See <a href="../core/baking.html#when-a-bake-is-out-of-date">Baking</a>.</p>
+<h2 id="variants">Variants</h2>
+<p>A bake lights the variant in effect and is kept for that variant. Switch variants in the <a href="layers.html#variants">Layers</a> panel and bake each one.</p>
+<p><strong>Bake all variants</strong> bakes each variant in turn. It appears when the map has more than one.</p>
+<h2 id="looking-at-the-result">Looking at the result</h2>
+<p>Choose what the 3D view shows from its <strong>View</strong> dropdown, or with the F-keys:</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Mode</th>
+<th>Shows</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>F1</code></td>
+<td>Unlit</td>
+<td>textures, no lighting</td>
+</tr>
+<tr>
+<td><code>F2</code></td>
+<td>Lightmap</td>
+<td>the baked light alone</td>
+</tr>
+<tr>
+<td><code>F3</code></td>
+<td>Lightmap Scale</td>
+<td>how fine each surface's lightmap is</td>
+</tr>
+<tr>
+<td><code>F4</code></td>
+<td>Caustics</td>
+<td>light patterns thrown by water</td>
+</tr>
+<tr>
+<td><code>F5</code></td>
+<td>Lit</td>
+<td>textures with lighting, as in the game</td>
+</tr>
+</tbody>
+</table>
+<p>Problems the bake found are listed in the <a href="problems.html">Problems</a> panel.</p>
+		</article>
+		<p class="docs-source">Hammerite 2.0 · built from 6d57ab2d, 2026-10-17</p>
+	</main>
+</div>
+
+<footer class="studio-foot">
+	<a href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>

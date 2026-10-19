@@ -24,6 +24,7 @@
 		<a href="../index.html">Docs</a>
 		<a href="../guides/index.html">Guides</a>
 		<a href="index.html">API</a>
+		<a href="../manual/index.html">Manual</a>
 	</nav>
 </header>
 
@@ -42,40 +43,46 @@
 <h1>HammeriteBakedLight</h1>
 <p class="inherits">Core: lighting. Inherits <a href="https://docs.godotengine.org/en/stable/classes/class_resource.html"><code>Resource</code></a></p>
 <p class="brief">The runtime handle of one light slot a bake wrote into the lightmaps and probes.</p>
-<p>Every atlas and probe a light reaches holds this same instance, so assigning its <a href="#property-color"><code>color</code></a> or <a href="#property-modulation"><code>modulation</code></a> relights all of them without a re-bake.</p><p>Look one up with <a href="HammeriteMap.html#method-get_baked_light_for_entity"><code>HammeriteMap.get_baked_light_for_entity()</code></a> or <a href="HammeriteMap.html#method-get_baked_light_for_group"><code>HammeriteMap.get_baked_light_for_group()</code></a>.</p>
+<p>Every atlas and probe a light reaches holds this same instance, so assigning its <a href="#property-color"><code>color</code></a>, <a href="#property-modulation"><code>modulation</code></a> or <a href="#property-drive"><code>drive</code></a> relights all of them without a re-bake.</p><p>What they are lit by is <a href="#method-get_lit"><code>get_lit()</code></a>, the product of two values with one writer each: <a href="#property-modulation"><code>modulation</code></a> is the light&#x27;s own - a dynamic light switched off or flickering writes it, every frame it is seen - and <a href="#property-drive"><code>drive</code></a> is what a script drives the slot with, a lightning flash or a cloud over the sun. A light&#x27;s own frame does not undo a drive.</p><p>Look one up with <a href="HammeriteMap.html#method-get_baked_light_for_entity"><code>HammeriteMap.get_baked_light_for_entity()</code></a> or <a href="HammeriteMap.html#method-get_baked_light_for_group"><code>HammeriteMap.get_baked_light_for_group()</code></a>.</p>
 <h2>Properties</h2>
-<table class="members"><thead><tr><th>Type</th><th>Name</th><th>Default</th></tr></thead><tbody><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_variant.html"><code>Variant</code></a></td><td><a href="#property-color"><code>color</code></a></td><td><code>Color(1, 1, 1, 1)</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_int.html"><code>int</code></a></td><td><a href="#property-entity_id"><code>entity_id</code></a></td><td><code>0</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_stringname.html"><code>StringName</code></a></td><td><a href="#property-group"><code>group</code></a></td><td><code>&amp;&quot;&quot;</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_float.html"><code>float</code></a></td><td><a href="#property-modulation"><code>modulation</code></a></td><td><code>1.0</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_vector4.html"><code>Vector4</code></a></td><td><a href="#property-placement"><code>placement</code></a></td><td><code>Vector4(0, 0, 0, 0)</code></td></tr></tbody></table>
+<table class="members"><thead><tr><th>Type</th><th>Name</th><th>Default</th></tr></thead><tbody><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_variant.html"><code>Variant</code></a></td><td><a href="#property-color"><code>color</code></a></td><td><code>Color(1, 1, 1, 1)</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_float.html"><code>float</code></a></td><td><a href="#property-drive"><code>drive</code></a></td><td></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_int.html"><code>int</code></a></td><td><a href="#property-entity_id"><code>entity_id</code></a></td><td><code>0</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_stringname.html"><code>StringName</code></a></td><td><a href="#property-group"><code>group</code></a></td><td><code>&amp;&quot;&quot;</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_float.html"><code>float</code></a></td><td><a href="#property-modulation"><code>modulation</code></a></td><td><code>1.0</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_vector4.html"><code>Vector4</code></a></td><td><a href="#property-placement"><code>placement</code></a></td><td><code>Vector4(0, 0, 0, 0)</code></td></tr></tbody></table>
 <h2>Methods</h2>
-<table class="members"><thead><tr><th>Returns</th><th>Method</th></tr></thead><tbody><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_bool.html"><code>bool</code></a></td><td><a href="#method-is_sky"><code>is_sky</code></a><code>()</code> <code>const</code></td></tr></tbody></table>
+<table class="members"><thead><tr><th>Returns</th><th>Method</th></tr></thead><tbody><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_float.html"><code>float</code></a></td><td><a href="#method-get_lit"><code>get_lit</code></a><code>()</code> <code>const</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_bool.html"><code>bool</code></a></td><td><a href="#method-is_sky"><code>is_sky</code></a><code>()</code> <code>const</code></td></tr></tbody></table>
 <h2>Signals</h2>
 <h3 id="signal-color_changed">color_changed</h3>
 <pre class="signature"><code>signal color_changed(color: Color)</code></pre>
 <p>Emitted when <a href="#property-color"><code>color</code></a> changes.</p>
 <h3 id="signal-modulation_changed">modulation_changed</h3>
 <pre class="signature"><code>signal modulation_changed(v: float)</code></pre>
-<p>Emitted when <a href="#property-modulation"><code>modulation</code></a> changes.</p>
+<p>Emitted when <a href="#method-get_lit"><code>get_lit()</code></a> changes, through <a href="#property-modulation"><code>modulation</code></a> or <a href="#property-drive"><code>drive</code></a>, with its new value.</p>
 <h2>Property descriptions</h2>
 <h3 id="property-color">color</h3>
 <pre class="signature"><code>var color: Variant = Color(1, 1, 1, 1)</code></pre>
 <p>The light&#x27;s colour, as the bake took it from the entity: a <a href="https://docs.godotengine.org/en/stable/classes/class_color.html"><code>Color</code></a>, whatever is assigned - a <a href="https://docs.godotengine.org/en/stable/classes/class_vector3.html"><code>Vector3</code></a>, as maps baked before it was a colour hold, is taken as one. Assigning it relights every face and probe the light reaches. An unchanged value is not announced.</p>
+<h3 id="property-drive">drive</h3>
+<pre class="signature"><code>var drive: float</code></pre>
+<p>What a script drives the slot with: 1 as baked, 0 dark. The lights the slot was baked from never write it, so it is the one to set from a script. Not saved with the map: a drive belongs to whatever is running.</p>
 <h3 id="property-entity_id">entity_id</h3>
 <pre class="signature"><code>var entity_id: int = 0</code></pre>
 <p>Id of the <a href="HammeriteEntity.html"><code>HammeriteEntity</code></a> this light was baked from; the group&#x27;s representative entity when <a href="#property-group"><code>group</code></a> is set. Negative for the sky&#x27;s own slot, which no entity holds: see <a href="#method-is_sky"><code>is_sky()</code></a>.</p>
 <h3 id="property-group">group</h3>
 <pre class="signature"><code>var group: StringName = &amp;&quot;&quot;</code></pre>
-<p>Slot group this light belongs to, empty when ungrouped. When several light entities share a group they share one slot and therefore ONE HammeriteBakedLight - this is the handle <a href="HammeriteMap.html#method-get_baked_light_for_group"><code>HammeriteMap.get_baked_light_for_group()</code></a> resolves, so a single modulation drives the whole effect. <a href="#property-entity_id"><code>entity_id</code></a> is then the group&#x27;s representative entity, not the only one.</p>
+<p>Slot group this light belongs to, empty when ungrouped. When several light entities share a group they share one slot and therefore ONE HammeriteBakedLight - this is the handle <a href="HammeriteMap.html#method-get_baked_light_for_group"><code>HammeriteMap.get_baked_light_for_group()</code></a> resolves, so a single <a href="#property-drive"><code>drive</code></a> drives the whole effect. <a href="#property-entity_id"><code>entity_id</code></a> is then the group&#x27;s representative entity, not the only one.</p>
 <h3 id="property-modulation">modulation</h3>
 <pre class="signature"><code>var modulation: float = 1.0</code></pre>
-<p>Light modulation.</p><p>The value is between 0.0 and 1.0, with 0 having no contribution in the scene, and 1 having full contribution. Assigning it dims or brightens the light everywhere it was baked. A flickering lamp sets it every frame and every face and probe it reaches listens, so an unchanged value is not announced: it would be thousands of calls.</p>
+<p>The light&#x27;s own modulation: 0 for a dynamic light switched off, its flicker while it is on, 1 for a light that simply burns. The dynamic light it was baked from writes it, every frame it is seen; to drive the slot from a script, set <a href="#property-drive"><code>drive</code></a>, which this does not overwrite. A flickering lamp sets it every frame and every face and probe it reaches listens, so an unchanged value is not announced: it would be thousands of calls.</p>
 <h3 id="property-placement">placement</h3>
 <pre class="signature"><code>var placement: Vector4 = Vector4(0, 0, 0, 0)</code></pre>
 <p>Where this light stands, so a shader can work out which way its light arrives at any point it is drawing - caustics flow that way. For a sun, <a href="#property-placement"><code>placement</code></a> holds the direction TOWARD it instead, which is what a w of 0 says.</p><p>A group is several lights in one slot and has no single position: the representative entity&#x27;s stands for all of them, which is as true as one slot can be.</p>
 <h2>Method descriptions</h2>
+<h3 id="method-get_lit">get_lit()</h3>
+<pre class="signature"><code>func get_lit() -&gt; float</code></pre>
+<p>What the faces and probes it reaches are lit by: <a href="#property-modulation"><code>modulation</code></a> times <a href="#property-drive"><code>drive</code></a>.</p>
 <h3 id="method-is_sky">is_sky()</h3>
 <pre class="signature"><code>func is_sky() -&gt; bool</code></pre>
 <p>Whether this is the sky&#x27;s slot, whose <a href="#property-entity_id"><code>entity_id</code></a> names no entity in the map.</p>
 		</article>
-		<p class="docs-source">Hammerite latest · built from d8d727be, 2026-10-17</p>
+		<p class="docs-source">Hammerite latest · built from 45a63b69, 2026-10-19</p>
 	</main>
 </div>
 

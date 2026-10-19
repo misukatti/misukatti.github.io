@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Outdoors and weather — Hammerite 3D 2.0 docs</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="../../../../assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="../../../../assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../../../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@300&display=swap">
+<link rel="stylesheet" href="../../../../hammerite.css">
+<link rel="stylesheet" href="../../../docs.css">
+<script src="../../../versions.js" defer></script>
+</head>
+<body class="docs" data-docs-version="2.0">
+
+<header class="studio">
+	<a class="studio-logo" href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="../../../../index.html">Hammerite 3D</a>
+		<a href="../../index.html">Docs</a>
+		<a href="../../guides/index.html">Guides</a>
+		<a href="../../api/index.html">API</a>
+		<a href="../index.html">Manual</a>
+	</nav>
+</header>
+
+<div class="docs-banner" hidden></div>
+
+<div class="docs-layout">
+	<aside class="docs-side">
+		<a class="docs-brand" href="../../index.html"><img src="../../../../assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
+		<label class="docs-version">Version
+			<select aria-label="Docs version"><option value="2.0" selected>2.0</option></select>
+		</label>
+		<nav class="api-nav"><a class="api-home" href="../index.html">Manual</a><h2>Core</h2><ul><li><a href="../core/index.html">Core</a></li><li><a href="../core/carved-world.html">The carved world</a></li><li><a href="../core/rooms-and-portals.html">Rooms and portals</a></li><li><a href="../core/fills.html">Fills</a></li><li><a href="../core/entities.html">Entities</a></li><li><a href="../core/textures.html">Textures</a></li><li><a href="../core/lighting.html">Lighting</a></li><li><a href="../core/baking.html">Baking</a></li><li><a href="../core/variants.html">Variants</a></li><li><a href="../core/terrain.html">Terrain</a></li><li><a href="../core/glossary.html">Glossary</a></li></ul><h2>Editor</h2><ul><li><a href="../editor/index.html">Editor</a></li><li><a href="../editor/interface.html">The interface</a></li><li><a href="../editor/camera.html">Camera</a></li><li><a href="../editor/selecting.html">Selecting</a></li><li><a href="../editor/building.html">Building</a></li><li><a href="../editor/editing.html">Editing</a></li><li><a href="../editor/texturing.html">Texturing</a></li><li><a href="../editor/terrain.html">Terrain</a></li><li><a href="../editor/entities.html">Entities</a></li><li><a href="../editor/props.html">Props</a></li><li><a href="../editor/decals.html">Decals</a></li><li><a href="../editor/prefabs.html">Prefabs</a></li><li><a href="../editor/layers.html">Layers</a></li><li><a href="../editor/sky.html">Sky</a></li><li><a href="../editor/lighting.html">Lighting</a></li><li><a href="../editor/problems.html">Problems</a></li><li><a href="../editor/files.html">Map files</a></li><li><a href="../editor/keys.html">Keyboard reference</a></li><li><a href="../editor/manual.html">Using the manual</a></li><li><a href="../editor/extending-the-manual.html">Extending the manual</a></li></ul><h2>Audio</h2><ul><li><a href="index.html">Audio</a></li><li><a href="rooms.html">Rooms</a></li><li><a href="doors.html">Doors and openings</a></li><li><a href="outdoors.html" aria-current="page">Outdoors and weather</a></li><li><a href="graph.html">The audio graph</a></li></ul><h2>Navigation</h2><ul><li><a href="../nav/index.html">Navigation</a></li><li><a href="../nav/ground.html">Ground</a></li><li><a href="../nav/links.html">Links</a></li><li><a href="../nav/preview.html">The Navigation tool</a></li></ul><h2>Docs</h2><ul><li><a href="../../index.html">Docs home</a></li><li><a href="../../api/index.html">API reference</a></li></ul></nav>
+	</aside>
+	<main class="docs-main">
+		<article class="prose">
+<h1 id="outdoors-and-weather">Outdoors and weather</h1>
+<p>Each zone is <strong>Interior</strong>, <strong>Exterior</strong> or <strong>Semi-exterior</strong>. The type decides how weather is heard there.</p>
+<table>
+<thead>
+<tr>
+<th>Zone type</th>
+<th>Weather is heard</th>
+<th>Set by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Exterior</td>
+<td>everywhere, at full level</td>
+<td>Auto, when the room is open to the sky itself</td>
+</tr>
+<tr>
+<td>Interior</td>
+<td>coming in through the way out</td>
+<td>Auto, for every other room</td>
+</tr>
+<tr>
+<td>Semi-exterior</td>
+<td>between the two, by <strong>Weather exposure</strong></td>
+<td>you: an awning, an archway, a covered market</td>
+</tr>
+</tbody>
+</table>
+<p>Set the type in the air brush's <strong>Audio</strong> section: see <a href="rooms.html#the-audio-section">Rooms</a>.</p>
+<h2 id="open-to-the-sky-is-not-the-same-as-lit-by-it">Open to the sky is not the same as lit by it</h2>
+<p>A room is open to the sky when its own walls include <a href="../core/textures.html">sky faces</a>. A room with a window onto a courtyard is not: the rain is at the window, not overhead.</p>
+<p>Lighting asks a different question. For the lightmapper, a room that can see the sky through any chain of openings is exterior, so daylight comes in through the window. See <a href="../core/lighting.html">Lighting</a>.</p>
+<p>So a room with a window is lit as exterior and heard as interior. That is intended. Compare the two answers on the 2D floorplan:</p>
+<ol>
+<li>Open the cell overlay dropdown on the toolbar.</li>
+<li>Choose <strong>Cells: Interior / exterior</strong> to see how lighting classifies each room.</li>
+<li>Choose <strong>Cells: Acoustics</strong> to see how sound classifies it.</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Acoustics overlay colour</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>orange</td>
+<td>Interior</td>
+</tr>
+<tr>
+<td>blue</td>
+<td>Exterior</td>
+</tr>
+<tr>
+<td>green</td>
+<td>Semi-exterior</td>
+</tr>
+<tr>
+<td>grey</td>
+<td>excluded from the graph</td>
+</tr>
+</tbody>
+</table>
+<figure><img src="images/outdoors-overlays.png" alt="The same small map under the two overlays: a room with a window reads exterior for lighting and interior for acoustics" loading="lazy"><figcaption>The same small map under the two overlays: a room with a window reads exterior for lighting and interior for acoustics</figcaption></figure>
+<h2 id="covered-spaces">Covered spaces</h2>
+<p>Auto cannot tell a covered space from a closed one. Mark it yourself.</p>
+<ol>
+<li>Select the air brush of the archway or awning.</li>
+<li>In <strong>Audio</strong>, set <strong>Zone type</strong> to <strong>Semi-exterior</strong>.</li>
+<li>Set <strong>Weather exposure</strong>: 0 is fully sheltered, 1 fully open. Try 0.5 for an open-sided shelter.</li>
+<li>Rebuild the audio graph.</li>
+</ol>
+<h2 id="weather">Weather</h2>
+<p>Rain and wind are <code>env_sound_environment</code> entities. Place one anywhere in the map; where it stands does not matter.</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>What it does</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sound_file</code></td>
+<td>Path of the sound, relative to your game's sounds folder.</td>
+<td>empty</td>
+</tr>
+<tr>
+<td><code>volume</code></td>
+<td>Level in dB, as heard outdoors.</td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>autoplay</code></td>
+<td>Starts when the map loads or the simulation starts.</td>
+<td>on</td>
+</tr>
+<tr>
+<td><code>loop</code></td>
+<td>Loops the sound.</td>
+<td>on</td>
+</tr>
+<tr>
+<td><code>direction</code></td>
+<td>Zero: heard from the way out, as below. Otherwise the direction the sound travels, and it always comes from that side: <code>(0, -1, 0)</code> is thunder overhead.</td>
+<td><code>(0, 0, 0)</code></td>
+</tr>
+</tbody>
+</table>
+<p>How it sounds from where the listener stands:</p>
+<ul>
+<li><strong>Outdoors:</strong> all round, at full level.</li>
+<li><strong>Indoors:</strong> from the room's ways out, each opening at its own place and its own level, up to four of them. The nearest is loudest; a room with windows on two sides hears the rain on both sides. It gets quieter and duller the further in the listener is, and a shut door on the way counts against it.</li>
+<li><strong>Semi-exterior:</strong> between the two, by the room's weather exposure.</li>
+<li><strong>A sealed room</strong> with no way out hears almost nothing.</li>
+</ul>
+<p>Walking in from the street is a fade, never a step.</p>
+<blockquote class="callout callout-note"><p><strong>Note:</strong> Weather needs a built audio graph. Without one it plays 40 dB down everywhere. See <a href="graph.html">The audio graph</a>.</p>
+</blockquote>
+		</article>
+		<p class="docs-source">Hammerite 2.0 · built from 6d57ab2d, 2026-10-17</p>
+	</main>
+</div>
+
+<footer class="studio-foot">
+	<a href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>

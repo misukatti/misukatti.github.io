@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Core manual — Hammerite 3D latest docs</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="../../../../assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="../../../../assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../../../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@300&display=swap">
+<link rel="stylesheet" href="../../../../hammerite.css">
+<link rel="stylesheet" href="../../../docs.css">
+<script src="../../../versions.js" defer></script>
+</head>
+<body class="docs" data-docs-version="latest">
+
+<header class="studio">
+	<a class="studio-logo" href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="../../../../index.html">Hammerite 3D</a>
+		<a href="../../index.html">Docs</a>
+		<a href="../../guides/index.html">Guides</a>
+		<a href="../../api/index.html">API</a>
+		<a href="../index.html">Manual</a>
+	</nav>
+</header>
+
+<div class="docs-banner" hidden></div>
+
+<div class="docs-layout">
+	<aside class="docs-side">
+		<a class="docs-brand" href="../../index.html"><img src="../../../../assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
+		<label class="docs-version">Version
+			<select aria-label="Docs version"><option value="latest" selected>latest</option></select>
+		</label>
+		<nav class="api-nav"><a class="api-home" href="../index.html">Manual</a><h2>Core</h2><ul><li><a href="index.html" aria-current="page">Core</a></li><li><a href="carved-world.html">The carved world</a></li><li><a href="rooms-and-portals.html">Rooms and portals</a></li><li><a href="fills.html">Fills</a></li><li><a href="entities.html">Entities</a></li><li><a href="textures.html">Textures</a></li><li><a href="lighting.html">Lighting</a></li><li><a href="baking.html">Baking</a></li><li><a href="variants.html">Variants</a></li><li><a href="terrain.html">Terrain</a></li><li><a href="glossary.html">Glossary</a></li></ul><h2>Editor</h2><ul><li><a href="../editor/index.html">Editor</a></li><li><a href="../editor/interface.html">The interface</a></li><li><a href="../editor/camera.html">Camera</a></li><li><a href="../editor/selecting.html">Selecting</a></li><li><a href="../editor/building.html">Building</a></li><li><a href="../editor/editing.html">Editing</a></li><li><a href="../editor/texturing.html">Texturing</a></li><li><a href="../editor/terrain.html">Terrain</a></li><li><a href="../editor/entities.html">Entities</a></li><li><a href="../editor/props.html">Props</a></li><li><a href="../editor/decals.html">Decals</a></li><li><a href="../editor/prefabs.html">Prefabs</a></li><li><a href="../editor/layers.html">Layers</a></li><li><a href="../editor/sky.html">Sky</a></li><li><a href="../editor/lighting.html">Lighting</a></li><li><a href="../editor/problems.html">Problems</a></li><li><a href="../editor/files.html">Map files</a></li><li><a href="../editor/keys.html">Keyboard reference</a></li><li><a href="../editor/manual.html">Using the manual</a></li><li><a href="../editor/extending-the-manual.html">Extending the manual</a></li></ul><h2>Audio</h2><ul><li><a href="../audio/index.html">Audio</a></li><li><a href="../audio/rooms.html">Rooms</a></li><li><a href="../audio/doors.html">Doors and openings</a></li><li><a href="../audio/outdoors.html">Outdoors and weather</a></li><li><a href="../audio/graph.html">The audio graph</a></li></ul><h2>Navigation</h2><ul><li><a href="../nav/index.html">Navigation</a></li><li><a href="../nav/ground.html">Ground</a></li><li><a href="../nav/links.html">Links</a></li><li><a href="../nav/preview.html">The Navigation tool</a></li></ul><h2>Docs</h2><ul><li><a href="../../index.html">Docs home</a></li><li><a href="../../api/index.html">API reference</a></li></ul></nav>
+	</aside>
+	<main class="docs-main">
+		<article class="prose">
+<h1 id="core">Core</h1>
+<p>Hammerite builds a <strong>carved world</strong>. The map starts as solid rock and you carve rooms out of it with air brushes. Walls, floors, openings, and which rooms connect all follow from the carve, and are worked out again after every edit.</p>
+<figure><img src="images/index-carved-level.png" alt="A small carved level: two rooms joined by a corridor, lit by a bake" loading="lazy"><figcaption>A small carved level: two rooms joined by a corridor, lit by a bake</figcaption></figure>
+<p>Read <a href="carved-world.html">The carved world</a> first. Most building mistakes come from treating a Hammerite map as walls built in a void.</p>
+<h2 id="what-the-core-section-covers">What the core section covers</h2>
+<p>This section says what things are and what they mean for the level. The <a href="../editor/index.html">Editor</a> section says how to make them.</p>
+<table>
+<thead>
+<tr>
+<th>Page</th>
+<th>What it covers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="carved-world.html">The carved world</a></td>
+<td>Solid by default, the three tiers, brush order, overlap to extend and abut to divide</td>
+</tr>
+<tr>
+<td><a href="rooms-and-portals.html">Rooms and portals</a></td>
+<td>Cells, rooms, openings, naming doorways, interior and exterior</td>
+</tr>
+<tr>
+<td><a href="fills.html">Fills</a></td>
+<td>Filling a room with water</td>
+</tr>
+<tr>
+<td><a href="entities.html">Entities</a></td>
+<td>Point entities, brush entities, lights, props, decals</td>
+</tr>
+<tr>
+<td><a href="textures.html">Textures</a></td>
+<td>Texture names, texture scale, and the <code>!</code>, <code>sky_</code> and <code>_emission</code> conventions</td>
+</tr>
+<tr>
+<td><a href="lighting.html">Lighting</a></td>
+<td>Lights, sky and daylight, emissive surfaces, water, bounce</td>
+</tr>
+<tr>
+<td><a href="baking.html">Baking</a></td>
+<td>What a bake produces, when it is out of date, bake warnings</td>
+</tr>
+<tr>
+<td><a href="variants.html">Variants</a></td>
+<td>One map in several states</td>
+</tr>
+<tr>
+<td><a href="terrain.html">Terrain</a></td>
+<td>Sculptable ground made of detail</td>
+</tr>
+<tr>
+<td><a href="glossary.html">Glossary</a></td>
+<td>Every term, one line each</td>
+</tr>
+</tbody>
+</table>
+<h2 id="other-sections">Other sections</h2>
+<ul>
+<li><a href="../editor/index.html">Editor</a>: building, texturing, placing entities, baking in the editor.</li>
+<li><a href="../audio/index.html">Audio</a>: how sound travels through the rooms you carve.</li>
+<li><a href="../nav/index.html">Navigation</a>: where guards and other agents can walk.</li>
+</ul>
+		</article>
+		<p class="docs-source">Hammerite latest · built from 45a63b69, 2026-10-19</p>
+	</main>
+</div>
+
+<footer class="studio-foot">
+	<a href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>

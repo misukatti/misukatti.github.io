@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Variants — Hammerite 3D latest docs</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="../../../../assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="../../../../assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../../../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@300&display=swap">
+<link rel="stylesheet" href="../../../../hammerite.css">
+<link rel="stylesheet" href="../../../docs.css">
+<script src="../../../versions.js" defer></script>
+</head>
+<body class="docs" data-docs-version="latest">
+
+<header class="studio">
+	<a class="studio-logo" href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="../../../../index.html">Hammerite 3D</a>
+		<a href="../../index.html">Docs</a>
+		<a href="../../guides/index.html">Guides</a>
+		<a href="../../api/index.html">API</a>
+		<a href="../index.html">Manual</a>
+	</nav>
+</header>
+
+<div class="docs-banner" hidden></div>
+
+<div class="docs-layout">
+	<aside class="docs-side">
+		<a class="docs-brand" href="../../index.html"><img src="../../../../assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
+		<label class="docs-version">Version
+			<select aria-label="Docs version"><option value="latest" selected>latest</option></select>
+		</label>
+		<nav class="api-nav"><a class="api-home" href="../index.html">Manual</a><h2>Core</h2><ul><li><a href="index.html">Core</a></li><li><a href="carved-world.html">The carved world</a></li><li><a href="rooms-and-portals.html">Rooms and portals</a></li><li><a href="fills.html">Fills</a></li><li><a href="entities.html">Entities</a></li><li><a href="textures.html">Textures</a></li><li><a href="lighting.html">Lighting</a></li><li><a href="baking.html">Baking</a></li><li><a href="variants.html" aria-current="page">Variants</a></li><li><a href="terrain.html">Terrain</a></li><li><a href="glossary.html">Glossary</a></li></ul><h2>Editor</h2><ul><li><a href="../editor/index.html">Editor</a></li><li><a href="../editor/interface.html">The interface</a></li><li><a href="../editor/camera.html">Camera</a></li><li><a href="../editor/selecting.html">Selecting</a></li><li><a href="../editor/building.html">Building</a></li><li><a href="../editor/editing.html">Editing</a></li><li><a href="../editor/texturing.html">Texturing</a></li><li><a href="../editor/terrain.html">Terrain</a></li><li><a href="../editor/entities.html">Entities</a></li><li><a href="../editor/props.html">Props</a></li><li><a href="../editor/decals.html">Decals</a></li><li><a href="../editor/prefabs.html">Prefabs</a></li><li><a href="../editor/layers.html">Layers</a></li><li><a href="../editor/sky.html">Sky</a></li><li><a href="../editor/lighting.html">Lighting</a></li><li><a href="../editor/problems.html">Problems</a></li><li><a href="../editor/files.html">Map files</a></li><li><a href="../editor/keys.html">Keyboard reference</a></li><li><a href="../editor/manual.html">Using the manual</a></li><li><a href="../editor/extending-the-manual.html">Extending the manual</a></li></ul><h2>Audio</h2><ul><li><a href="../audio/index.html">Audio</a></li><li><a href="../audio/rooms.html">Rooms</a></li><li><a href="../audio/doors.html">Doors and openings</a></li><li><a href="../audio/outdoors.html">Outdoors and weather</a></li><li><a href="../audio/graph.html">The audio graph</a></li></ul><h2>Navigation</h2><ul><li><a href="../nav/index.html">Navigation</a></li><li><a href="../nav/ground.html">Ground</a></li><li><a href="../nav/links.html">Links</a></li><li><a href="../nav/preview.html">The Navigation tool</a></li></ul><h2>Docs</h2><ul><li><a href="../../index.html">Docs home</a></li><li><a href="../../api/index.html">API reference</a></li></ul></nav>
+	</aside>
+	<main class="docs-main">
+		<article class="prose">
+<h1 id="variants">Variants</h1>
+<p>A <strong>variant</strong> is one state of a map: the same streets by day and by night, a corridor before and after it collapses. One map holds all of them.</p>
+<p>How to make and switch variants: <a href="../editor/layers.html">Layers</a>.</p>
+<h2 id="how-a-variant-works">How a variant works</h2>
+<p>A variant is a layer marked as a variant. What is on it, and on the layers inside it, exists only in that variant.</p>
+<ul>
+<li>A layer in no variant is in every variant: the parts of the level that never change.</li>
+<li>Sibling variants are alternatives: Day or Night.</li>
+<li>A variant inside another refines it. Making the inner one active brings the outer one's contents too: Night, then Night with the gate open.</li>
+<li>Every map has a <strong>Default variant</strong>. It is in effect until something asks for another, and it cannot be removed.</li>
+</ul>
+<figure><img src="images/variants-layers.png" alt="Layer tree with a Day and a Night variant, Night active" loading="lazy"><figcaption>Layer tree with a Day and a Night variant, Night active</figcaption></figure>
+<h2 id="what-not-in-the-active-variant-means">What "not in the active variant" means</h2>
+<p>Something in another variant is not in the world, not merely hidden:</p>
+<ul>
+<li>A room does not carve, a solid does not fill.</li>
+<li>It is not drawn, collided with, baked, lit, heard or walked on.</li>
+<li>It cannot be picked in the editor.</li>
+</ul>
+<p>A brush entity's brushes go with the entity: a door in another variant takes its leaf along.</p>
+<p>Use variants for changes to the level itself. To tidy the view while you work, hide a layer instead: hiding changes nothing in the world.</p>
+<h2 id="each-variant-has-its-own-bake">Each variant has its own bake</h2>
+<ul>
+<li>A bake lights the variant in effect and is kept as that variant's lighting.</li>
+<li>Switching variants puts that variant's lighting on the map. A variant never baked is unlit.</li>
+<li><strong>Bake all variants</strong> in the lightmap tool bakes, in turn, every variant that no other variant refines. A variant that others refine is baked when it is the one in effect.</li>
+<li>Data other addons bake into the map, such as the audio graph, is also kept per variant.</li>
+</ul>
+<p>See <a href="baking.html">Baking</a> and <a href="../editor/lighting.html">Lighting</a>.</p>
+<h2 id="each-variant-can-have-its-own-sky">Each variant can have its own sky</h2>
+<p>A variant can have a sky of its own, set in the <a href="../editor/sky.html">Sky</a> tool. One without takes the sky of the variant it sits inside, and in the end the default variant's.</p>
+<h2 id="which-variant-the-game-shows">Which variant the game shows</h2>
+<p>Hammerite knows variants only by layer name. Which one a game state means, and when to switch, is your game's.</p>
+		</article>
+		<p class="docs-source">Hammerite latest · built from 45a63b69, 2026-10-19</p>
+	</main>
+</div>
+
+<footer class="studio-foot">
+	<a href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>

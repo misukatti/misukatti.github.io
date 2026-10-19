@@ -24,6 +24,7 @@
 		<a href="../index.html">Docs</a>
 		<a href="../guides/index.html">Guides</a>
 		<a href="index.html">API</a>
+		<a href="../manual/index.html">Manual</a>
 	</nav>
 </header>
 
@@ -120,7 +121,7 @@
 <pre class="signature"><code>static func write(resource: Resource, path: String, text: bool = false, keep_backup: bool = false) -&gt; int</code></pre>
 <p>Save <code>resource</code> at <code>path</code>. <code>text</code> writes it as JSON, one property to a line, so content that lives in version control reads as a diff; otherwise it is compressed binary, which is what a map - most of it lightmap pixels - wants. <a href="#method-read"><code>read()</code></a> tells the two apart by themselves.  Written beside the file and moved over it once complete, so a crash or a full disk part way leaves the old file whole. <code>keep_backup</code> keeps the file being replaced as <code>&lt;path&gt;.bak</code>.  A map records who provides what it names as it is saved (<a href="HammeriteReferences.html#method-record"><code>HammeriteReferences.record()</code></a>).</p>
 		</article>
-		<p class="docs-source">Hammerite latest · built from d8d727be, 2026-10-17</p>
+		<p class="docs-source">Hammerite latest · built from 45a63b69, 2026-10-19</p>
 	</main>
 </div>
 

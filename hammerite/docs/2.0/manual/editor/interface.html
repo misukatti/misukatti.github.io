@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The interface — Hammerite 3D 2.0 docs</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="../../../../assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="../../../../assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../../../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@300&display=swap">
+<link rel="stylesheet" href="../../../../hammerite.css">
+<link rel="stylesheet" href="../../../docs.css">
+<script src="../../../versions.js" defer></script>
+</head>
+<body class="docs" data-docs-version="2.0">
+
+<header class="studio">
+	<a class="studio-logo" href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="../../../../index.html">Hammerite 3D</a>
+		<a href="../../index.html">Docs</a>
+		<a href="../../guides/index.html">Guides</a>
+		<a href="../../api/index.html">API</a>
+		<a href="../index.html">Manual</a>
+	</nav>
+</header>
+
+<div class="docs-banner" hidden></div>
+
+<div class="docs-layout">
+	<aside class="docs-side">
+		<a class="docs-brand" href="../../index.html"><img src="../../../../assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
+		<label class="docs-version">Version
+			<select aria-label="Docs version"><option value="2.0" selected>2.0</option></select>
+		</label>
+		<nav class="api-nav"><a class="api-home" href="../index.html">Manual</a><h2>Core</h2><ul><li><a href="../core/index.html">Core</a></li><li><a href="../core/carved-world.html">The carved world</a></li><li><a href="../core/rooms-and-portals.html">Rooms and portals</a></li><li><a href="../core/fills.html">Fills</a></li><li><a href="../core/entities.html">Entities</a></li><li><a href="../core/textures.html">Textures</a></li><li><a href="../core/lighting.html">Lighting</a></li><li><a href="../core/baking.html">Baking</a></li><li><a href="../core/variants.html">Variants</a></li><li><a href="../core/terrain.html">Terrain</a></li><li><a href="../core/glossary.html">Glossary</a></li></ul><h2>Editor</h2><ul><li><a href="index.html">Editor</a></li><li><a href="interface.html" aria-current="page">The interface</a></li><li><a href="camera.html">Camera</a></li><li><a href="selecting.html">Selecting</a></li><li><a href="building.html">Building</a></li><li><a href="editing.html">Editing</a></li><li><a href="texturing.html">Texturing</a></li><li><a href="terrain.html">Terrain</a></li><li><a href="entities.html">Entities</a></li><li><a href="props.html">Props</a></li><li><a href="decals.html">Decals</a></li><li><a href="prefabs.html">Prefabs</a></li><li><a href="layers.html">Layers</a></li><li><a href="sky.html">Sky</a></li><li><a href="lighting.html">Lighting</a></li><li><a href="problems.html">Problems</a></li><li><a href="files.html">Map files</a></li><li><a href="keys.html">Keyboard reference</a></li><li><a href="manual.html">Using the manual</a></li><li><a href="extending-the-manual.html">Extending the manual</a></li></ul><h2>Audio</h2><ul><li><a href="../audio/index.html">Audio</a></li><li><a href="../audio/rooms.html">Rooms</a></li><li><a href="../audio/doors.html">Doors and openings</a></li><li><a href="../audio/outdoors.html">Outdoors and weather</a></li><li><a href="../audio/graph.html">The audio graph</a></li></ul><h2>Navigation</h2><ul><li><a href="../nav/index.html">Navigation</a></li><li><a href="../nav/ground.html">Ground</a></li><li><a href="../nav/links.html">Links</a></li><li><a href="../nav/preview.html">The Navigation tool</a></li></ul><h2>Docs</h2><ul><li><a href="../../index.html">Docs home</a></li><li><a href="../../api/index.html">API reference</a></li></ul></nav>
+	</aside>
+	<main class="docs-main">
+		<article class="prose">
+<h1 id="the-interface">The interface</h1>
+<p>From top to bottom: menubar, toolbar, the views between two side panels, and the status bar.</p>
+<figure><img src="images/interface-layout.png" alt="The editor&#x27;s layout" loading="lazy"><figcaption>The editor&#x27;s layout</figcaption></figure>
+<h2 id="views">Views</h2>
+<p>Four views: 3D (perspective) top left, and three flat views: top, front and side. Click a view to give it the keyboard; it gets an outline. Drag the lines between views to resize them.</p>
+<ul>
+<li><code>M</code> maximises the view under focus, and restores the four-way split. The <code>↗</code> button in a view's top right corner does the same for that view.</li>
+<li>The name in a view's top right corner says what it shows. Choose another to swap: the view you choose moves to this corner, and this one takes its place. The editor remembers the arrangement.</li>
+<li>The 2D views fill in the rooms cut at one depth. Drag from a ruler with the right mouse button to move the cut of the view across from it. See <a href="camera.html#2d-views">Camera</a>.</li>
+<li>Each 2D view has rulers along its top and left edge. Click or drag in a ruler to move a working plane: the plane new brushes are drawn on in the other flat views. Or point at a face and press <code>.</code> to put the working plane through it: in a 2D view, that view's plane; in the 3D view, the plane of whichever view the face faces.</li>
+<li>The <strong>View</strong> dropdown in the 3D view's top left corner holds what that view draws: the visualisation mode, grid, wireframes and overlays. See <a href="keys.html#3d-view-dropdown">Keyboard reference</a>.</li>
+</ul>
+<h2 id="menubar">Menubar</h2>
+<table>
+<thead>
+<tr>
+<th>Menu</th>
+<th>Holds</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>File</td>
+<td>open, save, save prefab sets, migrate 1.x resources, close the editor</td>
+</tr>
+<tr>
+<td>Edit</td>
+<td>undo, duplicate, delete, group, merge, UV lock</td>
+</tr>
+<tr>
+<td>Selection</td>
+<td>what to do with the selection: mirror, snap, tier, layer, texture, prefabs, narrowing, simulation</td>
+</tr>
+<tr>
+<td>View</td>
+<td>warning markers, grid size, UI size</td>
+</tr>
+<tr>
+<td>Tools</td>
+<td>every tool, and the texture and decal browsers</td>
+</tr>
+</tbody>
+</table>
+<p>Addons can add their own menus after these. Every item shows its key. See <a href="keys.html">Keyboard reference</a> for the full list.</p>
+<h2 id="toolbar">Toolbar</h2>
+<p>Left to right:</p>
+<table>
+<thead>
+<tr>
+<th>Group</th>
+<th>Buttons</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pointing</td>
+<td>Select, Move</td>
+</tr>
+<tr>
+<td>Drawing</td>
+<td>Cube, Cylinder, Cone, Ramp, Stair, Arch, Polygon</td>
+</tr>
+<tr>
+<td>Cutting and shaping</td>
+<td>Clip, Face, Vertex</td>
+</tr>
+<tr>
+<td>Placing</td>
+<td>Entity, Prop, Prefab</td>
+</tr>
+<tr>
+<td>Addon tools</td>
+<td>Audio Portals, Navigation, when those addons are installed</td>
+</tr>
+<tr>
+<td>Settings</td>
+<td>tier dropdown (<strong>Solid</strong>, <strong>Air</strong>, <strong>Detail</strong>), <strong>Faces</strong>, <strong>UV Lock</strong>, <strong>Cells:</strong> overlay dropdown</td>
+</tr>
+<tr>
+<td>Simulation</td>
+<td>Play, Pause, Stop</td>
+</tr>
+</tbody>
+</table>
+<p>The terrain, decal, lightmap and sky tools have no button. Use the <strong>Tools</strong> menu or their keys.</p>
+<p>The <strong>Cells:</strong> dropdown colours the rooms in the 2D views by what a system knows about them. <strong>Interior / exterior</strong> is built in; addons add their own.</p>
+<p>Play runs the selected entities, or every entity when nothing is selected. The editor's background turns red while running and orange while paused. Stop puts everything back.</p>
+<h2 id="side-panels">Side panels</h2>
+<p>Each side panel is a stack of boxes, each under a dark header with its name. On a small screen, put them where you have room:</p>
+<ul>
+<li><strong>Click a header</strong> to fold its box down to the header alone. Click it again to open it.</li>
+<li><strong>Drag a header</strong> to move its box. A blue line shows where it will land, in either side panel.</li>
+<li><strong>Right-click a header</strong> to fold it, move it up or down, or send it to the other side panel. <strong>Reset Panel Layout</strong> puts every box back where it started.</li>
+</ul>
+<figure><img src="images/interface-panels.png" alt="The right panel with the tool help moved into it, Active texture and Layers folded, and a box being dropped above Properties" loading="lazy"><figcaption>The right panel with the tool help moved into it, Active texture and Layers folded, and a box being dropped above Properties</figcaption></figure>
+<p>Drag the edge of a side panel to resize it. When the boxes are taller than the window, the panel scrolls. The editor remembers the widths, where each box is, and which are folded.</p>
+<p>Where the boxes start:</p>
+<p><strong>Left panel</strong></p>
+<ul>
+<li><strong>Selection</strong>: what is selected, and the narrowing controls. See <a href="selecting.html#narrowing">Selecting</a>.</li>
+<li>The entity, prefab or prop browser, while its tool is active.</li>
+<li><strong>Tool help</strong>: the active tool's name, what it expects next, and what each click and key does. Read this when a tool seems stuck.</li>
+</ul>
+<p><strong>Right panel</strong>, top to bottom:</p>
+<ul>
+<li><strong>Active texture</strong> swatch. Click it to open the texture browser.</li>
+<li><strong>Layers</strong>. See <a href="layers.html">Layers</a>.</li>
+<li><strong>Problems</strong>, only when there are any. See <a href="problems.html">Problems</a>.</li>
+<li><strong>Properties</strong>, the inspector, when something with properties is selected. See <a href="#inspector">below</a>.</li>
+<li><strong>Tool options</strong>: the active tool's panel, including the audio and navigation tools' panels.</li>
+</ul>
+<p>A box with nothing to show, such as Problems when there are none, is hidden along with its header.</p>
+<h2 id="inspector">Inspector</h2>
+<p>Shows the properties of what is selected. Change a value to change it on every selected object. Each change is one undo step.</p>
+<ul>
+<li><strong>Entities</strong>: an <strong>Entity type</strong> picker, then the type's properties. A value the selection disagrees on is shown as mixed; setting it sets it on all of them. Hover a property's name for what it does.</li>
+<li><strong>Running entities</strong>: a <strong>Runtime</strong> section with the live values, and a button for each action the entity offers. Actions are not undoable; Stop puts the entity back.</li>
+<li><strong>Air brushes</strong>: <strong>Fill</strong> (what fills the room), and any sections addons declare, such as acoustics. A section appears only when it applies to every selected brush. See <a href="../core/fills.html">Fills</a>.</li>
+<li><strong>Several things selected</strong>: a list of them. Hover a row to light it up in the views, click it to select only that one.</li>
+</ul>
+<figure><img src="images/interface-inspector.png" alt="The inspector with a room selected" loading="lazy"><figcaption>The inspector with a room selected</figcaption></figure>
+<h2 id="status-bar">Status bar</h2>
+<p>Left to right:</p>
+<ul>
+<li><strong>Grid</strong> size, with − and + buttons.</li>
+<li>The latest message. Hover it to see the log. It flashes red when that message is an error.</li>
+<li>While the map is saving, a spinner and how far the save has got. Saving runs alongside the editor,
+  but nothing can be edited until it is done. Once the map file is written, the first save of a
+  session may compile the map's other variants for their worldrep caches, which on a large level
+  takes a while; <strong>Cancel</strong> skips that, and they compile when the map is next loaded.</li>
+</ul>
+<p>What is selected is shown in the <strong>Selection</strong> panel.</p>
+<h2 id="right-click-menu">Right-click menu</h2>
+<p>With the Select tool active, right-click in a view without dragging for what can be done with what is under the cursor.</p>
+<ul>
+<li>Right-clicking something outside the selection selects it first.</li>
+<li>Right-clicking inside the selection keeps it, so the menu acts on all of it.</li>
+<li>Only what applies is listed. Entities also list their own actions and the Simulate / Pause / Stop and Reset controls for just that entity.</li>
+</ul>
+<figure><img src="images/interface-context-menu.png" alt="The right-click menu on a brush" loading="lazy"><figcaption>The right-click menu on a brush</figcaption></figure>
+<h2 id="command-launcher">Command launcher</h2>
+<p>Press <code>/</code> (or <code>Cmd</code> <code>Shift</code> <code>P</code>) for a field that runs any command by name, in any tool. Type a few letters and press <code>Enter</code> to run the top match:</p>
+<ol>
+<li>Select two brushes.</li>
+<li>Press <code>/</code> and type <code>me</code>.</li>
+<li><strong>Merge Brushes</strong> is at the top. Press <code>Enter</code>.</li>
+</ol>
+<ul>
+<li>Letters match the start of any word, the initials (<code>mb</code>), or a word the command is known by (<code>join</code>). Every word you type has to match.</li>
+<li><code>↑</code> <code>↓</code> choose another row. <code>Esc</code> or <code>Cmd</code> <code>Shift</code> <code>P</code> closes it.</li>
+<li>Each row shows the command's menu and its key, so you can learn the key.</li>
+<li>Commands that cannot run with what is selected are listed last, dimmed. <code>Enter</code> on one does nothing.</li>
+<li>What the selection's entities can be asked to do is listed too, as in the right-click menu.</li>
+<li>Commands you ran lately come first among equal matches.</li>
+</ul>
+<p>Every command an addon or your game adds is in it as well.</p>
+<h2 id="ui-size">UI size</h2>
+<p><strong>View → Bigger UI</strong> (<code>Cmd</code> <code>=</code>) and <strong>Smaller UI</strong> (<code>Cmd</code> <code>-</code>) scale the editor's own interface. The editor remembers it, with panel widths and view toggles, between sessions.</p>
+		</article>
+		<p class="docs-source">Hammerite 2.0 · built from 6d57ab2d, 2026-10-17</p>
+	</main>
+</div>
+
+<footer class="studio-foot">
+	<a href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>

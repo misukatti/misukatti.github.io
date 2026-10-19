@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Links — Hammerite 3D 1.0 docs</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="../../../../assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="../../../../assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../../../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@300&display=swap">
+<link rel="stylesheet" href="../../../../hammerite.css">
+<link rel="stylesheet" href="../../../docs.css">
+<script src="../../../versions.js" defer></script>
+</head>
+<body class="docs" data-docs-version="1.0">
+
+<header class="studio">
+	<a class="studio-logo" href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="../../../../index.html">Hammerite 3D</a>
+		<a href="../../index.html">Docs</a>
+		<a href="../../guides/index.html">Guides</a>
+		<a href="../../api/index.html">API</a>
+		<a href="../index.html">Manual</a>
+	</nav>
+</header>
+
+<div class="docs-banner" hidden></div>
+
+<div class="docs-layout">
+	<aside class="docs-side">
+		<a class="docs-brand" href="../../index.html"><img src="../../../../assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
+		<label class="docs-version">Version
+			<select aria-label="Docs version"><option value="1.0" selected>1.0</option></select>
+		</label>
+		<nav class="api-nav"><a class="api-home" href="../index.html">Manual</a><h2>Core</h2><ul><li><a href="../core/index.html">Core</a></li><li><a href="../core/carved-world.html">The carved world</a></li><li><a href="../core/rooms-and-portals.html">Rooms and portals</a></li><li><a href="../core/fills.html">Fills</a></li><li><a href="../core/entities.html">Entities</a></li><li><a href="../core/textures.html">Textures</a></li><li><a href="../core/lighting.html">Lighting</a></li><li><a href="../core/baking.html">Baking</a></li><li><a href="../core/variants.html">Variants</a></li><li><a href="../core/terrain.html">Terrain</a></li><li><a href="../core/glossary.html">Glossary</a></li></ul><h2>Editor</h2><ul><li><a href="../editor/index.html">Editor</a></li><li><a href="../editor/interface.html">The interface</a></li><li><a href="../editor/camera.html">Camera</a></li><li><a href="../editor/selecting.html">Selecting</a></li><li><a href="../editor/building.html">Building</a></li><li><a href="../editor/editing.html">Editing</a></li><li><a href="../editor/texturing.html">Texturing</a></li><li><a href="../editor/terrain.html">Terrain</a></li><li><a href="../editor/entities.html">Entities</a></li><li><a href="../editor/props.html">Props</a></li><li><a href="../editor/decals.html">Decals</a></li><li><a href="../editor/prefabs.html">Prefabs</a></li><li><a href="../editor/layers.html">Layers</a></li><li><a href="../editor/sky.html">Sky</a></li><li><a href="../editor/lighting.html">Lighting</a></li><li><a href="../editor/problems.html">Problems</a></li><li><a href="../editor/files.html">Map files</a></li><li><a href="../editor/keys.html">Keyboard reference</a></li><li><a href="../editor/manual.html">Using the manual</a></li><li><a href="../editor/extending-the-manual.html">Extending the manual</a></li></ul><h2>Audio</h2><ul><li><a href="../audio/index.html">Audio</a></li><li><a href="../audio/rooms.html">Rooms</a></li><li><a href="../audio/doors.html">Doors and openings</a></li><li><a href="../audio/outdoors.html">Outdoors and weather</a></li><li><a href="../audio/graph.html">The audio graph</a></li></ul><h2>Navigation</h2><ul><li><a href="index.html">Navigation</a></li><li><a href="ground.html">Ground</a></li><li><a href="links.html" aria-current="page">Links</a></li><li><a href="preview.html">The Navigation tool</a></li></ul><h2>Docs</h2><ul><li><a href="../../index.html">Docs home</a></li><li><a href="../../api/index.html">API reference</a></li></ul></nav>
+	</aside>
+	<main class="docs-main">
+		<article class="prose">
+<h1 id="links">Links</h1>
+<p>A <strong>link</strong> is a way between two patches of ground that is not walking. Links are where agents differ: a window a thief climbs through is a wall to a guard.</p>
+<p>Links are found by measuring. Each carries what it takes: how high to climb, how far to fall, how wide a gap, how big the opening. Your game's agent profiles decide who can take it and what it costs them. Costs are counted in units of walking: how far out of their way a guard would go to avoid it.</p>
+<table>
+<thead>
+<tr>
+<th>Kind</th>
+<th>What it is</th>
+<th>Colour in the tool</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Step</td>
+<td>a rise of 18 units or less</td>
+<td>grey</td>
+</tr>
+<tr>
+<td>Window</td>
+<td>an opening whose sill stands above the floor on either side</td>
+<td>blue</td>
+</tr>
+<tr>
+<td>Drop</td>
+<td>an edge with lower ground beyond it</td>
+<td>orange</td>
+</tr>
+<tr>
+<td>Jump</td>
+<td>a gap across open air to ground within reach</td>
+<td>purple</td>
+</tr>
+<tr>
+<td>Authored</td>
+<td>a <code>nav_link</code> you placed</td>
+<td>cyan</td>
+</tr>
+</tbody>
+</table>
+<h2 id="doorways">Doorways</h2>
+<p>An ordinary doorway is not a link. Two rooms that abut with floors at the same height join by themselves, and agents walk through.</p>
+<p>A doorway whose sill stands more than a unit above the floor on either side is a window, however low. Keep doorway floors level with the rooms they join.</p>
+<blockquote class="callout callout-note"><p><strong>Note:</strong> A closed door does not close the route through its doorway. Agents walk up to the door; your game decides whether they open it.</p>
+</blockquote>
+<h2 id="steps-and-stairs">Steps and stairs</h2>
+<p>A rise of 18 units or less is a step. It costs nothing and goes both ways. A flight of stairs built to 18-unit treads is walking.</p>
+<p>An agent whose profile climbs less than a tread still cannot use them.</p>
+<h2 id="windows">Windows</h2>
+<p>An opening with a sill above the floor, on either side, is a window. It can be a different climb from each side: a window into a cellar may be easy to drop through and hard to climb back out of.</p>
+<p>An agent that does not fit through the opening, upright, cannot take it.</p>
+<h2 id="drops">Drops</h2>
+<p>The edge of any patch of ground with lower ground beyond it is a drop: a ledge, a balcony, a pit. Drops up to 1024 units are found. Going down is a fall; coming back up is a climb. Each agent's profile says how far it will fall and how high it can climb, so a drop is often one-way.</p>
+<h2 id="jumps">Jumps</h2>
+<p>Two patches within 128 units across, and within 96 units of each other in height, with clear air between them, are a jump. Roof to roof, ledge to ledge. Most agents' profiles cannot jump at all.</p>
+<h2 id="water">Water</h2>
+<p>A drop into water is measured to the water's depth.</p>
+<ul>
+<li>An agent that swims there falls only to the surface, and climbs out from the surface. A pool filled to the brim is no climb at all.</li>
+<li>An agent that wades falls and climbs from the bottom.</li>
+</ul>
+<p>Wading and swimming across the water: see <a href="ground.html#water">Ground</a>.</p>
+<h2 id="ladders-and-ropes">Ladders and ropes</h2>
+<p>Geometry cannot say that a mesh is a ladder. Place a <code>nav_link</code> entity for it.</p>
+<ol>
+<li>Choose <code>nav_link</code> in the entity browser and place it on the ground at the bottom of the ladder. See <a href="../editor/entities.html">Entities</a>.</li>
+<li>Set <code>nav_link_target</code> to the offset from the entity to the far end. The default, <code>(0, 128, 0)</code>, is straight up 128 units.</li>
+<li>Set <code>nav_link_one_way</code> for a chute or a hatch that only opens downwards.</li>
+<li>Give it a <code>nav_link_name</code> if the game switches it on and off: see <a href="#named-links">Named links</a>.</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>What it does</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>nav_link_target</code></td>
+<td>offset to the far end</td>
+<td><code>(0, 128, 0)</code></td>
+</tr>
+<tr>
+<td><code>nav_link_name</code></td>
+<td>name the game can switch it by</td>
+<td>empty</td>
+</tr>
+<tr>
+<td><code>nav_link_one_way</code></td>
+<td>only from the entity to the far end</td>
+<td>off</td>
+</tr>
+</tbody>
+</table>
+<p>Select the link to see where it goes: a line to its far end, with an arrowhead at each end it can be taken from. A one-way link has one arrowhead. The name shows at the middle of the line. A link with no offset is marked in red and is left out of the bake.</p>
+<p>Both ends must be in a room. A link with an end in solid is reported when the ground is built.</p>
+<p>Placing a link says it can be climbed. An agent's profile can still refuse it if the agent does not fit.</p>
+<figure><img src="images/links-nav-link.png" alt="A nav_link selected on a ladder: a cyan line from the floor to a balcony, arrowheads at both ends" loading="lazy"><figcaption>A nav_link selected on a ladder: a cyan line from the floor to a balcony, arrowheads at both ends</figcaption></figure>
+<h2 id="named-links">Named links</h2>
+<p>A window or hatch can be switched on and off while the game runs: boarded up, then broken open. The game does this by name.</p>
+<p>A derived link takes the name of the opening it passes through. Name openings in the <strong>Audio Portals</strong> tool; see <a href="../audio/doors.html#naming-an-opening">Doors and openings</a>. One name closes an opening to both sound and routes.</p>
+<p>A <code>nav_link</code> takes its <code>nav_link_name</code>.</p>
+<p>Only links through a named opening, and named <code>nav_link</code>s, can be switched. An ordinary doorway cannot.</p>
+<figure><img src="images/links-kinds.png" alt="The Navigation tool over a two-storey map: a blue window link, an orange drop off a balcony, grey steps up a stair" loading="lazy"><figcaption>The Navigation tool over a two-storey map: a blue window link, an orange drop off a balcony, grey steps up a stair</figcaption></figure>
+		</article>
+		<p class="docs-source">Hammerite 1.0 · built from 059fce03, 2026-10-10</p>
+	</main>
+</div>
+
+<footer class="studio-foot">
+	<a href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>

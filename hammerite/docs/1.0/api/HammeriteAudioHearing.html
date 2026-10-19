@@ -24,6 +24,7 @@
 		<a href="../index.html">Docs</a>
 		<a href="../guides/index.html">Guides</a>
 		<a href="index.html">API</a>
+		<a href="../manual/index.html">Manual</a>
 	</nav>
 </header>
 
@@ -59,7 +60,7 @@
 <pre class="signature"><code>func report_sound(type: StringName, position: Vector3, emitter: Node = null) -&gt; void</code></pre>
 <p>Report a sound of <code>type</code> made at <code>position</code>, and tell whoever could hear it.  The type is checked first and cheaply: with nothing subscribed there is no work to do. Then, per listener, straight-line distance against the type&#x27;s range - a cheap reject that avoids pathfinding for sounds that could not possibly carry - and only then the propagation query, which is the expensive part.  <code>emitter</code> is whatever made the noise, used so a listener can disregard its own.</p>
 		</article>
-		<p class="docs-source">Hammerite 1.0 · built from a6dd634, 2026-10-10</p>
+		<p class="docs-source">Hammerite 1.0 · built from 059fce03, 2026-10-10</p>
 	</main>
 </div>
 

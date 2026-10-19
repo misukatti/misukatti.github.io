@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rooms and portals — Hammerite 3D 1.0 docs</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="../../../../assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="../../../../assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../../../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@300&display=swap">
+<link rel="stylesheet" href="../../../../hammerite.css">
+<link rel="stylesheet" href="../../../docs.css">
+<script src="../../../versions.js" defer></script>
+</head>
+<body class="docs" data-docs-version="1.0">
+
+<header class="studio">
+	<a class="studio-logo" href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="../../../../index.html">Hammerite 3D</a>
+		<a href="../../index.html">Docs</a>
+		<a href="../../guides/index.html">Guides</a>
+		<a href="../../api/index.html">API</a>
+		<a href="../index.html">Manual</a>
+	</nav>
+</header>
+
+<div class="docs-banner" hidden></div>
+
+<div class="docs-layout">
+	<aside class="docs-side">
+		<a class="docs-brand" href="../../index.html"><img src="../../../../assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
+		<label class="docs-version">Version
+			<select aria-label="Docs version"><option value="1.0" selected>1.0</option></select>
+		</label>
+		<nav class="api-nav"><a class="api-home" href="../index.html">Manual</a><h2>Core</h2><ul><li><a href="index.html">Core</a></li><li><a href="carved-world.html">The carved world</a></li><li><a href="rooms-and-portals.html" aria-current="page">Rooms and portals</a></li><li><a href="fills.html">Fills</a></li><li><a href="entities.html">Entities</a></li><li><a href="textures.html">Textures</a></li><li><a href="lighting.html">Lighting</a></li><li><a href="baking.html">Baking</a></li><li><a href="variants.html">Variants</a></li><li><a href="terrain.html">Terrain</a></li><li><a href="glossary.html">Glossary</a></li></ul><h2>Editor</h2><ul><li><a href="../editor/index.html">Editor</a></li><li><a href="../editor/interface.html">The interface</a></li><li><a href="../editor/camera.html">Camera</a></li><li><a href="../editor/selecting.html">Selecting</a></li><li><a href="../editor/building.html">Building</a></li><li><a href="../editor/editing.html">Editing</a></li><li><a href="../editor/texturing.html">Texturing</a></li><li><a href="../editor/terrain.html">Terrain</a></li><li><a href="../editor/entities.html">Entities</a></li><li><a href="../editor/props.html">Props</a></li><li><a href="../editor/decals.html">Decals</a></li><li><a href="../editor/prefabs.html">Prefabs</a></li><li><a href="../editor/layers.html">Layers</a></li><li><a href="../editor/sky.html">Sky</a></li><li><a href="../editor/lighting.html">Lighting</a></li><li><a href="../editor/problems.html">Problems</a></li><li><a href="../editor/files.html">Map files</a></li><li><a href="../editor/keys.html">Keyboard reference</a></li><li><a href="../editor/manual.html">Using the manual</a></li><li><a href="../editor/extending-the-manual.html">Extending the manual</a></li></ul><h2>Audio</h2><ul><li><a href="../audio/index.html">Audio</a></li><li><a href="../audio/rooms.html">Rooms</a></li><li><a href="../audio/doors.html">Doors and openings</a></li><li><a href="../audio/outdoors.html">Outdoors and weather</a></li><li><a href="../audio/graph.html">The audio graph</a></li></ul><h2>Navigation</h2><ul><li><a href="../nav/index.html">Navigation</a></li><li><a href="../nav/ground.html">Ground</a></li><li><a href="../nav/links.html">Links</a></li><li><a href="../nav/preview.html">The Navigation tool</a></li></ul><h2>Docs</h2><ul><li><a href="../../index.html">Docs home</a></li><li><a href="../../api/index.html">API reference</a></li></ul></nav>
+	</aside>
+	<main class="docs-main">
+		<article class="prose">
+<h1 id="rooms-and-portals">Rooms and portals</h1>
+<p>Hammerite turns your air brushes into rooms and the openings between them. Sound, light and navigation all read this. You never draw rooms or openings separately: they come from the carve. See <a href="carved-world.html">The carved world</a>.</p>
+<h2 id="cells-and-rooms">Cells and rooms</h2>
+<p>A <strong>cell</strong> is one convex piece of carved air. A plain box room is one cell.</p>
+<p>A <strong>room</strong> (also called a region) is a connected group of cells from one air brush. A pillar splits a hall into several cells around it; they are still one room.</p>
+<table>
+<thead>
+<tr>
+<th>Carve</th>
+<th>Cells</th>
+<th>Rooms</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>One box</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>A hall with a solid pillar in the middle</td>
+<td>several</td>
+<td>1</td>
+</tr>
+<tr>
+<td>A hall with a solid wall right across it</td>
+<td>2 or more</td>
+<td>2</td>
+</tr>
+<tr>
+<td>Two overlapping air brushes</td>
+<td>one per brush piece</td>
+<td>2, joined as one space</td>
+</tr>
+</tbody>
+</table>
+<p>A solid wall that cuts an air brush in two makes two rooms, each with its own openings. Both halves share the air brush's properties, such as its acoustics.</p>
+<figure><img src="images/rooms-and-portals-regions.png" alt="A pillared hall is one room; a wall across the hall makes two" loading="lazy"><figcaption>A pillared hall is one room; a wall across the hall makes two</figcaption></figure>
+<p>When two rooms overlap, a point in the shared space belongs to the bigger room.</p>
+<h2 id="portals">Portals</h2>
+<p>A <strong>portal</strong> is where two rooms connect. There are two kinds.</p>
+<table>
+<thead>
+<tr>
+<th>Kind</th>
+<th>Made by</th>
+<th>Has an opening</th>
+<th>Can be named</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Aperture</td>
+<td>Two rooms abutting: faces touching on the same plane</td>
+<td>Yes, the shape where the two faces overlap</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Overlap</td>
+<td>Two rooms interpenetrating</td>
+<td>No: they are one continuous space</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<p>An aperture is a real hole in a wall. A doorway, a window and a hole in a floor are apertures. The wall around it stays solid.</p>
+<p>Two openings between the same two rooms are two portals. A wall between two rooms with a door and a window in it has two apertures.</p>
+<figure><img src="images/rooms-and-portals-apertures.png" alt="Apertures drawn as portal lines where abutting rooms meet" loading="lazy"><figcaption>Apertures drawn as portal lines where abutting rooms meet</figcaption></figure>
+<h2 id="naming-doorways">Naming doorways</h2>
+<p>A door has to know which opening it fills. It finds it by name.</p>
+<ul>
+<li>Name an opening with the <strong>Audio Portals</strong> tool. See <a href="../audio/doors.html#naming-an-opening">Doors and openings</a>.</li>
+<li>The name is stored on the wall you drew that the opening is cut from, on either side. It survives edits and moves with the room. A copy of the room, or either half of a clipped one, is a new room, and its openings start out unnamed.</li>
+<li>One name serves sound and navigation alike. See <a href="../nav/links.html">Links</a>.</li>
+<li>Only apertures can be named. Overlapping rooms have no opening.</li>
+</ul>
+<blockquote class="callout callout-warning"><p><strong>Warning:</strong> Openings between the same two rooms are numbered in a fixed geometric order, and a name belongs to a number. Cutting a new opening between two rooms that already have a named one can move the name to a different opening. The Audio Portals tool draws each name on its opening: check them after cutting.</p>
+</blockquote>
+<h2 id="interior-and-exterior">Interior and exterior</h2>
+<p>Two different questions are asked about a room and the sky.</p>
+<table>
+<thead>
+<tr>
+<th>Question</th>
+<th>Asked by</th>
+<th>A room with a window onto a courtyard</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Does it <strong>reach</strong> the sky, directly or through openings?</td>
+<td>Lighting</td>
+<td>Yes: daylight comes in through the window</td>
+</tr>
+<tr>
+<td>Is it <strong>open</strong> to the sky itself?</td>
+<td>Audio</td>
+<td>No: the rain is at the window, not overhead</td>
+</tr>
+</tbody>
+</table>
+<p>A room reaches the sky when it has a sky face, or connects to a room that does. A sky face is a face textured with a <code>sky_</code> texture. See <a href="textures.html#sky-faces">Textures</a>.</p>
+<p>Reaching spreads through every opening, however many rooms away. Only a room sealed off from every sky face is interior — so in a connected building one window can make almost every room reach the sky.</p>
+<h3 id="overruling-it">Overruling it</h3>
+<p>Select a room and set <strong>Interior / exterior</strong> in the inspector, beside its fill.</p>
+<table>
+<thead>
+<tr>
+<th>Answer</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Auto (from the sky)</td>
+<td>reaches the sky if any chain of openings gets there. The default</td>
+</tr>
+<tr>
+<td>Interior</td>
+<td>never reaches the sky, and stops the reach passing through to the rooms behind it</td>
+</tr>
+<tr>
+<td>Exterior</td>
+<td>reaches the sky whatever stands between it and one</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Interior</strong> is how a cellar is sealed off from the lit courtyard it opens onto: it is the one answer that stops the spread, so putting it on the room between the two settles everything behind it as well. <strong>Exterior</strong> lights a room the sky cannot actually get to — a cave mouth, a yard under an awning.</p>
+<p>It is a lighting answer, not a geometric one. A room declared exterior still owns no sky wall, so audio still hears the rain at its opening rather than overhead.</p>
+<p>A room that does not reach the sky receives no sunlight, moonlight or daylight. One that does receives it only where the light has a straight line in through a sky face. See <a href="lighting.html#sky-sun-and-daylight">Lighting</a>.</p>
+<p>To see how each room is classified, choose <strong>Interior / exterior</strong> in the toolbar's cell overlay selector. Rooms that reach the sky are tinted warm yellow, the rest blue. Audio adds its own overlay; see <a href="../audio/outdoors.html">Outdoors</a>.</p>
+<figure><img src="images/rooms-and-portals-exterior.png" alt="Interior / exterior overlay: a courtyard and the room off it are exterior, a sealed room is interior" loading="lazy"><figcaption>Interior / exterior overlay: a courtyard and the room off it are exterior, a sealed room is interior</figcaption></figure>
+<h2 id="seeing-the-rooms">Seeing the rooms</h2>
+<p>The 2D views draw what the carve made, over the brushes you drew:</p>
+<ul>
+<li>Each room's cross-section at the view's slice depth, filled.</li>
+<li>The walls that are kept, outlined.</li>
+<li>Walls removed because they lie inside another room, shaded.</li>
+<li>Openings, as portal lines.</li>
+<li>Warning circles where two rooms nearly touch or overlap ambiguously.</li>
+</ul>
+<p>See <a href="../editor/interface.html">Interface</a> and <a href="../editor/problems.html">Problems</a>.</p>
+		</article>
+		<p class="docs-source">Hammerite 1.0 · built from 059fce03, 2026-10-10</p>
+	</main>
+</div>
+
+<footer class="studio-foot">
+	<a href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>

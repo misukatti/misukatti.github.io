@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prefabs — Hammerite 3D 1.0 docs</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="../../../../assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="../../../../assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../../../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@300&display=swap">
+<link rel="stylesheet" href="../../../../hammerite.css">
+<link rel="stylesheet" href="../../../docs.css">
+<script src="../../../versions.js" defer></script>
+</head>
+<body class="docs" data-docs-version="1.0">
+
+<header class="studio">
+	<a class="studio-logo" href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="../../../../index.html">Hammerite 3D</a>
+		<a href="../../index.html">Docs</a>
+		<a href="../../guides/index.html">Guides</a>
+		<a href="../../api/index.html">API</a>
+		<a href="../index.html">Manual</a>
+	</nav>
+</header>
+
+<div class="docs-banner" hidden></div>
+
+<div class="docs-layout">
+	<aside class="docs-side">
+		<a class="docs-brand" href="../../index.html"><img src="../../../../assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
+		<label class="docs-version">Version
+			<select aria-label="Docs version"><option value="1.0" selected>1.0</option></select>
+		</label>
+		<nav class="api-nav"><a class="api-home" href="../index.html">Manual</a><h2>Core</h2><ul><li><a href="../core/index.html">Core</a></li><li><a href="../core/carved-world.html">The carved world</a></li><li><a href="../core/rooms-and-portals.html">Rooms and portals</a></li><li><a href="../core/fills.html">Fills</a></li><li><a href="../core/entities.html">Entities</a></li><li><a href="../core/textures.html">Textures</a></li><li><a href="../core/lighting.html">Lighting</a></li><li><a href="../core/baking.html">Baking</a></li><li><a href="../core/variants.html">Variants</a></li><li><a href="../core/terrain.html">Terrain</a></li><li><a href="../core/glossary.html">Glossary</a></li></ul><h2>Editor</h2><ul><li><a href="index.html">Editor</a></li><li><a href="interface.html">The interface</a></li><li><a href="camera.html">Camera</a></li><li><a href="selecting.html">Selecting</a></li><li><a href="building.html">Building</a></li><li><a href="editing.html">Editing</a></li><li><a href="texturing.html">Texturing</a></li><li><a href="terrain.html">Terrain</a></li><li><a href="entities.html">Entities</a></li><li><a href="props.html">Props</a></li><li><a href="decals.html">Decals</a></li><li><a href="prefabs.html" aria-current="page">Prefabs</a></li><li><a href="layers.html">Layers</a></li><li><a href="sky.html">Sky</a></li><li><a href="lighting.html">Lighting</a></li><li><a href="problems.html">Problems</a></li><li><a href="files.html">Map files</a></li><li><a href="keys.html">Keyboard reference</a></li><li><a href="manual.html">Using the manual</a></li><li><a href="extending-the-manual.html">Extending the manual</a></li></ul><h2>Audio</h2><ul><li><a href="../audio/index.html">Audio</a></li><li><a href="../audio/rooms.html">Rooms</a></li><li><a href="../audio/doors.html">Doors and openings</a></li><li><a href="../audio/outdoors.html">Outdoors and weather</a></li><li><a href="../audio/graph.html">The audio graph</a></li></ul><h2>Navigation</h2><ul><li><a href="../nav/index.html">Navigation</a></li><li><a href="../nav/ground.html">Ground</a></li><li><a href="../nav/links.html">Links</a></li><li><a href="../nav/preview.html">The Navigation tool</a></li></ul><h2>Docs</h2><ul><li><a href="../../index.html">Docs home</a></li><li><a href="../../api/index.html">API reference</a></li></ul></nav>
+	</aside>
+	<main class="docs-main">
+		<article class="prose">
+<h1 id="prefabs">Prefabs</h1>
+<p>A prefab is a piece of level you made once and place many times: a window frame, a market stall. Each placed copy is an <strong>instance</strong>. Edit the prefab and every instance changes.</p>
+<p>Prefabs live in <strong>prefab sets</strong>, files your game loads. The editor can only add to a set your game has loaded.</p>
+<h2 id="make-a-prefab">Make a prefab</h2>
+<ol>
+<li>Select the brushes and entities.</li>
+<li>Press <code>Cmd</code> <code>[</code>.</li>
+<li>Enter a <strong>Prefab Name</strong>, choose the <strong>Target Set</strong>, and optionally a <strong>Category</strong>.</li>
+<li>Click OK.</li>
+</ol>
+<p>The editor draws a thumbnail for the browser. What you selected becomes the prefab's first instance.</p>
+<p><code>Cmd</code> <code>Z</code> undoes the whole thing: the prefab leaves the set and the selection is plain brushwork again. The set is left marked as changed, so save it when you do mean to keep one.</p>
+<h2 id="place-a-prefab">Place a prefab</h2>
+<ol>
+<li>Press <code>Cmd</code> <code>Shift</code> <code>[</code>. The prefab browser opens in the left panel.</li>
+<li>Choose a <strong>Set</strong> and click a prefab. Type in the filter field to find one by name.</li>
+<li>Move over a view. A box shows where it will go, resting on the surface under the cursor and snapped to the grid.</li>
+<li>Click to place it. Right-click cancels.</li>
+<li>Click the prefab in the browser again to place another. Press <code>Esc</code> when done.</li>
+</ol>
+<figure><img src="images/prefabs-place.png" alt="Placing a prefab" loading="lazy"><figcaption>Placing a prefab</figcaption></figure>
+<h2 id="work-with-instances">Work with instances</h2>
+<table>
+<thead>
+<tr>
+<th>Do</th>
+<th>How</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Select a whole instance</td>
+<td>click any part of it</td>
+</tr>
+<tr>
+<td>Duplicate an instance</td>
+<td><code>Cmd</code> <code>Shift</code> <code>D</code>, then click to drop the copy</td>
+</tr>
+<tr>
+<td>Straighten a turned instance</td>
+<td><code>Cmd</code> <code>Shift</code> <code>R</code></td>
+</tr>
+<tr>
+<td>Turn an instance back into plain brushes and entities</td>
+<td><code>Ctrl</code> <code>[</code></td>
+</tr>
+</tbody>
+</table>
+<p>Placing an instance and breaking one are each one undo step.</p>
+<h2 id="edit-a-prefab">Edit a prefab</h2>
+<ol>
+<li><code>Shift</code>-click an instance. The editor narrows to it, and the Selection panel says <strong>EDITING PREFAB</strong>.</li>
+<li>Edit it like anything else. Changes are written back to the prefab.</li>
+<li>Press <code>Cmd</code> <code>N</code> with nothing selected to finish.</li>
+<li>Save with <strong>File → Save Modified Prefab Sets</strong>. Saving the map saves them too.</li>
+</ol>
+<figure><img src="images/prefabs-edit.png" alt="Editing a prefab through one of its instances" loading="lazy"><figcaption>Editing a prefab through one of its instances</figcaption></figure>
+		</article>
+		<p class="docs-source">Hammerite 1.0 · built from 059fce03, 2026-10-10</p>
+	</main>
+</div>
+
+<footer class="studio-foot">
+	<a href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>

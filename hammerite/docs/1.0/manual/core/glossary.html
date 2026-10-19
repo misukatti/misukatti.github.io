@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Glossary — Hammerite 3D 1.0 docs</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="../../../../assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="../../../../assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../../../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@300&display=swap">
+<link rel="stylesheet" href="../../../../hammerite.css">
+<link rel="stylesheet" href="../../../docs.css">
+<script src="../../../versions.js" defer></script>
+</head>
+<body class="docs" data-docs-version="1.0">
+
+<header class="studio">
+	<a class="studio-logo" href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="../../../../index.html">Hammerite 3D</a>
+		<a href="../../index.html">Docs</a>
+		<a href="../../guides/index.html">Guides</a>
+		<a href="../../api/index.html">API</a>
+		<a href="../index.html">Manual</a>
+	</nav>
+</header>
+
+<div class="docs-banner" hidden></div>
+
+<div class="docs-layout">
+	<aside class="docs-side">
+		<a class="docs-brand" href="../../index.html"><img src="../../../../assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
+		<label class="docs-version">Version
+			<select aria-label="Docs version"><option value="1.0" selected>1.0</option></select>
+		</label>
+		<nav class="api-nav"><a class="api-home" href="../index.html">Manual</a><h2>Core</h2><ul><li><a href="index.html">Core</a></li><li><a href="carved-world.html">The carved world</a></li><li><a href="rooms-and-portals.html">Rooms and portals</a></li><li><a href="fills.html">Fills</a></li><li><a href="entities.html">Entities</a></li><li><a href="textures.html">Textures</a></li><li><a href="lighting.html">Lighting</a></li><li><a href="baking.html">Baking</a></li><li><a href="variants.html">Variants</a></li><li><a href="terrain.html">Terrain</a></li><li><a href="glossary.html" aria-current="page">Glossary</a></li></ul><h2>Editor</h2><ul><li><a href="../editor/index.html">Editor</a></li><li><a href="../editor/interface.html">The interface</a></li><li><a href="../editor/camera.html">Camera</a></li><li><a href="../editor/selecting.html">Selecting</a></li><li><a href="../editor/building.html">Building</a></li><li><a href="../editor/editing.html">Editing</a></li><li><a href="../editor/texturing.html">Texturing</a></li><li><a href="../editor/terrain.html">Terrain</a></li><li><a href="../editor/entities.html">Entities</a></li><li><a href="../editor/props.html">Props</a></li><li><a href="../editor/decals.html">Decals</a></li><li><a href="../editor/prefabs.html">Prefabs</a></li><li><a href="../editor/layers.html">Layers</a></li><li><a href="../editor/sky.html">Sky</a></li><li><a href="../editor/lighting.html">Lighting</a></li><li><a href="../editor/problems.html">Problems</a></li><li><a href="../editor/files.html">Map files</a></li><li><a href="../editor/keys.html">Keyboard reference</a></li><li><a href="../editor/manual.html">Using the manual</a></li><li><a href="../editor/extending-the-manual.html">Extending the manual</a></li></ul><h2>Audio</h2><ul><li><a href="../audio/index.html">Audio</a></li><li><a href="../audio/rooms.html">Rooms</a></li><li><a href="../audio/doors.html">Doors and openings</a></li><li><a href="../audio/outdoors.html">Outdoors and weather</a></li><li><a href="../audio/graph.html">The audio graph</a></li></ul><h2>Navigation</h2><ul><li><a href="../nav/index.html">Navigation</a></li><li><a href="../nav/ground.html">Ground</a></li><li><a href="../nav/links.html">Links</a></li><li><a href="../nav/preview.html">The Navigation tool</a></li></ul><h2>Docs</h2><ul><li><a href="../../index.html">Docs home</a></li><li><a href="../../api/index.html">API reference</a></li></ul></nav>
+	</aside>
+	<main class="docs-main">
+		<article class="prose">
+<h1 id="glossary">Glossary</h1>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Meaning</th>
+<th>Page</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Abut</td>
+<td>Two air brushes touching face to face on one plane. Divides space into two rooms.</td>
+<td><a href="carved-world.html#overlap-to-extend-abut-to-divide">The carved world</a></td>
+</tr>
+<tr>
+<td>Air</td>
+<td>The tier that carves open space out of the rock.</td>
+<td><a href="carved-world.html#the-three-tiers">The carved world</a></td>
+</tr>
+<tr>
+<td>Air brush</td>
+<td>A brush of the air tier. Each one carves a room.</td>
+<td><a href="carved-world.html">The carved world</a></td>
+</tr>
+<tr>
+<td>Alpha mask</td>
+<td>A texture named with a leading <code>!</code>, see-through where transparent.</td>
+<td><a href="textures.html#alpha-masks">Textures</a></td>
+</tr>
+<tr>
+<td>Aperture</td>
+<td>A portal with a real opening, made by two rooms abutting. Can be named.</td>
+<td><a href="rooms-and-portals.html#portals">Rooms and portals</a></td>
+</tr>
+<tr>
+<td>Bake</td>
+<td>Working out the level's lighting and storing it with the map.</td>
+<td><a href="baking.html">Baking</a></td>
+</tr>
+<tr>
+<td>Bake warning</td>
+<td>Something the last bake could not do, shown as a cross and in the Problems panel.</td>
+<td><a href="baking.html#bake-warnings">Baking</a></td>
+</tr>
+<tr>
+<td>Brush</td>
+<td>A convex block you draw. Its tier decides what it does.</td>
+<td><a href="carved-world.html">The carved world</a></td>
+</tr>
+<tr>
+<td>Brush entity</td>
+<td>An entity made of brushes: a door, a trigger volume. Always detail.</td>
+<td><a href="entities.html#brush-entities">Entities</a></td>
+</tr>
+<tr>
+<td>Brush order</td>
+<td>The order structural brushes apply in: the order they were made.</td>
+<td><a href="carved-world.html#brush-order">The carved world</a></td>
+</tr>
+<tr>
+<td>Carried light</td>
+<td>A real-time light that moves, such as a guard's torch. Added by your game, not baked.</td>
+<td><a href="lighting.html#lights-that-move">Lighting</a></td>
+</tr>
+<tr>
+<td>Cell</td>
+<td>One convex piece of carved air.</td>
+<td><a href="rooms-and-portals.html#cells-and-rooms">Rooms and portals</a></td>
+</tr>
+<tr>
+<td>Decal</td>
+<td>A picture laid on a surface, lit by that surface's baked light.</td>
+<td><a href="entities.html#decals">Entities</a></td>
+</tr>
+<tr>
+<td>Detail</td>
+<td>The tier for dressing inside a room. Carves nothing, fills nothing.</td>
+<td><a href="carved-world.html#detail-is-dressing">The carved world</a></td>
+</tr>
+<tr>
+<td>Dynamic light</td>
+<td>A light baked into a light slot, which the game can dim or switch.</td>
+<td><a href="lighting.html#static-and-dynamic">Lighting</a></td>
+</tr>
+<tr>
+<td>Emissive texture</td>
+<td>A texture with an <code>_emission</code> partner. It glows in the bake.</td>
+<td><a href="textures.html#emissive-textures">Textures</a></td>
+</tr>
+<tr>
+<td>Entity</td>
+<td>Anything in the map that is not the carve: a light, a prop, a door.</td>
+<td><a href="entities.html">Entities</a></td>
+</tr>
+<tr>
+<td>Exterior</td>
+<td>A room that reaches a sky face, directly or through openings.</td>
+<td><a href="rooms-and-portals.html#interior-and-exterior">Rooms and portals</a></td>
+</tr>
+<tr>
+<td>Face</td>
+<td>One flat side of a brush. Points out of its own brush.</td>
+<td><a href="carved-world.html#faces-point-out-of-their-own-brush">The carved world</a></td>
+</tr>
+<tr>
+<td>Fill</td>
+<td>What is in a room instead of nothing. Water ships with Hammerite.</td>
+<td><a href="fills.html">Fills</a></td>
+</tr>
+<tr>
+<td>Interior</td>
+<td>A room sealed off from every sky face. Gets no outside light.</td>
+<td><a href="rooms-and-portals.html#interior-and-exterior">Rooms and portals</a></td>
+</tr>
+<tr>
+<td>Light group</td>
+<td>A name lights share to use one light slot and one switch.</td>
+<td><a href="lighting.html#static-and-dynamic">Lighting</a></td>
+</tr>
+<tr>
+<td>Light probe</td>
+<td>A point in a room that records the light there, for lighting what moves.</td>
+<td><a href="lighting.html#things-that-move">Lighting</a></td>
+</tr>
+<tr>
+<td>Light slot</td>
+<td>One of the four places on a surface a dynamic light group is baked into.</td>
+<td><a href="lighting.html#static-and-dynamic">Lighting</a></td>
+</tr>
+<tr>
+<td>Lightmap</td>
+<td>The baked light stored for a surface or prop.</td>
+<td><a href="baking.html">Baking</a></td>
+</tr>
+<tr>
+<td>Lightmap scale</td>
+<td>World units per lightmap texel. Lower is sharper and costs more.</td>
+<td><a href="baking.html#lightmap-scale">Baking</a></td>
+</tr>
+<tr>
+<td>Movable light</td>
+<td>A placed light that is not baked: a real-time light with a shadow, for one that moves.</td>
+<td><a href="lighting.html#movable-lights">Lighting</a></td>
+</tr>
+<tr>
+<td>Overlap</td>
+<td>Two air brushes interpenetrating. Extends one space.</td>
+<td><a href="carved-world.html#overlap-to-extend-abut-to-divide">The carved world</a></td>
+</tr>
+<tr>
+<td>Overlap portal</td>
+<td>The connection between overlapping rooms. No opening, cannot be named.</td>
+<td><a href="rooms-and-portals.html#portals">Rooms and portals</a></td>
+</tr>
+<tr>
+<td>Point entity</td>
+<td>An entity placed at a point: a light, a prop, a decal.</td>
+<td><a href="entities.html">Entities</a></td>
+</tr>
+<tr>
+<td>Portal</td>
+<td>Where two rooms connect: an aperture or an overlap.</td>
+<td><a href="rooms-and-portals.html#portals">Rooms and portals</a></td>
+</tr>
+<tr>
+<td>Prop</td>
+<td>A placed model, <code>prop_model</code>.</td>
+<td><a href="entities.html#props">Entities</a></td>
+</tr>
+<tr>
+<td>Region</td>
+<td>See room.</td>
+<td><a href="rooms-and-portals.html#cells-and-rooms">Rooms and portals</a></td>
+</tr>
+<tr>
+<td>Room</td>
+<td>A connected group of cells from one air brush.</td>
+<td><a href="rooms-and-portals.html#cells-and-rooms">Rooms and portals</a></td>
+</tr>
+<tr>
+<td>Sky face</td>
+<td>A face with a <code>sky_</code> texture: a hole to the sky.</td>
+<td><a href="textures.html#sky-faces">Textures</a></td>
+</tr>
+<tr>
+<td>Solid</td>
+<td>The tier that fills carved space back in. The rock itself needs no brush.</td>
+<td><a href="carved-world.html#the-three-tiers">The carved world</a></td>
+</tr>
+<tr>
+<td>Spot light</td>
+<td>A light shining in a cone, aimed by turning it.</td>
+<td><a href="lighting.html#lights">Lighting</a></td>
+</tr>
+<tr>
+<td>Static light</td>
+<td>A light baked into surfaces for good. Uses no slot.</td>
+<td><a href="lighting.html#static-and-dynamic">Lighting</a></td>
+</tr>
+<tr>
+<td>Structural</td>
+<td>Air and solid: the tiers that shape the space.</td>
+<td><a href="carved-world.html#the-three-tiers">The carved world</a></td>
+</tr>
+<tr>
+<td>Terrain</td>
+<td>Sculptable ground made of detail prisms.</td>
+<td><a href="terrain.html">Terrain</a></td>
+</tr>
+<tr>
+<td>Tier</td>
+<td>Air, solid or detail: what a brush does to the world.</td>
+<td><a href="carved-world.html#the-three-tiers">The carved world</a></td>
+</tr>
+<tr>
+<td>Variant</td>
+<td>One state of the map, held on a variant layer.</td>
+<td><a href="variants.html">Variants</a></td>
+</tr>
+</tbody>
+</table>
+		</article>
+		<p class="docs-source">Hammerite 1.0 · built from 059fce03, 2026-10-10</p>
+	</main>
+</div>
+
+<footer class="studio-foot">
+	<a href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>

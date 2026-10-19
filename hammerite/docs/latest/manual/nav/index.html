@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Navigation manual — Hammerite 3D latest docs</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="../../../../assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="../../../../assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../../../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@300&display=swap">
+<link rel="stylesheet" href="../../../../hammerite.css">
+<link rel="stylesheet" href="../../../docs.css">
+<script src="../../../versions.js" defer></script>
+</head>
+<body class="docs" data-docs-version="latest">
+
+<header class="studio">
+	<a class="studio-logo" href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="../../../../index.html">Hammerite 3D</a>
+		<a href="../../index.html">Docs</a>
+		<a href="../../guides/index.html">Guides</a>
+		<a href="../../api/index.html">API</a>
+		<a href="../index.html">Manual</a>
+	</nav>
+</header>
+
+<div class="docs-banner" hidden></div>
+
+<div class="docs-layout">
+	<aside class="docs-side">
+		<a class="docs-brand" href="../../index.html"><img src="../../../../assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
+		<label class="docs-version">Version
+			<select aria-label="Docs version"><option value="latest" selected>latest</option></select>
+		</label>
+		<nav class="api-nav"><a class="api-home" href="../index.html">Manual</a><h2>Core</h2><ul><li><a href="../core/index.html">Core</a></li><li><a href="../core/carved-world.html">The carved world</a></li><li><a href="../core/rooms-and-portals.html">Rooms and portals</a></li><li><a href="../core/fills.html">Fills</a></li><li><a href="../core/entities.html">Entities</a></li><li><a href="../core/textures.html">Textures</a></li><li><a href="../core/lighting.html">Lighting</a></li><li><a href="../core/baking.html">Baking</a></li><li><a href="../core/variants.html">Variants</a></li><li><a href="../core/terrain.html">Terrain</a></li><li><a href="../core/glossary.html">Glossary</a></li></ul><h2>Editor</h2><ul><li><a href="../editor/index.html">Editor</a></li><li><a href="../editor/interface.html">The interface</a></li><li><a href="../editor/camera.html">Camera</a></li><li><a href="../editor/selecting.html">Selecting</a></li><li><a href="../editor/building.html">Building</a></li><li><a href="../editor/editing.html">Editing</a></li><li><a href="../editor/texturing.html">Texturing</a></li><li><a href="../editor/terrain.html">Terrain</a></li><li><a href="../editor/entities.html">Entities</a></li><li><a href="../editor/props.html">Props</a></li><li><a href="../editor/decals.html">Decals</a></li><li><a href="../editor/prefabs.html">Prefabs</a></li><li><a href="../editor/layers.html">Layers</a></li><li><a href="../editor/sky.html">Sky</a></li><li><a href="../editor/lighting.html">Lighting</a></li><li><a href="../editor/problems.html">Problems</a></li><li><a href="../editor/files.html">Map files</a></li><li><a href="../editor/keys.html">Keyboard reference</a></li><li><a href="../editor/manual.html">Using the manual</a></li><li><a href="../editor/extending-the-manual.html">Extending the manual</a></li></ul><h2>Audio</h2><ul><li><a href="../audio/index.html">Audio</a></li><li><a href="../audio/rooms.html">Rooms</a></li><li><a href="../audio/doors.html">Doors and openings</a></li><li><a href="../audio/outdoors.html">Outdoors and weather</a></li><li><a href="../audio/graph.html">The audio graph</a></li></ul><h2>Navigation</h2><ul><li><a href="index.html" aria-current="page">Navigation</a></li><li><a href="ground.html">Ground</a></li><li><a href="links.html">Links</a></li><li><a href="preview.html">The Navigation tool</a></li></ul><h2>Docs</h2><ul><li><a href="../../index.html">Docs home</a></li><li><a href="../../api/index.html">API reference</a></li></ul></nav>
+	</aside>
+	<main class="docs-main">
+		<article class="prose">
+<h1 id="navigation">Navigation</h1>
+<p>The navigation addon works out where guards and other agents can walk, and the ways between places that are not walking: windows, drops, jumps, ladders. Nothing is painted. The ground is picked from the carve: room floors, the tops of detail brushwork, and props marked as standable.</p>
+<p>Navigation is rebuilt from the level whenever the game loads a map. Nothing is saved in the map, so it is never out of date in the game.</p>
+<h2 id="what-you-author">What you author</h2>
+<table>
+<thead>
+<tr>
+<th>Where</th>
+<th>What</th>
+<th>Page</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Air brush, inspector <strong>Navigation</strong></td>
+<td><strong>Travel cost</strong>: how much agents avoid a room</td>
+<td><a href="ground.html#travel-cost">Ground</a></td>
+</tr>
+<tr>
+<td>Props, <code>nav_role</code></td>
+<td>whether a prop blocks, can be stood on, both, or neither</td>
+<td><a href="ground.html#props">Ground</a></td>
+</tr>
+<tr>
+<td>Entity <code>nav_link</code></td>
+<td>a ladder, rope or lift the geometry cannot show</td>
+<td><a href="links.html#ladders-and-ropes">Links</a></td>
+</tr>
+<tr>
+<td>Opening name</td>
+<td>switch a window or hatch on and off at runtime</td>
+<td><a href="links.html#named-links">Links</a></td>
+</tr>
+</tbody>
+</table>
+<p>Everything else is measured.</p>
+<h2 id="what-your-game-defines">What your game defines</h2>
+<p>Hammerite measures the ground: headroom, width, slope, how high a sill is, how far a drop. Your game defines its agents, in a table of <strong>agent profiles</strong>: how tall a guard is, what they can climb, how far they will drop, whether they swim. The two are compared to decide who can go where. Ask your game's documentation for its profiles.</p>
+<h2 id="pages">Pages</h2>
+<ul>
+<li><a href="ground.html">Ground</a>: where agents can walk, headroom, slopes, water, props, travel cost.</li>
+<li><a href="links.html">Links</a>: doorways, steps, windows, drops, jumps, swimming, ladders.</li>
+<li><a href="preview.html">The Navigation tool</a>: seeing the ground, testing a route, finding why an area is unreachable.</li>
+</ul>
+		</article>
+		<p class="docs-source">Hammerite latest · built from 45a63b69, 2026-10-19</p>
+	</main>
+</div>
+
+<footer class="studio-foot">
+	<a href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>

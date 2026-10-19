@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Textures — Hammerite 3D 2.0 docs</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="../../../../assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="../../../../assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../../../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@300&display=swap">
+<link rel="stylesheet" href="../../../../hammerite.css">
+<link rel="stylesheet" href="../../../docs.css">
+<script src="../../../versions.js" defer></script>
+</head>
+<body class="docs" data-docs-version="2.0">
+
+<header class="studio">
+	<a class="studio-logo" href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="../../../../index.html">Hammerite 3D</a>
+		<a href="../../index.html">Docs</a>
+		<a href="../../guides/index.html">Guides</a>
+		<a href="../../api/index.html">API</a>
+		<a href="../index.html">Manual</a>
+	</nav>
+</header>
+
+<div class="docs-banner" hidden></div>
+
+<div class="docs-layout">
+	<aside class="docs-side">
+		<a class="docs-brand" href="../../index.html"><img src="../../../../assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
+		<label class="docs-version">Version
+			<select aria-label="Docs version"><option value="2.0" selected>2.0</option></select>
+		</label>
+		<nav class="api-nav"><a class="api-home" href="../index.html">Manual</a><h2>Core</h2><ul><li><a href="index.html">Core</a></li><li><a href="carved-world.html">The carved world</a></li><li><a href="rooms-and-portals.html">Rooms and portals</a></li><li><a href="fills.html">Fills</a></li><li><a href="entities.html">Entities</a></li><li><a href="textures.html" aria-current="page">Textures</a></li><li><a href="lighting.html">Lighting</a></li><li><a href="baking.html">Baking</a></li><li><a href="variants.html">Variants</a></li><li><a href="terrain.html">Terrain</a></li><li><a href="glossary.html">Glossary</a></li></ul><h2>Editor</h2><ul><li><a href="../editor/index.html">Editor</a></li><li><a href="../editor/interface.html">The interface</a></li><li><a href="../editor/camera.html">Camera</a></li><li><a href="../editor/selecting.html">Selecting</a></li><li><a href="../editor/building.html">Building</a></li><li><a href="../editor/editing.html">Editing</a></li><li><a href="../editor/texturing.html">Texturing</a></li><li><a href="../editor/terrain.html">Terrain</a></li><li><a href="../editor/entities.html">Entities</a></li><li><a href="../editor/props.html">Props</a></li><li><a href="../editor/decals.html">Decals</a></li><li><a href="../editor/prefabs.html">Prefabs</a></li><li><a href="../editor/layers.html">Layers</a></li><li><a href="../editor/sky.html">Sky</a></li><li><a href="../editor/lighting.html">Lighting</a></li><li><a href="../editor/problems.html">Problems</a></li><li><a href="../editor/files.html">Map files</a></li><li><a href="../editor/keys.html">Keyboard reference</a></li><li><a href="../editor/manual.html">Using the manual</a></li><li><a href="../editor/extending-the-manual.html">Extending the manual</a></li></ul><h2>Audio</h2><ul><li><a href="../audio/index.html">Audio</a></li><li><a href="../audio/rooms.html">Rooms</a></li><li><a href="../audio/doors.html">Doors and openings</a></li><li><a href="../audio/outdoors.html">Outdoors and weather</a></li><li><a href="../audio/graph.html">The audio graph</a></li></ul><h2>Navigation</h2><ul><li><a href="../nav/index.html">Navigation</a></li><li><a href="../nav/ground.html">Ground</a></li><li><a href="../nav/links.html">Links</a></li><li><a href="../nav/preview.html">The Navigation tool</a></li></ul><h2>Docs</h2><ul><li><a href="../../index.html">Docs home</a></li><li><a href="../../api/index.html">API reference</a></li></ul></nav>
+	</aside>
+	<main class="docs-main">
+		<article class="prose">
+<h1 id="textures">Textures</h1>
+<p>Every face has a texture. How to apply them: <a href="../editor/texturing.html">Texturing</a>.</p>
+<h2 id="texture-names">Texture names</h2>
+<p>A face records its texture by <strong>name</strong>: the file name without folder or extension. <code>gbl_stone_cobble_01.png</code> is <code>gbl_stone_cobble_01</code>.</p>
+<ul>
+<li>Your game says which folders hold textures. The first folder with a matching name wins.</li>
+<li>A texture can move folders without breaking any map.</li>
+<li>A name with no texture behind it shows your game's fallback texture, if it has one, so you can see and fix the wall.</li>
+</ul>
+<p>When a map is saved it records the textures, models and decals it uses. When it is opened, the editor logs any that have gone missing or changed.</p>
+<h2 id="texture-scale">Texture scale</h2>
+<p>Textures are drawn at 4 texels per world unit. A 256 x 256 texture covers 64 x 64 units: one square of the default grid.</p>
+<p>A wall on the grid therefore tiles without adjusting anything. Scale, shift and rotate a face's texture in the face tool when you need something else.</p>
+<h2 id="names-that-mean-something">Names that mean something</h2>
+<p>A texture's name can change what a face is.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Example</th>
+<th>What the face becomes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Starts with <code>!</code></td>
+<td><code>!grate_iron</code></td>
+<td>Cut-out: see-through where the texture is transparent</td>
+</tr>
+<tr>
+<td>Starts with <code>sky_</code></td>
+<td><code>sky_night</code></td>
+<td>A hole to the sky</td>
+</tr>
+<tr>
+<td>Has a partner ending <code>_emission</code></td>
+<td><code>lamp_glass</code> beside <code>lamp_glass_emission</code></td>
+<td>Glows</td>
+</tr>
+</tbody>
+</table>
+<h3 id="alpha-masks">Alpha masks</h3>
+<p>A texture whose name starts with <code>!</code> is drawn see-through wherever its alpha is transparent. Light passes through the transparent parts in the bake.</p>
+<p>Use it on detail: grates, railings, foliage, a window pane.</p>
+<blockquote class="callout callout-warning"><p><strong>Warning:</strong> A <code>!</code> texture on a room's own wall shows what is behind it, and behind every room wall is rock with nothing drawn. The 2D views mark such a wall in red. To make a window, carve an opening and put a detail pane in it.</p>
+</blockquote>
+<figure><img src="images/textures-alpha-mask.png" alt="A cut-out grate made of detail over a floor opening" loading="lazy"><figcaption>A cut-out grate made of detail over a floor opening</figcaption></figure>
+<h3 id="sky-faces">Sky faces</h3>
+<p>A face whose texture name starts with <code>sky_</code> is a hole to the sky. The underscore matters: <code>skyline_bricks</code> is an ordinary wall.</p>
+<ul>
+<li>The map's sky is drawn on it. Set up the sky with the <a href="../editor/sky.html">Sky</a> tool.</li>
+<li>It is not lit and does not block light.</li>
+<li>It is how sunlight, moonlight and daylight get in, and what makes a room reach the sky. See <a href="lighting.html#sky-sun-and-daylight">Lighting</a>.</li>
+</ul>
+<p>Put sky faces on air brushes: the ceiling of a courtyard, the far side of a window.</p>
+<h3 id="emissive-textures">Emissive textures</h3>
+<p>A texture glows when there is a texture of the same name with <code>_emission</code> added: <code>wall_01</code> glows wherever <code>wall_01_emission</code> is bright.</p>
+<ul>
+<li>Nothing to assign: adding the second file turns the glow on, removing it turns it off.</li>
+<li>The glow is baked. It lights the room around it and bounces like any other light.</li>
+<li>It is always on: it cannot be switched or dimmed while the game runs.</li>
+</ul>
+<p>How bright a white emission texel glows is set for the whole bake by <strong>Emission gain</strong>. See <a href="lighting.html#emissive-surfaces">Lighting</a>.</p>
+<h2 id="water-is-not-a-texture">Water is not a texture</h2>
+<p>No texture name makes water. Water is a fill on an air brush. See <a href="fills.html">Fills</a>.</p>
+		</article>
+		<p class="docs-source">Hammerite 2.0 · built from 6d57ab2d, 2026-10-17</p>
+	</main>
+</div>
+
+<footer class="studio-foot">
+	<a href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>

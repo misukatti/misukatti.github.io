@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Doors and openings — Hammerite 3D 1.0 docs</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="../../../../assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="../../../../assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../../../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@300&display=swap">
+<link rel="stylesheet" href="../../../../hammerite.css">
+<link rel="stylesheet" href="../../../docs.css">
+<script src="../../../versions.js" defer></script>
+</head>
+<body class="docs" data-docs-version="1.0">
+
+<header class="studio">
+	<a class="studio-logo" href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="../../../../index.html">Hammerite 3D</a>
+		<a href="../../index.html">Docs</a>
+		<a href="../../guides/index.html">Guides</a>
+		<a href="../../api/index.html">API</a>
+		<a href="../index.html">Manual</a>
+	</nav>
+</header>
+
+<div class="docs-banner" hidden></div>
+
+<div class="docs-layout">
+	<aside class="docs-side">
+		<a class="docs-brand" href="../../index.html"><img src="../../../../assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
+		<label class="docs-version">Version
+			<select aria-label="Docs version"><option value="1.0" selected>1.0</option></select>
+		</label>
+		<nav class="api-nav"><a class="api-home" href="../index.html">Manual</a><h2>Core</h2><ul><li><a href="../core/index.html">Core</a></li><li><a href="../core/carved-world.html">The carved world</a></li><li><a href="../core/rooms-and-portals.html">Rooms and portals</a></li><li><a href="../core/fills.html">Fills</a></li><li><a href="../core/entities.html">Entities</a></li><li><a href="../core/textures.html">Textures</a></li><li><a href="../core/lighting.html">Lighting</a></li><li><a href="../core/baking.html">Baking</a></li><li><a href="../core/variants.html">Variants</a></li><li><a href="../core/terrain.html">Terrain</a></li><li><a href="../core/glossary.html">Glossary</a></li></ul><h2>Editor</h2><ul><li><a href="../editor/index.html">Editor</a></li><li><a href="../editor/interface.html">The interface</a></li><li><a href="../editor/camera.html">Camera</a></li><li><a href="../editor/selecting.html">Selecting</a></li><li><a href="../editor/building.html">Building</a></li><li><a href="../editor/editing.html">Editing</a></li><li><a href="../editor/texturing.html">Texturing</a></li><li><a href="../editor/terrain.html">Terrain</a></li><li><a href="../editor/entities.html">Entities</a></li><li><a href="../editor/props.html">Props</a></li><li><a href="../editor/decals.html">Decals</a></li><li><a href="../editor/prefabs.html">Prefabs</a></li><li><a href="../editor/layers.html">Layers</a></li><li><a href="../editor/sky.html">Sky</a></li><li><a href="../editor/lighting.html">Lighting</a></li><li><a href="../editor/problems.html">Problems</a></li><li><a href="../editor/files.html">Map files</a></li><li><a href="../editor/keys.html">Keyboard reference</a></li><li><a href="../editor/manual.html">Using the manual</a></li><li><a href="../editor/extending-the-manual.html">Extending the manual</a></li></ul><h2>Audio</h2><ul><li><a href="index.html">Audio</a></li><li><a href="rooms.html">Rooms</a></li><li><a href="doors.html" aria-current="page">Doors and openings</a></li><li><a href="outdoors.html">Outdoors and weather</a></li><li><a href="graph.html">The audio graph</a></li></ul><h2>Navigation</h2><ul><li><a href="../nav/index.html">Navigation</a></li><li><a href="../nav/ground.html">Ground</a></li><li><a href="../nav/links.html">Links</a></li><li><a href="../nav/preview.html">The Navigation tool</a></li></ul><h2>Docs</h2><ul><li><a href="../../index.html">Docs home</a></li><li><a href="../../api/index.html">API reference</a></li></ul></nav>
+	</aside>
+	<main class="docs-main">
+		<article class="prose">
+<h1 id="doors-and-openings">Doors and openings</h1>
+<p>Every opening between two abutting rooms is an acoustic portal: a doorway, a window, a hole in a floor. Sound moves from room to room only through them. Two windows in one wall are two portals. See <a href="../core/rooms-and-portals.html">Rooms and portals</a> for what makes an opening.</p>
+<p>Rooms that overlap have no opening between them. They are one zone, and there is nothing to name.</p>
+<h2 id="how-sound-travels">How sound travels</h2>
+<ul>
+<li>A sound in your room plays where it is.</li>
+<li>A sound you can see plays where it is, even in another room.</li>
+<li>Otherwise it takes the cheapest route through the openings and plays from the first opening you can see, at the level the route leaves it.</li>
+<li>A sound with no route at all is almost silent.</li>
+</ul>
+<p>Each opening on the way, each corner turned and the distance travelled make the sound quieter and duller. A voice through a shut door sounds muffled and comes from the door's direction.</p>
+<h2 id="naming-an-opening">Naming an opening</h2>
+<p>A door has to find the opening it fills. It does so by name. The name is stored on the wall the opening is cut from, so it survives edits and moves with the room.</p>
+<ol>
+<li>Click <strong>Audio Portals</strong> on the toolbar, or choose it from the <strong>Tools</strong> menu.</li>
+<li>Click an opening in the 3D view. It turns white.</li>
+<li>In the panel, type a <strong>Name</strong>.</li>
+<li>Press <code>Escape</code> to deselect it. Press <code>Escape</code> again to leave the tool.</li>
+</ol>
+<p>Named openings are drawn in yellow with a marker at their centre. Unnamed ones are drawn in dim blue.</p>
+<p>The same name is used by <a href="../nav/links.html#named-links">navigation</a>: one name closes an opening to both sound and routes.</p>
+<blockquote class="callout callout-warning"><p><strong>Warning:</strong> Only openings cut from a wall you drew can be named. An opening whose wall came from a clip of another brush has no face to hold the name, and the tool refuses it with a warning.</p>
+</blockquote>
+<figure><img src="images/doors-naming.png" alt="Audio Portals tool with a doorway selected and named cell_door in the panel" loading="lazy"><figcaption>Audio Portals tool with a doorway selected and named cell_door in the panel</figcaption></figure>
+<h2 id="opening-properties">Opening properties</h2>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>What it does</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Name</td>
+<td>How a door or script addresses this opening. Leave empty otherwise.</td>
+<td>empty</td>
+</tr>
+<tr>
+<td>Closed dB</td>
+<td>How much quieter sound through it is when fully closed, 0 to 80.</td>
+<td>40</td>
+</tr>
+<tr>
+<td>Occlusion</td>
+<td>Standing closure, 0 open to 1 closed: a grating, a boarded window.</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>Leave <strong>Occlusion</strong> at 0 on an opening a door fills. The door drives it while the game runs.</p>
+<p>Edits in the panel can be undone.</p>
+<h2 id="closed-doors">Closed doors</h2>
+<p>Your game's door entity names the opening it stands in. As it swings shut it closes that opening, from 0 to 1, and sound through it drops by up to its <strong>Closed dB</strong> and turns dull. How a door is set up to name its opening is your game's.</p>
+<p>A shut door does not seal a room. Sound through it still arrives, quiet and dull.</p>
+<blockquote class="callout callout-note"><p><strong>Note:</strong> A closed door does not stop guards walking through the opening. See <a href="../nav/links.html#doorways">Links</a>.</p>
+</blockquote>
+<h2 id="several-openings-between-two-rooms">Several openings between two rooms</h2>
+<p>A hall and a corridor joined by two doorways have two portals. The tool numbers them: the panel shows "Opening #2 between these two rooms". Name each one separately.</p>
+		</article>
+		<p class="docs-source">Hammerite 1.0 · built from 059fce03, 2026-10-10</p>
+	</main>
+</div>
+
+<footer class="studio-foot">
+	<a href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>

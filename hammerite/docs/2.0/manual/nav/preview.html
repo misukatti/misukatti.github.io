@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Navigation tool — Hammerite 3D 2.0 docs</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="../../../../assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="../../../../assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../../../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@300&display=swap">
+<link rel="stylesheet" href="../../../../hammerite.css">
+<link rel="stylesheet" href="../../../docs.css">
+<script src="../../../versions.js" defer></script>
+</head>
+<body class="docs" data-docs-version="2.0">
+
+<header class="studio">
+	<a class="studio-logo" href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="../../../../index.html">Hammerite 3D</a>
+		<a href="../../index.html">Docs</a>
+		<a href="../../guides/index.html">Guides</a>
+		<a href="../../api/index.html">API</a>
+		<a href="../index.html">Manual</a>
+	</nav>
+</header>
+
+<div class="docs-banner" hidden></div>
+
+<div class="docs-layout">
+	<aside class="docs-side">
+		<a class="docs-brand" href="../../index.html"><img src="../../../../assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
+		<label class="docs-version">Version
+			<select aria-label="Docs version"><option value="2.0" selected>2.0</option></select>
+		</label>
+		<nav class="api-nav"><a class="api-home" href="../index.html">Manual</a><h2>Core</h2><ul><li><a href="../core/index.html">Core</a></li><li><a href="../core/carved-world.html">The carved world</a></li><li><a href="../core/rooms-and-portals.html">Rooms and portals</a></li><li><a href="../core/fills.html">Fills</a></li><li><a href="../core/entities.html">Entities</a></li><li><a href="../core/textures.html">Textures</a></li><li><a href="../core/lighting.html">Lighting</a></li><li><a href="../core/baking.html">Baking</a></li><li><a href="../core/variants.html">Variants</a></li><li><a href="../core/terrain.html">Terrain</a></li><li><a href="../core/glossary.html">Glossary</a></li></ul><h2>Editor</h2><ul><li><a href="../editor/index.html">Editor</a></li><li><a href="../editor/interface.html">The interface</a></li><li><a href="../editor/camera.html">Camera</a></li><li><a href="../editor/selecting.html">Selecting</a></li><li><a href="../editor/building.html">Building</a></li><li><a href="../editor/editing.html">Editing</a></li><li><a href="../editor/texturing.html">Texturing</a></li><li><a href="../editor/terrain.html">Terrain</a></li><li><a href="../editor/entities.html">Entities</a></li><li><a href="../editor/props.html">Props</a></li><li><a href="../editor/decals.html">Decals</a></li><li><a href="../editor/prefabs.html">Prefabs</a></li><li><a href="../editor/layers.html">Layers</a></li><li><a href="../editor/sky.html">Sky</a></li><li><a href="../editor/lighting.html">Lighting</a></li><li><a href="../editor/problems.html">Problems</a></li><li><a href="../editor/files.html">Map files</a></li><li><a href="../editor/keys.html">Keyboard reference</a></li><li><a href="../editor/manual.html">Using the manual</a></li><li><a href="../editor/extending-the-manual.html">Extending the manual</a></li></ul><h2>Audio</h2><ul><li><a href="../audio/index.html">Audio</a></li><li><a href="../audio/rooms.html">Rooms</a></li><li><a href="../audio/doors.html">Doors and openings</a></li><li><a href="../audio/outdoors.html">Outdoors and weather</a></li><li><a href="../audio/graph.html">The audio graph</a></li></ul><h2>Navigation</h2><ul><li><a href="index.html">Navigation</a></li><li><a href="ground.html">Ground</a></li><li><a href="links.html">Links</a></li><li><a href="preview.html" aria-current="page">The Navigation tool</a></li></ul><h2>Docs</h2><ul><li><a href="../../index.html">Docs home</a></li><li><a href="../../api/index.html">API reference</a></li></ul></nav>
+	</aside>
+	<main class="docs-main">
+		<article class="prose">
+<h1 id="the-navigation-tool">The Navigation tool</h1>
+<p>The Navigation tool shows the ground and links the level has, for one agent at a time, and tests routes between two points. There is nothing to author in it.</p>
+<p>Click <strong>Navigation</strong> on the toolbar, or choose it from the <strong>Tools</strong> menu. Press <code>Escape</code> to leave it.</p>
+<h2 id="the-panel">The panel</h2>
+<table>
+<thead>
+<tr>
+<th>Control</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>agent dropdown</td>
+<td>The agent everything is shown for. Lists your game's agent profiles; <strong>any agent</strong> when the game has none.</td>
+</tr>
+<tr>
+<td><strong>Show walkable ground</strong></td>
+<td>Fills the ground in the 3D view and outlines it in the 2D views.</td>
+</tr>
+<tr>
+<td><strong>Show traversal links</strong></td>
+<td>Draws the links. See <a href="links.html">Links</a> for the colours.</td>
+</tr>
+<tr>
+<td><strong>Show baked navigation</strong></td>
+<td>Godot's own navigation debug drawing: what was actually baked.</td>
+</tr>
+<tr>
+<td><strong>Clear route</strong></td>
+<td>Removes the test route.</td>
+</tr>
+<tr>
+<td><strong>Bake navigation</strong></td>
+<td>Bakes, the same way the game does when it loads the map.</td>
+</tr>
+</tbody>
+</table>
+<p>Under the buttons, a status report: patches of ground, rooms, area, how many patches the agent can use only crouching or not at all, links by kind, the route test, and warnings.</p>
+<h2 id="reading-the-ground">Reading the ground</h2>
+<p>The ground is re-read after every edit. For the chosen agent:</p>
+<table>
+<thead>
+<tr>
+<th>Colour</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>green</td>
+<td>walks upright</td>
+</tr>
+<tr>
+<td>amber</td>
+<td>crouching only</td>
+</tr>
+<tr>
+<td>red</td>
+<td>cannot use: too low, too narrow, or too steep, or water it cannot swim</td>
+</tr>
+</tbody>
+</table>
+<p>With no agent profiles, amber means under 96 units of headroom, and nothing is red.</p>
+<p>The fill is hidden by walls, like the rooms themselves.</p>
+<p>Links are lines between their two ends. The end an agent leaves from has the larger marker, so a one-way drop reads at a glance.</p>
+<figure><img src="images/preview-ground.png" alt="The Navigation tool for a guard: a hall green, a crawlspace amber, a vent red" loading="lazy"><figcaption>The Navigation tool for a guard: a hall green, a crawlspace amber, a vent red</figcaption></figure>
+<h2 id="testing-a-route">Testing a route</h2>
+<ol>
+<li>Pick an agent in the dropdown.</li>
+<li>Click <strong>Bake navigation</strong>.</li>
+<li>Click a point on the floor. That is the start.</li>
+<li>Click a second point. That is the destination.</li>
+</ol>
+<p>The route the navigation server returns is drawn in white. The status line says whether the agent gets there. A third click starts a new route.</p>
+<p>Changing the agent re-runs the route for the new one.</p>
+<blockquote class="callout callout-note"><p><strong>Note:</strong> The route test uses the last bake. After an edit, click <strong>Bake navigation</strong> again before trusting it.</p>
+</blockquote>
+<figure><img src="images/preview-route.png" alt="A route test: a white path from a hall, up a stair and along a balcony" loading="lazy"><figcaption>A route test: a white path from a hall, up a stair and along a balcony</figcaption></figure>
+<h2 id="the-room-height-overlay">The Room height overlay</h2>
+<p>The toolbar's cell overlay dropdown has <strong>Cells: Room height</strong>. It colours each room on the 2D floorplan by its full height:</p>
+<table>
+<thead>
+<tr>
+<th>Colour</th>
+<th>Room height</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>red</td>
+<td>under 64</td>
+</tr>
+<tr>
+<td>amber</td>
+<td>64 to 96</td>
+</tr>
+<tr>
+<td>green</td>
+<td>96 or more</td>
+</tr>
+</tbody>
+</table>
+<p>It is a quick map of a level's crawlspaces and halls, and it is the room's shape rather than the headroom a bake measures: it does not see beams, low ceilings over part of a room, or crates. It cannot — it is one colour per room, and the whole reason the bake measures headroom per patch of ground is that a low beam makes the answer different in one half of a room from the other. The Navigation tool shows the measured number.</p>
+<h2 id="when-an-area-is-unreachable">When an area is unreachable</h2>
+<p>Pick the agent that should get there, bake, and test a route into the area. Then:</p>
+<ul>
+<li><strong>The ground is red.</strong> Headroom, width, slope or water shuts this agent out. Raise the ceiling, widen the passage, or ease the slope.</li>
+<li><strong>The ground is missing.</strong> Nothing there is ground: a floor steeper than 46°, a surface with no air above it, or a prop with no <code>nav_role</code>. See <a href="ground.html">Ground</a>.</li>
+<li><strong>A doorway does not join.</strong> Check the floors on both sides are at the same height. A sill makes it a window. And check it is wider than the agent: a route keeps half a body from each jamb. See <a href="ground.html#a-bodys-width-from-the-walls">Ground</a>.</li>
+<li><strong>A link is drawn but not taken.</strong> The agent's profile refuses it: too high a climb, too far a fall, too wide a gap, or too small an opening. Your game's profiles decide this.</li>
+<li><strong>There is no link.</strong> A ledge higher than the agent climbs needs a ladder: place a <code>nav_link</code>. See <a href="links.html#ladders-and-ropes">Links</a>.</li>
+<li><strong>The route used to work.</strong> Bake again; the route test uses the last bake.</li>
+</ul>
+<p>The status report and the message log list warnings from each bake:</p>
+<table>
+<thead>
+<tr>
+<th>Warning</th>
+<th>What to do</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>N props have no nav_role, so navigation ignores them.</em></td>
+<td>Mark the props that block or can be stood on.</td>
+</tr>
+<tr>
+<td><em>Prop N is marked an obstacle but has no bounds, so it blocks nothing.</em></td>
+<td>Check the prop's model.</td>
+</tr>
+<tr>
+<td><em>Navigation link N goes nowhere.</em></td>
+<td>Set its <code>nav_link_target</code>.</td>
+</tr>
+<tr>
+<td><em>Navigation link N has an end outside any room.</em></td>
+<td>Move the link, or its target, into air.</td>
+</tr>
+<tr>
+<td><em>N of M patches fit no agent profile and were left out.</em></td>
+<td>Expected for crawlspaces. Otherwise, see above.</td>
+</tr>
+<tr>
+<td><em>No agent can take any of the links, so nothing crosses them.</em></td>
+<td>Your game's profiles are stricter than the level.</td>
+</tr>
+<tr>
+<td><em>No agent profiles: baked for a stand-in agent.</em></td>
+<td>Your game has not given its profiles to the editor.</td>
+</tr>
+</tbody>
+</table>
+		</article>
+		<p class="docs-source">Hammerite 2.0 · built from 6d57ab2d, 2026-10-17</p>
+	</main>
+</div>
+
+<footer class="studio-foot">
+	<a href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>

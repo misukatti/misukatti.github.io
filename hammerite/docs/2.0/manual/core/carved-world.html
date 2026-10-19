@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The carved world — Hammerite 3D 2.0 docs</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="../../../../assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="../../../../assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../../../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@300&display=swap">
+<link rel="stylesheet" href="../../../../hammerite.css">
+<link rel="stylesheet" href="../../../docs.css">
+<script src="../../../versions.js" defer></script>
+</head>
+<body class="docs" data-docs-version="2.0">
+
+<header class="studio">
+	<a class="studio-logo" href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="../../../../index.html">Hammerite 3D</a>
+		<a href="../../index.html">Docs</a>
+		<a href="../../guides/index.html">Guides</a>
+		<a href="../../api/index.html">API</a>
+		<a href="../index.html">Manual</a>
+	</nav>
+</header>
+
+<div class="docs-banner" hidden></div>
+
+<div class="docs-layout">
+	<aside class="docs-side">
+		<a class="docs-brand" href="../../index.html"><img src="../../../../assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
+		<label class="docs-version">Version
+			<select aria-label="Docs version"><option value="2.0" selected>2.0</option></select>
+		</label>
+		<nav class="api-nav"><a class="api-home" href="../index.html">Manual</a><h2>Core</h2><ul><li><a href="index.html">Core</a></li><li><a href="carved-world.html" aria-current="page">The carved world</a></li><li><a href="rooms-and-portals.html">Rooms and portals</a></li><li><a href="fills.html">Fills</a></li><li><a href="entities.html">Entities</a></li><li><a href="textures.html">Textures</a></li><li><a href="lighting.html">Lighting</a></li><li><a href="baking.html">Baking</a></li><li><a href="variants.html">Variants</a></li><li><a href="terrain.html">Terrain</a></li><li><a href="glossary.html">Glossary</a></li></ul><h2>Editor</h2><ul><li><a href="../editor/index.html">Editor</a></li><li><a href="../editor/interface.html">The interface</a></li><li><a href="../editor/camera.html">Camera</a></li><li><a href="../editor/selecting.html">Selecting</a></li><li><a href="../editor/building.html">Building</a></li><li><a href="../editor/editing.html">Editing</a></li><li><a href="../editor/texturing.html">Texturing</a></li><li><a href="../editor/terrain.html">Terrain</a></li><li><a href="../editor/entities.html">Entities</a></li><li><a href="../editor/props.html">Props</a></li><li><a href="../editor/decals.html">Decals</a></li><li><a href="../editor/prefabs.html">Prefabs</a></li><li><a href="../editor/layers.html">Layers</a></li><li><a href="../editor/sky.html">Sky</a></li><li><a href="../editor/lighting.html">Lighting</a></li><li><a href="../editor/problems.html">Problems</a></li><li><a href="../editor/files.html">Map files</a></li><li><a href="../editor/keys.html">Keyboard reference</a></li><li><a href="../editor/manual.html">Using the manual</a></li><li><a href="../editor/extending-the-manual.html">Extending the manual</a></li></ul><h2>Audio</h2><ul><li><a href="../audio/index.html">Audio</a></li><li><a href="../audio/rooms.html">Rooms</a></li><li><a href="../audio/doors.html">Doors and openings</a></li><li><a href="../audio/outdoors.html">Outdoors and weather</a></li><li><a href="../audio/graph.html">The audio graph</a></li></ul><h2>Navigation</h2><ul><li><a href="../nav/index.html">Navigation</a></li><li><a href="../nav/ground.html">Ground</a></li><li><a href="../nav/links.html">Links</a></li><li><a href="../nav/preview.html">The Navigation tool</a></li></ul><h2>Docs</h2><ul><li><a href="../../index.html">Docs home</a></li><li><a href="../../api/index.html">API reference</a></li></ul></nav>
+	</aside>
+	<main class="docs-main">
+		<article class="prose">
+<h1 id="the-carved-world">The carved world</h1>
+<p>A Hammerite map is carved, not built. Everything is solid rock until an air brush carves a room out of it. You never build walls around a room: the rock around it is the wall.</p>
+<figure><img src="images/carved-world-one-room.png" alt="One air brush carved out of the rock: the room is its inside" loading="lazy"><figcaption>One air brush carved out of the rock: the room is its inside</figcaption></figure>
+<h2 id="solid-by-default">Solid by default</h2>
+<ul>
+<li>Where nothing is drawn, there is rock. There is no void outside the level and no outer shell to seal.</li>
+<li>An air brush carves a room. Its inside is open space; its faces become the room's walls, floor and ceiling.</li>
+<li>A room is seen from inside. The outside of an air brush is rock and is never drawn.</li>
+</ul>
+<p>The editor's default grid is 64 units.</p>
+<h2 id="the-three-tiers">The three tiers</h2>
+<p>Every brush has a tier: <strong>Air</strong>, <strong>Solid</strong> or <strong>Detail</strong>. Choose it in the toolbar before drawing, or change the tier of a selected brush. See <a href="../editor/building.html">Building</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>What it does</th>
+<th>Use it for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Air</td>
+<td>Carves open space out of the rock.</td>
+<td>Rooms, corridors, doorways, windows, shafts, courtyards</td>
+</tr>
+<tr>
+<td>Solid</td>
+<td>Fills carved space back in. Can split a room.</td>
+<td>Pillars, dividing walls, a beam across a hall</td>
+</tr>
+<tr>
+<td>Detail</td>
+<td>Stands inside a room as dressing. Carves nothing, fills nothing.</td>
+<td>Furniture, trim, ledges, crates, cornices</td>
+</tr>
+</tbody>
+</table>
+<p>Air and solid are <strong>structural</strong>: they decide the shape of the space. Detail does not.</p>
+<p>Rule of thumb: if it changes how spaces connect, it is structural. If it is dressing inside a space, it is detail.</p>
+<figure><img src="images/carved-world-tiers.png" alt="Top-down view of the three tiers: an air room, a solid pillar splitting its corner, a detail table" loading="lazy"><figcaption>Top-down view of the three tiers: an air room, a solid pillar splitting its corner, a detail table</figcaption></figure>
+<h2 id="brush-order">Brush order</h2>
+<p>Structural brushes apply in the order they were made. A later brush wins where two overlap.</p>
+<ul>
+<li>A solid made <strong>after</strong> a room fills that part of it. This is how a pillar stands in a hall.</li>
+<li>A room made <strong>after</strong> a solid carves through it.</li>
+<li>A solid in rock that nothing has carved changes nothing: it is rock in rock.</li>
+</ul>
+<p>Clipping a brush keeps its place in the order. A duplicate is a new brush and goes last.</p>
+<h3 id="moving-a-brush-along-the-order">Moving a brush along the order</h3>
+<p>Select it and use <strong>Edit → Bring to Front</strong> (<code>Cmd</code> <code>Page Up</code>) or <strong>Send to Back</strong> (<code>Cmd</code> <code>Page Down</code>). Front is last in the order, so it wins; back is first, so everything drawn since wins over it. Several brushes keep the order they were already in among themselves.</p>
+<blockquote class="callout callout-tip"><p><strong>Tip:</strong> A pillar that does not appear was made before the room around it. Select it and Bring to Front.</p>
+</blockquote>
+<p>For the case neither end covers — one brush <em>between</em> two others — the inspector's <strong>Place in the world's program</strong> gives the numbers themselves. <strong>Order</strong> is the one those two commands write. <strong>Priority</strong> is a different question: which room owns a spot two of them overlap on, where 0 works it out from their sizes and anything else says so outright, highest winning.</p>
+<p>Both are for structural brushwork. Detail is dressing and an entity's brushes belong to the entity; neither takes part in the program, so neither is asked where it stands in one.</p>
+<p>Hiding a brush takes it out of the world while it is hidden: a hidden room closes up, a hidden pillar is gone. Hiding a layer does not change the world, only the view. See <a href="../editor/layers.html">Layers</a>.</p>
+<h2 id="overlap-to-extend-abut-to-divide">Overlap to extend, abut to divide</h2>
+<p>How two air brushes meet decides whether they are one space or two.</p>
+<table>
+<thead>
+<tr>
+<th>How they meet</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Overlap</strong>: the brushes interpenetrate</td>
+<td>One continuous space. The walls of each that lie inside the other are removed. There is no opening to name.</td>
+</tr>
+<tr>
+<td><strong>Abut</strong>: faces touch on the same plane</td>
+<td>Two rooms. Where the two faces overlap there is an opening, a <strong>portal</strong>, that can be named and closed by a door.</td>
+</tr>
+<tr>
+<td><strong>Gap</strong>: rock left between them</td>
+<td>Two rooms, not connected.</td>
+</tr>
+</tbody>
+</table>
+<p>Overlap to extend a space: an alcove, a bay window, an L-shaped hall from two boxes. Abut to divide one: a doorway between two rooms, a window from a room onto a courtyard.</p>
+<figure><img src="images/carved-world-overlap-abut.png" alt="Top-down: overlapping rooms make one space, abutting rooms meet at an opening" loading="lazy"><figcaption>Top-down: overlapping rooms make one space, abutting rooms meet at an opening</figcaption></figure>
+<p>Sound and navigation follow the same split. Overlapping rooms are one acoustic zone. Abutting rooms are two, joined through the opening. See <a href="rooms-and-portals.html">Rooms and portals</a>.</p>
+<p>To make a doorway a door can close, abut it: carve the doorway as its own air brush whose ends touch both rooms, flush with their walls. A doorway pushed into the rooms overlaps them and becomes part of one space.</p>
+<p>Two rooms whose walls are less than one unit apart are flagged as <strong>Rooms that nearly touch</strong>: a sliver of rock too thin to be a wall. Abut them or overlap them. See <a href="../editor/problems.html">Problems</a>.</p>
+<h3 id="who-owns-an-overlap">Who owns an overlap</h3>
+<p>Where two rooms overlap, the bigger room owns the shared space and draws the surfaces the two share. A floor where two overlapping rooms meet at the same height is textured by the bigger room.</p>
+<p>Two overlapping rooms of exactly equal size are flagged as <strong>Rooms that overlap ambiguously</strong>. Resize one so the owner is the one you chose.</p>
+<h2 id="detail-is-dressing">Detail is dressing</h2>
+<p>Detail renders, collides, is lit by the bake and casts shadows. It does not carve, split a room or make an opening.</p>
+<ul>
+<li>Blocking a doorway with detail does not disconnect the rooms. Use a solid, or leave the rooms apart.</li>
+<li>A detail face pressed flat against a wall, a floor or other detail is not drawn or baked, which saves lightmap space. It still collides.</li>
+<li>Brushwork that belongs to an entity is always detail. See <a href="entities.html#brush-entities">Entities</a>.</li>
+<li><a href="terrain.html">Terrain</a> is detail.</li>
+</ul>
+<p>Toggle <strong>Detail Tint</strong> in the 3D viewport's menu to see which brushes are detail.</p>
+<h2 id="faces-point-out-of-their-own-brush">Faces point out of their own brush</h2>
+<p>Every face points away from the brush it belongs to. On an air brush that means into the rock. A room's floor is its bottom face, pointing down; its ceiling is its top face, pointing up.</p>
+<p>Texture a room by texturing its air brush's faces, seen from inside. A solid pillar's faces point out into the room around it. See <a href="../editor/texturing.html">Texturing</a>.</p>
+<h2 id="what-is-worked-out-and-what-you-author">What is worked out, and what you author</h2>
+<p>Rooms, openings and the walls you see are recomputed after every edit. Nothing is set on them directly. What you author lives on a brush, a face or an entity, and survives any edit.</p>
+		</article>
+		<p class="docs-source">Hammerite 2.0 · built from 6d57ab2d, 2026-10-17</p>
+	</main>
+</div>
+
+<footer class="studio-foot">
+	<a href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Layers — Hammerite 3D 2.0 docs</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="../../../../assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="../../../../assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../../../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@300&display=swap">
+<link rel="stylesheet" href="../../../../hammerite.css">
+<link rel="stylesheet" href="../../../docs.css">
+<script src="../../../versions.js" defer></script>
+</head>
+<body class="docs" data-docs-version="2.0">
+
+<header class="studio">
+	<a class="studio-logo" href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="../../../../index.html">Hammerite 3D</a>
+		<a href="../../index.html">Docs</a>
+		<a href="../../guides/index.html">Guides</a>
+		<a href="../../api/index.html">API</a>
+		<a href="../index.html">Manual</a>
+	</nav>
+</header>
+
+<div class="docs-banner" hidden></div>
+
+<div class="docs-layout">
+	<aside class="docs-side">
+		<a class="docs-brand" href="../../index.html"><img src="../../../../assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
+		<label class="docs-version">Version
+			<select aria-label="Docs version"><option value="2.0" selected>2.0</option></select>
+		</label>
+		<nav class="api-nav"><a class="api-home" href="../index.html">Manual</a><h2>Core</h2><ul><li><a href="../core/index.html">Core</a></li><li><a href="../core/carved-world.html">The carved world</a></li><li><a href="../core/rooms-and-portals.html">Rooms and portals</a></li><li><a href="../core/fills.html">Fills</a></li><li><a href="../core/entities.html">Entities</a></li><li><a href="../core/textures.html">Textures</a></li><li><a href="../core/lighting.html">Lighting</a></li><li><a href="../core/baking.html">Baking</a></li><li><a href="../core/variants.html">Variants</a></li><li><a href="../core/terrain.html">Terrain</a></li><li><a href="../core/glossary.html">Glossary</a></li></ul><h2>Editor</h2><ul><li><a href="index.html">Editor</a></li><li><a href="interface.html">The interface</a></li><li><a href="camera.html">Camera</a></li><li><a href="selecting.html">Selecting</a></li><li><a href="building.html">Building</a></li><li><a href="editing.html">Editing</a></li><li><a href="texturing.html">Texturing</a></li><li><a href="terrain.html">Terrain</a></li><li><a href="entities.html">Entities</a></li><li><a href="props.html">Props</a></li><li><a href="decals.html">Decals</a></li><li><a href="prefabs.html">Prefabs</a></li><li><a href="layers.html" aria-current="page">Layers</a></li><li><a href="sky.html">Sky</a></li><li><a href="lighting.html">Lighting</a></li><li><a href="problems.html">Problems</a></li><li><a href="files.html">Map files</a></li><li><a href="keys.html">Keyboard reference</a></li><li><a href="manual.html">Using the manual</a></li><li><a href="extending-the-manual.html">Extending the manual</a></li></ul><h2>Audio</h2><ul><li><a href="../audio/index.html">Audio</a></li><li><a href="../audio/rooms.html">Rooms</a></li><li><a href="../audio/doors.html">Doors and openings</a></li><li><a href="../audio/outdoors.html">Outdoors and weather</a></li><li><a href="../audio/graph.html">The audio graph</a></li></ul><h2>Navigation</h2><ul><li><a href="../nav/index.html">Navigation</a></li><li><a href="../nav/ground.html">Ground</a></li><li><a href="../nav/links.html">Links</a></li><li><a href="../nav/preview.html">The Navigation tool</a></li></ul><h2>Docs</h2><ul><li><a href="../../index.html">Docs home</a></li><li><a href="../../api/index.html">API reference</a></li></ul></nav>
+	</aside>
+	<main class="docs-main">
+		<article class="prose">
+<h1 id="layers">Layers</h1>
+<p>Layers organise a map: put the upper floor on one layer and hide it while working below. A layer can also be a <strong>variant</strong>: a version of the level that exists only while it is chosen, such as the same street by night. What variants are is in <a href="../core/variants.html">Layers and variants</a>.</p>
+<p>The <strong>Layers</strong> panel is in the right panel.</p>
+<figure><img src="images/layers-panel.png" alt="The Layers panel with a night variant in effect" loading="lazy"><figcaption>The Layers panel with a night variant in effect</figcaption></figure>
+<h2 id="columns">Columns</h2>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Shows</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Name</td>
+<td>the layer; double-click to rename</td>
+</tr>
+<tr>
+<td>Swatch</td>
+<td>the layer's tint; click to change it</td>
+</tr>
+<tr>
+<td><strong>B</strong>, <strong>E</strong>, <strong>I</strong></td>
+<td>how many brushes, entities and prefab instances it holds</td>
+</tr>
+<tr>
+<td>Eye</td>
+<td>click to cycle visible → ghosted (faded) → hidden</td>
+</tr>
+<tr>
+<td>Lock</td>
+<td>marks the layer locked. It does not yet stop its contents being selected or edited</td>
+</tr>
+<tr>
+<td>Variant</td>
+<td>on variant layers only: filled for the one in effect; click another to switch</td>
+</tr>
+</tbody>
+</table>
+<p>A variant that is not baked, or whose bake is out of date, has a warning icon by its name; hover it to see which. Layers in a variant other than the one shown are greyed.</p>
+<h2 id="the-active-layer">The active layer</h2>
+<p>Click a layer to make it active. New cube and arch brushes land on the active layer; other new objects land on the default layer.</p>
+<p>To move objects onto a layer, select them and press <code>L</code> for the active layer (unless that is the default layer), or right-click a layer and choose <strong>Move Selection to Layer</strong>.</p>
+<h2 id="arrange-layers">Arrange layers</h2>
+<ul>
+<li>Click the <strong>+</strong> by the panel's title to add a layer.</li>
+<li>Drag a layer onto another to put it inside; drag between two to reorder.</li>
+<li>Right-click a layer for <strong>Rename</strong>, <strong>New Layer Inside</strong>, <strong>Move to Top Level</strong> and <strong>Delete Layer</strong>. Deleting a layer moves its contents to the default layer.</li>
+</ul>
+<p>Hiding a layer hides the layers inside it too.</p>
+<h2 id="variants">Variants</h2>
+<ol>
+<li>Right-click a layer and tick <strong>Variant (baked on its own)</strong>.</li>
+<li>Put what belongs only to that version of the level on it, or on layers inside it.</li>
+<li>Click its variant marker, or right-click → <strong>Show This Variant</strong>, to switch to it.</li>
+</ol>
+<p>Choosing a layer that belongs to another variant switches to that variant, so what you draw next is visible.</p>
+<p>Each variant is baked on its own: a bake lights the variant in effect. See <a href="lighting.html#variants">Lighting</a>.</p>
+		</article>
+		<p class="docs-source">Hammerite 2.0 · built from 6d57ab2d, 2026-10-17</p>
+	</main>
+</div>
+
+<footer class="studio-foot">
+	<a href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>

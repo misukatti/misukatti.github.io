@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Camera — Hammerite 3D latest docs</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="../../../../assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="../../../../assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../../../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@300&display=swap">
+<link rel="stylesheet" href="../../../../hammerite.css">
+<link rel="stylesheet" href="../../../docs.css">
+<script src="../../../versions.js" defer></script>
+</head>
+<body class="docs" data-docs-version="latest">
+
+<header class="studio">
+	<a class="studio-logo" href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="../../../../index.html">Hammerite 3D</a>
+		<a href="../../index.html">Docs</a>
+		<a href="../../guides/index.html">Guides</a>
+		<a href="../../api/index.html">API</a>
+		<a href="../index.html">Manual</a>
+	</nav>
+</header>
+
+<div class="docs-banner" hidden></div>
+
+<div class="docs-layout">
+	<aside class="docs-side">
+		<a class="docs-brand" href="../../index.html"><img src="../../../../assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
+		<label class="docs-version">Version
+			<select aria-label="Docs version"><option value="latest" selected>latest</option></select>
+		</label>
+		<nav class="api-nav"><a class="api-home" href="../index.html">Manual</a><h2>Core</h2><ul><li><a href="../core/index.html">Core</a></li><li><a href="../core/carved-world.html">The carved world</a></li><li><a href="../core/rooms-and-portals.html">Rooms and portals</a></li><li><a href="../core/fills.html">Fills</a></li><li><a href="../core/entities.html">Entities</a></li><li><a href="../core/textures.html">Textures</a></li><li><a href="../core/lighting.html">Lighting</a></li><li><a href="../core/baking.html">Baking</a></li><li><a href="../core/variants.html">Variants</a></li><li><a href="../core/terrain.html">Terrain</a></li><li><a href="../core/glossary.html">Glossary</a></li></ul><h2>Editor</h2><ul><li><a href="index.html">Editor</a></li><li><a href="interface.html">The interface</a></li><li><a href="camera.html" aria-current="page">Camera</a></li><li><a href="selecting.html">Selecting</a></li><li><a href="building.html">Building</a></li><li><a href="editing.html">Editing</a></li><li><a href="texturing.html">Texturing</a></li><li><a href="terrain.html">Terrain</a></li><li><a href="entities.html">Entities</a></li><li><a href="props.html">Props</a></li><li><a href="decals.html">Decals</a></li><li><a href="prefabs.html">Prefabs</a></li><li><a href="layers.html">Layers</a></li><li><a href="sky.html">Sky</a></li><li><a href="lighting.html">Lighting</a></li><li><a href="problems.html">Problems</a></li><li><a href="files.html">Map files</a></li><li><a href="keys.html">Keyboard reference</a></li><li><a href="manual.html">Using the manual</a></li><li><a href="extending-the-manual.html">Extending the manual</a></li></ul><h2>Audio</h2><ul><li><a href="../audio/index.html">Audio</a></li><li><a href="../audio/rooms.html">Rooms</a></li><li><a href="../audio/doors.html">Doors and openings</a></li><li><a href="../audio/outdoors.html">Outdoors and weather</a></li><li><a href="../audio/graph.html">The audio graph</a></li></ul><h2>Navigation</h2><ul><li><a href="../nav/index.html">Navigation</a></li><li><a href="../nav/ground.html">Ground</a></li><li><a href="../nav/links.html">Links</a></li><li><a href="../nav/preview.html">The Navigation tool</a></li></ul><h2>Docs</h2><ul><li><a href="../../index.html">Docs home</a></li><li><a href="../../api/index.html">API reference</a></li></ul></nav>
+	</aside>
+	<main class="docs-main">
+		<article class="prose">
+<h1 id="camera">Camera</h1>
+<p>Each view has its own camera. The view under the mouse takes the input.</p>
+<h2 id="3d-view">3D view</h2>
+<table>
+<thead>
+<tr>
+<th>Do</th>
+<th>How</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Look around</td>
+<td>hold the right mouse button and move the mouse</td>
+</tr>
+<tr>
+<td>Fly</td>
+<td>hold the right mouse button, then <code>W</code> <code>A</code> <code>S</code> <code>D</code></td>
+</tr>
+<tr>
+<td>Fly faster / slower</td>
+<td>add <code>Shift</code> (four times) / <code>Ctrl</code> (a quarter)</td>
+</tr>
+<tr>
+<td>Orbit</td>
+<td>two-finger drag on a trackpad</td>
+</tr>
+<tr>
+<td>Pan</td>
+<td><code>Shift</code> and two-finger drag</td>
+</tr>
+<tr>
+<td>Dolly in and out</td>
+<td><code>Ctrl</code> and two-finger drag</td>
+</tr>
+</tbody>
+</table>
+<p>While the right button is held, <code>W</code> <code>A</code> <code>S</code> <code>D</code> fly the camera and do nothing else. Let go and they are editor keys again.</p>
+<p>The trackpad orbit turns around the point on the ground (height 0) the camera is looking at.</p>
+<p>To see a room from inside, fly into it. From outside, its walls are not drawn on the side facing you.</p>
+<h2 id="2d-views">2D views</h2>
+<table>
+<thead>
+<tr>
+<th>Do</th>
+<th>How</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pan</td>
+<td>drag with the right mouse button, or two-finger drag</td>
+</tr>
+<tr>
+<td>Zoom at the cursor</td>
+<td>mouse wheel, or <code>Ctrl</code> and two-finger drag</td>
+</tr>
+<tr>
+<td>Cut another view, or move its cut</td>
+<td>drag from a ruler with the right mouse button</td>
+</tr>
+<tr>
+<td>Take a cut away</td>
+<td>right-click its line on the ruler</td>
+</tr>
+</tbody>
+</table>
+<p>A 2D view can cut the level at one depth: the top view at a height, the front and side views at a distance. None is cut until you cut it. Rooms the cut passes through are filled in; a room on the viewer's side of the cut - above it, in the top view - is still outlined, faintly, as are the openings and solid brushes there and the detail brushes and entities standing in such a room. What lies wholly beyond the cut is not drawn, and cannot be clicked or caught in a selection box there, so the storey you are on is not buried under the others. Something selected is always drawn. A cut that passes through no room fades nothing. <strong>View → Fade What the Cut Misses</strong> turns the fading off. The other views' cuts are drawn as guide lines.</p>
+<p>A cut is moved from a view that shows it as a line, the way a working plane is: drag from that view's ruler with the right mouse button and the guide line follows the cursor, snapped to the grid. The top view's cut is the horizontal line in the front and side views, so drag from the ruler down their left edge; the ruler along the top moves the front or side view's cut.</p>
+<figure><img src="images/camera-slice.png" alt="The top view cut through the upper floor: that room filled, the one below outlined" loading="lazy"><figcaption>The top view cut through the upper floor: that room filled, the one below outlined</figcaption></figure>
+<h2 id="focus-on-the-selection">Focus on the selection</h2>
+<p>Press <code>Cmd</code> <code>A</code> to move every view onto what is selected, and each cut there is to the middle of it. Choosing a row in the Problems panel does the same.</p>
+<h2 id="maximise-a-view">Maximise a view</h2>
+<p>Press <code>M</code> over a view to fill the editor with it. Press <code>M</code> again for all four.</p>
+		</article>
+		<p class="docs-source">Hammerite latest · built from 45a63b69, 2026-10-19</p>
+	</main>
+</div>
+
+<footer class="studio-foot">
+	<a href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>

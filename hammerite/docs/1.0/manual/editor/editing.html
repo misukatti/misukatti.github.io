@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Editing — Hammerite 3D 1.0 docs</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="../../../../assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="../../../../assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../../../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@300&display=swap">
+<link rel="stylesheet" href="../../../../hammerite.css">
+<link rel="stylesheet" href="../../../docs.css">
+<script src="../../../versions.js" defer></script>
+</head>
+<body class="docs" data-docs-version="1.0">
+
+<header class="studio">
+	<a class="studio-logo" href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="../../../../index.html">Hammerite 3D</a>
+		<a href="../../index.html">Docs</a>
+		<a href="../../guides/index.html">Guides</a>
+		<a href="../../api/index.html">API</a>
+		<a href="../index.html">Manual</a>
+	</nav>
+</header>
+
+<div class="docs-banner" hidden></div>
+
+<div class="docs-layout">
+	<aside class="docs-side">
+		<a class="docs-brand" href="../../index.html"><img src="../../../../assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
+		<label class="docs-version">Version
+			<select aria-label="Docs version"><option value="1.0" selected>1.0</option></select>
+		</label>
+		<nav class="api-nav"><a class="api-home" href="../index.html">Manual</a><h2>Core</h2><ul><li><a href="../core/index.html">Core</a></li><li><a href="../core/carved-world.html">The carved world</a></li><li><a href="../core/rooms-and-portals.html">Rooms and portals</a></li><li><a href="../core/fills.html">Fills</a></li><li><a href="../core/entities.html">Entities</a></li><li><a href="../core/textures.html">Textures</a></li><li><a href="../core/lighting.html">Lighting</a></li><li><a href="../core/baking.html">Baking</a></li><li><a href="../core/variants.html">Variants</a></li><li><a href="../core/terrain.html">Terrain</a></li><li><a href="../core/glossary.html">Glossary</a></li></ul><h2>Editor</h2><ul><li><a href="index.html">Editor</a></li><li><a href="interface.html">The interface</a></li><li><a href="camera.html">Camera</a></li><li><a href="selecting.html">Selecting</a></li><li><a href="building.html">Building</a></li><li><a href="editing.html" aria-current="page">Editing</a></li><li><a href="texturing.html">Texturing</a></li><li><a href="terrain.html">Terrain</a></li><li><a href="entities.html">Entities</a></li><li><a href="props.html">Props</a></li><li><a href="decals.html">Decals</a></li><li><a href="prefabs.html">Prefabs</a></li><li><a href="layers.html">Layers</a></li><li><a href="sky.html">Sky</a></li><li><a href="lighting.html">Lighting</a></li><li><a href="problems.html">Problems</a></li><li><a href="files.html">Map files</a></li><li><a href="keys.html">Keyboard reference</a></li><li><a href="manual.html">Using the manual</a></li><li><a href="extending-the-manual.html">Extending the manual</a></li></ul><h2>Audio</h2><ul><li><a href="../audio/index.html">Audio</a></li><li><a href="../audio/rooms.html">Rooms</a></li><li><a href="../audio/doors.html">Doors and openings</a></li><li><a href="../audio/outdoors.html">Outdoors and weather</a></li><li><a href="../audio/graph.html">The audio graph</a></li></ul><h2>Navigation</h2><ul><li><a href="../nav/index.html">Navigation</a></li><li><a href="../nav/ground.html">Ground</a></li><li><a href="../nav/links.html">Links</a></li><li><a href="../nav/preview.html">The Navigation tool</a></li></ul><h2>Docs</h2><ul><li><a href="../../index.html">Docs home</a></li><li><a href="../../api/index.html">API reference</a></li></ul></nav>
+	</aside>
+	<main class="docs-main">
+		<article class="prose">
+<h1 id="editing">Editing</h1>
+<p>Edits go into one undo history: <code>Cmd</code> <code>Z</code> undoes, <code>Cmd</code> <code>Shift</code> <code>Z</code> redoes. Tools that take several steps undo their own steps while running, and add one step to the history when you finish.</p>
+<p>A tool other than Select owns the plain letter keys while it runs. Press <code>Esc</code> to leave it before pressing another tool's key.</p>
+<h2 id="move-rotate-and-scale">Move, rotate and scale</h2>
+<ol>
+<li>Select brushes or entities.</li>
+<li>Press <code>G</code> to move, <code>R</code> to rotate or <code>S</code> to scale. The selection follows the mouse.</li>
+<li>Press <code>X</code>, <code>Y</code> or <code>Z</code> to lock to that axis. Press it again to unlock.</li>
+<li>Click to drop it, or press <code>Esc</code> to put it back.</li>
+</ol>
+<p>Rotation snaps to 15°. Hold <code>Shift</code> for 45°, <code>Ctrl</code> for 5°. <code>Alt</code>-click moves the point it turns around.</p>
+<p>Scaling stretches the selection about its centre, along the axes of the view you drag in, by the grid: drag 64 to the right and a room 256 across becomes 384, 64 wider on each side. <code>Alt</code>-click moves the point it stretches from. A prefab instance is scaled by editing its prefab.</p>
+<p>Moving or rotating a room moves its textures with it while <strong>UV Lock</strong> is on. See <a href="texturing.html#uv-lock">Texturing</a>.</p>
+<p>Point entities that turn show a handle at the tip of an arrow when selected. Drag the handle to turn the entity.</p>
+<h2 id="duplicate-and-delete">Duplicate and delete</h2>
+<ul>
+<li><code>Cmd</code> <code>D</code> duplicates the selection and starts moving the copy. Click to drop it.</li>
+<li><code>Backspace</code> deletes the selection.</li>
+</ul>
+<h2 id="mirror">Mirror</h2>
+<p><strong>Selection → Mirror on X</strong>, <strong>Y</strong> or <strong>Z</strong> flips the selection through its own middle. Entities in it move with the brushwork. Use it to make a left-handed copy of a doorway.</p>
+<h2 id="clip">Clip</h2>
+<p>Cut brushes in two along a plane.</p>
+<ol>
+<li>Select the brushes to cut.</li>
+<li>Press <code>X</code>.</li>
+<li>Set the plane. The cut previews as you go.
+   - Drag along a surface: the cut runs along the line you drew, square to that surface.
+   - Or click three points on surfaces: the plane passes through all three.
+   - Or <code>Alt</code>-click a face to cut along that face's plane.</li>
+<li>Press <code>Space</code> to choose what to keep: both sides, the side below, or the side above. The foot of the left panel says which.</li>
+<li>Press <code>Enter</code> to cut, or <code>Esc</code> to cancel.</li>
+</ol>
+<p>Hold <code>Alt</code> to highlight the face a plane would be taken from.</p>
+<figure><img src="images/editing-clip.png" alt="Clipping a wedge off a solid block" loading="lazy"><figcaption>Clipping a wedge off a solid block</figcaption></figure>
+<h2 id="extrude-and-push-faces">Extrude and push faces</h2>
+<p>Pull a face out into a new brush, or push it into its own.</p>
+<ol>
+<li>Hold <code>Q</code> and click a face to select it.</li>
+<li>Press <code>E</code> to extrude, or <code>G</code> to move the face.</li>
+<li>Move the mouse. The distance shows on the face.</li>
+<li>Click or press <code>Enter</code> to finish; <code>Esc</code> cancels.</li>
+</ol>
+<p>Or do it in one gesture from the Select tool: in face mode, press on a face, then drag with <code>Shift</code> held to move it or <code>Alt</code> held to extrude it.</p>
+<p>Extruding outward adds a brush. Extruding inward cuts the face's own brush back.</p>
+<p>With several faces selected, <code>Space</code> switches between moving them all the same distance (<strong>uniform</strong>) and each along its own direction (<strong>projected</strong>).</p>
+<h2 id="vertices">Vertices</h2>
+<ol>
+<li>Select brushes.</li>
+<li>Press <code>V</code>. Their corners show as handles.</li>
+<li>Click a corner to select it; <code>Cmd</code>-click to add more. In a 2D view, drag a box to select several.</li>
+<li>Drag a selected corner to move it, or press <code>G</code> to move them with the mouse and <code>X</code> / <code>Y</code> / <code>Z</code> to lock an axis.</li>
+<li>Press <code>Enter</code> to keep the changes.</li>
+</ol>
+<p>A brush pushed out of shape is split into convex pieces. <code>Esc</code> deselects the corners; <code>Esc</code> with none selected throws away every change and leaves the tool.</p>
+<figure><img src="images/editing-vertex.png" alt="Moving one corner of a brush" loading="lazy"><figcaption>Moving one corner of a brush</figcaption></figure>
+<h2 id="merge">Merge</h2>
+<p>Select two or more brushes and press <code>,</code> to replace them with one brush wrapping them all. <code>Cmd</code> <code>,</code> keeps the originals.</p>
+<p>The merged brush is convex, so it fills any gaps between the originals.</p>
+<h2 id="bridge-faces">Bridge faces</h2>
+<p>Select faces and press <code>Cmd</code> <code>F</code> to build one brush spanning them.</p>
+<h2 id="change-a-brushs-tier">Change a brush's tier</h2>
+<p>Choose a tier on the toolbar, select the brushes, and press <code>U</code>. See <a href="building.html#choose-the-tier">Building</a>.</p>
+<h2 id="grid-and-snapping">Grid and snapping</h2>
+<p>Moves, corners and new brushes snap to the grid. The status bar shows its size as <strong>Grid</strong> with − and + buttons; <code>=</code> makes it coarser and <code>-</code> finer, even while a tool is running.</p>
+<p>While dragging, hold <code>Shift</code> to snap to twice the grid, <code>Ctrl</code> to a quarter.</p>
+<p><strong>Selection → Snap to Grid</strong> puts each selected brush and entity back on the grid, one by one.</p>
+<p><code>Ctrl</code> <code>G</code> shows or hides the grid on surfaces. <strong>3D Grid</strong> in the 3D view's <strong>View</strong> dropdown shows a grid plane in that view.</p>
+		</article>
+		<p class="docs-source">Hammerite 1.0 · built from 059fce03, 2026-10-10</p>
+	</main>
+</div>
+
+<footer class="studio-foot">
+	<a href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>

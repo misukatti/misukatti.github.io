@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Using the manual — Hammerite 3D 2.0 docs</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="../../../../assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="../../../../assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../../../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@300&display=swap">
+<link rel="stylesheet" href="../../../../hammerite.css">
+<link rel="stylesheet" href="../../../docs.css">
+<script src="../../../versions.js" defer></script>
+</head>
+<body class="docs" data-docs-version="2.0">
+
+<header class="studio">
+	<a class="studio-logo" href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="../../../../index.html">Hammerite 3D</a>
+		<a href="../../index.html">Docs</a>
+		<a href="../../guides/index.html">Guides</a>
+		<a href="../../api/index.html">API</a>
+		<a href="../index.html">Manual</a>
+	</nav>
+</header>
+
+<div class="docs-banner" hidden></div>
+
+<div class="docs-layout">
+	<aside class="docs-side">
+		<a class="docs-brand" href="../../index.html"><img src="../../../../assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
+		<label class="docs-version">Version
+			<select aria-label="Docs version"><option value="2.0" selected>2.0</option></select>
+		</label>
+		<nav class="api-nav"><a class="api-home" href="../index.html">Manual</a><h2>Core</h2><ul><li><a href="../core/index.html">Core</a></li><li><a href="../core/carved-world.html">The carved world</a></li><li><a href="../core/rooms-and-portals.html">Rooms and portals</a></li><li><a href="../core/fills.html">Fills</a></li><li><a href="../core/entities.html">Entities</a></li><li><a href="../core/textures.html">Textures</a></li><li><a href="../core/lighting.html">Lighting</a></li><li><a href="../core/baking.html">Baking</a></li><li><a href="../core/variants.html">Variants</a></li><li><a href="../core/terrain.html">Terrain</a></li><li><a href="../core/glossary.html">Glossary</a></li></ul><h2>Editor</h2><ul><li><a href="index.html">Editor</a></li><li><a href="interface.html">The interface</a></li><li><a href="camera.html">Camera</a></li><li><a href="selecting.html">Selecting</a></li><li><a href="building.html">Building</a></li><li><a href="editing.html">Editing</a></li><li><a href="texturing.html">Texturing</a></li><li><a href="terrain.html">Terrain</a></li><li><a href="entities.html">Entities</a></li><li><a href="props.html">Props</a></li><li><a href="decals.html">Decals</a></li><li><a href="prefabs.html">Prefabs</a></li><li><a href="layers.html">Layers</a></li><li><a href="sky.html">Sky</a></li><li><a href="lighting.html">Lighting</a></li><li><a href="problems.html">Problems</a></li><li><a href="files.html">Map files</a></li><li><a href="keys.html">Keyboard reference</a></li><li><a href="manual.html" aria-current="page">Using the manual</a></li><li><a href="extending-the-manual.html">Extending the manual</a></li></ul><h2>Audio</h2><ul><li><a href="../audio/index.html">Audio</a></li><li><a href="../audio/rooms.html">Rooms</a></li><li><a href="../audio/doors.html">Doors and openings</a></li><li><a href="../audio/outdoors.html">Outdoors and weather</a></li><li><a href="../audio/graph.html">The audio graph</a></li></ul><h2>Navigation</h2><ul><li><a href="../nav/index.html">Navigation</a></li><li><a href="../nav/ground.html">Ground</a></li><li><a href="../nav/links.html">Links</a></li><li><a href="../nav/preview.html">The Navigation tool</a></li></ul><h2>Docs</h2><ul><li><a href="../../index.html">Docs home</a></li><li><a href="../../api/index.html">API reference</a></li></ul></nav>
+	</aside>
+	<main class="docs-main">
+		<article class="prose">
+<h1 id="using-the-manual">Using the manual</h1>
+<p>Press <code>Shift</code> <code>F1</code>, or choose <strong>Help &gt; Manual…</strong>, to open this manual. It opens in its own window over the editor, and you can keep working while it is open.</p>
+<figure><img src="images/manual-window.png" alt="The manual window: the index on the left, two tabs open, the Terrain page showing" loading="lazy"><figcaption>The manual window: the index on the left, two tabs open, the Terrain page showing</figcaption></figure>
+<h2 id="opening-it-at-the-right-page">Opening it at the right page</h2>
+<p>If a tool is active when you open the manual, it opens at that tool's page. Press <code>H</code> for the terrain tool, then <code>Shift</code> <code>F1</code>, and you get <a href="terrain.html">Terrain</a>.</p>
+<p>With the select tool, or a tool that has no page, the manual opens where you left it.</p>
+<h2 id="finding-a-page">Finding a page</h2>
+<p>The index on the left lists every section and its pages. Click a section to open its first page. The page you are reading is highlighted.</p>
+<p>Drag the divider between the index and the page to make the index wider or narrower.</p>
+<h2 id="searching">Searching</h2>
+<p>Type in the search field at the top right. The page is replaced by a list of the pages that match every word you typed, best match first. A match in a page's title counts most, then its keywords, then its headings, then its text.</p>
+<ol>
+<li>Press <code>Cmd</code> <code>F</code> to put the cursor in the search field.</li>
+<li>Type a word or two: <code>sculpt terrain</code>.</li>
+<li>Press <code>Enter</code> to open the top result, or click any result.</li>
+</ol>
+<p>Press <code>Esc</code> to clear the search and go back to the page.</p>
+<figure><img src="images/manual-search.png" alt="Searching for &quot;portal&quot;: results with the matching text under each title" loading="lazy"><figcaption>Searching for &quot;portal&quot;: results with the matching text under each title</figcaption></figure>
+<h2 id="links">Links</h2>
+<p>Blue text is a link. Click it to go there. A link to a heading scrolls to that heading.</p>
+<ul>
+<li><code>Cmd</code>-click or middle-click a link to open it in a new tab.</li>
+<li>A link to a website opens in your web browser.</li>
+<li>Orange text is a link to a page that does not exist yet.</li>
+</ul>
+<h2 id="tabs">Tabs</h2>
+<p>Each tab keeps its own history, so <strong>Back</strong> and <strong>Forward</strong> move within that tab only.</p>
+<ul>
+<li>Click <strong>+</strong> or press <code>Cmd</code> <code>T</code> for a new tab. It opens at the first page of the manual.</li>
+<li>Click a tab's <strong>×</strong>, or press <code>Cmd</code> <code>W</code>, to close it.</li>
+<li><code>Cmd</code>-click a page in the index to open it in a new tab.</li>
+</ul>
+<h2 id="keys">Keys</h2>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Shift</code> <code>F1</code></td>
+<td>open the manual; in the manual, close it</td>
+</tr>
+<tr>
+<td><code>Esc</code></td>
+<td>clear the search; with no search, close the manual</td>
+</tr>
+<tr>
+<td><code>Cmd</code> <code>F</code></td>
+<td>search</td>
+</tr>
+<tr>
+<td><code>Cmd</code> <code>[</code> / <code>Cmd</code> <code>]</code></td>
+<td>back / forward</td>
+</tr>
+<tr>
+<td><code>Alt</code> <code>Left</code> / <code>Alt</code> <code>Right</code></td>
+<td>back / forward</td>
+</tr>
+<tr>
+<td><code>Cmd</code> <code>T</code></td>
+<td>new tab</td>
+</tr>
+<tr>
+<td><code>Cmd</code> <code>W</code></td>
+<td>close tab</td>
+</tr>
+</tbody>
+</table>
+<p><code>Ctrl</code> works in place of <code>Cmd</code> for these.</p>
+<h2 id="where-you-left-off">Where you left off</h2>
+<p>The manual remembers its tabs, the page each one shows and how far down you read, which tab was in front, the window's size and place, and the width of the index. Close the editor and open it again, and the manual is as you left it.</p>
+<p>Drag the manual's title bar to move it. Drag the corner at its bottom right to resize it.</p>
+		</article>
+		<p class="docs-source">Hammerite 2.0 · built from 6d57ab2d, 2026-10-17</p>
+	</main>
+</div>
+
+<footer class="studio-foot">
+	<a href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>

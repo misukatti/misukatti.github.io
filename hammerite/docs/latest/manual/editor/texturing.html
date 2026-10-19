@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Texturing — Hammerite 3D latest docs</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="../../../../assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="../../../../assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../../../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@300&display=swap">
+<link rel="stylesheet" href="../../../../hammerite.css">
+<link rel="stylesheet" href="../../../docs.css">
+<script src="../../../versions.js" defer></script>
+</head>
+<body class="docs" data-docs-version="latest">
+
+<header class="studio">
+	<a class="studio-logo" href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="../../../../index.html">Hammerite 3D</a>
+		<a href="../../index.html">Docs</a>
+		<a href="../../guides/index.html">Guides</a>
+		<a href="../../api/index.html">API</a>
+		<a href="../index.html">Manual</a>
+	</nav>
+</header>
+
+<div class="docs-banner" hidden></div>
+
+<div class="docs-layout">
+	<aside class="docs-side">
+		<a class="docs-brand" href="../../index.html"><img src="../../../../assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
+		<label class="docs-version">Version
+			<select aria-label="Docs version"><option value="latest" selected>latest</option></select>
+		</label>
+		<nav class="api-nav"><a class="api-home" href="../index.html">Manual</a><h2>Core</h2><ul><li><a href="../core/index.html">Core</a></li><li><a href="../core/carved-world.html">The carved world</a></li><li><a href="../core/rooms-and-portals.html">Rooms and portals</a></li><li><a href="../core/fills.html">Fills</a></li><li><a href="../core/entities.html">Entities</a></li><li><a href="../core/textures.html">Textures</a></li><li><a href="../core/lighting.html">Lighting</a></li><li><a href="../core/baking.html">Baking</a></li><li><a href="../core/variants.html">Variants</a></li><li><a href="../core/terrain.html">Terrain</a></li><li><a href="../core/glossary.html">Glossary</a></li></ul><h2>Editor</h2><ul><li><a href="index.html">Editor</a></li><li><a href="interface.html">The interface</a></li><li><a href="camera.html">Camera</a></li><li><a href="selecting.html">Selecting</a></li><li><a href="building.html">Building</a></li><li><a href="editing.html">Editing</a></li><li><a href="texturing.html" aria-current="page">Texturing</a></li><li><a href="terrain.html">Terrain</a></li><li><a href="entities.html">Entities</a></li><li><a href="props.html">Props</a></li><li><a href="decals.html">Decals</a></li><li><a href="prefabs.html">Prefabs</a></li><li><a href="layers.html">Layers</a></li><li><a href="sky.html">Sky</a></li><li><a href="lighting.html">Lighting</a></li><li><a href="problems.html">Problems</a></li><li><a href="files.html">Map files</a></li><li><a href="keys.html">Keyboard reference</a></li><li><a href="manual.html">Using the manual</a></li><li><a href="extending-the-manual.html">Extending the manual</a></li></ul><h2>Audio</h2><ul><li><a href="../audio/index.html">Audio</a></li><li><a href="../audio/rooms.html">Rooms</a></li><li><a href="../audio/doors.html">Doors and openings</a></li><li><a href="../audio/outdoors.html">Outdoors and weather</a></li><li><a href="../audio/graph.html">The audio graph</a></li></ul><h2>Navigation</h2><ul><li><a href="../nav/index.html">Navigation</a></li><li><a href="../nav/ground.html">Ground</a></li><li><a href="../nav/links.html">Links</a></li><li><a href="../nav/preview.html">The Navigation tool</a></li></ul><h2>Docs</h2><ul><li><a href="../../index.html">Docs home</a></li><li><a href="../../api/index.html">API reference</a></li></ul></nav>
+	</aside>
+	<main class="docs-main">
+		<article class="prose">
+<h1 id="texturing">Texturing</h1>
+<p>Textures are chosen by name from the textures your game provides. What names mean (alpha-masked, sky, emissive) is in <a href="../core/textures.html">Textures</a>.</p>
+<h2 id="apply-a-texture">Apply a texture</h2>
+<ol>
+<li>Select brushes, or faces in face mode (<code>Q</code>).</li>
+<li>Press <code>T</code> to open the texture browser.</li>
+<li>Click a texture. It becomes the active texture and goes on everything selected.</li>
+</ol>
+<p>The active texture shows at the top of the right panel; click it to open the browser. New brushes take it. <code>Cmd</code> <code>T</code> puts it on the selection again without opening the browser.</p>
+<figure><img src="images/texturing-browser.png" alt="The texture browser filtered to brick textures" loading="lazy"><figcaption>The texture browser filtered to brick textures</figcaption></figure>
+<h2 id="texture-browser">Texture browser</h2>
+<table>
+<thead>
+<tr>
+<th>Do</th>
+<th>How</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Filter</td>
+<td>type in the field; words separated by spaces match in order, anywhere in the name</td>
+</tr>
+<tr>
+<td>Bigger / smaller pictures</td>
+<td>+ and − buttons, or <code>Ctrl</code> and the mouse wheel</td>
+</tr>
+<tr>
+<td>Close</td>
+<td><code>Esc</code>, or the ✕ button</td>
+</tr>
+</tbody>
+</table>
+<p>Pictures are drawn to scale: a texture twice the size in the world is twice the size in the browser. Each tile shows the name and pixel size.</p>
+<h2 id="adjust-a-faces-texture">Adjust a face's texture</h2>
+<ol>
+<li>Select the faces to adjust in face mode (<code>Q</code>). With brushes selected instead, every face of them is adjusted.</li>
+<li>Press <code>F</code>. The <strong>Face UV</strong> panel opens in the tool options.</li>
+<li>Adjust, any of these ways:
+   - Drag the texture in the panel's preview. The face stays still and the texture moves under it. Drag the handles to turn and stretch it.
+   - Type <strong>Offset</strong>, <strong>Scale</strong> and <strong>Angle</strong>.
+   - In a view, press <code>G</code>, <code>R</code> or <code>S</code> and move the mouse to offset, rotate or scale. Arrow keys nudge by one grid step.</li>
+<li>Press <code>Enter</code>, click in a view, or click <strong>Apply</strong>. <code>Esc</code> or <strong>Cancel</strong> puts it back.</li>
+</ol>
+<p>The whole session is one undo step.</p>
+<p>In the preview, drag with the right mouse button to pan and use the wheel to zoom. <strong>Fit</strong> re-centres the view. <strong>Reset UV</strong> puts the texture square on the face again: no offset, rotation or scale. <strong>Change texture</strong> opens the browser for the selected faces.</p>
+<figure><img src="images/texturing-face-panel.png" alt="The face panel lining a texture up on a wall" loading="lazy"><figcaption>The face panel lining a texture up on a wall</figcaption></figure>
+<p>The panel also sets the face's <strong>Lightmap scale</strong>: how coarse its baked light is. See <a href="../core/baking.html">Baking</a>.</p>
+<h2 id="uv-lock">UV lock</h2>
+<p>With <strong>UV lock</strong> on (toolbar, or <strong>Edit → Lock Texture to Geometry</strong>), a texture travels with its face when you move, rotate or reshape the brush. With it off, the texture stays put in the world and the face slides across it.</p>
+<p>A face can overrule the editor. In the face panel, set <strong>UV lock</strong> to <strong>Locked</strong> or <strong>Unlocked</strong>; <strong>Follow editor</strong> goes back to the toolbar setting.</p>
+<p>While the face tool is running, faces with their own setting are marked: blue for locked, orange for unlocked.</p>
+<h2 id="copy-one-faces-texture-to-others">Copy one face's texture to others</h2>
+<ol>
+<li>Tap <code>Q</code> for face mode and click the face that looks right.</li>
+<li>Press <code>Cmd</code> <code>Shift</code> <code>C</code> to pick up its texture and UVs.</li>
+<li>Hold <code>Shift</code> and click each face to paint it. Or select faces and press <code>Cmd</code> <code>Shift</code> <code>V</code>.</li>
+<li><strong>Selection → Drop Held Face UVs</strong> when done, so a click is a plain click again.</li>
+</ol>
+<p>Each paint is one undo step. The texture comes along with the UVs; untick <strong>Selection → Painting UVs Carries the Texture</strong> to paint UVs alone.</p>
+<h2 id="faces-that-look-into-the-void">Faces that look into the void</h2>
+<p>A see-through (alpha-masked) texture on a room's wall shows the rock behind it: the outside of the world, or nothing at all. The 3D view draws such walls red. Give the wall an opaque texture, or carve a room behind it so the wall becomes an opening. <code>O</code> hides these marks with the other warnings.</p>
+		</article>
+		<p class="docs-source">Hammerite latest · built from 45a63b69, 2026-10-19</p>
+	</main>
+</div>
+
+<footer class="studio-foot">
+	<a href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>
