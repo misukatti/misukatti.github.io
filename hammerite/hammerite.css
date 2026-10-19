@@ -394,6 +394,16 @@ td:first-child {
 
 .features .feature-wide h3 { margin-top: 0; }
 
+.features .feature-wide.flip { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); }
+
+.features .feature-wide.flip > img { order: 2; }
+
+.features .feature-wide > img { height: auto; }
+
+.features .wide { grid-column: 1 / -1; }
+
 @media (max-width: 760px) {
-	.features .feature-wide { grid-template-columns: 1fr; }
+	.features .feature-wide, .features .feature-wide.flip { grid-template-columns: 1fr; }
+
+	.features .feature-wide.flip > img { order: 0; }
 }

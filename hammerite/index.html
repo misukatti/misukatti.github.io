@@ -108,15 +108,20 @@
 			<p>Reverb comes from each room's size and surfaces. Rain and wind are all around you outdoors, and
 			indoors you hear them through the nearest windows, muffled by the roof.</p>
 		</article>
-		<article class="plain">
-			<h3>Shipping the editor</h3>
-			<p>The editor comes with its own manual under Help. Games made with Hammerite may ship it, so
-			players can make maps too, royalty-free.</p>
-		</article>
-		<article class="plain">
-			<h3>Navigation</h3>
-			<p>Walkable ground and traversal links come straight from the carved rooms, as Godot
-			navigation meshes.</p>
+		<article class="feature-wide flip">
+			<img src="assets/navigation-route.png" alt="The Navigation tool for a guard: the hall floor green, a low crawlspace amber, and a white test route from the crawlspace up a stair to a balcony, with the route's result in the panel" width="1252" height="782" loading="lazy">
+			<div>
+				<h3>Navigation</h3>
+				<p>Walkable ground and traversal links come straight from the carved rooms, as Godot
+				navigation meshes. Steps, windows, drops, jumps and swimming are found from the level, and a
+				ladder or a rope is one entity.</p>
+				<p>Your game defines its agent types: how tall a guard is, how high they climb, how far they
+				drop and whether they swim. Each type gets its own navigation, so a rat can go where a guard
+				cannot.</p>
+				<p>The Navigation tool shows the ground for one agent at a time: green where it walks, amber
+				where it has to crouch and red where it cannot go. Click two points to test a route, and the
+				tool draws the path that agent takes.</p>
+			</div>
 		</article>
 		<article class="feature-wide">
 			<div class="compare" style="--split: 50%">
@@ -135,6 +140,11 @@
 				<p>Each variant has its own bake, its own sky and its own audio graph. When the game switches
 				to another variant, the level changes and its baked lighting and sound come with it.</p>
 			</div>
+		</article>
+		<article class="plain wide">
+			<h3>Shipping the editor</h3>
+			<p>The editor comes with its own manual under Help. Games made with Hammerite may ship it, so
+			players can make maps too, royalty-free.</p>
 		</article>
 	</section>
 
