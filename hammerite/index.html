@@ -206,6 +206,7 @@
 		};
 		slider.addEventListener("input", show);
 		compare.addEventListener("pointerdown", (event) => {
+			event.preventDefault();
 			compare.setPointerCapture(event.pointerId);
 			follow(event);
 		});
