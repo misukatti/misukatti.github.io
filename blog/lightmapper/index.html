@@ -355,9 +355,9 @@
 		<p><strong>Caustics.</strong> The bake does not trace the ripples. It stores how much of each light
 		reaching a texel came through water, in a caustic texture next to the slots and the static light,
 		and which water it came through: how disturbed its surface is, and how deep under it the light went.
-		The shader draws the pattern itself: two copies of a caustic texture, each rippled by a travelling
-		wave, added on top of the lit surface in proportion to the share of the light that is caustic. The
-		pattern doubles in size for every 32 units of depth, and it flows away from the light that made it.
+		The shader draws the pattern itself: a caustic texture rippled by a travelling wave, added on top of
+		the lit surface in proportion to the share of the light that is caustic. The pattern doubles in size
+		for every 32 units of depth, and it flows away from the light that made it.
 		The surface of the water ripples with the same pattern at the same speed, so the surface and the
 		light under it never drift apart.</p>
 		<p>Caustics are measured only along real paths through the water, in the direct pass. They are not
@@ -366,7 +366,9 @@
 		after the direct light treats every texel of a water surface as a small mirror. The light it reflects
 		goes one way, mirrored about the water's normal, into a cone as wide as the water is disturbed, and
 		every texel of the room takes what lands on it. The sum of all of them is the pool's real shape:
-		crisp off still water, a soft wash off running water. Far away stretches of pool are clustered, 128
+		crisp off still water, a soft wash off running water. The bake also keeps how far the light was
+		thrown, and the shader draws the reflected caustics larger the further the wall is from the pool,
+		as it does with depth under the water. Far away stretches of pool are clustered, 128
 		units at a time, and checked with one ray. The reflected light bounces on like direct light, but its
 		caustics do not: a wall lit by a pool's ripples scatters the light, not the pattern.</p>
 
