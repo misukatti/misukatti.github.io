@@ -350,3 +350,114 @@ main {
 }
 
 .post .small-figure { max-width: 260px; margin: 0 auto; display: block; }
+
+.post .atlas-row.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+.post .formula {
+	font-family: "JetBrains Mono", ui-monospace, monospace;
+	font-size: 0.95rem;
+	font-weight: 400;
+	text-align: center;
+	padding: 0.75rem 1rem;
+	background: var(--night-raised);
+	border-radius: 6px;
+	overflow-x: auto;
+}
+
+.post .references li { font-size: 0.95rem; }
+
+.post .compare {
+	position: relative;
+	overflow: hidden;
+	border-radius: 6px;
+	user-select: none;
+	touch-action: pan-y;
+	cursor: ew-resize;
+}
+
+.post .compare img { display: block; width: 100%; height: auto; border-radius: 0; pointer-events: none; }
+
+.post .compare .compare-after {
+	position: absolute;
+	inset: 0;
+	clip-path: inset(0 0 0 var(--split));
+}
+
+.post .compare-label {
+	position: absolute;
+	top: 0.6rem;
+	left: 0.6rem;
+	padding: 0.15rem 0.5rem;
+	font-size: 0.8rem;
+	color: var(--moon);
+	background: rgb(21 20 43 / 0.75);
+	border-radius: 4px;
+	pointer-events: none;
+}
+
+.post .compare-label-after { left: auto; right: 0.6rem; }
+
+.post .compare-handle {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: var(--split);
+	width: 2px;
+	margin-left: -1px;
+	background: var(--moon);
+	pointer-events: none;
+}
+
+.post .compare-handle::after {
+	content: "";
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 2rem;
+	height: 2rem;
+	transform: translate(-50%, -50%);
+	border: 2px solid var(--moon);
+	border-radius: 50%;
+	background: var(--night) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M7 5 2 10l5 5M13 5l5 5-5 5' fill='none' stroke='%23f3e2b3' stroke-width='2'/%3E%3C/svg%3E") center / 1.1rem no-repeat;
+}
+
+.post .compare input {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	margin: 0;
+	opacity: 0;
+	pointer-events: none;
+}
+
+.post .compare:has(input:focus-visible) .compare-handle::after { outline: 2px solid var(--moon); outline-offset: 2px; }
+
+.post .slot-pictures {
+	display: grid;
+	grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+	gap: 0.75rem;
+	align-items: start;
+}
+
+.post .slot-pictures .slot-atlas { image-rendering: pixelated; background: #000; }
+
+.post .slot-buttons { display: flex; gap: 0.4rem; margin-top: 0.75rem; }
+
+.post .slot-buttons button {
+	min-width: 2.75rem;
+	padding: 0.35rem 0.75rem;
+	font: inherit;
+	font-size: 0.9rem;
+	color: var(--moon-dim);
+	background: var(--night-raised);
+	border: 1px solid var(--line);
+	border-radius: 6px;
+	cursor: pointer;
+}
+
+.post .slot-buttons button[aria-pressed="true"] { color: var(--night); background: var(--moon); border-color: var(--moon); }
+
+@media (max-width: 560px) {
+	.post .slot-pictures { grid-template-columns: 1fr; }
+}

@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Hammerite's lightmapper — Misukatti Interactive</title>
 <meta name="robots" content="noindex">
-<meta name="description" content="How Hammerite's GPU radiosity lightmapper works: unwrapping and atlases, direct light and shadows, bounce through light probes, four switchable light slots per surface, colour bleed, and its limits.">
+<meta name="description" content="How Hammerite's GPU radiosity lightmapper works, step by step: BVHs and charts, direct light, progressive radiosity through irradiance probes, four switchable light slots per surface, colour bleed for switchable light, how baked and real-time light meet in the shader, and reproducible bakes.">
 <meta property="og:title" content="Hammerite's lightmapper">
-<meta property="og:image" content="https://misukatti.fi/blog/lightmapper/lit-scene.png">
+<meta property="og:image" content="https://misukatti.fi/blog/lightmapper/cornell-bleed-on.jpg">
 <meta property="og:url" content="https://misukatti.fi/blog/lightmapper/">
 <meta property="og:type" content="article">
 <link rel="canonical" href="https://misukatti.fi/blog/lightmapper/">
@@ -39,15 +39,16 @@
 		<header class="post-head">
 			<p class="post-meta">Draft · Hammerite</p>
 			<h1>Hammerite's lightmapper</h1>
-			<p class="post-lede">Hammerite bakes light into lightmaps on the GPU, with bounced light in the
-			style of the classic brush-based games. A stealth game also needs light that can change while
-			the game runs, so every surface can hold four switchable lights next to its static light. This
-			is an overview of how it works.</p>
+			<p class="post-lede">Hammerite bakes light into lightmaps on the GPU: direct light with soft
+			shadows, and bounced light by progressive radiosity through a set of irradiance probes. A stealth
+			game also needs light that changes while the game runs, so every surface holds four switchable
+			lights next to its static light, and the switchable light bounces in colour too. This post goes
+			through the whole pipeline, step by step.</p>
 		</header>
 
 		<figure>
-			<img src="lit-scene.png" alt="Two rooms joined by a doorway in the Hammerite editor: the left room lit warm by a static lamp, the right room lit by a blue and a red lamp that can be switched at runtime" width="1200" height="660">
-			<figcaption>The scene used for the textures in this post: a static warm lamp on the left, and two switchable lamps, blue and red, on the right.</figcaption>
+			<img src="cornell-bleed-on.jpg" alt="A Cornell box baked in Hammerite: a red wall on the left, a green wall on the right, two white blocks, lit by a switchable lamp under the ceiling, with red and green light bounced onto the blocks and the floor" width="1000" height="1000">
+			<figcaption>A Cornell box, baked in Hammerite at 4 units a texel and lit by one switchable lamp.</figcaption>
 		</figure>
 
 		<h2>Why lightmaps</h2>
@@ -55,120 +56,349 @@
 		guards see them depending on how lit they are. That needs light that looks good, but also light
 		the game can measure, and lamps that can be switched off, flicker or be put out.</p>
 		<p>Baked light does the first part well: soft bounced light and colour coming off the walls, at no
-		cost at runtime. Real-time lights do the second part, but they are expensive and don't bounce. So
+		cost at runtime. Real-time lights do the second part, but they are expensive and do not bounce. So
 		Hammerite bakes everything it can, and makes the baked light switchable.</p>
-		<p>The first version, in 2024, did radiosity on the CPU, and it did not scale. In radiosity every
-		patch of every wall trades light with every other patch it can see, so the work grows a lot faster
-		than the level does. In 2025 I moved the whole bake to the GPU, as compute shaders.</p>
+		<p>The first version, in 2024, did radiosity on the CPU, and it did not scale. Classic radiosity
+		trades light between every pair of patches that can see each other, so the work grows with the
+		square of the level. In 2025 I moved the whole bake to the GPU, as compute shaders, and changed how
+		the bounce is done.</p>
 
-		<h2>Unwrapping and atlases</h2>
-		<p>First every surface that takes light gets its own lightmap coordinates. Hammerite's walls are
-		flat polygons, so each one is simply projected onto its own plane at a fixed density: by default
-		one lightmap texel per 16 world units on walls, and one per 8 on props. A face can have its own
-		scale where it needs more or less detail.</p>
-		<p>The projected faces are then packed into atlases with a little padding around each one, so
-		light does not bleed from one face to its neighbour. Faces that share the same lights are packed
-		together, which keeps the number of atlases down.</p>
+		<h2>The pipeline</h2>
+		<p>A bake has four parts. The level is prepared on the CPU, the light is transferred on the GPU, the
+		results are written into atlases on the CPU, and a shader puts it all together every frame.</p>
+
+		<figure class="pipeline">
+			<svg viewBox="0 0 720 560" role="img" aria-labelledby="lm-pipeline-title">
+				<title id="lm-pipeline-title">The lightmapper's pipeline in four rows: preparing the level on the CPU, transferring light on the GPU, writing the atlases on the CPU, and drawing them in the shader</title>
+				<g font-family="Josefin Sans, sans-serif" text-anchor="middle">
+					<g fill="#c9bd9a" font-size="12" text-anchor="start" letter-spacing="1.5">
+						<text x="4" y="18">1. PREPARE · CPU</text>
+						<text x="4" y="158">2. LIGHT TRANSFER · GPU COMPUTE</text>
+						<text x="4" y="298">3. WRITE · CPU</text>
+						<text x="4" y="438">4. DRAW · SHADER, EVERY FRAME</text>
+					</g>
+					<g fill="#26244a" stroke="#3a3768">
+						<rect x="4" y="30" width="108" height="56" rx="8"/>
+						<rect x="124" y="30" width="108" height="56" rx="8"/>
+						<rect x="244" y="30" width="108" height="56" rx="8"/>
+						<rect x="364" y="30" width="108" height="56" rx="8"/>
+						<rect x="484" y="30" width="108" height="56" rx="8"/>
+						<rect x="604" y="30" width="108" height="56" rx="8"/>
+						<rect x="4" y="170" width="108" height="56" rx="8"/>
+						<rect x="124" y="170" width="108" height="56" rx="8"/>
+						<rect x="244" y="170" width="108" height="56" rx="8"/>
+						<rect x="364" y="170" width="108" height="56" rx="8"/>
+						<rect x="484" y="170" width="108" height="56" rx="8"/>
+						<rect x="604" y="170" width="108" height="56" rx="8"/>
+						<rect x="4" y="310" width="108" height="56" rx="8"/>
+						<rect x="124" y="310" width="108" height="56" rx="8"/>
+						<rect x="244" y="310" width="108" height="56" rx="8"/>
+						<rect x="364" y="310" width="108" height="56" rx="8"/>
+						<rect x="484" y="310" width="108" height="56" rx="8"/>
+						<rect x="604" y="310" width="108" height="56" rx="8"/>
+						<rect x="4" y="450" width="108" height="56" rx="8"/>
+						<rect x="124" y="450" width="108" height="56" rx="8"/>
+						<rect x="244" y="450" width="108" height="56" rx="8"/>
+						<rect x="364" y="450" width="108" height="56" rx="8"/>
+						<rect x="484" y="450" width="108" height="56" rx="8"/>
+						<rect x="604" y="450" width="108" height="56" rx="8"/>
+					</g>
+					<g fill="#f3e2b3" font-size="13">
+						<text x="58" y="63">Probes</text>
+						<text x="178" y="63">Lights</text>
+						<text x="298" y="63">BVHs</text>
+						<text x="418" y="63">UV2</text>
+						<text x="538" y="63">Charts</text>
+						<text x="658" y="63">Texels</text>
+						<text x="58" y="203">Direct</text>
+						<text x="178" y="203">Water</text>
+						<text x="298" y="203">Gather</text>
+						<text x="418" y="203">Bounce ×N</text>
+						<text x="538" y="203">Distribute</text>
+						<text x="658" y="203">Settle slots</text>
+						<text x="58" y="343">Group</text>
+						<text x="178" y="343">Pack</text>
+						<text x="298" y="343">Write</text>
+						<text x="418" y="343">Chroma</text>
+						<text x="538" y="343">Edge filter</text>
+						<text x="658" y="343">Bind</text>
+						<text x="58" y="483">Slots</text>
+						<text x="178" y="483">+ Static</text>
+						<text x="298" y="483">Light curve</text>
+						<text x="418" y="483">× Albedo</text>
+						<text x="538" y="483">EMISSION</text>
+						<text x="658" y="483">light()</text>
+					</g>
+					<g fill="#c9bd9a" font-size="10.5">
+						<text x="58" y="104">walls and air</text>
+						<text x="178" y="104">light groups</text>
+						<text x="298" y="104">brushes, props</text>
+						<text x="418" y="104">planar projection</text>
+						<text x="538" y="104">faces that join</text>
+						<text x="658" y="104">one patch each</text>
+						<text x="58" y="244">4 shadow rays</text>
+						<text x="178" y="244">mirrors, caustics</text>
+						<text x="298" y="244">patches → probes</text>
+						<text x="418" y="244">probes → probes</text>
+						<text x="538" y="244">probes → texels</text>
+						<text x="658" y="244">brightest four</text>
+						<text x="58" y="384">≤ 4 lights a set</text>
+						<text x="178" y="384">512² atlases</text>
+						<text x="298" y="384">RGBA slots, RGB</text>
+						<text x="418" y="384">tint and shares</text>
+						<text x="538" y="384">5×5 bilateral</text>
+						<text x="658" y="384">textures to faces</text>
+						<text x="58" y="524">× colour, modulation</text>
+						<text x="178" y="524">and ambient</text>
+						<text x="298" y="524">the game's look</text>
+						<text x="418" y="524">× exposure</text>
+						<text x="538" y="524">baked light out</text>
+						<text x="658" y="524">real-time lights</text>
+					</g>
+					<g stroke="#c9bd9a" stroke-width="1.5" fill="none">
+						<path d="M112 58h12M232 58h12M352 58h12M472 58h12M592 58h12"/>
+						<path d="M112 198h12M232 198h12M352 198h12M472 198h12M592 198h12"/>
+						<path d="M112 338h12M232 338h12M352 338h12M472 338h12M592 338h12"/>
+						<path d="M112 478h12M232 478h12M352 478h12M472 478h12M592 478h12"/>
+						<path d="M658 112v14H58v32"/>
+						<path d="M658 252v14H58v32"/>
+						<path d="M658 392v14H58v32"/>
+					</g>
+					<g fill="#c9bd9a">
+						<path d="M54 158l4 8 4-8z"/>
+						<path d="M54 298l4 8 4-8z"/>
+						<path d="M54 438l4 8 4-8z"/>
+					</g>
+				</g>
+			</svg>
+		</figure>
+
+		<p>The bake runs inside the editor, on a fiber that gives the editor a frame every 100 ms, and the
+		GPU work is cut into slices of about a tenth of a second so that the operating system's GPU
+		watchdog never kills it. A cancelled bake puts the old lighting back.</p>
+
+		<h2>Preparing the level</h2>
+		<p><strong>Probes.</strong> The bounce goes through light probes, so they are placed first.
+		<em>Surface probes</em> sit on a 64-unit grid over every wall and every face of detail brushwork, one
+		unit out into the air, and each gets the area of surface around it. <em>Volume probes</em> sit on a
+		64-unit lattice through the air, kept away from the walls. Both are irradiance probes: they measure
+		the light that arrives at a point.</p>
+		<p><strong>Lights.</strong> Every light is static or switchable, decided by its entity type. Switchable
+		lights are put into <em>light groups</em>: lights with the same group name share one slot and are
+		switched together, and a light with no group gets one of its own.</p>
+		<p><strong>BVHs.</strong> Shadows need a fast way to ask what a ray hits. Hammerite's world is made
+		of convex brushes, so the occluders are the convex pieces of rock that the
+		<a href="../carved-not-built/index.html">subtractive compiler</a> produces, plus detail brushes. They go
+		into a bounding volume hierarchy, split at the median of the longest axis, and a ray is clipped
+		against each convex brush's planes, which is cheaper than testing its triangles. Props are triangle
+		meshes, so they get a second BVH, and their triangles are tested with Möller–Trumbore.</p>
+		<p><strong>UV2 and charts.</strong> Every surface that takes light gets its own lightmap coordinates.
+		Walls are flat polygons, so each one is projected onto the axis plane it faces most, at a fixed
+		density: by default one texel per 16 world units on walls and one per 8 on props, and a face can
+		have its own scale. Detail faces that go on into each other, in one plane or smooth across a bend
+		of less than 60 degrees, are laid out together as one <em>chart</em>, so their light runs across the
+		seam.</p>
 
 		<figure>
 			<img src="baking-lightmap-scale.png" alt="A room in the editor with every surface showing a black and white checker pattern, one square per lightmap texel" width="784" height="709" loading="lazy">
-			<figcaption>The lightmap density view: one checker square is one lightmap texel.</figcaption>
+			<figcaption>The lightmap density view: one checker square is one texel.</figcaption>
 		</figure>
 
+		<p><strong>Texels.</strong> Each texel becomes one <em>patch</em>, the unit radiosity works with. It
+		gets a position, a normal and a reflectance, which is the albedo of the texture under it,
+		converted from sRGB to linear. A ring of padding texels goes around every face. How much light a
+		padding texel keeps depends on what meets the face at that edge: all of it past an open edge, none
+		of it behind a wall that stands against it. This keeps a wall's light from bleeding under the floor
+		next to it.</p>
+
 		<h2>Direct light and shadows</h2>
-		<p>Each texel becomes a patch, with a reflectance taken from its texture. The direct pass lights
-		every patch from every lamp that can see it. Shadows are rays cast on the GPU through a bounding
-		volume hierarchy of the level's convex brushes, plus a separate one of triangles for props.</p>
-		<p>Each texel casts up to four shadow rays per light, spread over its area, so shadow edges come
-		out soft instead of stair-stepped. A ray can also pass through up to three surfaces that let light
-		through, such as masked textures, tinted glass or water.</p>
-		<p>Daylight works the same way. Faces textured as sky are openings, not blockers. A patch is in
-		sunlight when a ray toward the sun reaches a sky face before it hits rock, and every sky face also
-		gives off the sky's own light into the rooms that can see it.</p>
+		<p>The first GPU pass lights every patch from every light that can see it. Each texel casts four
+		shadow rays per light, at fixed points of a rotated grid across the texel, and averages them. A
+		texel that a shadow edge crosses comes out partly lit, which is where the soft edges come from.
+		The grid is the same for every texel and every bake, so there is no noise.</p>
+		<p>Point lights fall off with the inverse square of the distance, measured in metres, and a light
+		can be given a radius past which it fades out. Spot lights use Godot's own cone curve, so a baked
+		spot matches a real-time one. A shadow ray can go through up to three surfaces that let light
+		through, such as masked textures, tinted glass or water, and it takes their colour on the way.</p>
+		<p>Daylight works differently. Faces textured as sky are openings in the rock, not blockers. A
+		texel is in sunlight when a ray towards the sun reaches a sky face before it hits rock, and every
+		sky face also gives off the sky's own light.</p>
 
 		<figure>
 			<img src="lighting-sun.png" alt="A room lit by sunlight through a window, with a bright patch of sun on the floor and soft light on the walls" width="784" height="709" loading="lazy">
 			<figcaption>Sunlight through a window, and the sky's light bouncing around the room.</figcaption>
 		</figure>
 
-		<h2>Bounce</h2>
-		<p>Bounced light is what makes the result look like radiosity, and it is also the expensive part.
-		Instead of patches trading light with each other directly, Hammerite relays it through light
-		probes, points placed just off every wall and on a lattice through the air:</p>
+		<p>Static light is kept in full RGB. Switchable light is kept as a single brightness per slot, the
+		BT.709 luma of the light, because its colour is applied when the level is drawn. That is what lets a
+		lamp change colour at runtime.</p>
+
+		<h2>Bounce: radiosity through irradiance probes</h2>
+		<p>In classic radiosity every patch sends light to every other patch it can see, weighted by the
+		<em>form factor</em>, the share of one surface that another one sees:</p>
+		<p class="formula">F = cos θ<sub>s</sub> · cos θ<sub>r</sub> · A<sub>s</sub> / (π d²)</p>
+		<p>With 4 million patches that is far too many pairs. Hammerite relays the bounce through the
+		probes instead, in three steps:</p>
 		<ol>
-			<li><strong>Gather.</strong> Each probe collects the light reflected by the patches it can see.
-			Far away patches are clustered together, so a probe does not cast a ray at each one.</li>
-			<li><strong>Bounce.</strong> The probes pass light between each other, once per bounce.</li>
-			<li><strong>Distribute.</strong> Every texel reads the light from the eight nearest probes it can
-			see.</li>
+			<li><strong>Gather.</strong> Each probe collects the light reflected by the patches it can see,
+			within 768 units, using the same form factor and one visibility ray per patch. Far away patches
+			are clustered: within 64 by 64 units of one wall they are read as one sender from their
+			area-weighted centre, with one ray instead of sixteen. Before the clustering, the gather on my
+			reference level traced four billion rays.</li>
+			<li><strong>Bounce.</strong> The surface probes pass light between each other, once per bounce.
+			Each pass sends only what arrived in the pass before, the <em>unshot</em> energy, which is the idea
+			behind progressive refinement radiosity. The sender multiplies by its wall's reflectance, so a red
+			wall throws back red light and a dark wall throws back little.</li>
+			<li><strong>Distribute.</strong> Every texel interpolates the eight nearest surface probes that it
+			can see, weighted by distance and by how much their walls face the same way. The texel's own albedo
+			is not applied here: the shader does that.</li>
 		</ol>
-		<p>Every transfer uses the same form factor, the classic radiosity term for how much of one
-		surface another one sees. I checked the result against the theory: a room with dark walls bounces
-		about 12% of its direct light back into itself, close to the 11% that the walls' reflectance
-		predicts.</p>
-		<p>The same probes are saved with the map. Anything that moves, like a guard or a carried crate,
-		is lit from the nearest probes, so it gets the same light as the walls around it. The game can
-		also ask how lit a point is, which is what the stealth gameplay reads.</p>
+		<p>The volume probes gather too, but they never send. They are there for things that move.</p>
+		<p>I checked the result against the theory: a room with dark walls bounces about 12% of its direct
+		light back into itself, close to the 11% that the walls' reflectance predicts.</p>
 
 		<h2>Four light slots</h2>
-		<p>A lightmap is normally a single image. In Hammerite each atlas has two:</p>
-		<ul>
-			<li><strong>The static texture</strong> holds the light that never changes: static lamps,
-			daylight, glowing textures and all of their bounce.</li>
-			<li><strong>The slot texture</strong> holds up to four switchable lights, one in each of its
-			red, green, blue and alpha channels, each at full strength.</li>
-		</ul>
+		<p>Each atlas has a <strong>static texture</strong> in RGB, for the light that never changes:
+		static lamps, daylight, glowing textures and all of their bounce. Next to it is a <strong>slot
+		texture</strong> in RGBA, which holds up to four switchable lights, one in each channel, each at full
+		strength and without colour. Both are 32-bit float.</p>
+		<p>Below is the slot atlas of a room with four switchable lamps in its corners. Pick a channel to
+		see one lamp's light on its own, as it is stored. <em>All</em> shows the four together, each in its
+		lamp's colour, the way the shader adds them up.</p>
 
-		<figure class="atlas-row">
-			<div>
-				<img src="atlas-static.png" alt="The static lightmap atlas: rectangles of baked light, warm where the static lamp reaches" width="384" height="444" loading="lazy">
-				<p>Static</p>
+		<figure class="slot-viewer">
+			<div class="slot-pictures">
+				<img src="slot-room.jpg" alt="A square room with a pillar in the middle, lit by four switchable lamps in its corners: red, green, blue and yellow" width="1000" height="774" loading="lazy">
+				<img class="slot-atlas" src="slot-all.png" alt="The room's slot atlas with all four channels, each in its lamp's colour" width="369" height="444" loading="lazy">
 			</div>
-			<div>
-				<img src="atlas-slot-a.png" alt="The red channel of the slot atlas, shown in blue: only the faces the blue lamp reaches" width="384" height="444" loading="lazy">
-				<p>Slot: blue lamp</p>
+			<div class="slot-buttons" role="group" aria-label="Slot channel">
+				<button type="button" data-slot="all" aria-pressed="true">All</button>
+				<button type="button" data-slot="r" aria-pressed="false">R</button>
+				<button type="button" data-slot="g" aria-pressed="false">G</button>
+				<button type="button" data-slot="b" aria-pressed="false">B</button>
+				<button type="button" data-slot="a" aria-pressed="false">A</button>
 			</div>
-			<div>
-				<img src="atlas-slot-b.png" alt="The green channel of the slot atlas, shown in red: only the faces the red lamp reaches" width="384" height="444" loading="lazy">
-				<p>Slot: red lamp</p>
-			</div>
-			<figcaption>The atlas from the scene at the top, scaled up so the texels show. Each rectangle is one face. The slots hold light without colour. The colours here are the lamps' own.</figcaption>
+			<figcaption>The room and its slot atlas, scaled up so the texels show. Each rectangle is one face.</figcaption>
 		</figure>
 
-		<p>When the level is drawn, the shader adds the static light to each slot's light times that
-		light's current strength and colour. Turning a lamp off, dimming it or making it flicker only
-		changes one number per light, and nothing is baked again. Lamps can share a slot by being in the
-		same light group, so a chandelier's candles flicker as one and a lightning flash lights every
-		window at once.</p>
-		<p>Four is the limit per surface. If more than four groups reach a surface, the bake keeps four
-		and warns about it. Lights that are not in view do no work at all, and visible ones update their
-		strength 30 times a second by default, which keeps a level full of flickering lamps cheap.</p>
+		<p>When the level is drawn, each slot is multiplied by its light's colour and current strength.
+		Turning a lamp off, dimming it or making it flicker only changes one number, and nothing is baked
+		again. A chandelier's candles share a light group, so they flicker as one, and a lightning flash
+		lights every window at once.</p>
+		<p>Four is the limit per surface, the same as Quake's four light styles per face. Faces are grouped
+		into atlases by the set of lights that reach them, with at most four in a set. When more than four
+		light groups reach one face, the bake keeps the four that give it the most light and warns about
+		the rest.</p>
 
-		<h2>Colour bleed</h2>
-		<p>Bounced light takes on the colour of what it bounced from, like a red carpet tinting a white
-		ceiling. Storing full colour for every slot would cost a lot of memory, so Hammerite stores colour bleed separately: one tint texture, and a weight per slot for how much of the
-		tint each light gets.</p>
+		<h2>Colour bleed for switchable light</h2>
+		<p>Static bounce is baked in RGB, so its colour bleed is simply there. A slot has no colour, so the
+		colour of what bounced has to be kept beside it. Storing an RGB colour for every slot of every
+		texel would multiply the size of the atlases, so Hammerite stores it in two small textures instead.</p>
+		<p>While the bounce runs, every texel keeps a <em>chroma</em> vector for each slot: the light of that
+		slot that arrived coloured, in its colour. It is carried through every bounce at the same energy as
+		the bounce itself, so its luma is exactly the bounced part of the slot. When the atlas is written,
+		that becomes:</p>
+		<ul>
+			<li><strong>A tint</strong> T: the sum of a texel's chroma vectors, scaled so its brightest channel
+			is 1, in RGB8.</li>
+			<li><strong>A share</strong> K<sub>s</sub> per slot: the chroma's luma over the slot's light, so the
+			part of the slot's light that arrived in the tint's colour, in RGBA8.</li>
+		</ul>
+		<p>That is 7 bytes a texel for all four slots. The shader colours each slot's light like this:</p>
+		<p class="formula">light<sub>s</sub> = colour<sub>s</sub> · L<sub>s</sub> · mix(1, T / luma(T), K<sub>s</sub>)</p>
+		<p>The lamp's direct light keeps the lamp's colour, and only the bounced share takes the tint, at
+		the same brightness. Light that came through tinted glass or water is counted as coloured too. It is
+		exact when every slot of a texel bounced in the same colour, which is nearly always the case, since
+		they bounced off the same walls.</p>
+		<p>Making this post, I found three things that kept the colour from showing. The shader blended the
+		whole surface, lamp light and all, towards the bleed colour at a fixed strength, so the coloured walls
+		turned grey at any higher setting. The bounce passes sent the full gathered chroma again on every
+		bounce, without the wall's colour. And detail brushwork had no probes of its own, so the side of a
+		block facing a red wall was lit from the probes on the walls around it, which face other ways and
+		never see the red wall's light. All three are fixed now. Here is the same box with the colour bleed
+		of its switchable lamp off and on:</p>
 
 		<figure>
-			<img src="atlas-ct-tint.png" alt="The colour bleed tint atlas: the same rectangles in a flat warm tone" width="384" height="444" loading="lazy" class="small-figure">
-			<figcaption>The colour bleed tint for the same atlas. These walls are all plaster, so the tint is even.</figcaption>
+			<div class="compare" style="--split: 50%">
+				<img src="cornell-bleed-off.jpg" alt="The Cornell box with the colour bleed of the switchable lamp turned off: the white blocks and floor are grey" width="1000" height="1000" loading="lazy">
+				<img class="compare-after" src="cornell-bleed-on.jpg" alt="The same Cornell box with colour bleed on: red light on the left sides of the blocks and the floor, green on the right" width="1000" height="1000" loading="lazy">
+				<span class="compare-label">Off</span>
+				<span class="compare-label compare-label-after">On</span>
+				<span class="compare-handle" aria-hidden="true"></span>
+				<input type="range" min="0" max="100" value="50" aria-label="Drag to compare colour bleed off and on">
+			</div>
+			<figcaption>Drag to compare. The light is the same, only how much of the bounce takes its colour changes.</figcaption>
 		</figure>
 
-		<p>How strong the colour bleed looks is set when the level is drawn, not when it is baked, so it
-		can be tuned without baking again.</p>
+		<figure class="atlas-row two">
+			<div>
+				<img src="ct-tint.png" alt="The Cornell box's tint atlas: faces near the red wall reddish, faces near the green wall greenish" width="966" height="642" loading="lazy">
+				<p>Tint</p>
+			</div>
+			<div>
+				<img src="ct-share.png" alt="The Cornell box's share atlas in greyscale: dark where the lamp shines directly, bright in the corners and under the blocks" width="966" height="642" loading="lazy">
+				<p>Share of the slot that bounced</p>
+			</div>
+			<figcaption>The two chroma textures of the Cornell box. The share is high where the lamp cannot reach and the light is all bounce.</figcaption>
+		</figure>
+
+		<h2>Writing the atlases</h2>
+		<p>After the transfer, each face's slots are settled: each texel claims slots for the lights that
+		reach it, and the face keeps the four groups with the most light. Faces are then grouped by their
+		light sets, so faces that share the same lights end up in the same atlases, and packed into 512 by 512
+		atlases with two texels of padding. Props that share their lights also share atlases.</p>
+		<p>Every patch is written into its texels, and the edges are smoothed with a 5 by 5 bilateral
+		filter. It is edge-preserving, so it softens the stair steps of a shadow without blurring light
+		across a sharp change. A chart is filtered as a whole, so the filter runs over the seams between its
+		faces too.</p>
+		<p>Last, the probes are saved with the map, compressed with Reinhard's x / (1 + x), for anything that
+		moves.</p>
+
+		<h2>How baked and real-time light meet</h2>
+		<p>Hammerite's surface shader has Godot's ambient light and specular turned off. It works out the
+		baked light itself and writes it to <code>EMISSION</code>:</p>
+		<ol>
+			<li>The slots, each times its light's colour, its strength and its colour bleed, plus the static
+			light and a small ambient floor.</li>
+			<li>The light curve, which is how a game shapes the look of its light: a lookup table keyed by the
+			light's brightness, and a lift for the shadows.</li>
+			<li>Times the surface's albedo, and times the exposure.</li>
+		</ol>
+		<p>The shader also sets <code>ALBEDO</code>, so Godot's own lights still light the surface through
+		its <code>light()</code> function. A torch the player carries is a real-time light, and it is added
+		on top of the baked light, through the same curve: the shader adds the difference between the
+		curve of baked plus real-time light and the curve of baked light alone. A torch lifts a dark room
+		the way more baked light would, and does not wash out a bright one.</p>
+		<p>A switchable light sends its strength to the surfaces it lights at most 30 times a second, each
+		light at its own phase, and only while its room can be seen. A level full of flickering lamps costs
+		little.</p>
+		<p>Things that move, like guards or a carried crate, have no lightmap. They are lit from up to eight
+		probes around them, the same idea as the irradiance volume and Half-Life 2's ambient cube, so a guard
+		gets the same light as the walls around them. The game can also ask the probes how lit a point is,
+		which is what the stealth gameplay reads.</p>
 
 		<h2>Baking while you work</h2>
-		<p>A full bake runs inside the editor, which runs inside the game, so you can look at the result
-		from where you stand. The editor stays responsive during the bake and can cancel it, and the old
-		light is put back if you do.</p>
+		<p>A full bake runs inside the editor, which runs inside the game, so you can look at the result from
+		where you stand. The editor stays responsive during the bake.</p>
 		<p>After an edit, walls that were moved or carved have no light until the next bake. A quick bake
-		lights just those walls with direct light, and leaves everything else as it was. On a large
-		imported level with 736 lamps a quick bake takes about a second.</p>
+		lights just those walls with direct light, and leaves everything else as it was. On a large imported
+		level with 736 lamps a quick bake takes about a second.</p>
 
 		<figure>
 			<img src="lighting-bake.png" alt="The Hammerite editor with a lightmap tool panel showing the bake settings beside two lit rooms" width="1092" height="709" loading="lazy">
 			<figcaption>The lightmap tool in the editor.</figcaption>
 		</figure>
+
+		<h2>Reproducible bakes</h2>
+		<p>Two bakes of the same level give the same result, bit for bit. It took two fixes. Slots used to
+		be handed out by atomic compare-and-swap in whatever order the GPU threads arrived, so a face lit by
+		more than four lights could keep a different four from one bake to the next. Now each texel claims
+		its slots privately and the face settles them afterwards, brightest first and lowest group on a tie.
+		And the gather and the bounces are cut into parts sized to the GPU's speed, which changed where
+		floating-point sums were rounded. Each probe now keeps one running sum across the parts. On a large
+		imported level, two bakes used to differ on all but a few hundred of its 128,767 surfaces.</p>
+		<p>The native code is also built without fused multiply-add, so it rounds the same way on every
+		machine.</p>
 
 		<h2>Numbers</h2>
 		<p>My reference level is large: 7,240 brushes, about 130,000 walls, 4.4 million patches, 54,000
@@ -184,12 +414,43 @@
 			<li>At most four switchable light groups can reach one surface.</li>
 			<li>Glowing textures are static. A light that has to move is a real-time light, not a baked
 			one.</li>
-			<li>Two bakes of the same level are not bit for bit identical yet. Which of two lights that
-			add nothing to a face gets its last slot can change between runs. The difference is tiny, but I want the bake to be fully reproducible, and I plan to fix it.</li>
+			<li>The colour bleed of switchable light has one tint per texel, shared by its four slots.</li>
 		</ul>
 
-		<p>The <a href="../../hammerite/docs/index.html">Hammerite docs</a> have more about lighting and baking, including
-		baking from a script in a build pipeline.</p>
+		<h2>Prior art</h2>
+		<p>None of this is new. These are the papers and games it comes from:</p>
+		<ul class="references">
+			<li>Cindy M. Goral, Kenneth E. Torrance, Donald P. Greenberg and Bennett Battaile.
+			<a href="https://history.siggraph.org/?p=107463">Modeling the interaction of light between diffuse
+			surfaces</a>. SIGGRAPH 1984. Radiosity in computer graphics, and the first Cornell box.</li>
+			<li>Michael F. Cohen, Shenchang Eric Chen, John R. Wallace and Donald P. Greenberg.
+			<a href="https://doi.org/10.1145/54852.378487">A progressive refinement approach to fast radiosity
+			image generation</a>. SIGGRAPH 1988. Shooting unshot energy, one pass at a time.</li>
+			<li>Pat Hanrahan, David Salzman and Larry Aupperle. <a href="https://graphics.stanford.edu/papers/rad/">A
+			rapid hierarchical radiosity algorithm</a>. SIGGRAPH 1991. Treating far away surfaces as one, which
+			the gather's clusters do in a much simpler way.</li>
+			<li>Michael F. Cohen and John R. Wallace. Radiosity and Realistic Image Synthesis. Academic Press,
+			1993.</li>
+			<li>Ian Ashdown. <a href="https://www.researchgate.net/publication/220690300_Radiosity_-_a_programmer's_perspective">Radiosity:
+			A Programmer's Perspective</a>. Wiley, 1994.</li>
+			<li>Hugo Elias. <a href="https://web.archive.org/web/2004/http://freespace.virgin.net/hugo.elias/radiosity/radiosity.htm">Radiosity</a>.
+			A short, practical introduction to radiosity for lightmaps, much read on the early web.</li>
+			<li>Gene Greger, Peter Shirley, Philip M. Hubbard and Donald P. Greenberg.
+			<a href="https://doi.org/10.1109/38.656788">The irradiance volume</a>. IEEE Computer Graphics and
+			Applications, 1998. Light probes in the air for things that move.</li>
+			<li>id Software. <a href="https://github.com/id-Software/Quake">Quake</a>, 1996. Lightmaps with up to
+			four light styles per face, switched and animated at runtime.</li>
+			<li>Gary McTaggart. <a href="https://drivers.amd.com/developer/gdc/D3DTutorial10_Half-Life2_Shading.pdf">Half-Life 2
+			/ Valve Source shading</a>. GDC 2004. The ambient cube for lighting models from the baked world.</li>
+			<li>Tomas Möller and Ben Trumbore. Fast, minimum storage ray/triangle intersection. Journal of
+			Graphics Tools, 1997.</li>
+			<li>Carlo Tomasi and Roberto Manduchi. Bilateral filtering for gray and color images. ICCV 1998.</li>
+			<li>Erik Reinhard, Michael Stark, Peter Shirley and James Ferwerda. Photographic tone reproduction
+			for digital images. SIGGRAPH 2002.</li>
+		</ul>
+
+		<p>The <a href="../../hammerite/docs/index.html">Hammerite docs</a> have more about lighting and baking,
+		including baking from a script in a build pipeline.</p>
 
 		<p class="post-sign">- Elli</p>
 	</article>
@@ -200,5 +461,40 @@
 	<p>© 2026 Misukatti Interactive</p>
 </footer>
 
+<script>
+	for (const compare of document.querySelectorAll(".compare")) {
+		const slider = compare.querySelector("input");
+		const show = () => compare.style.setProperty("--split", slider.value + "%");
+		const follow = (event) => {
+			const box = compare.getBoundingClientRect();
+			slider.value = Math.min(100, Math.max(0, (event.clientX - box.left) / box.width * 100));
+			show();
+		};
+		slider.addEventListener("input", show);
+		compare.addEventListener("pointerdown", (event) => {
+			event.preventDefault();
+			compare.setPointerCapture(event.pointerId);
+			follow(event);
+		});
+		compare.addEventListener("pointermove", (event) => {
+			if (compare.hasPointerCapture(event.pointerId)) {
+				follow(event);
+			}
+		});
+	}
+	for (const viewer of document.querySelectorAll(".slot-viewer")) {
+		const atlas = viewer.querySelector(".slot-atlas");
+		const labels = { all: "all four channels, each in its lamp's colour", r: "the red channel: the red lamp", g: "the green channel: the green lamp", b: "the blue channel: the blue lamp", a: "the alpha channel: the yellow lamp" };
+		for (const button of viewer.querySelectorAll("button")) {
+			button.addEventListener("click", () => {
+				for (const other of viewer.querySelectorAll("button")) {
+					other.setAttribute("aria-pressed", String(other === button));
+				}
+				atlas.src = `slot-${button.dataset.slot}.png`;
+				atlas.alt = `The room's slot atlas, ${labels[button.dataset.slot]}`;
+			});
+		}
+	}
+</script>
 </body>
 </html>
