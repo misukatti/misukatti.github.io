@@ -310,13 +310,7 @@
 		the same brightness. Light that came through tinted glass or water is counted as coloured too. It is
 		exact when every slot of a texel bounced in the same colour, which is nearly always the case, since
 		they bounced off the same walls.</p>
-		<p>Making this post, I found three things that kept the colour from showing. The shader blended the
-		whole surface, lamp light and all, towards the bleed colour at a fixed strength, so the coloured walls
-		turned grey at any higher setting. The bounce passes sent the full gathered chroma again on every
-		bounce, without the wall's colour. And detail brushwork had no probes of its own, so the side of a
-		block facing a red wall was lit from the probes on the walls around it, which face other ways and
-		never see the red wall's light. All three are fixed now. Here is the same box with the colour bleed
-		of its switchable lamp off and on:</p>
+		<p>Here is the same box with the colour bleed of its switchable lamp off and on:</p>
 
 		<figure>
 			<div class="compare" style="--split: 50%">
