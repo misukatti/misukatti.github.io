@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hammerite's sound propagation — Misukatti Interactive</title>
+<meta name="robots" content="noindex">
+<meta name="description" content="How Hammerite moves sound through a level: a graph of the doorways and windows built from the carved rooms, routes found through it, doors that muffle, reverb from each room, rain and wind heard through the way out, how it plays through Godot's audio buses, and how guards hear the same sounds.">
+<meta property="og:title" content="Hammerite's sound propagation">
+<meta property="og:image" content="https://misukatti.fi/blog/sound/audio-graph.png">
+<meta property="og:url" content="https://misukatti.fi/blog/sound/">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://misukatti.fi/blog/sound/">
+<meta name="theme-color" content="#1d1b38">
+<link rel="icon" href="../../favicon.ico" sizes="any">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Josefin+Sans:wght@300;400;600&family=JetBrains+Mono:wght@400&display=swap">
+<link rel="stylesheet" href="../../assets/site.css">
+</head>
+<body>
+
+<header class="bar">
+	<a class="bar-logo" href="../../index.html"><img src="../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="../../index.html#games">Games</a>
+		<a href="../../index.html#tools">Tools</a>
+		<a href="../index.html">Blog</a>
+		<a href="../../index.html#contact">Contact</a>
+	</nav>
+</header>
+
+<main>
+	<article class="post">
+		<p class="draft-note">Draft. Not listed on the blog and not indexed.</p>
+
+		<header class="post-head">
+			<p class="post-meta">Draft · Hammerite</p>
+			<h1>Hammerite's sound propagation</h1>
+			<p class="post-lede">In a stealth game you listen as much as you look. A guard's footsteps
+			should come from the doorway they are behind, not through the wall, and a door you close should
+			make the room quieter. Hammerite moves sound through a level the way the rooms allow, and it
+			goes a step further than the classic stealth games with rain and wind, which come from the
+			outdoors rather than from a point.</p>
+		</header>
+
+		<figure>
+			<img src="audio-graph.png" alt="The Audio Portals tool over five rooms and an open courtyard: a marker in each room, the doors and windows outlined, and green lines for the routes sound takes between the openings" width="760" height="475">
+			<figcaption>The audio graph of a small level: the doors and windows, and the green lines sound travels along between them.</figcaption>
+		</figure>
+
+		<h2>The Thief formula</h2>
+		<p>Thief: The Dark Project did this in 1998. Its sounds were propagated through the level's
+		geometry, so a guard heard a sound from the direction it really came from, and a sound carried
+		a meaning the AI could react to. Sound went through doorways and not through walls, and a closed
+		door made it quieter. To make that work, the level designer placed the rooms sound travelled
+		through by hand, in the editor, around the level's geometry.</p>
+		<p>Hammerite keeps the formula and drops the hand work. The level is
+		<a href="../carved-not-built/index.html">carved out of solid</a>, so the compiler already knows
+		every room and every opening between them. The audio graph is built from that, with one button.
+		On top of the formula, Hammerite adds reverb from each room's size and surfaces, and weather
+		that is heard through the way out.</p>
+
+		<h2>The audio graph</h2>
+		<p>The graph is built from the compiled world in three steps:</p>
+		<ol class="stages">
+			<li><strong>Zones.</strong> Rooms that flow into each other through an overlap are one space,
+			so they become one zone. Rooms that meet through a doorway or a window stay separate zones.</li>
+			<li><strong>Portals.</strong> Every opening between two zones becomes a portal: its position,
+			its area, and its name if it has one.</li>
+			<li><strong>Edges.</strong> The nodes of the graph are the portals, not the rooms. Two
+			portals that open into the same zone are joined by an edge, since sound that comes in through
+			one can go out through the other. If the two openings can see each other the edge is a straight
+			line. If not, the sound has to go round a corner, and the edge goes through the middle of the
+			room.</li>
+		</ol>
+		<p>The graph is saved with the map, one for each <a href="../../hammerite/index.html#features">level
+		variant</a>. It also carries a fingerprint of the world it was built from, so the editor says when
+		an edit has made it out of date.</p>
+		<p>On my reference level, an imported Thief mission with 1,208 zones and about 1,800 portals, the
+		graph builds in 1.7 seconds. The first version took 204 seconds to group the zones and hours for the
+		rest.</p>
+
+		<h2>Finding the way a sound takes</h2>
+		<p>Every frame, each playing sound is placed for the listener:</p>
+		<ul>
+			<li><strong>Same room:</strong> the sound plays where it is, quieter with distance.</li>
+			<li><strong>In sight:</strong> if a straight line from the sound to the listener stays in the
+			air, it plays where it is too, and any door that line passes through counts against it.</li>
+			<li><strong>Anywhere else:</strong> the sound starts at the nearest opening, and Dijkstra's
+			algorithm searches the graph for an opening that the listener can see. Edges with line of sight
+			cost 1 and edges round a corner cost 1000, so the search prefers a route the sound could travel
+			in straight hops. The sound then plays at the last opening on the route: a guard in the next
+			room is heard from the doorway, the way you would hear them in life.</li>
+		</ul>
+
+		<figure class="pipeline">
+			<svg viewBox="0 0 720 340" role="img" aria-labelledby="route-title">
+				<title id="route-title">A guard in one room, a hall between, and the listener in a third room round a corner. The sound's route goes from the guard's doorway through the hall to the doorway the listener can see, and the sound plays at that doorway</title>
+				<g font-family="Josefin Sans, sans-serif" font-size="13">
+					<g fill="#26244a" stroke="#3a3768" stroke-width="2">
+						<rect x="20" y="20" width="220" height="150"/>
+						<rect x="240" y="60" width="260" height="110"/>
+						<rect x="420" y="170" width="280" height="150"/>
+					</g>
+					<g fill="#c9bd9a" font-size="12" letter-spacing="1.2">
+						<text x="34" y="42">ROOM</text>
+						<text x="254" y="82">HALL</text>
+						<text x="434" y="302">ROOM</text>
+					</g>
+					<g stroke="#1d1b38" stroke-width="5">
+						<path d="M240 100v40"/>
+						<path d="M440 170h40"/>
+					</g>
+					<g fill="none" stroke="#c9bd9a" stroke-width="1.5" stroke-dasharray="5 5">
+						<path d="M110 110 L240 120 L460 170"/>
+					</g>
+					<path d="M110 110 L600 250" stroke="#d9483c" stroke-width="1.5" stroke-dasharray="3 6" fill="none" opacity="0.8"/>
+					<g fill="#f3e2b3">
+						<circle cx="110" cy="110" r="7"/>
+						<circle cx="600" cy="250" r="7"/>
+					</g>
+					<g fill="#f3e2b3" stroke="#1d1b38" stroke-width="2">
+						<circle cx="240" cy="120" r="6"/>
+						<circle cx="460" cy="170" r="9"/>
+					</g>
+					<g fill="#f3e2b3">
+						<text x="74" y="138">guard</text>
+						<text x="566" y="278">listener</text>
+						<text x="250" y="116" font-size="12">doorway</text>
+						<text x="474" y="160" font-size="12">heard from here</text>
+					</g>
+					<text x="300" y="214" fill="#d9483c" font-size="12">no straight line: the wall is in the way</text>
+				</g>
+			</svg>
+			<figcaption>The guard is heard from the doorway the listener can see. The route through the hall is how far the sound travelled, and the doors on it are what it lost on the way.</figcaption>
+		</figure>
+
+		<p>Along the route the sound loses level for the distance it travelled, for air absorption, and for
+		every door it passed. It also gets duller: the cutoff of its low-pass filter falls an octave for
+		every 6 dB of doors, and a little more for every corner and every few hundred units of
+		distance.</p>
+		<p>Routes are cached on a 32-unit grid and only searched again when the sound or the listener has
+		moved, or a door has changed. A search takes 1.5 to 2 milliseconds on the reference level. The first
+		version in GDScript took 65 to 123.</p>
+
+		<h2>Doors</h2>
+		<p>A door, a hatch or a window that can be shut is a named opening. The game sets how shut it is,
+		from 0 to 1, and Hammerite charges that share of the opening's closed loss, 40 dB by default, to
+		every sound that passes through it. A shut door does not change the route, only how much comes
+		through. The opening's name lives on the face it is cut from, so it survives every edit, and the
+		navigation reads the same name to know whether a guard can walk through.</p>
+
+		<h2>Reverb</h2>
+		<p>Each zone is given a reverb preset when the graph is built. The preset comes from the room's size,
+		its shape, what its walls are made of and how much of it is open sky:</p>
+		<ul>
+			<li>A room under about 192 units across is small, and one over 480 is large.</li>
+			<li>A long, narrow room is a corridor.</li>
+			<li>The walls are weighed by area, and each texture maps to a material, such as stone, wood or
+			plaster, from its name or from the game's own table.</li>
+			<li>A room open to the sky is outdoors or a courtyard.</li>
+		</ul>
+		<p>There are sixteen presets, all kept tight rather than cathedral-like, because a level is mostly
+		small rooms. The reverb follows the listener and is blended with the rooms behind the nearby
+		openings, so walking from a stone hall into a wooden room is a crossfade. The pre-delay comes from
+		the room's size, and an equaliser after the reverb takes the high frequencies out of rooms that
+		absorb them.</p>
+		<p>Under water, everything goes through a 700 Hz low-pass filter, and sound crossing the water's
+		surface loses 18 dB.</p>
+
+		<h2>Playing it in Godot</h2>
+		<p>Hammerite plays its sounds through Godot's own audio system, and does the propagation itself:</p>
+		<ul>
+			<li><strong>A pool of players.</strong> Up to 64 <code>AudioStreamPlayer3D</code> nodes are made
+			as they are needed, and reused. Godot's own distance attenuation is turned off: Hammerite sets
+			the volume, and the player's position is only used for panning.</li>
+			<li><strong>Virtual voices.</strong> A sound only holds a player while it can be heard. A one-shot
+			that would arrive 40 dB down or more is not played at all, but still reports itself as playing
+			for its length, so the game sees no difference. A looping sound keeps its player.</li>
+			<li><strong>A ladder of buses.</strong> Godot has no low-pass filter per player, so Hammerite makes
+			six buses with low-pass filters at 8,000, 4,000, 2,000, 900, 450 and 200 Hz, and sends each sound
+			to the one nearest its cutoff, measured in octaves. All of them feed one Hammerite bus, which holds
+			the reverb, the equaliser and the underwater filter.</li>
+			<li><strong>The listener</strong> is the current camera's <code>AudioListener3D</code>, or the
+			camera itself.</li>
+		</ul>
+
+		<h2>Rain, wind and the way out</h2>
+		<p>The Thief formula is made for sounds that come from a point: footsteps, a lever, a guard
+		talking. Rain and wind come from everywhere outdoors. Indoors, you hear them through the windows
+		and the doors that lead outside, louder the closer you are to the way out. Hammerite handles
+		these environmental sounds on their own.</p>
+		<p>First, every zone has a type:</p>
+		<ul>
+			<li><strong>Exterior:</strong> the room is open to the sky itself, because its own walls include
+			sky faces. Weather is heard all round, at full level.</li>
+			<li><strong>Interior:</strong> every other room. Weather comes in through the way out.</li>
+			<li><strong>Semi-exterior:</strong> set by the level designer, for an awning, an archway or a
+			covered market. Its weather exposure, from 0 to 1, puts it between the two.</li>
+		</ul>
+		<p>This is a different question than the one the lightmapper asks. For light, a room with a window
+		onto a courtyard is exterior, because daylight comes in through the window. For sound it is
+		interior: the rain is at the window, not overhead.</p>
+
+		<figure>
+			<img src="outdoors-overlays.png" alt="Two floor plans of the same small map: a courtyard joined to a room through a window. On the left both are coloured as exterior; on the right the courtyard is blue for exterior and the room orange for interior" width="1280" height="412" loading="lazy">
+			<figcaption>A courtyard and a room with a window onto it. Left: how lighting classifies them, both exterior. Right: how sound does, the courtyard exterior and the room interior.</figcaption>
+		</figure>
+
+		<p>Indoors, the question is how far it is to the outdoors from each way out. The graph answers that
+		once, when it is built. For each side of each opening, it searches for the nearest opening into an
+		exterior zone, and stores the distance and the openings along the way. These searches run in
+		parallel on all cores. In GDScript they took 110 seconds on a level with a little sky; in native code
+		they take 0.57.</p>
+
+		<figure class="pipeline">
+			<svg viewBox="0 0 720 330" role="img" aria-labelledby="weather-title">
+				<title id="weather-title">An open courtyard, a room with a window onto it, and an inner room behind a door. Each opening stores how far it is to the outdoors: zero for the window, the length of the outer room for the door. The listener in the inner room hears the rain at the door, charged for the distance to the door plus the stored distance</title>
+				<g font-family="Josefin Sans, sans-serif" font-size="13">
+					<rect x="20" y="20" width="680" height="90" fill="#22334f" stroke="#3a3768" stroke-width="2"/>
+					<g fill="#26244a" stroke="#3a3768" stroke-width="2">
+						<rect x="120" y="110" width="300" height="200"/>
+						<rect x="420" y="170" width="220" height="140"/>
+					</g>
+					<g fill="#c9bd9a" font-size="12" letter-spacing="1.2">
+						<text x="34" y="42">COURTYARD · EXTERIOR · OPEN TO THE SKY</text>
+						<text x="134" y="292">ROOM · INTERIOR</text>
+						<text x="434" y="292">ROOM · INTERIOR</text>
+					</g>
+					<g stroke="#1d1b38" stroke-width="5">
+						<path d="M220 110h60"/>
+						<path d="M420 220v40"/>
+					</g>
+					<g stroke="#c9bd9a" stroke-width="1.6" fill="none">
+						<path d="M60 52l-6 14M110 60l-6 14M160 48l-6 14M330 56l-6 14M380 46l-6 14M450 60l-6 14M520 50l-6 14M590 58l-6 14M650 48l-6 14"/>
+					</g>
+					<g fill="none" stroke="#c9bd9a" stroke-width="1.5" stroke-dasharray="5 5">
+						<path d="M420 240 L250 110"/>
+					</g>
+					<path d="M560 250 L420 240" stroke="#f3e2b3" stroke-width="1.5" fill="none"/>
+					<g fill="#f3e2b3" stroke="#1d1b38" stroke-width="2">
+						<circle cx="250" cy="110" r="6"/>
+						<circle cx="420" cy="240" r="9"/>
+					</g>
+					<circle cx="560" cy="250" r="7" fill="#f3e2b3"/>
+					<g fill="#f3e2b3" font-size="12">
+						<text x="262" y="132">window: 0 to the outdoors</text>
+						<text x="436" y="262">door: stored 220 to the outdoors</text>
+						<text x="566" y="238">listener</text>
+						<text x="436" y="228">rain heard here</text>
+					</g>
+				</g>
+			</svg>
+			<figcaption>Each opening knows how far it is to the outdoors. Indoors, the rain plays at the room's ways out, charged for the walk to each one plus what it has stored.</figcaption>
+		</figure>
+
+		<p>At runtime, weather never searches the graph. For each opening of the listener's room it adds the
+		distance from the listener to the opening and the stored distance from the opening to the outdoors,
+		and charges the sound for that, for being indoors, and for any door along the stored way. The rain
+		then plays at up to four openings, each at its own place and level, so a room with windows on two
+		sides hears the rain on both sides. The cost per frame depends only on how many openings the
+		listener's room has.</p>
+		<p>A looping sound must not restart. The nearest opening keeps the sound's own player. Each further
+		opening borrows a player from the pool, starts it at the same playback position, and fades it in.
+		Moving between rooms glides the sound from one opening to the next, so walking in from the street is
+		a fade, never a step.</p>
+		<p>Each room can also have an ambient bed of its own, like the hum of a machine room or birdsong in a
+		garden. Rooms with the same bed share one player, and moving between beds is a two-second
+		crossfade.</p>
+
+		<h2>Guards hear the same sounds</h2>
+		<p>The game reports a sound with a type, such as a footstep on metal or a door, and a loudness. For
+		every guard that listens for that type, Hammerite finds the route the same way it does for the
+		player and works out how loud the sound is when it reaches them. A guard whose threshold it beats
+		gets an event with the level, whether the sound came straight or round a corner, and where it seemed
+		to come from: the doorway it arrived through. So the guard goes to look in the doorway, not into the
+		wall.</p>
+		<p>Hammerite measures the sound and the game decides what it means. The types, how loud they are,
+		each guard's hearing and what a guard does about it are all the game's.</p>
+
+		<h2>Limits</h2>
+		<ul>
+			<li>Sound never goes through walls. A thin wall is as thick as any other.</li>
+			<li>Each sound takes one route. Two doorways into the same room do not add up.</li>
+			<li>The reverb is the listener's room, blended with the rooms next to it. A sound from far away
+			gets the reverb of the room you are in.</li>
+			<li>Semi-exterior rooms have to be marked by hand. The compiler cannot tell an awning from a
+			ceiling.</li>
+			<li>The pool has 64 players by default, and a sound that finds none free is not played.</li>
+		</ul>
+
+		<h2>Prior art</h2>
+		<ul class="references">
+			<li>Looking Glass Studios. Thief: The Dark Project, 1998. Sound propagated through the level's
+			rooms and doorways, heard by the AI and the player alike.</li>
+			<li>Tom Leonard. <a href="https://www.gamedeveloper.com/programming/building-an-ai-sensory-system-examining-the-design-of-i-thief-the-dark-project-i-">Building
+			an AI sensory system: examining the design of Thief: The Dark Project</a>. Game Developer, 2003.</li>
+			<li><a href="https://gamebanshee.com/ka3h4">Deus Ex: Invisible War developer diary</a>, on a
+			propagation system very like Thief's.</li>
+			<li>Stepan Boev. <a href="https://twvideo01.ubm-us.net/o1/vault/gdceurope2015/Boev_Stepan_Sound%20Propagation%20in.pdf">Sound
+			propagation in Hitman</a>. GDC Europe 2015. Rooms and portals, with occlusion per room.</li>
+		</ul>
+
+		<p>The <a href="../../hammerite/docs/manual/index.html">Hammerite manual</a> has a section on audio,
+		and the <a href="../../hammerite/docs/index.html">docs</a> a guide to hearing for stealth
+		gameplay.</p>
+
+		<p class="post-sign">- Elli</p>
+	</article>
+</main>
+
+<footer class="foot">
+	<img src="../../assets/misukatti/mark-night.svg" alt="" width="36" height="36">
+	<p>© 2026 Misukatti Interactive</p>
+</footer>
+
+</body>
+</html>
