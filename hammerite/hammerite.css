@@ -413,3 +413,42 @@ td:first-child {
 
 	.features .feature-wide.flip > img { order: 0; }
 }
+
+.next { margin-bottom: clamp(3rem, 8vw, 5rem); }
+
+.next-tag {
+	display: inline-block;
+	margin: 0 0 0.75rem;
+	padding: 0.2rem 0.7rem;
+	border: 1px solid var(--red);
+	border-radius: 999px;
+	color: var(--red-bright);
+	font-size: 0.75rem;
+	font-weight: 600;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+}
+
+.next-intro, .next-more { color: var(--bone-dim); max-width: 68ch; }
+
+.next-cards {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+	gap: 1.25rem;
+	margin: 1.5rem 0;
+}
+
+.next-cards article {
+	padding: 1.5rem 1.75rem;
+	border-radius: 10px;
+	border: 1px dashed var(--line);
+	background: var(--stone-raised);
+}
+
+.next-cards h3 { margin-top: 0; }
+
+.next-cards p { margin: 0; color: var(--bone-dim); }
+
+.next-cards p + p { margin-top: 0.75rem; }
+
+.next code { font-size: 0.9em; color: var(--bone); overflow-wrap: anywhere; }

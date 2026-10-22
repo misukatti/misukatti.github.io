@@ -151,6 +151,48 @@
 		</article>
 	</section>
 
+	<section id="next" class="next">
+		<p class="next-tag">Unreleased</p>
+		<h2>Coming in the next release</h2>
+		<p class="next-intro">These are in Hammerite's development version and are not in 2.0 yet. The
+		<a href="docs/latest/index.html">latest docs</a> already cover them.</p>
+		<div class="next-cards">
+			<article>
+				<h3>TrenchBroom maps</h3>
+				<p><strong>File → Import .map File…</strong> opens a <code>.map</code> from TrenchBroom, J.A.C.K.
+				or the Radiants, classic or Valve 220. Textures stay where they were, layers and groups come
+				across, and tool brushes like clip and skip are left out.</p>
+				<p><strong>Divide into Rooms</strong> then splits the imported space at its doorways and doors,
+				so sound and light follow the rooms. Quake's first level divides into 39 rooms in two
+				seconds.</p>
+				<p><a href="docs/latest/manual/editor/coming-from-trenchbroom.html">Coming from TrenchBroom</a> ·
+				<a href="docs/latest/guides/importing-map-files.html">Importing .map files</a></p>
+			</article>
+			<article>
+				<h3>func_godot entities</h3>
+				<p>A TrenchBroom <code>.fgd</code> or func_godot's FGD resource becomes Hammerite's entity types,
+				with their defaults, descriptions, choices, flags, size and colour. Your func_godot scripts
+				run on them unchanged.</p>
+				<p>When you are ready to move over, <strong>Project → Tools → Port FGD to Hammerite…</strong> in
+				the Godot editor writes an entity set of your game's own, and the FGD is no longer
+				needed.</p>
+				<p><a href="docs/latest/guides/entity-sets.html">Entity sets</a></p>
+			</article>
+			<article>
+				<h3>A level is two nodes</h3>
+				<p>Add a <code>HammeriteLevel</code> to a scene and set its map, textures and entities in the
+				inspector. Put a <code>HammeriteLevelEditor</code> under it and F10 opens the editor over your
+				game. There is no script to write.</p>
+				<p>The starter example is those two nodes and a lit room, and the getting started guide begins
+				with it.</p>
+				<p><a href="docs/latest/getting-started.html">Getting started</a></p>
+			</article>
+		</div>
+		<p class="next-more">Also coming: rebindable keys, Sweep and Path Sweep tools, smooth faces,
+		texture fit and justify, breaking a brush entity back into brushes, and the 3D view as the audio
+		listener while you simulate.</p>
+	</section>
+
 	<section id="addons" class="addons">
 		<h2>Four addons, one native library</h2>
 		<p>Each is a standalone Godot addon, and nothing in them depends on a particular game. All four are
