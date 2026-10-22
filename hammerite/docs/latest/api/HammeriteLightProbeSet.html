@@ -47,7 +47,7 @@
 <h2>Properties</h2>
 <table class="members"><thead><tr><th>Type</th><th>Name</th><th>Default</th></tr></thead><tbody><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_aabb.html"><code>AABB</code></a></td><td><a href="#property-bounds"><code>bounds</code></a></td><td><code>AABB(0, 0, 0, 0, 0, 0)</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_float.html"><code>float</code></a></td><td><a href="#property-cell_size"><code>cell_size</code></a></td><td><code>64.0</code></td></tr><tr><td><code>HammeriteLightProbe[]</code></td><td><a href="#property-probes"><code>probes</code></a></td><td><code>[]</code></td></tr></tbody></table>
 <h2>Methods</h2>
-<table class="members"><thead><tr><th>Returns</th><th>Method</th></tr></thead><tbody><tr><td><code>void</code></td><td><a href="#method-add_probe"><code>add_probe</code></a><code>(probe: HammeriteLightProbe)</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_bool.html"><code>bool</code></a></td><td><a href="#method-has_nearby_probe"><code>has_nearby_probe</code></a><code>(pos: Vector3, min_distance: float)</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_dictionary.html"><code>Dictionary</code></a></td><td><a href="#method-query"><code>query</code></a><code>(pos: Vector3, max_probes: int, max_radius: float = 512.0)</code></td></tr><tr><td><code>void</code></td><td><a href="#method-rebuild"><code>rebuild</code></a><code>()</code></td></tr></tbody></table>
+<table class="members"><thead><tr><th>Returns</th><th>Method</th></tr></thead><tbody><tr><td><code>void</code></td><td><a href="#method-add_probe"><code>add_probe</code></a><code>(probe: HammeriteLightProbe)</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_bool.html"><code>bool</code></a></td><td><a href="#method-has_nearby_probe"><code>has_nearby_probe</code></a><code>(pos: Vector3, min_distance: float, facing: Vector3 = Vector3(0, 0, 0))</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_dictionary.html"><code>Dictionary</code></a></td><td><a href="#method-query"><code>query</code></a><code>(pos: Vector3, max_probes: int, max_radius: float = 512.0)</code></td></tr><tr><td><code>void</code></td><td><a href="#method-rebuild"><code>rebuild</code></a><code>()</code></td></tr></tbody></table>
 <h2>Property descriptions</h2>
 <h3 id="property-bounds">bounds</h3>
 <pre class="signature"><code>var bounds: AABB = AABB(0, 0, 0, 0, 0, 0)</code></pre>
@@ -63,8 +63,8 @@
 <pre class="signature"><code>func add_probe(probe: HammeriteLightProbe) -&gt; void</code></pre>
 <p>Add <code>probe</code> to the set, and to the grid as it stands rather than building it again.</p>
 <h3 id="method-has_nearby_probe">has_nearby_probe()</h3>
-<pre class="signature"><code>func has_nearby_probe(pos: Vector3, min_distance: float) -&gt; bool</code></pre>
-<p>Whether any probe stands within <code>min_distance</code> of <code>pos</code>. What probe generation asks to keep probes from clustering; as many rings of cells are searched as <code>min_distance</code> reaches.</p>
+<pre class="signature"><code>func has_nearby_probe(pos: Vector3, min_distance: float, facing: Vector3 = Vector3(0, 0, 0)) -&gt; bool</code></pre>
+<p>Whether any probe stands within <code>min_distance</code> of <code>pos</code> - with a <code>facing</code>, any that faces much the same way, within about 45 degrees. What probe generation asks to keep probes from clustering; as many rings of cells are searched as <code>min_distance</code> reaches.</p>
 <h3 id="method-query">query()</h3>
 <pre class="signature"><code>func query(pos: Vector3, max_probes: int, max_radius: float = 512.0) -&gt; Dictionary</code></pre>
 <p>The <code>max_probes</code> probes nearest <code>pos</code>, and how far off each one is.</p><p>Returns <code>{ &quot;indices&quot;: PackedInt32Array, &quot;distances&quot;: PackedFloat32Array }</code>, nearest first, and they really are the nearest: the fade that weights them - in <a href="HammeriteMap.html#method-light_level_at"><code>HammeriteMap.light_level_at()</code></a>, and in probe_sampling.gdshaderinc - leans on it. It silences whichever probe is farthest on the grounds that it is the one leaving the set, so a set that is only approximately the nearest drops probes while they still carry weight, which is the light popping that the fade exists to prevent.</p><p>Probes sit half a cell apart, so the cells around <code>pos</code> hold far more than any caller asks for and the walk stops within a ring or two of it. <code>max_radius</code> only binds where the bake is sparse - the edge of a map, a room the generator could not reach into.</p><p>Answered from where the probes were when the grid was last built or added to: a probe moved in place wants <a href="#method-rebuild"><code>rebuild()</code></a>.</p>
@@ -72,7 +72,7 @@
 <pre class="signature"><code>func rebuild() -&gt; void</code></pre>
 <p>Builds the grid and <a href="#property-bounds"><code>bounds</code></a> again from <a href="#property-probes"><code>probes</code></a> and <a href="#property-cell_size"><code>cell_size</code></a>. The map calls it on load, and a query calls it after the probes change; a probe edited in place - moved - is the one change it cannot see, and wants this called.</p>
 		</article>
-		<p class="docs-source">Hammerite latest · built from 45a63b69, 2026-10-19</p>
+		<p class="docs-source">Hammerite latest · built from c0b28836, 2026-10-22</p>
 	</main>
 </div>
 

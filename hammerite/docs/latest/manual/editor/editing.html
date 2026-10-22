@@ -36,7 +36,7 @@
 		<label class="docs-version">Version
 			<select aria-label="Docs version"><option value="latest" selected>latest</option></select>
 		</label>
-		<nav class="api-nav"><a class="api-home" href="../index.html">Manual</a><h2>Core</h2><ul><li><a href="../core/index.html">Core</a></li><li><a href="../core/carved-world.html">The carved world</a></li><li><a href="../core/rooms-and-portals.html">Rooms and portals</a></li><li><a href="../core/fills.html">Fills</a></li><li><a href="../core/entities.html">Entities</a></li><li><a href="../core/textures.html">Textures</a></li><li><a href="../core/lighting.html">Lighting</a></li><li><a href="../core/baking.html">Baking</a></li><li><a href="../core/variants.html">Variants</a></li><li><a href="../core/terrain.html">Terrain</a></li><li><a href="../core/glossary.html">Glossary</a></li></ul><h2>Editor</h2><ul><li><a href="index.html">Editor</a></li><li><a href="interface.html">The interface</a></li><li><a href="camera.html">Camera</a></li><li><a href="selecting.html">Selecting</a></li><li><a href="building.html">Building</a></li><li><a href="editing.html" aria-current="page">Editing</a></li><li><a href="texturing.html">Texturing</a></li><li><a href="terrain.html">Terrain</a></li><li><a href="entities.html">Entities</a></li><li><a href="props.html">Props</a></li><li><a href="decals.html">Decals</a></li><li><a href="prefabs.html">Prefabs</a></li><li><a href="layers.html">Layers</a></li><li><a href="sky.html">Sky</a></li><li><a href="lighting.html">Lighting</a></li><li><a href="problems.html">Problems</a></li><li><a href="files.html">Map files</a></li><li><a href="keys.html">Keyboard reference</a></li><li><a href="manual.html">Using the manual</a></li><li><a href="extending-the-manual.html">Extending the manual</a></li></ul><h2>Audio</h2><ul><li><a href="../audio/index.html">Audio</a></li><li><a href="../audio/rooms.html">Rooms</a></li><li><a href="../audio/doors.html">Doors and openings</a></li><li><a href="../audio/outdoors.html">Outdoors and weather</a></li><li><a href="../audio/graph.html">The audio graph</a></li></ul><h2>Navigation</h2><ul><li><a href="../nav/index.html">Navigation</a></li><li><a href="../nav/ground.html">Ground</a></li><li><a href="../nav/links.html">Links</a></li><li><a href="../nav/preview.html">The Navigation tool</a></li></ul><h2>Docs</h2><ul><li><a href="../../index.html">Docs home</a></li><li><a href="../../api/index.html">API reference</a></li></ul></nav>
+		<nav class="api-nav"><a class="api-home" href="../index.html">Manual</a><h2>Core</h2><ul><li><a href="../core/index.html">Core</a></li><li><a href="../core/carved-world.html">The carved world</a></li><li><a href="../core/rooms-and-portals.html">Rooms and portals</a></li><li><a href="../core/fills.html">Fills</a></li><li><a href="../core/entities.html">Entities</a></li><li><a href="../core/textures.html">Textures</a></li><li><a href="../core/lighting.html">Lighting</a></li><li><a href="../core/baking.html">Baking</a></li><li><a href="../core/variants.html">Variants</a></li><li><a href="../core/terrain.html">Terrain</a></li><li><a href="../core/glossary.html">Glossary</a></li></ul><h2>Editor</h2><ul><li><a href="index.html">Editor</a></li><li><a href="coming-from-trenchbroom.html">Coming from TrenchBroom</a></li><li><a href="interface.html">The interface</a></li><li><a href="camera.html">Camera</a></li><li><a href="selecting.html">Selecting</a></li><li><a href="building.html">Building</a></li><li><a href="editing.html" aria-current="page">Editing</a></li><li><a href="texturing.html">Texturing</a></li><li><a href="terrain.html">Terrain</a></li><li><a href="entities.html">Entities</a></li><li><a href="props.html">Props</a></li><li><a href="decals.html">Decals</a></li><li><a href="prefabs.html">Prefabs</a></li><li><a href="layers.html">Layers</a></li><li><a href="sky.html">Sky</a></li><li><a href="lighting.html">Lighting</a></li><li><a href="problems.html">Problems</a></li><li><a href="files.html">Map files</a></li><li><a href="dividing-rooms.html">Dividing a map into rooms</a></li><li><a href="keys.html">Keyboard reference</a></li><li><a href="manual.html">Using the manual</a></li><li><a href="extending-the-manual.html">Extending the manual</a></li></ul><h2>Audio</h2><ul><li><a href="../audio/index.html">Audio</a></li><li><a href="../audio/rooms.html">Rooms</a></li><li><a href="../audio/doors.html">Doors and openings</a></li><li><a href="../audio/outdoors.html">Outdoors and weather</a></li><li><a href="../audio/graph.html">The audio graph</a></li></ul><h2>Navigation</h2><ul><li><a href="../nav/index.html">Navigation</a></li><li><a href="../nav/ground.html">Ground</a></li><li><a href="../nav/links.html">Links</a></li><li><a href="../nav/preview.html">The Navigation tool</a></li></ul><h2>Docs</h2><ul><li><a href="../../index.html">Docs home</a></li><li><a href="../../api/index.html">API reference</a></li></ul></nav>
 	</aside>
 	<main class="docs-main">
 		<article class="prose">
@@ -56,9 +56,10 @@
 <p>Point entities that turn show a handle at the tip of an arrow when selected. Drag the handle to turn the entity.</p>
 <h2 id="dragging-past-the-edge-of-a-view">Dragging past the edge of a view</h2>
 <p>While you move, rotate, scale, extrude, push faces, drag vertices or a handle, drag a selection box, or resize or move a brush you are drawing, the cursor stays in the view you began in. Push it against the edge of a 2D view and the view scrolls, so the drag goes on into what was off screen. In the 3D view the cursor comes back in at the opposite edge and the drag carries on.</p>
-<h2 id="duplicate-and-delete">Duplicate and delete</h2>
+<h2 id="copy-paste-duplicate-and-delete">Copy, paste, duplicate and delete</h2>
 <ul>
 <li><code>Cmd</code> <code>D</code> duplicates the selection and starts moving the copy. Click to drop it.</li>
+<li><code>Cmd</code> <code>C</code> copies the selection, and <code>Cmd</code> <code>V</code> pastes it where it was copied from. <code>Cmd</code> <code>Alt</code> <code>V</code> pastes it on the working plane under the cursor, snapped to the grid. The copy is text on the system clipboard, so it pastes into another map too. What is pasted lands on the active layer, in new groups; a prefab instance arrives as plain brushes and entities.</li>
 <li><code>Backspace</code> deletes the selection.</li>
 </ul>
 <h2 id="mirror">Mirror</h2>
@@ -86,19 +87,50 @@
 <li>Move the mouse. The distance shows on the face.</li>
 <li>Click or press <code>Enter</code> to finish; <code>Esc</code> cancels.</li>
 </ol>
-<p>Or do it in one gesture from the Select tool: in face mode, press on a face, then drag with <code>Shift</code> held to move it or <code>Alt</code> held to extrude it.</p>
+<p>Or do it in one gesture from the Select tool: in face mode, drag a face to move it, or hold <code>Cmd</code> and drag to extrude it. Hold <code>Alt</code> as well to take the backface, the face facing away from you. Let go of the mouse to finish.</p>
 <p>Extruding outward adds a brush. Extruding inward cuts the face's own brush back.</p>
-<p>With several faces selected, <code>Space</code> switches between moving them all the same distance (<strong>uniform</strong>) and each along its own direction (<strong>projected</strong>).</p>
+<p>In a 2D view a face moves wherever the mouse takes it. What it moves along its normal pushes it out or in; what it moves across its own plane slides it, the faces around it tilting to follow while the far side of the brush stays where it is, so a wall leans or a doorway's side slants. <code>X</code>, <code>Y</code> or <code>Z</code> locks the direction. In the 3D view a face moves along its normal only.</p>
+<p>An angled face's normal is seldom along an axis, so in a 2D view press <code>N</code> to move faces along their normals only. A face also moves this way when another selected face is on the same brush.</p>
+<p>When extruding or moving along normals with several faces selected, <code>Space</code> switches between moving them all the same distance (<strong>uniform</strong>) and each along its own direction (<strong>projected</strong>).</p>
+<h2 id="sweep-faces-round-a-bend">Sweep faces round a bend</h2>
+<p>Sweep faces out of their brushes round a curve, a new brush per segment: a corridor or an arch turning a corner, a pipe along it.</p>
+<ol>
+<li>Hold <code>Q</code> and click the faces to sweep. They must lie in one plane and face the same way.</li>
+<li>Press <code>Shift</code> <code>E</code>. The bend is shown at once, its pivot drawn in orange.</li>
+<li>Set <strong>Angle</strong>, <strong>Radius</strong> and <strong>Segments</strong> in the tool's panel. <code>Left</code> / <code>Right</code> take a segment away or add one. <code>Space</code> or <strong>Turn 90°</strong> turns which way the bend goes.</li>
+<li>Press <code>Enter</code> or <strong>Sweep</strong> to keep it; <code>Esc</code> cancels.</li>
+</ol>
+<p>The radius is from the pivot to the middle of the selected faces, so a quarter turn of radius 128 ends 128 across and 128 on, on the grid. A radius less than half the selection's width is raised to it, which puts the inside of the bend on the pivot.</p>
+<p>Every segment is the tier of the brush its face came from. Sweep the end of an air arch together with a detail pipe running along its ceiling, and the arch's bend is air and the pipe's detail. Air segments overlap each other a little, so the bend is one room, and the first abuts the face it was swept from, as an extrude does.</p>
+<p><strong>Smooth</strong> draws the walls the bend curves as one surface. A wall square to the pivot, such as the floor of a bend that turns left or right, stays flat.</p>
+<h2 id="sweep-faces-along-a-path">Sweep faces along a path</h2>
+<p>The path sweep takes the selected faces along a smooth path through points you place: a winding tunnel, a pipe that climbs and turns, a passage that twists.</p>
+<ol>
+<li>Select the faces as for a sweep, and press <code>Ctrl</code> <code>E</code>. The path starts straight out from them with one point.</li>
+<li>Drag a point to move it, or press <code>G</code> to move the active one with the mouse and click to drop it. <code>X</code>, <code>Y</code> or <code>Z</code> locks the move to an axis.</li>
+<li>Drag one of the active point's three rings to turn it about that ring's axis, or press <code>R</code> to turn it about the view and <code>X</code>, <code>Y</code> or <code>Z</code> to turn it about its own axis instead.</li>
+<li><code>N</code> adds a point after the last, continuing as the last one went; <code>Backspace</code> removes the active one. <code>Left</code> / <code>Right</code>, or clicking a point, picks another.</li>
+<li>Press <code>Enter</code> or <strong>Sweep</strong> to keep it; <code>Esc</code> cancels. While moving or turning a point, <code>Esc</code> puts it back.</li>
+</ol>
+<p>While the tool runs, <code>Cmd</code> <code>Z</code> and <code>Cmd</code> <code>Shift</code> <code>Z</code> undo and redo its own edits: a point moved, turned, added or removed, or a value typed into the panel. A whole drag is one step. Keeping the sweep is one step of the map's history.</p>
+<p>The path is shown as brushes, not carved into the world, even with <strong>WYSIWYG Tool Previews</strong> on: a path is many overlapping segments, rebuilt at every step of a drag. It is carved once you keep it.</p>
+<p>Each point is placed and turned from the one before it, so moving or turning one carries every point after it. The panel shows the active point's <strong>Across</strong>, <strong>Up</strong> and <strong>Out</strong> from the one before, and its <strong>Pitch</strong>, <strong>Yaw</strong> and <strong>Twist</strong>. The path leaves each point the way that point faces, so turning a point steers the path through it; twisting it turns the faces about the path.</p>
+<p><strong>Segment length</strong> is the longest a segment may be. Each span between two points is cut into as few even segments as keep under it, so points close together and far apart make segments much alike.</p>
+<p>Segments keep the tier of the brush each face came from, and air segments overlap so the path is one room, as in a sweep round a bend.</p>
 <h2 id="vertices">Vertices</h2>
 <ol>
 <li>Select brushes.</li>
 <li>Press <code>V</code>. Their corners show as handles.</li>
 <li>Click a corner to select it; <code>Cmd</code>-click to add more. In a 2D view, drag a box to select several.</li>
-<li>Drag a selected corner to move it, or press <code>G</code> to move them with the mouse and <code>X</code> / <code>Y</code> / <code>Z</code> to lock an axis.</li>
+<li>Drag a selected corner to move it, or press <code>G</code> to move them with the mouse, <code>X</code> / <code>Y</code> / <code>Z</code> to lock an axis, and click to drop them.</li>
 <li>Press <code>Enter</code> to keep the changes.</li>
 </ol>
 <p>A brush pushed out of shape is split into convex pieces. <code>Esc</code> deselects the corners; <code>Esc</code> with none selected throws away every change and leaves the tool.</p>
 <figure><img src="images/editing-vertex.png" alt="Moving one corner of a brush" loading="lazy"><figcaption>Moving one corner of a brush</figcaption></figure>
+<h2 id="edges">Edges</h2>
+<p>The Edge tool is the Vertex tool for edges: <code>Shift</code> <code>V</code>, with brushes selected. Each edge has a handle at its middle; picking an edge picks both its ends, and they move together. In a 2D view, a box picks the edges lying wholly inside it.</p>
+<p><code>Cmd</code>-click an edge to add it, and again to take it out - its ends both go, even one another edge picked shares. Moving, <code>Enter</code> and <code>Esc</code> are as in the Vertex tool.</p>
+<figure><img src="images/editing-edge.png" alt="Lifting one edge of a brush" loading="lazy"><figcaption>Lifting one edge of a brush</figcaption></figure>
 <h2 id="merge">Merge</h2>
 <p>Select two or more brushes and press <code>,</code> to replace them with one brush wrapping them all. <code>Cmd</code> <code>,</code> keeps the originals.</p>
 <p>The merged brush is convex, so it fills any gaps between the originals.</p>
@@ -112,7 +144,7 @@
 <p><strong>Selection → Snap to Grid</strong> puts each selected brush and entity back on the grid, one by one.</p>
 <p><code>Ctrl</code> <code>G</code> shows or hides the grid on surfaces. <strong>3D Grid</strong> in the 3D view's <strong>View</strong> dropdown shows a grid plane in that view.</p>
 		</article>
-		<p class="docs-source">Hammerite latest · built from 45a63b69, 2026-10-19</p>
+		<p class="docs-source">Hammerite latest · built from c0b28836, 2026-10-22</p>
 	</main>
 </div>
 

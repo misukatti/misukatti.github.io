@@ -46,22 +46,31 @@
 <p>Adds acoustic entity types and a toolbar button/tool to the Hammerite HammeriteMapEditor. Requires hammerite-editor.</p><p>Zones and portals are no longer authored: they are derived from the compiled world. The tool this plugin adds inspects that derived graph and names the openings in it, which is the only part of a portal an author still decides.</p><p>The runtime side (HammeriteAudioManager injection into HammeriteMap3D) is handled separately and unconditionally by the <code>HammeriteAudio</code> autoload, so acoustic propagation works whether or not this editor plugin is ever initialized -- see scripts/hammerite_audio.gd.</p><p>Initialize it after integrating the <a href="HammeriteMapEditor.html"><code>HammeriteMapEditor</code></a>:</p><pre><code>var audio_editor_plugin := HammeriteAudioEditorExtension.new()
 audio_editor_plugin.initialize(map_editor)</code></pre>
 <h2>Methods</h2>
-<table class="members"><thead><tr><th>Returns</th><th>Method</th></tr></thead><tbody><tr><td><code>void</code></td><td><a href="#method-cleanup"><code>cleanup</code></a><code>()</code></td></tr><tr><td><code>void</code></td><td><a href="#method-initialize"><code>initialize</code></a><code>(editor: HammeriteMapEditor)</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_stringname.html"><code>StringName</code></a></td><td><a href="#method-menu_command"><code>menu_command</code></a><code>()</code> <code>static</code></td></tr><tr><td><code>void</code></td><td><a href="#method-open_tool"><code>open_tool</code></a><code>()</code></td></tr></tbody></table>
+<table class="members"><thead><tr><th>Returns</th><th>Method</th></tr></thead><tbody><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_stringname.html"><code>StringName</code></a></td><td><a href="#method-audio_listener_command"><code>audio_listener_command</code></a><code>()</code> <code>static</code></td></tr><tr><td><code>void</code></td><td><a href="#method-cleanup"><code>cleanup</code></a><code>()</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_bool.html"><code>bool</code></a></td><td><a href="#method-has_audio_listener"><code>has_audio_listener</code></a><code>()</code> <code>const</code></td></tr><tr><td><code>void</code></td><td><a href="#method-initialize"><code>initialize</code></a><code>(editor: HammeriteMapEditor)</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_stringname.html"><code>StringName</code></a></td><td><a href="#method-menu_command"><code>menu_command</code></a><code>()</code> <code>static</code></td></tr><tr><td><code>void</code></td><td><a href="#method-open_tool"><code>open_tool</code></a><code>()</code></td></tr><tr><td><code>void</code></td><td><a href="#method-toggle_audio_listener"><code>toggle_audio_listener</code></a><code>()</code></td></tr></tbody></table>
 <h2>Method descriptions</h2>
+<h3 id="method-audio_listener_command">audio_listener_command()</h3>
+<pre class="signature"><code>static func audio_listener_command() -&gt; StringName</code></pre>
+<p>Id of the 3D view&#x27;s <strong>View &gt; Audio Listener</strong> toggle, in <a href="HammeriteMapEditor.html#property-commands"><code>HammeriteMapEditor.commands</code></a>.</p>
 <h3 id="method-cleanup">cleanup()</h3>
 <pre class="signature"><code>func cleanup() -&gt; void</code></pre>
-<p>Clean up when the plugin is removed: the overlay, menu command, manual section, toolbar button and the icons it hung on the sound entity types.</p><p>The types themselves stay registered, and deliberately: they are the autoload&#x27;s (<a href="HammeriteAudioRuntime.html#method-register_entity_types"><code>HammeriteAudioRuntime.register_entity_types()</code></a>), because a shipped build with no editor in it still has to build a map&#x27;s sound entities. All this extension ever added to them is a picture for the entity picker, and that is what goes (#224).</p>
+<p>Clean up when the plugin is removed: the overlay, menu command, Audio Listener toggle, manual section, toolbar button and the icons it hung on the sound entity types. The game&#x27;s view hears again.</p><p>The types themselves stay registered, and deliberately: they are the autoload&#x27;s (<a href="HammeriteAudioRuntime.html#method-register_entity_types"><code>HammeriteAudioRuntime.register_entity_types()</code></a>), because a shipped build with no editor in it still has to build a map&#x27;s sound entities. All this extension ever added to them is a picture for the entity picker, and that is what goes (#224).</p>
+<h3 id="method-has_audio_listener">has_audio_listener()</h3>
+<pre class="signature"><code>func has_audio_listener() -&gt; bool</code></pre>
+<p>Whether <strong>View &gt; Audio Listener</strong> is on: while the editor is up, the world is heard from the 3D view&#x27;s camera rather than the game&#x27;s. On unless the editor&#x27;s workspace says otherwise.</p>
 <h3 id="method-initialize">initialize()</h3>
 <pre class="signature"><code>func initialize(editor: HammeriteMapEditor) -&gt; void</code></pre>
-<p>Initialize the plugin with a HammeriteMapEditor instance: registers <code>env_sound</code> and <code>env_sound_environment</code>, the Acoustics floorplan overlay, the toolbar button and menu command, and the manual section. Call once per editor.</p>
+<p>Initialize the plugin with a HammeriteMapEditor instance: registers <code>env_sound</code> and <code>env_sound_environment</code>, the Acoustics floorplan overlay, the toolbar button and menu command, the 3D view&#x27;s Audio Listener toggle, and the manual section. Call once per editor.</p>
 <h3 id="method-menu_command">menu_command()</h3>
 <pre class="signature"><code>static func menu_command() -&gt; StringName</code></pre>
 <p>Id of the Tools menu command that opens the Audio Portals tool, in <a href="HammeriteMapEditor.html#property-commands"><code>HammeriteMapEditor.commands</code></a> - so a game can rebind it or take it away.</p>
 <h3 id="method-open_tool">open_tool()</h3>
 <pre class="signature"><code>func open_tool() -&gt; void</code></pre>
 <p>Open this addon&#x27;s editor tool - the Audio Portals tool, which inspects the derived graph and names its openings. The same thing the toolbar button and the Tools menu entry do.</p>
+<h3 id="method-toggle_audio_listener">toggle_audio_listener()</h3>
+<pre class="signature"><code>func toggle_audio_listener() -&gt; void</code></pre>
+<p>Turn <strong>View &gt; Audio Listener</strong> on or off; see <a href="#method-has_audio_listener"><code>has_audio_listener()</code></a>. The 3D view&#x27;s viewport mixes the world&#x27;s sound in place of the game&#x27;s, so nothing is heard twice from two places, and the game&#x27;s gets it back when the editor is put away.</p>
 		</article>
-		<p class="docs-source">Hammerite latest · built from 45a63b69, 2026-10-19</p>
+		<p class="docs-source">Hammerite latest · built from c0b28836, 2026-10-22</p>
 	</main>
 </div>
 

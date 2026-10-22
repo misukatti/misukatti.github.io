@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Importing .map files — Hammerite 3D latest docs</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="../../../assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="../../../assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@300&display=swap">
+<link rel="stylesheet" href="../../../hammerite.css">
+<link rel="stylesheet" href="../../docs.css">
+<script src="../../versions.js" defer></script>
+</head>
+<body class="docs" data-docs-version="latest">
+
+<header class="studio">
+	<a class="studio-logo" href="../../../../index.html"><img src="../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="../../../index.html">Hammerite 3D</a>
+		<a href="../index.html">Docs</a>
+		<a href="index.html">Guides</a>
+		<a href="../api/index.html">API</a>
+		<a href="../manual/index.html">Manual</a>
+	</nav>
+</header>
+
+<div class="docs-banner" hidden></div>
+
+<div class="docs-layout">
+	<aside class="docs-side">
+		<a class="docs-brand" href="../index.html"><img src="../../../assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
+		<label class="docs-version">Version
+			<select aria-label="Docs version"><option value="latest" selected>latest</option></select>
+		</label>
+		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="../install.html">Installing Hammerite</a></li><li><a href="../getting-started.html">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="writing-an-entity.html">Writing an entity class</a></li><li><a href="rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="probe-lighting.html">Probe lighting</a></li><li><a href="entity-sets.html">Entity sets</a></li><li><a href="moving-brush-entities.html">Moving brush entities</a></li><li><a href="guard-navigation.html">Navigation for guards</a></li><li><a href="brush-materials.html">Brush materials and shaders</a></li><li><a href="brush-properties.html">Properties on brushes</a></li><li><a href="importing-map-files.html" aria-current="page">Importing Quake maps</a></li></ul><h2>Reference</h2><ul><li><a href="../api/index.html">API reference</a></li><li><a href="../manual/index.html">Manual</a></li><li><a href="../migrating-to-2.0.html">Migrating to Hammerite 2.0</a></li><li><a href="../baking.html">Baking from a script</a></li><li><a href="../performance.html">Performance and limits</a></li><li><a href="../troubleshooting.html">Troubleshooting</a></li><li><a href="../api-stability.html">API stability</a></li></ul></nav>
+	</aside>
+	<main class="docs-main">
+		<article class="prose">
+<h1 id="importing-map-files">Importing .map files</h1>
+<p><span class="unlinked"><code>HammeriteMapFileImporter</code></span> brings a <code>.map</code> - the format
+TrenchBroom, J.A.C.K. and the Radiants save, classic or Valve 220 - into Hammerite once, to go on
+editing there. It is made for a project coming from TrenchBroom and func_godot: its textures, its
+layers and groups and its own entity classes come with it. Authors run it from
+<strong>File → Import .map File…</strong>; the game decides what the map's entities become.</p>
+<h2 id="what-happens-to-the-world">What happens to the world</h2>
+<p>A <code>.map</code> builds solid in a void; Hammerite carves air out of rock. The importer carves everything the
+map spans with one air brush, puts each world brush back as solid, and fills every room no entity
+stands in - the void outside the seal - back in, on a hidden layer of its own. Every brush the author
+drew is kept as it was drawn.</p>
+<ul>
+<li>The sealed inside is <strong>one room</strong>. A <code>.map</code> has none to give it. Give the importer a
+  <span class="unlinked"><code>HammeriteRoomDivider</code></span> as <code>room_divider</code> and it is divided as it is
+  imported, at every hole through a wall larger than the hole - a doorway, a window - and wherever a
+  door of <code>door_types</code> closes an opening; or the author divides it in the editor with
+  <strong>Selection → Divide into Rooms</strong>. Each room is air brushes that overlap, and two rooms abut at the
+  hole between them, so it is a portal - see <a href="rooms-and-sight.html">Rooms, portals and line of sight</a>.
+  Quake's e1m1 divides into 39 rooms in 2 s. The editor manual's <em>Dividing a map into rooms</em> is the
+  author's side: checking the result, and dividing and joining by hand.</li>
+<li>A map that <strong>leaks</strong> is imported with its void still carved, and says so.</li>
+<li>Brushes of <code>world_classnames</code> (<code>worldspawn</code>, <code>func_group</code>) are the world, and those of
+  <code>detail_classnames</code> (<code>func_detail</code> and its kin) detail.</li>
+<li>A brush made only of <code>tool_textures</code> - TrenchBroom's and func_godot's <code>clip</code>, <code>skip</code>, <code>origin</code>,
+  <code>trigger</code>, <code>hint</code>... matched by file name - is left out of the world. An entity made of nothing else,
+  a trigger, keeps them as its volume.</li>
+<li>TrenchBroom's <strong>layers</strong> become the map's, hidden and locked as they were, and its <strong>groups</strong> the
+  map's groups. A layer marked <em>omit from export</em> is left out, as TrenchBroom leaves it out.</li>
+</ul>
+<h2 id="textures">Textures</h2>
+<p>A face's texture is named by its file, as TrenchBroom wrote its path: <code>base/Floor_Tiles</code> is
+<code>Floor_Tiles</code>, the name Hammerite's texture library finds <code>Floor_Tiles.png</code> by. <code>textures</code> renames any
+the game keeps under another:</p>
+<pre><code class="language-gdscript">importer.textures = {&quot;base/Floor_Tiles&quot;: &amp;&quot;floor_tiles_worn&quot;, &quot;sky1&quot;: &amp;&quot;sky_dusk&quot;}
+</code></pre>
+<p>Each face keeps where its texture lay. TrenchBroom drew a texel a unit; a game whose art is drawn that
+way sets <strong>Project Settings → Hammerite → Textures → Texels Per Unit</strong> to 1
+(<code>hammerite/textures/texels_per_unit</code>), and a face that was unscaled comes in unscaled, as does one reset
+or drawn afresh. At Hammerite's default of 4 the map still comes in at its own size, its faces scaled to
+make up the difference. Art enlarged since is said with <code>texels_per_map_texel</code>. Import with the
+textures already where your game finds them: a face's offset is worked out in its texture's pixels.</p>
+<h2 id="entities">Entities</h2>
+<p>Each classname is looked up in two places, the first answer winning:</p>
+<ol>
+<li><code>entity_types</code>, a classname to a Hammerite type.</li>
+<li>A type registered under the classname itself - so a game that registers its FGD's classes by their
+   own names needs nothing.</li>
+</ol>
+<p>Brushwork with no type is kept as a <code>group</code>. A point entity with none is left out and counted, by
+classname, in <code>get_stats()["skipped_classnames"]</code>.</p>
+<p>Every key the type declares a property of the same name for is copied, as that property's kind of
+value: a float from <code>"25"</code>, a <code>Vector3</code> turned from the map's axes, a <code>Color</code> from <code>"255 128 0"</code>.
+<code>origin</code> places a point entity, <code>angle</code> turns one that has a <code>rotation</code>, <code>targetname</code> is its <code>name</code> and
+<code>target</code> its <code>target</code>, as TrenchBroom draws its links. For anything else, <code>entity_converter</code> is called
+last with the entity and its keys as text, and can leave the entity out by answering <code>false</code>:</p>
+<pre><code class="language-gdscript">func _ready() -&gt; void:
+    var importer: HammeriteMapFileImporter = map_editor.map_importer
+    importer.entity_types = {&quot;enemy_grunt&quot;: &amp;&quot;guard&quot;, &quot;player_spawn&quot;: &amp;&quot;player_start&quot;}
+    importer.entity_converter = func(entity: HammeriteEntity, keys: Dictionary) -&gt; bool:
+        if entity.type == &amp;&quot;guard&quot;:
+            entity.properties[&amp;&quot;deaf&quot;] = int(keys.get(&quot;spawnflags&quot;, &quot;0&quot;)) &amp; 1 != 0
+        return !keys.get(&quot;classname&quot;, &quot;&quot;).begins_with(&quot;pickup_&quot;)
+</code></pre>
+<p>Set it up on <code>map_editor.map_importer</code> and the editor's File menu imports with it. From a script or a
+build tool, make your own and call <code>import_file()</code>.</p>
+<h2 id="your-fgd">Your FGD</h2>
+<p>A TrenchBroom game describes its entities in an FGD, and a func_godot game keeps that FGD as resources
+that also say which node each class builds. Hammerite does not read an FGD as it edits: the FGD is
+ported once into what a Hammerite game writes by hand, an entity set, which is the game's from then on.</p>
+<p>In the Godot editor, <strong>Project → Tools → Port FGD to Hammerite…</strong> reads a <code>.fgd</code> or func_godot's FGD
+resource and lists its classes. Untick any the game no longer wants, and choose what each is built on:</p>
+<ul>
+<li><strong>func_godot adapter</strong> runs the class's func_godot script or scene as it is (below). The choice for a
+  class that has one.</li>
+<li><strong>Ported script</strong> writes a Hammerite entity script for the class to port its behaviour to. The
+  choice for a TrenchBroom class, which has no code of func_godot's to run.</li>
+</ul>
+<p><strong>Port</strong> writes the set - <code>res://entities/my_game_entities.gd</code>, <code>class_name MyGameEntities</code>, named after
+the FGD, unless you change it - and the ported classes' scripts beside it. A script already there is
+left as it is. Add the set as the <code>HammeriteLevel</code>'s <strong>Entity Definitions</strong>, or from the game's code:</p>
+<pre><code class="language-gdscript">HammeriteEntityTypeRegistry.add_set(MyGameEntities.new())
+</code></pre>
+<p>The set registers each class as an entity type of its own name, which the map importer finds each
+entity's type by, copying its keys as the types the FGD gave them. Each type's properties are the
+class's, its base classes' included, with their defaults. The inspector shows them as TrenchBroom did:
+each by its display name, its description the tooltip, a choice as a list of its labels, flags as a box
+each, and a <code>target</code> or <code>targetname</code> picked from the map's other entities' names
+(<code>HammeriteEntityTypeRegistry.key_label</code>, <code>key_doc</code>, <code>key_choices</code>, <code>key_flags</code> and <code>key_picker</code>). The
+class's size is its box in the editor and its colour its tint. It is a script like any other: change a
+default, a label or a choice there, or add a type beside them.</p>
+<p>To try a game's entities before porting them,
+<span class="unlinked"><code>HammeriteFgdImporter</code></span> registers an FGD's classes as they are read.
+Point the <code>HammeriteLevel</code>'s <strong>Entity Definitions</strong> at the <code>.fgd</code> or resource itself, or:</p>
+<pre><code class="language-gdscript">var fgd := HammeriteFgdImporter.new()
+fgd.read_func_godot(load(&quot;res://entities/my_game_fgd.tres&quot;))   # or read_fgd_file(&quot;res://my_game.fgd&quot;)
+fgd.register_types()
+fgd.configure(map_editor.map_importer)   # the solids func_godot merges into the world are the world
+</code></pre>
+<h3 id="your-entity-scripts-unchanged">Your entity scripts, unchanged</h3>
+<p>A class built on its adapter -
+<span class="unlinked"><code>HammeriteFuncGodotPointEntity</code></span>, or for a solid class the
+brush adapter whose body its node is - does what func_godot did: it attaches the class's script to the
+entity's own node (so a door's script moving <code>self</code> moves the door), or builds its scene or engine class
+as a child, and hands it the entity's properties as <code>func_godot_properties</code>, through
+<code>_func_godot_apply_properties(properties)</code>, onto matching node properties where the class asked for
+that, and then calls <code>_func_godot_build_complete()</code>. Scripts written for func_godot run as they are, so
+a game can move over first and port later - once its numbers are in Hammerite's units (below).</p>
+<h3 id="porting-a-class-properly">Porting a class properly</h3>
+<p>A class ported to a script is built on that script: its properties are variables, and it has the
+<code>_set_editor_active</code> and <code>_apply_entity_property</code> every entity has, for the work its func_godot script
+did to be moved into. To port a class left on its adapter later, write its script and build it on that
+instead, by changing its <code>classname</code> in the set to the script's class:</p>
+<pre><code class="language-gdscript">var fgd := HammeriteFgdImporter.new()
+fgd.read_fgd_file(&quot;res://my_game.fgd&quot;)
+fgd.write_entity_scripts(&quot;res://entities&quot;, [&quot;func_door&quot;])   # res://entities/func_door.gd, class_name FuncDoor
+</code></pre>
+<p>Porting the FGD again replaces the set, and with it any change made to it since.</p>
+<h3 id="units">Units</h3>
+<p>func_godot builds a level in Godot's units: it divides brush coordinates and entity origins by the map
+settings' <code>inverse_scale_factor</code>, 32 by default, so 32 map units are a metre. Hammerite does not. A
+level keeps the map's units, as Hammerite's own defaults expect - an 18-unit step, a 64-unit grid - so an
+imported level is <code>inverse_scale_factor</code> times larger than it was under func_godot.</p>
+<p>func_godot left entity properties as they were written, so a key's value means what it meant. What has
+to change is the game's own numbers measured in metres: a player's speed and jump height, a camera's
+near plane, a script's distances and ranges, gravity, and the size of every model and scene placed in
+the level. Multiply each by the <code>inverse_scale_factor</code> the game used.</p>
+<h2 id="quakes-own-maps">Quake's own maps</h2>
+<p>A map made with Quake's art and Quake's entities - one of id's, or a mod's - is read with Quake's
+conventions by <span class="unlinked"><code>HammeriteMapFileImporter.quake()</code></span>:</p>
+<ul>
+<li>a texture's name says what it is: <code>{grate</code> is the cut-out <code>!grate</code>, <code>*water0</code> the liquid
+  <code>liquid_water0</code> and a room of water, <code>sky4</code> the sky <code>sky_sky4</code>, all in lower case
+  (<span class="unlinked"><code>quake_texture_name</code></span>);</li>
+<li>Quake's lights, doors, buttons, platforms, triggers and path corners become the
+  <a href="entity-sets.html">entity sets</a>' types, their keys converted - a light's brightness, colour and reach,
+  a door's travel along its angle less its lip.</li>
+</ul>
+		</article>
+		<p class="docs-source">Hammerite latest · built from c0b28836, 2026-10-22</p>
+	</main>
+</div>
+
+<footer class="studio-foot">
+	<a href="../../../../index.html"><img src="../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>

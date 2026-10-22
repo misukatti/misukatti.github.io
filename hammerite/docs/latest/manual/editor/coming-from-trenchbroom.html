@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Coming from TrenchBroom — Hammerite 3D latest docs</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="../../../../assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="../../../../assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../../../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@300&display=swap">
+<link rel="stylesheet" href="../../../../hammerite.css">
+<link rel="stylesheet" href="../../../docs.css">
+<script src="../../../versions.js" defer></script>
+</head>
+<body class="docs" data-docs-version="latest">
+
+<header class="studio">
+	<a class="studio-logo" href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="../../../../index.html">Hammerite 3D</a>
+		<a href="../../index.html">Docs</a>
+		<a href="../../guides/index.html">Guides</a>
+		<a href="../../api/index.html">API</a>
+		<a href="../index.html">Manual</a>
+	</nav>
+</header>
+
+<div class="docs-banner" hidden></div>
+
+<div class="docs-layout">
+	<aside class="docs-side">
+		<a class="docs-brand" href="../../index.html"><img src="../../../../assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
+		<label class="docs-version">Version
+			<select aria-label="Docs version"><option value="latest" selected>latest</option></select>
+		</label>
+		<nav class="api-nav"><a class="api-home" href="../index.html">Manual</a><h2>Core</h2><ul><li><a href="../core/index.html">Core</a></li><li><a href="../core/carved-world.html">The carved world</a></li><li><a href="../core/rooms-and-portals.html">Rooms and portals</a></li><li><a href="../core/fills.html">Fills</a></li><li><a href="../core/entities.html">Entities</a></li><li><a href="../core/textures.html">Textures</a></li><li><a href="../core/lighting.html">Lighting</a></li><li><a href="../core/baking.html">Baking</a></li><li><a href="../core/variants.html">Variants</a></li><li><a href="../core/terrain.html">Terrain</a></li><li><a href="../core/glossary.html">Glossary</a></li></ul><h2>Editor</h2><ul><li><a href="index.html">Editor</a></li><li><a href="coming-from-trenchbroom.html" aria-current="page">Coming from TrenchBroom</a></li><li><a href="interface.html">The interface</a></li><li><a href="camera.html">Camera</a></li><li><a href="selecting.html">Selecting</a></li><li><a href="building.html">Building</a></li><li><a href="editing.html">Editing</a></li><li><a href="texturing.html">Texturing</a></li><li><a href="terrain.html">Terrain</a></li><li><a href="entities.html">Entities</a></li><li><a href="props.html">Props</a></li><li><a href="decals.html">Decals</a></li><li><a href="prefabs.html">Prefabs</a></li><li><a href="layers.html">Layers</a></li><li><a href="sky.html">Sky</a></li><li><a href="lighting.html">Lighting</a></li><li><a href="problems.html">Problems</a></li><li><a href="files.html">Map files</a></li><li><a href="dividing-rooms.html">Dividing a map into rooms</a></li><li><a href="keys.html">Keyboard reference</a></li><li><a href="manual.html">Using the manual</a></li><li><a href="extending-the-manual.html">Extending the manual</a></li></ul><h2>Audio</h2><ul><li><a href="../audio/index.html">Audio</a></li><li><a href="../audio/rooms.html">Rooms</a></li><li><a href="../audio/doors.html">Doors and openings</a></li><li><a href="../audio/outdoors.html">Outdoors and weather</a></li><li><a href="../audio/graph.html">The audio graph</a></li></ul><h2>Navigation</h2><ul><li><a href="../nav/index.html">Navigation</a></li><li><a href="../nav/ground.html">Ground</a></li><li><a href="../nav/links.html">Links</a></li><li><a href="../nav/preview.html">The Navigation tool</a></li></ul><h2>Docs</h2><ul><li><a href="../../index.html">Docs home</a></li><li><a href="../../api/index.html">API reference</a></li></ul></nav>
+	</aside>
+	<main class="docs-main">
+		<article class="prose">
+<h1 id="coming-from-trenchbroom">Coming from TrenchBroom</h1>
+<p>Most of what your hands know carries over: the four views, the grid, brushes cut with a clip tool,
+vertices dragged, textures lined up face by face. What changes is what a brush <em>is</em>. This page is what
+to unlearn first, and where the things you reach for are.</p>
+<h2 id="the-world-is-carved-not-built">The world is carved, not built</h2>
+<p>In TrenchBroom the world is empty space, every brush is solid, and a room is the gap you leave between
+walls you build. Hammerite is the other way round: <strong>everything is rock</strong>, and you draw the room.</p>
+<table>
+<thead>
+<tr>
+<th>In TrenchBroom you</th>
+<th>In Hammerite you</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>build six walls round a space</td>
+<td>draw one <strong>Air</strong> brush the size of the space</td>
+</tr>
+<tr>
+<td>make a doorway by building a wall in two halves</td>
+<td>draw a small <strong>Air</strong> brush between two rooms, touching both</td>
+</tr>
+<tr>
+<td>put a pillar in a hall</td>
+<td>draw a <strong>Solid</strong> brush in it, after the hall</td>
+</tr>
+<tr>
+<td>mark trim and furniture <code>func_detail</code></td>
+<td>draw it in <strong>Detail</strong></td>
+</tr>
+</tbody>
+</table>
+<p>So a room is one brush, not six, and its walls are its faces seen from inside. Texture the room by
+texturing that brush. <code>Tab</code> cycles the tier new brushes are drawn in; it starts on Air. The model in
+full is <a href="../core/carved-world.html">The carved world</a>, and it is worth the five minutes.</p>
+<h3 id="no-leaks-no-sealing">No leaks, no sealing</h3>
+<p>Outside every room is rock, so there is no void for the map to leak into and nothing to seal. There
+are no gaps to hunt for either: wherever nothing is carved there is wall. The one way to see out of a
+room is a see-through texture on its own wall, and the <a href="problems.html">Problems</a> panel marks that.</p>
+<h3 id="no-compiling">No compiling</h3>
+<p>There is no qbsp, vis or light step to run. Every edit recompiles what it touched as you make it, and
+rooms, openings and visibility are always up to date. Lighting is the one thing you ask for: <code>Cmd</code> <code>L</code>
+and <strong>Bake</strong>. If the world ever looks wrong in a way no edit explains,
+<strong>Tools → Recompile Whole Level</strong> carves it all again.</p>
+<h3 id="rooms-are-what-sound-and-sight-follow">Rooms are what sound and sight follow</h3>
+<p>How two Air brushes meet decides whether they are one room or two:</p>
+<ul>
+<li><strong>Overlap</strong> them to make one space: an L-shaped hall from two boxes, an alcove.</li>
+<li><strong>Abut</strong> them - faces touching on one plane - to make two rooms with an opening between, which a door
+  can close and sound passes through.</li>
+</ul>
+<p>There is no hint brush or area portal to place: the rooms <em>are</em> the portals. See
+<a href="../core/rooms-and-portals.html">Rooms and portals</a>.</p>
+<h2 id="where-things-are">Where things are</h2>
+<table>
+<thead>
+<tr>
+<th>TrenchBroom</th>
+<th>Hammerite</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Clip tool</td>
+<td><code>X</code>, then drag across a face or click three points; <code>Space</code> chooses what to keep</td>
+</tr>
+<tr>
+<td>Vertex tool, edge tool</td>
+<td><code>V</code>, <code>Shift</code> <code>V</code></td>
+</tr>
+<tr>
+<td>Moving a face</td>
+<td>hold <code>Q</code> and drag the face; with <code>Cmd</code> held, extrude it into a new brush</td>
+</tr>
+<tr>
+<td>Move, rotate, scale</td>
+<td><code>G</code>, <code>R</code>, <code>S</code>, then <code>X</code>, <code>Y</code> or <code>Z</code> to lock an axis; click to drop, <code>Esc</code> to put it back</td>
+</tr>
+<tr>
+<td>CSG merge (convex hull)</td>
+<td><code>,</code> merges the selected brushes into one</td>
+</tr>
+<tr>
+<td>CSG subtract, hollow</td>
+<td>not needed: draw an Air brush where the hole should be</td>
+</tr>
+<tr>
+<td>func_group, TrenchBroom groups</td>
+<td>groups, <code>Cmd</code> <code>G</code>; hold <code>I</code> and click to pick one brush of a group</td>
+</tr>
+<tr>
+<td>Layers</td>
+<td>the <strong>Layers</strong> panel; hide, ghost or lock a layer as you would</td>
+</tr>
+<tr>
+<td>Hide, isolate</td>
+<td>narrowing, <code>Cmd</code> <code>N</code>, which hides everything but the selection, in levels</td>
+</tr>
+<tr>
+<td>func_detail</td>
+<td>the <strong>Detail</strong> tier</td>
+</tr>
+<tr>
+<td>Brush entity from a selection</td>
+<td><code>Ctrl</code> <code>T</code>, then pick its type in the inspector</td>
+</tr>
+<tr>
+<td>Move brushes to world</td>
+<td><code>Ctrl</code> <code>Shift</code> <code>T</code> breaks the selected brush entity back into brushes</td>
+</tr>
+<tr>
+<td>Entity browser</td>
+<td><code>Cmd</code> <code>E</code>, then click a surface to place</td>
+</tr>
+<tr>
+<td>target / targetname lines</td>
+<td>drawn for the selected entity, out in teal and in in orange</td>
+</tr>
+<tr>
+<td>Find entity</td>
+<td><code>Ctrl</code> <code>F</code></td>
+</tr>
+<tr>
+<td>Texture browser</td>
+<td><code>T</code></td>
+</tr>
+<tr>
+<td>Texture alignment</td>
+<td><code>F</code> for the face's UV panel: offset, scale, angle, justify, stretch to fit</td>
+</tr>
+<tr>
+<td>Copy a face's texture to another</td>
+<td><code>Cmd</code> <code>Shift</code> <code>C</code> to pick it up, <code>Shift</code>-click faces to paint it; painted onto a face beside it, it wraps round the edge</td>
+</tr>
+<tr>
+<td>Replace texture</td>
+<td><strong>Selection → Replace Texture in Map</strong></td>
+</tr>
+<tr>
+<td>Grid size</td>
+<td><code>=</code> coarser, <code>-</code> finer</td>
+</tr>
+<tr>
+<td>Duplicate</td>
+<td><code>Cmd</code> <code>D</code></td>
+</tr>
+<tr>
+<td>Maximise a view</td>
+<td><code>M</code></td>
+</tr>
+<tr>
+<td>Issue browser</td>
+<td>the <strong>Problems</strong> panel</td>
+</tr>
+<tr>
+<td>Command search</td>
+<td><code>/</code> finds any command by name</td>
+</tr>
+<tr>
+<td>Keyboard preferences</td>
+<td><strong>Help → Keyboard Shortcuts…</strong></td>
+</tr>
+</tbody>
+</table>
+<p>The camera works as you expect: hold the right mouse button to look round and fly with <code>W</code> <code>A</code> <code>S</code>
+<code>D</code>. In the flat views, drag a ruler with the right mouse button to cut the view at a height, so the
+floor you are on is not buried under the ones above. The whole list is in
+<a href="keys.html">Keyboard reference</a>.</p>
+<p>A few things work differently:</p>
+<ul>
+<li><strong>A tool owns the plain keys while it runs.</strong> Press <code>Esc</code> to leave it before another tool's key.</li>
+<li><strong>A selection box in the 3D view takes brushes wholly inside it</strong>, and selects objects only: in face
+  mode a drag there moves the face. Box faces in the flat views.</li>
+<li><strong>Curved patches</strong> are not brushes here. For an arch or a bend, use the <strong>Arch</strong> brush, or sweep faces
+  round a curve or along a path (<code>Shift</code> <code>E</code>, <code>Ctrl</code> <code>E</code>).</li>
+</ul>
+<h2 id="bringing-a-map-across">Bringing a map across</h2>
+<p><strong>File → Import .map File…</strong> opens a <code>.map</code> from TrenchBroom, J.A.C.K. or the Radiants as a new map:
+the void round it is filled back in as rock, every brush stays as you drew it, your layers and groups
+come with it, and every face keeps where its texture lay. Two things to do after:</p>
+<ul>
+<li>The map's inside comes in as <strong>one room</strong>. Select it and choose <strong>Selection → Divide into Rooms</strong>
+  to divide it at its doorways, windows and doors, and fix what it missed by hand: see
+  <a href="dividing-rooms.html">Dividing a map into rooms</a>.</li>
+<li>Check the <a href="problems.html">Problems</a> panel, and bake.</li>
+</ul>
+<p>The import is one way: Hammerite does not write <code>.map</code> files, so carry on in Hammerite once a map is
+across. See <a href="files.html#maps-from-trenchbroom">Map files</a>.</p>
+<h2 id="for-the-developer">For the developer</h2>
+<p>Your FGD is ported once into the game's own entity types, from the Godot editor's <strong>Project → Tools →
+Port FGD to Hammerite…</strong>, and the inspector shows its choices, flags and targets as TrenchBroom did.
+func_godot entity scripts run on them unchanged;
+func_godot built your levels in metres and Hammerite keeps the map's units, so the game's own numbers
+are scaled once. All of it is in the guide <em>Importing .map files</em>, <code>docs/guides/importing-map-files.md</code> in the Hammerite
+package, which the game's programmer will want.</p>
+		</article>
+		<p class="docs-source">Hammerite latest · built from c0b28836, 2026-10-22</p>
+	</main>
+</div>
+
+<footer class="studio-foot">
+	<a href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>

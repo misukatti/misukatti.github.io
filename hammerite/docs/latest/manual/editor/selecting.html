@@ -36,7 +36,7 @@
 		<label class="docs-version">Version
 			<select aria-label="Docs version"><option value="latest" selected>latest</option></select>
 		</label>
-		<nav class="api-nav"><a class="api-home" href="../index.html">Manual</a><h2>Core</h2><ul><li><a href="../core/index.html">Core</a></li><li><a href="../core/carved-world.html">The carved world</a></li><li><a href="../core/rooms-and-portals.html">Rooms and portals</a></li><li><a href="../core/fills.html">Fills</a></li><li><a href="../core/entities.html">Entities</a></li><li><a href="../core/textures.html">Textures</a></li><li><a href="../core/lighting.html">Lighting</a></li><li><a href="../core/baking.html">Baking</a></li><li><a href="../core/variants.html">Variants</a></li><li><a href="../core/terrain.html">Terrain</a></li><li><a href="../core/glossary.html">Glossary</a></li></ul><h2>Editor</h2><ul><li><a href="index.html">Editor</a></li><li><a href="interface.html">The interface</a></li><li><a href="camera.html">Camera</a></li><li><a href="selecting.html" aria-current="page">Selecting</a></li><li><a href="building.html">Building</a></li><li><a href="editing.html">Editing</a></li><li><a href="texturing.html">Texturing</a></li><li><a href="terrain.html">Terrain</a></li><li><a href="entities.html">Entities</a></li><li><a href="props.html">Props</a></li><li><a href="decals.html">Decals</a></li><li><a href="prefabs.html">Prefabs</a></li><li><a href="layers.html">Layers</a></li><li><a href="sky.html">Sky</a></li><li><a href="lighting.html">Lighting</a></li><li><a href="problems.html">Problems</a></li><li><a href="files.html">Map files</a></li><li><a href="keys.html">Keyboard reference</a></li><li><a href="manual.html">Using the manual</a></li><li><a href="extending-the-manual.html">Extending the manual</a></li></ul><h2>Audio</h2><ul><li><a href="../audio/index.html">Audio</a></li><li><a href="../audio/rooms.html">Rooms</a></li><li><a href="../audio/doors.html">Doors and openings</a></li><li><a href="../audio/outdoors.html">Outdoors and weather</a></li><li><a href="../audio/graph.html">The audio graph</a></li></ul><h2>Navigation</h2><ul><li><a href="../nav/index.html">Navigation</a></li><li><a href="../nav/ground.html">Ground</a></li><li><a href="../nav/links.html">Links</a></li><li><a href="../nav/preview.html">The Navigation tool</a></li></ul><h2>Docs</h2><ul><li><a href="../../index.html">Docs home</a></li><li><a href="../../api/index.html">API reference</a></li></ul></nav>
+		<nav class="api-nav"><a class="api-home" href="../index.html">Manual</a><h2>Core</h2><ul><li><a href="../core/index.html">Core</a></li><li><a href="../core/carved-world.html">The carved world</a></li><li><a href="../core/rooms-and-portals.html">Rooms and portals</a></li><li><a href="../core/fills.html">Fills</a></li><li><a href="../core/entities.html">Entities</a></li><li><a href="../core/textures.html">Textures</a></li><li><a href="../core/lighting.html">Lighting</a></li><li><a href="../core/baking.html">Baking</a></li><li><a href="../core/variants.html">Variants</a></li><li><a href="../core/terrain.html">Terrain</a></li><li><a href="../core/glossary.html">Glossary</a></li></ul><h2>Editor</h2><ul><li><a href="index.html">Editor</a></li><li><a href="coming-from-trenchbroom.html">Coming from TrenchBroom</a></li><li><a href="interface.html">The interface</a></li><li><a href="camera.html">Camera</a></li><li><a href="selecting.html" aria-current="page">Selecting</a></li><li><a href="building.html">Building</a></li><li><a href="editing.html">Editing</a></li><li><a href="texturing.html">Texturing</a></li><li><a href="terrain.html">Terrain</a></li><li><a href="entities.html">Entities</a></li><li><a href="props.html">Props</a></li><li><a href="decals.html">Decals</a></li><li><a href="prefabs.html">Prefabs</a></li><li><a href="layers.html">Layers</a></li><li><a href="sky.html">Sky</a></li><li><a href="lighting.html">Lighting</a></li><li><a href="problems.html">Problems</a></li><li><a href="files.html">Map files</a></li><li><a href="dividing-rooms.html">Dividing a map into rooms</a></li><li><a href="keys.html">Keyboard reference</a></li><li><a href="manual.html">Using the manual</a></li><li><a href="extending-the-manual.html">Extending the manual</a></li></ul><h2>Audio</h2><ul><li><a href="../audio/index.html">Audio</a></li><li><a href="../audio/rooms.html">Rooms</a></li><li><a href="../audio/doors.html">Doors and openings</a></li><li><a href="../audio/outdoors.html">Outdoors and weather</a></li><li><a href="../audio/graph.html">The audio graph</a></li></ul><h2>Navigation</h2><ul><li><a href="../nav/index.html">Navigation</a></li><li><a href="../nav/ground.html">Ground</a></li><li><a href="../nav/links.html">Links</a></li><li><a href="../nav/preview.html">The Navigation tool</a></li></ul><h2>Docs</h2><ul><li><a href="../../index.html">Docs home</a></li><li><a href="../../api/index.html">API reference</a></li></ul></nav>
 	</aside>
 	<main class="docs-main">
 		<article class="prose">
@@ -64,7 +64,7 @@
 <td><code>Cmd</code>-click</td>
 </tr>
 <tr>
-<td>Pick the far side of a surface</td>
+<td>Pick the backface of a surface</td>
 <td><code>Alt</code>-click</td>
 </tr>
 <tr>
@@ -82,6 +82,7 @@
 </tbody>
 </table>
 <p>The brush under the cursor lights up before you click. In face mode the face under the cursor lights up instead.</p>
+<p>Nothing on a hidden or locked layer is picked: a click goes through it to what is behind. See <a href="layers.html">Layers</a>.</p>
 <h2 id="face-mode">Face mode</h2>
 <p>Tap <code>Q</code>, or set <strong>Selection</strong> on the toolbar to <strong>Faces</strong>, and clicks select faces rather than brushes until you tap it again. Hold <code>Q</code> instead and it lasts only while the key is down, for a face or two in passing. The tool help at the foot of the left panel says which mode you are in.</p>
 <p>In a carved world the near side of a wall is usually rock you do not want. <code>Alt</code>-click picks the side facing away from you.</p>
@@ -89,13 +90,14 @@
 <p>When more than one thing is under the cursor, the tool help at the foot of the left panel says how many. Double-click the same spot to open a list of all of them. Hover an entry to light it up; click it to select it.</p>
 <figure><img src="images/selecting-candidates.png" alt="The list of everything under the cursor" loading="lazy"><figcaption>The list of everything under the cursor</figcaption></figure>
 <h2 id="dragging-a-box">Dragging a box</h2>
-<p>In a 2D view, drag from empty space to select everything inside the box.</p>
+<p>Drag to select everything inside a box. <code>Cmd</code>-drag adds to the selection. Hidden layers, locked layers and brushes outside the current narrowing are skipped.</p>
+<p>In a 2D view, drag from empty space. A brush is taken when its centre or any of its corners is inside the box, and an entity when its origin is.</p>
 <ul>
-<li><code>Cmd</code>-drag adds to the selection.</li>
 <li>In face mode the box selects faces instead of brushes.</li>
 <li>Push against the edge of the view and it scrolls, so the box can take in what was off screen.</li>
 </ul>
-<p>Box selection works in the 2D views only. Hidden layers and brushes outside the current narrowing are skipped.</p>
+<p>In the 3D view, drag anywhere. A brush is taken only when all of it is inside the box and in front of the camera, so the room you are standing in is never taken. An entity is taken when its origin is inside. The box sees through walls: a brush in the next room is taken if it is inside the box.</p>
+<p>In face mode, a drag in the 3D view moves the face under the cursor, as it always does. Drag a box of faces in a 2D view.</p>
 <h2 id="groups">Groups</h2>
 <p>Brushes in a group are selected together.</p>
 <ol>
@@ -152,7 +154,7 @@
 <p><code>Up</code> and <code>Down</code> walk the list, and clicking a row does the same: the entity is selected and every view moves onto it, with the field still open. <code>Enter</code> goes to the highlighted row and closes the field; <code>Esc</code> closes it and leaves the selection as it is.</p>
 <p>A row drawn faintly is an entity on a hidden layer, or outside what the views are narrowed to. With nothing typed the list is every entity in the map, by type.</p>
 		</article>
-		<p class="docs-source">Hammerite latest · built from 45a63b69, 2026-10-19</p>
+		<p class="docs-source">Hammerite latest · built from c0b28836, 2026-10-22</p>
 	</main>
 </div>
 

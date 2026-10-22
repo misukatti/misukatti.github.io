@@ -36,7 +36,7 @@
 		<label class="docs-version">Version
 			<select aria-label="Docs version"><option value="latest" selected>latest</option></select>
 		</label>
-		<nav class="api-nav"><a class="api-home" href="../index.html">Manual</a><h2>Core</h2><ul><li><a href="../core/index.html">Core</a></li><li><a href="../core/carved-world.html">The carved world</a></li><li><a href="../core/rooms-and-portals.html">Rooms and portals</a></li><li><a href="../core/fills.html">Fills</a></li><li><a href="../core/entities.html">Entities</a></li><li><a href="../core/textures.html">Textures</a></li><li><a href="../core/lighting.html">Lighting</a></li><li><a href="../core/baking.html">Baking</a></li><li><a href="../core/variants.html">Variants</a></li><li><a href="../core/terrain.html">Terrain</a></li><li><a href="../core/glossary.html">Glossary</a></li></ul><h2>Editor</h2><ul><li><a href="index.html">Editor</a></li><li><a href="interface.html">The interface</a></li><li><a href="camera.html">Camera</a></li><li><a href="selecting.html">Selecting</a></li><li><a href="building.html">Building</a></li><li><a href="editing.html">Editing</a></li><li><a href="texturing.html">Texturing</a></li><li><a href="terrain.html">Terrain</a></li><li><a href="entities.html">Entities</a></li><li><a href="props.html">Props</a></li><li><a href="decals.html">Decals</a></li><li><a href="prefabs.html">Prefabs</a></li><li><a href="layers.html">Layers</a></li><li><a href="sky.html">Sky</a></li><li><a href="lighting.html">Lighting</a></li><li><a href="problems.html">Problems</a></li><li><a href="files.html" aria-current="page">Map files</a></li><li><a href="keys.html">Keyboard reference</a></li><li><a href="manual.html">Using the manual</a></li><li><a href="extending-the-manual.html">Extending the manual</a></li></ul><h2>Audio</h2><ul><li><a href="../audio/index.html">Audio</a></li><li><a href="../audio/rooms.html">Rooms</a></li><li><a href="../audio/doors.html">Doors and openings</a></li><li><a href="../audio/outdoors.html">Outdoors and weather</a></li><li><a href="../audio/graph.html">The audio graph</a></li></ul><h2>Navigation</h2><ul><li><a href="../nav/index.html">Navigation</a></li><li><a href="../nav/ground.html">Ground</a></li><li><a href="../nav/links.html">Links</a></li><li><a href="../nav/preview.html">The Navigation tool</a></li></ul><h2>Docs</h2><ul><li><a href="../../index.html">Docs home</a></li><li><a href="../../api/index.html">API reference</a></li></ul></nav>
+		<nav class="api-nav"><a class="api-home" href="../index.html">Manual</a><h2>Core</h2><ul><li><a href="../core/index.html">Core</a></li><li><a href="../core/carved-world.html">The carved world</a></li><li><a href="../core/rooms-and-portals.html">Rooms and portals</a></li><li><a href="../core/fills.html">Fills</a></li><li><a href="../core/entities.html">Entities</a></li><li><a href="../core/textures.html">Textures</a></li><li><a href="../core/lighting.html">Lighting</a></li><li><a href="../core/baking.html">Baking</a></li><li><a href="../core/variants.html">Variants</a></li><li><a href="../core/terrain.html">Terrain</a></li><li><a href="../core/glossary.html">Glossary</a></li></ul><h2>Editor</h2><ul><li><a href="index.html">Editor</a></li><li><a href="coming-from-trenchbroom.html">Coming from TrenchBroom</a></li><li><a href="interface.html">The interface</a></li><li><a href="camera.html">Camera</a></li><li><a href="selecting.html">Selecting</a></li><li><a href="building.html">Building</a></li><li><a href="editing.html">Editing</a></li><li><a href="texturing.html">Texturing</a></li><li><a href="terrain.html">Terrain</a></li><li><a href="entities.html">Entities</a></li><li><a href="props.html">Props</a></li><li><a href="decals.html">Decals</a></li><li><a href="prefabs.html">Prefabs</a></li><li><a href="layers.html">Layers</a></li><li><a href="sky.html">Sky</a></li><li><a href="lighting.html">Lighting</a></li><li><a href="problems.html">Problems</a></li><li><a href="files.html" aria-current="page">Map files</a></li><li><a href="dividing-rooms.html">Dividing a map into rooms</a></li><li><a href="keys.html">Keyboard reference</a></li><li><a href="manual.html">Using the manual</a></li><li><a href="extending-the-manual.html">Extending the manual</a></li></ul><h2>Audio</h2><ul><li><a href="../audio/index.html">Audio</a></li><li><a href="../audio/rooms.html">Rooms</a></li><li><a href="../audio/doors.html">Doors and openings</a></li><li><a href="../audio/outdoors.html">Outdoors and weather</a></li><li><a href="../audio/graph.html">The audio graph</a></li></ul><h2>Navigation</h2><ul><li><a href="../nav/index.html">Navigation</a></li><li><a href="../nav/ground.html">Ground</a></li><li><a href="../nav/links.html">Links</a></li><li><a href="../nav/preview.html">The Navigation tool</a></li></ul><h2>Docs</h2><ul><li><a href="../../index.html">Docs home</a></li><li><a href="../../api/index.html">API reference</a></li></ul></nav>
 	</aside>
 	<main class="docs-main">
 		<article class="prose">
@@ -68,6 +68,10 @@
 <tr>
 <td>Save edited prefabs</td>
 <td><strong>File → Save Modified Prefab Sets</strong></td>
+</tr>
+<tr>
+<td>Bring in a map from TrenchBroom</td>
+<td><strong>File → Import .map File…</strong></td>
 </tr>
 <tr>
 <td>Migrate what Hammerite 1.x saved</td>
@@ -112,6 +116,15 @@
 </table>
 <p>Use <code>.hmap</code> for maps you share or download. It holds values only, so opening one cannot run code. A <code>.tres</code> or <code>.res</code> can, which is why the editor refuses one from outside the project.</p>
 <p>To convert a map, open it and <strong>Save Map As…</strong> with the other extension.</p>
+<h2 id="maps-from-trenchbroom">Maps from TrenchBroom</h2>
+<p><strong>File → Import .map File…</strong> opens a <code>.map</code>, as TrenchBroom, J.A.C.K. and the Radiants save it, as a new map. Save it to keep it.</p>
+<ul>
+<li>A <code>.map</code> builds walls in empty space; Hammerite carves rooms out of rock. The space around the map is filled back in as solid brushes, on a layer named <strong>Void filled on import</strong> that starts hidden. Leave them: they are the rock outside your map.</li>
+<li>Everything inside the map's walls comes in as <strong>one room</strong>, one air brush. Select it and choose <strong>Selection → Divide into Rooms</strong>: it is divided at every doorway and window - a hole through a wall that is larger than the hole - and wherever a door closes an opening, into air brushes that overlap within a room and abut at each doorway, so each doorway is a portal. Undo puts the one brush back. Where it divided wrongly or not at all, see <a href="dividing-rooms.html">Dividing a map into rooms</a>. The command divides any air brush that spans several rooms, not only an imported one.</li>
+<li>A map that leaks - with a gap in its outside walls - comes in with the space round it still open, and the message log says so. Close the gap and import it again.</li>
+<li>TrenchBroom's layers and groups come in as layers and groups, hidden and locked as they were. A layer TrenchBroom omits from export is left out.</li>
+<li>Which entities come in, and as what, is your game's choice; the message log names the kinds left out. Clip, skip and other tool brushes are left out of the world.</li>
+</ul>
 <h2 id="files-from-hammerite-1x">Files from Hammerite 1.x</h2>
 <p>A <code>.tres</code>, <code>.res</code> or scene saved by Hammerite 1.x does not open in 2.0 until it is migrated. <strong>File → Migrate 1.x Resources…</strong> does it from the editor:</p>
 <ol>
@@ -130,7 +143,7 @@
 <h2 id="when-the-game-has-changed">When the game has changed</h2>
 <p>When you open a map, the editor checks what it names against what the game provides now: a texture gone, a model now provided by something else. Each change is listed in the <strong>Problems</strong> panel, under <strong>Changed in the game since saving</strong>, until you save the map.</p>
 		</article>
-		<p class="docs-source">Hammerite latest · built from 45a63b69, 2026-10-19</p>
+		<p class="docs-source">Hammerite latest · built from c0b28836, 2026-10-22</p>
 	</main>
 </div>
 

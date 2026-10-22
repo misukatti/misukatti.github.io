@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dividing a map into rooms — Hammerite 3D latest docs</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="../../../../assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="../../../../assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../../../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@300&display=swap">
+<link rel="stylesheet" href="../../../../hammerite.css">
+<link rel="stylesheet" href="../../../docs.css">
+<script src="../../../versions.js" defer></script>
+</head>
+<body class="docs" data-docs-version="latest">
+
+<header class="studio">
+	<a class="studio-logo" href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="../../../../index.html">Hammerite 3D</a>
+		<a href="../../index.html">Docs</a>
+		<a href="../../guides/index.html">Guides</a>
+		<a href="../../api/index.html">API</a>
+		<a href="../index.html">Manual</a>
+	</nav>
+</header>
+
+<div class="docs-banner" hidden></div>
+
+<div class="docs-layout">
+	<aside class="docs-side">
+		<a class="docs-brand" href="../../index.html"><img src="../../../../assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
+		<label class="docs-version">Version
+			<select aria-label="Docs version"><option value="latest" selected>latest</option></select>
+		</label>
+		<nav class="api-nav"><a class="api-home" href="../index.html">Manual</a><h2>Core</h2><ul><li><a href="../core/index.html">Core</a></li><li><a href="../core/carved-world.html">The carved world</a></li><li><a href="../core/rooms-and-portals.html">Rooms and portals</a></li><li><a href="../core/fills.html">Fills</a></li><li><a href="../core/entities.html">Entities</a></li><li><a href="../core/textures.html">Textures</a></li><li><a href="../core/lighting.html">Lighting</a></li><li><a href="../core/baking.html">Baking</a></li><li><a href="../core/variants.html">Variants</a></li><li><a href="../core/terrain.html">Terrain</a></li><li><a href="../core/glossary.html">Glossary</a></li></ul><h2>Editor</h2><ul><li><a href="index.html">Editor</a></li><li><a href="coming-from-trenchbroom.html">Coming from TrenchBroom</a></li><li><a href="interface.html">The interface</a></li><li><a href="camera.html">Camera</a></li><li><a href="selecting.html">Selecting</a></li><li><a href="building.html">Building</a></li><li><a href="editing.html">Editing</a></li><li><a href="texturing.html">Texturing</a></li><li><a href="terrain.html">Terrain</a></li><li><a href="entities.html">Entities</a></li><li><a href="props.html">Props</a></li><li><a href="decals.html">Decals</a></li><li><a href="prefabs.html">Prefabs</a></li><li><a href="layers.html">Layers</a></li><li><a href="sky.html">Sky</a></li><li><a href="lighting.html">Lighting</a></li><li><a href="problems.html">Problems</a></li><li><a href="files.html">Map files</a></li><li><a href="dividing-rooms.html" aria-current="page">Dividing a map into rooms</a></li><li><a href="keys.html">Keyboard reference</a></li><li><a href="manual.html">Using the manual</a></li><li><a href="extending-the-manual.html">Extending the manual</a></li></ul><h2>Audio</h2><ul><li><a href="../audio/index.html">Audio</a></li><li><a href="../audio/rooms.html">Rooms</a></li><li><a href="../audio/doors.html">Doors and openings</a></li><li><a href="../audio/outdoors.html">Outdoors and weather</a></li><li><a href="../audio/graph.html">The audio graph</a></li></ul><h2>Navigation</h2><ul><li><a href="../nav/index.html">Navigation</a></li><li><a href="../nav/ground.html">Ground</a></li><li><a href="../nav/links.html">Links</a></li><li><a href="../nav/preview.html">The Navigation tool</a></li></ul><h2>Docs</h2><ul><li><a href="../../index.html">Docs home</a></li><li><a href="../../api/index.html">API reference</a></li></ul></nav>
+	</aside>
+	<main class="docs-main">
+		<article class="prose">
+<h1 id="dividing-a-map-into-rooms">Dividing a map into rooms</h1>
+<p>A map imported from TrenchBroom comes in as <strong>one room</strong>: a single air brush carving out its whole inside. Sound fills it as one space, and no door has an opening to close. This page divides it, first with a command and then by hand where the command was wrong.</p>
+<p>Read <a href="../core/carved-world.html#overlap-to-extend-abut-to-divide">Overlap to extend, abut to divide</a> first. Everything here is that rule applied.</p>
+<h2 id="divide-it-with-the-command">Divide it with the command</h2>
+<ol>
+<li>Select the map's air brush. In a 2D view, double-click inside the map and choose <strong>Room (brush …)</strong> from the list. Its outline is the size of the whole map.</li>
+<li>Choose <strong>Selection → Divide into Rooms</strong>.</li>
+</ol>
+<p>The brush is replaced by several air brushes, which stay selected. The message log says how many rooms it made. <code>Cmd</code> <code>Z</code> puts the one brush back.</p>
+<p>The command divides:</p>
+<table>
+<thead>
+<tr>
+<th>At</th>
+<th>When</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A doorway or a window</td>
+<td>most of its edge is the wall it is cut through, and that wall is larger than the hole</td>
+</tr>
+<tr>
+<td>A door</td>
+<td>the door closes the opening, whatever its size, or fills a passage with no wall round it</td>
+</tr>
+</tbody>
+</table>
+<p>It does not divide:</p>
+<ul>
+<li>at an arch across a corridor, whose frame is smaller than its opening;</li>
+<li>at a step, a ledge or a room's open end;</li>
+<li>where a corridor narrows between sloping walls;</li>
+<li>across a door whose two sides also meet some other way round.</li>
+</ul>
+<p>The space through a doorway's depth goes to the room it opens widest onto. A closet behind a door stays a room of its own.</p>
+<p>Each room is one or more air brushes that overlap one another, so they are one space. Two rooms meet face to face at the opening between them, so each opening is a portal. The brushes take the original's place in the order, so they carve exactly what it did: nothing in the map changes shape.</p>
+<p>The command works on any air brush that runs through several rooms, not only an imported one.</p>
+<blockquote class="callout callout-tip"><p><strong>Tip:</strong> If your game sets up its importer to divide maps, <strong>File → Import .map File…</strong> has already done this.</p>
+</blockquote>
+<h2 id="check-the-result">Check the result</h2>
+<table>
+<thead>
+<tr>
+<th>Look at</th>
+<th>For</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>The 2D views</td>
+<td>portal lines where two rooms meet. A doorway with no line is not divided.</td>
+</tr>
+<tr>
+<td><strong>Audio Portals</strong> on the toolbar</td>
+<td>every opening drawn in the 3D view, if your game has audio installed. See <a href="../audio/doors.html">Doors and openings</a>.</td>
+</tr>
+<tr>
+<td>The <a href="problems.html">Problems</a> panel</td>
+<td>rooms that nearly touch or overlap ambiguously</td>
+</tr>
+</tbody>
+</table>
+<p>Fly through the level with the 2D views on a slice at head height, and look at each doorway in turn.</p>
+<h2 id="divide-where-it-did-not">Divide where it did not</h2>
+<p>To divide a room at a doorway the command missed, cut its air brushes there.</p>
+<ol>
+<li>Select every air brush of the room that runs through the doorway. Double-click the doorway in a 2D view: each air brush there is listed as <strong>Room (brush …)</strong>. Choose one, and <code>Cmd</code>-click to add the next.</li>
+<li>Press <code>X</code> for the clip tool.</li>
+<li>Hold <code>Alt</code> and click the face of the wall the doorway is cut through. The cut runs along that wall's plane.</li>
+<li>Press <code>Space</code> until the left panel says <strong>keeping both sides</strong>.</li>
+<li>Press <code>Enter</code>.</li>
+</ol>
+<p>The two halves abut on the wall's plane, so the doorway is now an opening. Both halves keep their place in the order.</p>
+<blockquote class="callout callout-warning"><p><strong>Warning:</strong> The cut runs across the whole of each brush cut, not just the doorway. Wherever else the room crosses that plane, it is divided there too. Check the 2D views for new portal lines away from the doorway, and join the room back there.</p>
+</blockquote>
+<p>If one of the room's brushes runs through the doorway and is left uncut, it overlaps both halves and makes them one space again. Cut every brush of the room that crosses the plane.</p>
+<h2 id="join-where-it-divided-wrongly">Join where it divided wrongly</h2>
+<p>To make two rooms one space, overlap them.</p>
+<ol>
+<li>Press <code>Tab</code> until <strong>Volume</strong> on the toolbar says <strong>Air</strong>.</li>
+<li>Draw a small air brush across the opening between the two rooms, reaching into both. It only has to overlap each room by a few units.</li>
+<li>Choose <strong>Edit → Send to Back</strong> (<code>Cmd</code> <code>Page Down</code>).</li>
+</ol>
+<p>Sent to the back of the order, the brush comes before every solid of the imported map. In an imported map all the rock is solid brushes, so wherever the brush reaches into rock, the rock is filled back in over it. It carves nothing; it only joins the two rooms. In a map built in Hammerite, where most rock is not brushes at all, keep the joining brush inside the two rooms.</p>
+<p>Do this wherever a clip divided a room it should not have, and wherever the command divided at a doorway you want open.</p>
+<blockquote class="callout callout-tip"><p><strong>Tip:</strong> Stretching one room's brush into the other with a face drag joins them too. That face usually runs right across the room, so it can join more than you meant. A small brush sent to the back joins exactly where you put it.</p>
+</blockquote>
+<h2 id="name-the-doorways">Name the doorways</h2>
+<p>A door finds the opening it fills by its name. Name each doorway a door stands in with the <strong>Audio Portals</strong> tool. See <a href="../audio/doors.html#naming-an-opening">Naming an opening</a>.</p>
+<p>Divide and join first, then name. A cut that makes a new opening between two rooms can move a name to a different opening. See <a href="../core/rooms-and-portals.html#naming-doorways">Rooms and portals</a>.</p>
+<p>Bake once the rooms are settled. See <a href="lighting.html">Lighting</a>.</p>
+<h2 id="for-the-developer">For the developer</h2>
+<p><strong>Selection → Divide into Rooms</strong> uses a <code>HammeriteRoomDivider</code> with its defaults. To divide every imported map as it comes in, or to change what counts as a doorway, see <em>Importing .map files</em>, <code>docs/guides/importing-map-files.md</code> in the Hammerite package.</p>
+		</article>
+		<p class="docs-source">Hammerite latest · built from c0b28836, 2026-10-22</p>
+	</main>
+</div>
+
+<footer class="studio-foot">
+	<a href="../../../../../index.html"><img src="../../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>

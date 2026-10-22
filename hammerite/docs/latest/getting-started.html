@@ -36,7 +36,7 @@
 		<label class="docs-version">Version
 			<select aria-label="Docs version"><option value="latest" selected>latest</option></select>
 		</label>
-		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="install.html">Installing Hammerite</a></li><li><a href="getting-started.html" aria-current="page">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="guides/writing-an-entity.html">Writing an entity class</a></li><li><a href="guides/rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="guides/stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="guides/stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="guides/probe-lighting.html">Probe lighting</a></li><li><a href="guides/entity-sets.html">Entity sets</a></li><li><a href="guides/moving-brush-entities.html">Moving brush entities</a></li><li><a href="guides/guard-navigation.html">Navigation for guards</a></li><li><a href="guides/brush-materials.html">Brush materials and shaders</a></li><li><a href="guides/brush-properties.html">Properties on brushes</a></li></ul><h2>Reference</h2><ul><li><a href="api/index.html">API reference</a></li><li><a href="manual/index.html">Manual</a></li><li><a href="migrating-to-2.0.html">Migrating to Hammerite 2.0</a></li><li><a href="baking.html">Baking from a script</a></li><li><a href="performance.html">Performance and limits</a></li><li><a href="troubleshooting.html">Troubleshooting</a></li><li><a href="api-stability.html">API stability</a></li></ul></nav>
+		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="install.html">Installing Hammerite</a></li><li><a href="getting-started.html" aria-current="page">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="guides/writing-an-entity.html">Writing an entity class</a></li><li><a href="guides/rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="guides/stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="guides/stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="guides/probe-lighting.html">Probe lighting</a></li><li><a href="guides/entity-sets.html">Entity sets</a></li><li><a href="guides/moving-brush-entities.html">Moving brush entities</a></li><li><a href="guides/guard-navigation.html">Navigation for guards</a></li><li><a href="guides/brush-materials.html">Brush materials and shaders</a></li><li><a href="guides/brush-properties.html">Properties on brushes</a></li><li><a href="guides/importing-map-files.html">Importing Quake maps</a></li></ul><h2>Reference</h2><ul><li><a href="api/index.html">API reference</a></li><li><a href="manual/index.html">Manual</a></li><li><a href="migrating-to-2.0.html">Migrating to Hammerite 2.0</a></li><li><a href="baking.html">Baking from a script</a></li><li><a href="performance.html">Performance and limits</a></li><li><a href="troubleshooting.html">Troubleshooting</a></li><li><a href="api-stability.html">API stability</a></li></ul></nav>
 	</aside>
 	<main class="docs-main">
 		<article class="prose">
@@ -46,6 +46,14 @@
 <code>addons/</code> are links to the addons beside it) and press F5. It has the full package installed, since it
 puts the editor over its map, and enables the core and editor plugins.</p>
 <p>Install the full package first: <a href="install.html">Installing Hammerite</a>.</p>
+<h2 id="with-no-code-at-all">With no code at all</h2>
+<p>Two nodes do everything below. Add a <strong>HammeriteLevel</strong> to a scene and set its <strong>Map Path</strong> - a map
+that does not exist yet is a new one, which saving writes there - and its <strong>Texture Paths</strong>. Add a
+<strong>HammeriteLevelEditor</strong> beneath it. Press F5: the level is built, a camera flies round it (right mouse
+to look, W A S D Q E to move), and F10 opens the editor over it.
+<span class="unlinked"><code>examples/starter</code></span> is exactly that, with a lit room to start from.</p>
+<p>The rest of this guide is the same thing in code, which is where a game goes once it has entities and
+a player of its own.</p>
 <h2 id="1-textures">1. Textures</h2>
 <p>Hammerite looks textures up by name. Put some in a folder - <code>res://textures/stone_wall.png</code> is the
 texture <code>stone_wall</code> - and tell the library where they are before any map is built:</p>
@@ -108,7 +116,7 @@ Map</strong> (<code>Cmd</code> <code>S</code>). The bake is saved with the map; 
 <li>How big a level can get: <a href="performance.html">Performance and limits</a>.</li>
 </ul>
 		</article>
-		<p class="docs-source">Hammerite latest · built from 45a63b69, 2026-10-19</p>
+		<p class="docs-source">Hammerite latest · built from c0b28836, 2026-10-22</p>
 	</main>
 </div>
 

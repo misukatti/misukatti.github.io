@@ -235,7 +235,7 @@
 <p>The owning <a href="HammeriteBrushEntity.html"><code>HammeriteBrushEntity</code></a>, or null for world brushwork, a brush in no map, or an owner the map does not hold.</p>
 <h3 id="method-get_chroma_bleed">get_chroma_bleed()</h3>
 <pre class="signature"><code>static func get_chroma_bleed() -&gt; float</code></pre>
-<p>How far a surface takes the COLOUR of the light bouncing onto it: 0 keeps every wall its own colour, 1 recolours it entirely along the bleed. 0.2 is what the effect was hardcoded at.  A render-time look, not a baked one - the bleed itself is in the atlas either way, and this only decides how much of it shows - so <a href="#method-set_chroma_bleed"><code>set_chroma_bleed()</code></a> can move it on a map that is already standing, with no re-bake.</p><p><strong>Experimental:</strong> The renderer&#x27;s, not part of the supported API.</p>
+<p>How much of the colour bounced switchable light arrived in a surface takes: 0 none, so a slot&#x27;s light is the lamp&#x27;s colour alone, and 1, the default, all of it - the bake&#x27;s measure, a white wall beside a red one lit by as much red as reached it. Only the share of a slot&#x27;s light that bounced is coloured, never the lamp&#x27;s direct light. A render-time look, not a baked one - the bleed itself is in the atlas either way, and this only decides how much of it shows - so <a href="#method-set_chroma_bleed"><code>set_chroma_bleed()</code></a> can move it on a map that is already standing, with no re-bake. Static light needs none of this: its bounce is baked in colour.</p><p><strong>Experimental:</strong> The renderer&#x27;s, not part of the supported API.</p>
 <h3 id="method-get_entity_property">get_entity_property()</h3>
 <pre class="signature"><code>func get_entity_property(prop_name: StringName, default = null) -&gt; Variant</code></pre>
 <p><code>prop_name</code> of the owning entity, or <code>default</code> if it lacks one or the brush is world brushwork.</p>
@@ -354,7 +354,7 @@
 <pre class="signature"><code>static func vertex_weld_epsilon() -&gt; float</code></pre>
 <p>How far apart two corners computed for the same point may land, and still be that one point. Where more than three planes meet - a pyramid&#x27;s apex - each triple of them puts the corner somewhere slightly different, and at a few hundred units from the origin that difference is thousandths. A relative comparison left eight copies of one apex on each side of a pyramid, and a turned one lost its apex to the inside test altogether, and with it the brush.</p>
 		</article>
-		<p class="docs-source">Hammerite latest · built from 45a63b69, 2026-10-19</p>
+		<p class="docs-source">Hammerite latest · built from c0b28836, 2026-10-22</p>
 	</main>
 </div>
 

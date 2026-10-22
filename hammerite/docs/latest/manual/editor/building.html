@@ -36,7 +36,7 @@
 		<label class="docs-version">Version
 			<select aria-label="Docs version"><option value="latest" selected>latest</option></select>
 		</label>
-		<nav class="api-nav"><a class="api-home" href="../index.html">Manual</a><h2>Core</h2><ul><li><a href="../core/index.html">Core</a></li><li><a href="../core/carved-world.html">The carved world</a></li><li><a href="../core/rooms-and-portals.html">Rooms and portals</a></li><li><a href="../core/fills.html">Fills</a></li><li><a href="../core/entities.html">Entities</a></li><li><a href="../core/textures.html">Textures</a></li><li><a href="../core/lighting.html">Lighting</a></li><li><a href="../core/baking.html">Baking</a></li><li><a href="../core/variants.html">Variants</a></li><li><a href="../core/terrain.html">Terrain</a></li><li><a href="../core/glossary.html">Glossary</a></li></ul><h2>Editor</h2><ul><li><a href="index.html">Editor</a></li><li><a href="interface.html">The interface</a></li><li><a href="camera.html">Camera</a></li><li><a href="selecting.html">Selecting</a></li><li><a href="building.html" aria-current="page">Building</a></li><li><a href="editing.html">Editing</a></li><li><a href="texturing.html">Texturing</a></li><li><a href="terrain.html">Terrain</a></li><li><a href="entities.html">Entities</a></li><li><a href="props.html">Props</a></li><li><a href="decals.html">Decals</a></li><li><a href="prefabs.html">Prefabs</a></li><li><a href="layers.html">Layers</a></li><li><a href="sky.html">Sky</a></li><li><a href="lighting.html">Lighting</a></li><li><a href="problems.html">Problems</a></li><li><a href="files.html">Map files</a></li><li><a href="keys.html">Keyboard reference</a></li><li><a href="manual.html">Using the manual</a></li><li><a href="extending-the-manual.html">Extending the manual</a></li></ul><h2>Audio</h2><ul><li><a href="../audio/index.html">Audio</a></li><li><a href="../audio/rooms.html">Rooms</a></li><li><a href="../audio/doors.html">Doors and openings</a></li><li><a href="../audio/outdoors.html">Outdoors and weather</a></li><li><a href="../audio/graph.html">The audio graph</a></li></ul><h2>Navigation</h2><ul><li><a href="../nav/index.html">Navigation</a></li><li><a href="../nav/ground.html">Ground</a></li><li><a href="../nav/links.html">Links</a></li><li><a href="../nav/preview.html">The Navigation tool</a></li></ul><h2>Docs</h2><ul><li><a href="../../index.html">Docs home</a></li><li><a href="../../api/index.html">API reference</a></li></ul></nav>
+		<nav class="api-nav"><a class="api-home" href="../index.html">Manual</a><h2>Core</h2><ul><li><a href="../core/index.html">Core</a></li><li><a href="../core/carved-world.html">The carved world</a></li><li><a href="../core/rooms-and-portals.html">Rooms and portals</a></li><li><a href="../core/fills.html">Fills</a></li><li><a href="../core/entities.html">Entities</a></li><li><a href="../core/textures.html">Textures</a></li><li><a href="../core/lighting.html">Lighting</a></li><li><a href="../core/baking.html">Baking</a></li><li><a href="../core/variants.html">Variants</a></li><li><a href="../core/terrain.html">Terrain</a></li><li><a href="../core/glossary.html">Glossary</a></li></ul><h2>Editor</h2><ul><li><a href="index.html">Editor</a></li><li><a href="coming-from-trenchbroom.html">Coming from TrenchBroom</a></li><li><a href="interface.html">The interface</a></li><li><a href="camera.html">Camera</a></li><li><a href="selecting.html">Selecting</a></li><li><a href="building.html" aria-current="page">Building</a></li><li><a href="editing.html">Editing</a></li><li><a href="texturing.html">Texturing</a></li><li><a href="terrain.html">Terrain</a></li><li><a href="entities.html">Entities</a></li><li><a href="props.html">Props</a></li><li><a href="decals.html">Decals</a></li><li><a href="prefabs.html">Prefabs</a></li><li><a href="layers.html">Layers</a></li><li><a href="sky.html">Sky</a></li><li><a href="lighting.html">Lighting</a></li><li><a href="problems.html">Problems</a></li><li><a href="files.html">Map files</a></li><li><a href="dividing-rooms.html">Dividing a map into rooms</a></li><li><a href="keys.html">Keyboard reference</a></li><li><a href="manual.html">Using the manual</a></li><li><a href="extending-the-manual.html">Extending the manual</a></li></ul><h2>Audio</h2><ul><li><a href="../audio/index.html">Audio</a></li><li><a href="../audio/rooms.html">Rooms</a></li><li><a href="../audio/doors.html">Doors and openings</a></li><li><a href="../audio/outdoors.html">Outdoors and weather</a></li><li><a href="../audio/graph.html">The audio graph</a></li></ul><h2>Navigation</h2><ul><li><a href="../nav/index.html">Navigation</a></li><li><a href="../nav/ground.html">Ground</a></li><li><a href="../nav/links.html">Links</a></li><li><a href="../nav/preview.html">The Navigation tool</a></li></ul><h2>Docs</h2><ul><li><a href="../../index.html">Docs home</a></li><li><a href="../../api/index.html">API reference</a></li></ul></nav>
 	</aside>
 	<main class="docs-main">
 		<article class="prose">
@@ -78,9 +78,9 @@ air brush is for.</p>
 <h2 id="cube">Cube</h2>
 <p>A box. Its panel shows width, height and thickness.</p>
 <h2 id="cylinder">Cylinder</h2>
-<p>A cylinder filling the box. <code>Left</code> / <code>Right</code> give it fewer or more sides. For a round hole, draw the cylinder in <strong>Air</strong>.</p>
+<p>A cylinder filling the box. <code>Left</code> / <code>Right</code> give it fewer or more sides. For a round hole, draw the cylinder in <strong>Air</strong>. Its sides are <a href="texturing.html#smooth-faces">smooth</a>, lit as one round surface; untick <strong>Smooth</strong> in the panel for a faceted column.</p>
 <h2 id="cone">Cone</h2>
-<p>A cylinder without a top: its sides meet at a point over the middle of the base. The base is what you draw, and the point is at the far end of the box, so giving it depth downwards hangs the cone from its base. <code>Left</code> / <code>Right</code> give it fewer or more sides.</p>
+<p>A cylinder without a top: its sides meet at a point over the middle of the base. The base is what you draw, and the point is at the far end of the box, so giving it depth downwards hangs the cone from its base. <code>Left</code> / <code>Right</code> give it fewer or more sides. Its sides are smooth unless <strong>Smooth</strong> is unticked, as a cylinder's are.</p>
 <h2 id="ramp">Ramp</h2>
 <p>A box with one top edge gone: its top slopes from the far side down to one edge of the base, which the tool marks. <code>Space</code> turns the slope a quarter, to the next edge of the base. <code>I</code> toggles <strong>Inverse</strong>, the rest of the box: flat on top with the slope underneath, as a sloping ceiling is. Giving it depth downwards hangs the ramp from its base with the slope underneath.</p>
 <h2 id="stair">Stair</h2>
@@ -162,6 +162,10 @@ air brush is for.</p>
 <td>Outward</td>
 <td>build the ring outside the box instead of inside it</td>
 </tr>
+<tr>
+<td>Smooth</td>
+<td>light the curve as one surface; untick for a faceted arch</td>
+</tr>
 </tbody>
 </table>
 <p>The arch always stands upright, whichever view you draw it in.</p>
@@ -173,7 +177,7 @@ air brush is for.</p>
 <li>Click the first point again to close the outline. <code>Backspace</code> or right-click takes the last point back.</li>
 <li>Move the mouse to give it depth, click, then <code>Enter</code>.</li>
 </ol>
-<p><strong>Thickness</strong> in the panel sets the depth by number.</p>
+<p><strong>Thickness</strong> in the panel sets the depth by number. Tick <strong>Smooth</strong> to make the sides smooth, for an outline drawn round.</p>
 <h2 id="building-rooms">Building rooms</h2>
 <ul>
 <li>Draw rooms in <strong>Air</strong>. Overlap two rooms to make one space; abut them on a shared wall to make two rooms with an opening. See <a href="../core/rooms-and-portals.html">Rooms and portals</a>.</li>
@@ -181,7 +185,7 @@ air brush is for.</p>
 <li><strong>Solid</strong> puts rock back. Where solid and air overlap, the order they were drawn in decides; see <a href="../core/carved-world.html">The carved world</a>.</li>
 </ul>
 		</article>
-		<p class="docs-source">Hammerite latest · built from 45a63b69, 2026-10-19</p>
+		<p class="docs-source">Hammerite latest · built from c0b28836, 2026-10-22</p>
 	</main>
 </div>
 
