@@ -36,7 +36,7 @@
 		<label class="docs-version">Version
 			<select aria-label="Docs version"><option value="latest" selected>latest</option></select>
 		</label>
-		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="install.html" aria-current="page">Installing Hammerite</a></li><li><a href="getting-started.html">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="guides/writing-an-entity.html">Writing an entity class</a></li><li><a href="guides/rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="guides/stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="guides/stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="guides/probe-lighting.html">Probe lighting</a></li><li><a href="guides/entity-sets.html">Entity sets</a></li><li><a href="guides/moving-brush-entities.html">Moving brush entities</a></li><li><a href="guides/guard-navigation.html">Navigation for guards</a></li><li><a href="guides/brush-materials.html">Brush materials and shaders</a></li><li><a href="guides/brush-properties.html">Properties on brushes</a></li><li><a href="guides/importing-map-files.html">Importing Quake maps</a></li></ul><h2>Reference</h2><ul><li><a href="api/index.html">API reference</a></li><li><a href="manual/index.html">Manual</a></li><li><a href="migrating-to-2.0.html">Migrating to Hammerite 2.0</a></li><li><a href="baking.html">Baking from a script</a></li><li><a href="performance.html">Performance and limits</a></li><li><a href="troubleshooting.html">Troubleshooting</a></li><li><a href="api-stability.html">API stability</a></li></ul></nav>
+		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="install.html" aria-current="page">Installing Hammerite</a></li><li><a href="getting-started.html">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="guides/writing-an-entity.html">Writing an entity class</a></li><li><a href="guides/rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="guides/stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="guides/stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="guides/rendering-hdr-lightmaps.html">Rendering HDR lightmaps</a></li><li><a href="guides/probe-lighting.html">Probe lighting</a></li><li><a href="guides/entity-sets.html">Entity sets</a></li><li><a href="guides/moving-brush-entities.html">Moving brush entities</a></li><li><a href="guides/guard-navigation.html">Navigation for guards</a></li><li><a href="guides/brush-materials.html">Brush materials and shaders</a></li><li><a href="guides/brush-properties.html">Properties on brushes</a></li><li><a href="guides/importing-map-files.html">Importing Quake maps</a></li></ul><h2>Reference</h2><ul><li><a href="api/index.html">API reference</a></li><li><a href="manual/index.html">Manual</a></li><li><a href="migrating-to-2.0.html">Migrating to Hammerite 2.0</a></li><li><a href="baking.html">Baking from a script</a></li><li><a href="performance.html">Performance and limits</a></li><li><a href="troubleshooting.html">Troubleshooting</a></li><li><a href="api-stability.html">API stability</a></li></ul></nav>
 	</aside>
 	<main class="docs-main">
 		<article class="prose">
@@ -68,9 +68,10 @@
 </tr>
 </tbody>
 </table>
-<p>Only baking needs the GPU compute path. A map baked under Forward+ displays under Compatibility, a
-little darker in the shadows (checked on macOS with OpenGL 3); there the lightmap tool says it cannot
-bake and its bake buttons are off.</p>
+<p>Only baking needs the GPU compute path. A map baked under Forward+ displays under Compatibility as it does
+under Forward+ (checked on macOS with OpenGL 3), but for a fine-grained dark texture seen from afar, which is a
+little darker: Compatibility averages a texture's stored colours before they are turned into light, where
+Forward+ turns them first. There the lightmap tool says it cannot bake and its bake buttons are off.</p>
 <h2 id="the-packages">The packages</h2>
 <p>Hammerite is four addons with one native library between them, so it comes as two packages, each its
 addons' folders with the library built for exactly those:</p>
@@ -148,17 +149,21 @@ enabled.</p>
 <p><strong>Coming from 1.x.</strong> Replace all four 1.x addon folders with one package's, then migrate the project before
 opening it: a <code>.tres</code>, <code>.res</code> or scene that 1.x saved does not load in 2.0 until it is. <code>.hmap</code> maps need nothing.
 <a href="migrating-to-2.0.html">Migrating to 2.0</a> says how, and what changed for a game's code.</p>
-<p><strong>Shipping a game.</strong> Core carries the Inter typeface, which a game exports with it, and the SIL Open
-Font License it is under asks that its licence go wherever the font does. Godot exports no <code>.txt</code> file
-it is not told to, so add <code>addons/hammerite-core/inter-OFL.txt</code> to your export preset's
-<strong>Filters to export non-resource files/folders</strong> (<code>include_filter</code>).</p>
+<p><strong>Shipping a game.</strong> Godot leaves out of an export any file it does not import. That includes a <code>.hmap</code>
+map and its worldrep cache, and the licences of what Hammerite ships of other people's: the Inter
+typeface's SIL Open Font License (<code>inter-OFL.txt</code>), which asks to go wherever the font does, and
+<code>THIRD_PARTY_NOTICES.md</code>, which asks to go with the native library. Core's plugin packs all of them into
+every export, so leave it enabled; the preset needs no filters for them. It leaves out the
+<code>level.preview.res</code> beside each map, which only Godot's editor reads. To keep a map out of an
+export, name it in the preset's <strong>Filters to exclude files/folders</strong> (<code>exclude_filter</code>). The licences
+are packed regardless.</p>
 <h2 id="next">Next</h2>
 <ul>
 <li><a href="getting-started.html">Getting started</a>: a map in your game, with the editor over it.</li>
 <li><a href="troubleshooting.html">Troubleshooting</a> if something on the way did not go as described.</li>
 </ul>
 		</article>
-		<p class="docs-source">Hammerite latest · built from c0b28836, 2026-10-22</p>
+		<p class="docs-source">Hammerite latest · built from da4de48d, 2026-10-26</p>
 	</main>
 </div>
 

@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rendering HDR lightmaps — Hammerite 3D latest docs</title>
+<meta name="theme-color" content="#1f1b18">
+<link rel="icon" href="../../../assets/favicon.ico" sizes="48x48">
+<link rel="icon" href="../../../assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@300&display=swap">
+<link rel="stylesheet" href="../../../hammerite.css">
+<link rel="stylesheet" href="../../docs.css">
+<script src="../../versions.js" defer></script>
+</head>
+<body class="docs" data-docs-version="latest">
+
+<header class="studio">
+	<a class="studio-logo" href="../../../../index.html"><img src="../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive"></a>
+	<nav>
+		<a href="../../../index.html">Hammerite 3D</a>
+		<a href="../index.html">Docs</a>
+		<a href="index.html">Guides</a>
+		<a href="../api/index.html">API</a>
+		<a href="../manual/index.html">Manual</a>
+	</nav>
+</header>
+
+<div class="docs-banner" hidden></div>
+
+<div class="docs-layout">
+	<aside class="docs-side">
+		<a class="docs-brand" href="../index.html"><img src="../../../assets/favicon.svg" alt="" width="28" height="28"><span>Hammerite 3D docs</span></a>
+		<label class="docs-version">Version
+			<select aria-label="Docs version"><option value="latest" selected>latest</option></select>
+		</label>
+		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="../install.html">Installing Hammerite</a></li><li><a href="../getting-started.html">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="writing-an-entity.html">Writing an entity class</a></li><li><a href="rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="rendering-hdr-lightmaps.html" aria-current="page">Rendering HDR lightmaps</a></li><li><a href="probe-lighting.html">Probe lighting</a></li><li><a href="entity-sets.html">Entity sets</a></li><li><a href="moving-brush-entities.html">Moving brush entities</a></li><li><a href="guard-navigation.html">Navigation for guards</a></li><li><a href="brush-materials.html">Brush materials and shaders</a></li><li><a href="brush-properties.html">Properties on brushes</a></li><li><a href="importing-map-files.html">Importing Quake maps</a></li></ul><h2>Reference</h2><ul><li><a href="../api/index.html">API reference</a></li><li><a href="../manual/index.html">Manual</a></li><li><a href="../migrating-to-2.0.html">Migrating to Hammerite 2.0</a></li><li><a href="../baking.html">Baking from a script</a></li><li><a href="../performance.html">Performance and limits</a></li><li><a href="../troubleshooting.html">Troubleshooting</a></li><li><a href="../api-stability.html">API stability</a></li></ul></nav>
+	</aside>
+	<main class="docs-main">
+		<article class="prose">
+<h1 id="rendering-hdr-lightmaps">Rendering HDR lightmaps</h1>
+<p>A Hammerite lightmap holds how much light reaches each texel of a wall, with no ceiling on it. A
+sunlit courtyard reads around 35 where a back room reads 0.3. Nothing clamps that range on its way to
+the screen: the last step is Godot's tonemapper, and the default one cuts everything above white off
+flat. This guide is about getting that step right.</p>
+<h2 id="1-how-a-texel-reaches-the-screen">1. How a texel reaches the screen</h2>
+<p>The bake keeps its light in half floats (<code>FORMAT_RGBAH</code>), so a lamp's hot spot and a corner far from
+it are both stored as measured. A wall's shader then takes, for each pixel:</p>
+<ol>
+<li>the light at that texel - static, the four slots at their lamps' current strength, and ambient;</li>
+<li>through the <a href="../api/HammeriteLightCurve.html">light curve</a>, which decides what each level of light is
+   worth to the eye;</li>
+<li>times the surface's own colour;</li>
+<li>times <code>hammerite_exposure</code>, what the eye has adapted to
+   (<a href="../api/HammeriteShaderGlobals.html"><code>HammeriteShaderGlobals.exposure</code></a>);</li>
+<li>written to <code>EMISSION</code>, in linear light, as large as it came out.</li>
+</ol>
+<p>The walls draw with <code>ambient_light_disabled</code> and <code>specular_disabled</code>. What the Environment adds as
+ambient light or reflections does not reach them: their whole picture is the bake. What the
+Environment does decide is step 6, the tonemapper, which turns that linear light into the screen's
+0 to 1.</p>
+<h2 id="2-use-a-non-linear-tonemapper">2. Use a non-linear tonemapper</h2>
+<p>With no Environment, or with <code>TONE_MAPPER_LINEAR</code>, anything above 1 is clipped. A patch of sun under a
+window becomes a white shape with hard edges, a lamp's pool turns white in the middle with no
+gradient, and a bright coloured light goes to a saturated flat colour before it goes white. The bake
+measured all of that; the screen throws it away.</p>
+<p>A non-linear tonemapper rolls bright light off towards white instead. Use AgX:</p>
+<pre><code class="language-gdscript">var environment := Environment.new()
+environment.tonemap_mode = Environment.TONE_MAPPER_AGX
+var world_environment := WorldEnvironment.new()
+world_environment.environment = environment
+add_child(world_environment)
+</code></pre>
+<p>Or add a WorldEnvironment to your level scene in Godot's editor and set <strong>Tonemap &gt; Mode</strong> to AgX.</p>
+<ul>
+<li><strong><code>tonemap_agx_white</code></strong> is the light level that reaches white. Raise it if bright patches still
+  flatten into white shapes - sun through a window is the usual one. Lower it if the whole picture
+  looks dull.</li>
+<li><strong><code>tonemap_agx_contrast</code></strong> steepens or flattens the middle of the curve.</li>
+<li>Filmic and ACES roll off too. AgX takes very bright colours towards white, as film and eyes do, so
+  an orange lamp's hot spot is a pale yellow-white rather than a flat orange.</li>
+</ul>
+<p>Hammerite's editor shares the World3D of the scene it is opened in, so the WorldEnvironment in your
+level scene tonemaps the editor's 3D view as well. Light a level with the tonemapper it will ship
+with, or every lamp will be tuned for a curve the player never sees.</p>
+<h2 id="3-one-exposure-not-two">3. One exposure, not two</h2>
+<p><code>hammerite_exposure</code> multiplies the light before the tonemapper, which is what Godot's
+<code>tonemap_exposure</code> does too. Use one of them and leave the other at 1.</p>
+<ul>
+<li><a href="../api/HammeriteEyeAdaptation3D.html"><code>HammeriteEyeAdaptation3D</code></a> drives <code>hammerite_exposure</code> from the
+  light where the camera stands, read from the bake, so a dark room and a courtyard can share one
+  tonemapper.</li>
+<li>Godot's auto exposure (<code>CameraAttributesPractical.auto_exposure_enabled</code>) measures the rendered
+  screen instead. Do not run both: they will chase each other.</li>
+</ul>
+<h2 id="4-the-light-curve-comes-first">4. The light curve comes first</h2>
+<p>The <a href="../api/HammeriteLightCurve.html">light curve</a> shapes the light level itself, before the surface's
+colour and before exposure. It decides what is shadow: a dip at its dark end makes a corner dark
+without touching the lit walls. The tonemapper only decides how the brightest light rolls off at the
+end. Do not reach for <code>tonemap_agx_contrast</code> to make shadows darker - change the curve, which
+leaves the highlights alone.</p>
+<h2 id="5-glow">5. Glow</h2>
+<p>Since the walls write their light above 1 where it is bright, Godot's glow works on them as it does on
+any HDR source: with <code>glow_enabled</code> and <code>glow_hdr_threshold</code> at 1 or a little above, a lamp's hot spot
+and a sun patch bloom and a dim wall does not. Self-lit materials should multiply by
+<code>hammerite_exposure</code> (<a href="brush-materials.html">Brush materials and shaders</a>) so they glow in step with
+the lit world.</p>
+<h2 id="6-checking-it">6. Checking it</h2>
+<p>The editor's <strong>Lightmap</strong> visualisation draws the light alone, with no surface colour and no
+exposure. A wall that reads well over 1 there is one the tonemapper has to roll off; a level whose lit
+surfaces sit mostly under 1 will look much the same under Linear and AgX.</p>
+		</article>
+		<p class="docs-source">Hammerite latest · built from da4de48d, 2026-10-26</p>
+	</main>
+</div>
+
+<footer class="studio-foot">
+	<a href="../../../../index.html"><img src="../../../../assets/misukatti/mark-night.svg" alt="Misukatti Interactive" width="32" height="32"></a>
+	<p>© 2024–2026 Misukatti Interactive · <a href="mailto:hello@misukatti.fi">hello@misukatti.fi</a></p>
+</footer>
+
+</body>
+</html>

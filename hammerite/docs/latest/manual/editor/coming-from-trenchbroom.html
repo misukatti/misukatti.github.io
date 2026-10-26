@@ -218,7 +218,7 @@ floor you are on is not buried under the ones above. The whole list is in
   round a curve or along a path (<code>Shift</code> <code>E</code>, <code>Ctrl</code> <code>E</code>).</li>
 </ul>
 <h2 id="bringing-a-map-across">Bringing a map across</h2>
-<p><strong>File → Import .map File…</strong> opens a <code>.map</code> from TrenchBroom, J.A.C.K. or the Radiants as a new map:
+<p>In the Godot editor, <strong>Project → Tools → Import .map File…</strong> brings a <code>.map</code> from TrenchBroom, J.A.C.K. or the Radiants into the project as a Hammerite map:
 the void round it is filled back in as rock, every brush stays as you drew it, your layers and groups
 come with it, and every face keeps where its texture lay. Two things to do after:</p>
 <ul>
@@ -234,10 +234,11 @@ across. See <a href="files.html#maps-from-trenchbroom">Map files</a>.</p>
 Port FGD to Hammerite…</strong>, and the inspector shows its choices, flags and targets as TrenchBroom did.
 func_godot entity scripts run on them unchanged;
 func_godot built your levels in metres and Hammerite keeps the map's units, so the game's own numbers
-are scaled once. All of it is in the guide <em>Importing .map files</em>, <code>docs/guides/importing-map-files.md</code> in the Hammerite
+are scaled once, and it laid them out turned a quarter round from Hammerite, which matters to a script
+that moves things in the world's own directions. All of it is in the guide <em>Importing .map files</em>, <code>docs/guides/importing-map-files.md</code> in the Hammerite
 package, which the game's programmer will want.</p>
 		</article>
-		<p class="docs-source">Hammerite latest · built from c0b28836, 2026-10-22</p>
+		<p class="docs-source">Hammerite latest · built from da4de48d, 2026-10-26</p>
 	</main>
 </div>
 

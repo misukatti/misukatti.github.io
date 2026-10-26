@@ -118,12 +118,12 @@
 <h2 id="copy-one-faces-texture-to-others">Copy one face's texture to others</h2>
 <ol>
 <li>Tap <code>Q</code> for face mode and click the face that looks right.</li>
-<li>Press <code>Cmd</code> <code>Shift</code> <code>C</code> to pick up its texture and UVs.</li>
-<li>Hold <code>Shift</code> and click each face to paint it. Or select faces and press <code>Cmd</code> <code>Shift</code> <code>V</code>.</li>
-<li><strong>Selection → Drop Held Face UVs</strong> when done, so a click is a plain click again.</li>
+<li>Press <strong>Copy</strong> in the <strong>Face UVs</strong> panel, or <code>Cmd</code> <code>Shift</code> <code>C</code>, to copy its texture and UVs.</li>
+<li>Hold <code>Shift</code>, press the mouse button on a face and drag across the others: every face the cursor crosses is painted. Or select faces and press <code>Cmd</code> <code>Shift</code> <code>V</code>.</li>
+<li>Press <strong>Clear</strong> in the panel when done, so a click is a plain click again.</li>
 </ol>
-<p>Each paint is one undo step. The texture comes along with the UVs; untick <strong>Selection → Painting UVs Carries the Texture</strong> to paint UVs alone.</p>
-<p>Painted onto a face that shares an edge with the one you picked up, the texture is folded round that edge, so it runs on across the corner as if the two faces were one sheet: pick up the top of a step and paint its front, and the planks carry on down it. Painting UVs alone copies the numbers exactly instead.</p>
+<p>The <strong>Face UVs</strong> panel is under <strong>Tool Options</strong> while the Select tool picks faces, and says what you have copied. Each drag is one undo step. The texture comes along with the UVs; untick <strong>Copy texture</strong> to paint UVs alone.</p>
+<p>Painted onto a face that shares an edge with the one you copied, the texture is folded round that edge, so it runs on across the corner as if the two faces were one sheet: copy the top of a step and paint its front, and the planks carry on down it. Painting UVs alone copies the numbers exactly instead.</p>
 <h2 id="replace-a-texture-everywhere">Replace a texture everywhere</h2>
 <ol>
 <li>Click a face that has the texture to replace (or select brushes: every texture on them is replaced).</li>
@@ -138,7 +138,7 @@
 <h2 id="faces-that-look-into-the-void">Faces that look into the void</h2>
 <p>A see-through (alpha-masked) texture on a room's wall shows the rock behind it: the outside of the world, or nothing at all. The 3D view draws such walls red. Give the wall an opaque texture, or carve a room behind it so the wall becomes an opening. <code>O</code> hides these marks with the other warnings.</p>
 		</article>
-		<p class="docs-source">Hammerite latest · built from c0b28836, 2026-10-22</p>
+		<p class="docs-source">Hammerite latest · built from da4de48d, 2026-10-26</p>
 	</main>
 </div>
 

@@ -36,7 +36,7 @@
 		<label class="docs-version">Version
 			<select aria-label="Docs version"><option value="latest" selected>latest</option></select>
 		</label>
-		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="../install.html">Installing Hammerite</a></li><li><a href="../getting-started.html">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="writing-an-entity.html">Writing an entity class</a></li><li><a href="rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="probe-lighting.html">Probe lighting</a></li><li><a href="entity-sets.html" aria-current="page">Entity sets</a></li><li><a href="moving-brush-entities.html">Moving brush entities</a></li><li><a href="guard-navigation.html">Navigation for guards</a></li><li><a href="brush-materials.html">Brush materials and shaders</a></li><li><a href="brush-properties.html">Properties on brushes</a></li><li><a href="importing-map-files.html">Importing Quake maps</a></li></ul><h2>Reference</h2><ul><li><a href="../api/index.html">API reference</a></li><li><a href="../manual/index.html">Manual</a></li><li><a href="../migrating-to-2.0.html">Migrating to Hammerite 2.0</a></li><li><a href="../baking.html">Baking from a script</a></li><li><a href="../performance.html">Performance and limits</a></li><li><a href="../troubleshooting.html">Troubleshooting</a></li><li><a href="../api-stability.html">API stability</a></li></ul></nav>
+		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="../install.html">Installing Hammerite</a></li><li><a href="../getting-started.html">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="writing-an-entity.html">Writing an entity class</a></li><li><a href="rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="rendering-hdr-lightmaps.html">Rendering HDR lightmaps</a></li><li><a href="probe-lighting.html">Probe lighting</a></li><li><a href="entity-sets.html" aria-current="page">Entity sets</a></li><li><a href="moving-brush-entities.html">Moving brush entities</a></li><li><a href="guard-navigation.html">Navigation for guards</a></li><li><a href="brush-materials.html">Brush materials and shaders</a></li><li><a href="brush-properties.html">Properties on brushes</a></li><li><a href="importing-map-files.html">Importing Quake maps</a></li></ul><h2>Reference</h2><ul><li><a href="../api/index.html">API reference</a></li><li><a href="../manual/index.html">Manual</a></li><li><a href="../migrating-to-2.0.html">Migrating to Hammerite 2.0</a></li><li><a href="../baking.html">Baking from a script</a></li><li><a href="../performance.html">Performance and limits</a></li><li><a href="../troubleshooting.html">Troubleshooting</a></li><li><a href="../api-stability.html">API stability</a></li></ul></nav>
 	</aside>
 	<main class="docs-main">
 		<article class="prose">
@@ -54,8 +54,8 @@ map is built - with the editor, through it, so each set also gives the editor it
 <pre><code class="language-gdscript">HammeriteEntityTypeRegistry.add_set(HammeriteEntitySets.logic())
 HammeriteEntityTypeRegistry.add_set(HammeriteEntitySets.movers())
 </code></pre>
-<p><code>everything()</code> is a set of no types of its own that includes the other five: <code>lights()</code>, <code>logic()</code>,
-<code>movers()</code>, <code>scenes()</code> and <code>particles()</code>. A project that wants no lights takes them away with
+<p><code>everything()</code> is a set of no types of its own that includes the other six: <code>lights()</code>, <code>logic()</code>,
+<code>movers()</code>, <code>scenes()</code>, <code>particles()</code> and <code>map_tools()</code>. A project that wants no lights takes them away with
 <code>HammeriteEntityTypeRegistry.remove_set(HammeriteEntitySets.lights_id())</code>. Core's own <code>group</code>, <code>trigger</code>,
 <code>prop_model</code> and <code>decal</code> belong to no set and are always there.</p>
 <p>A game that wants to refine one of these types does so as it refines any, after the set is in:</p>
@@ -145,12 +145,94 @@ the project to pick from, narrowed as you type; a scene saved since is listed wi
 not processed, its bodies out of the physics - until the world runs, and built afresh on a reset.
 Triggering it calls <code>trigger(impulse)</code> on the scene's root if the root has one, which is how a scene
 of the game's own becomes a working entity without an entity class.</p>
+<p>The prop keeps its scene by uid, so the scene can be moved or renamed in Godot's FileSystem dock and
+the prop still finds it. A path saved before uids still works. Each variable the scene's root
+exports is a property of the prop, under <code>scene/</code>. <code>@export var speed: float</code> is <code>scene/speed</code>,
+an <code>@export_enum</code> is chosen from its labels, and <code>@export_flags</code> is a box for each flag. A
+prop that leaves one alone gets the value the scene sets, so changing it in the scene changes every
+such prop. A value set on the prop is given to the root before its <code>_ready</code>. The inspector edits
+booleans, numbers, text, vectors and colours. A resource export (<code>@export var sound: AudioStream</code>)
+is chosen from the project's files of its class and kept by uid. An export of another kind, such as
+an array, is not offered.</p>
+<h2 id="scenes-as-types-hammeritesceneentityset">Scenes as types (<code>HammeriteSceneEntitySet</code>)</h2>
+<p>A <code>prop_scene</code> is chosen per prop. When a scene is a <em>kind</em> of thing, a pickup or a sign that appears
+many times, make it a type of its own instead. Keep such scenes in one folder and add the folder as a
+set, before the map is built:</p>
+<pre><code class="language-gdscript">HammeriteEntityTypeRegistry.add_set(HammeriteSceneEntitySet.from_folder(&quot;res://entities&quot;))
+</code></pre>
+<p>A <code>HammeriteLevel</code> takes the folder as its <strong>Entity Definitions</strong>; type the path in, since the file
+picker picks files. Either way there is no registration code and no entity class.</p>
+<p>Each scene becomes a type named after its file, so <code>res://entities/pickup_health.tscn</code> is
+<code>pickup_health</code> in the entity palette. Its properties are what the scene's root exports, as for
+<code>prop_scene</code> but without the <code>scene/</code> prefix. Each default is what the scene sets, which may
+differ from what the script's initialiser says. An entity is placed carrying none of them, and
+keeps only what the author sets differently, so a value changed in the scene reaches every entity
+that left it alone. A resource the scene keeps inside itself, rather than in a file of its own, is
+not offered.</p>
+<p>The root's script can say more about its type in a static function:</p>
+<pre><code class="language-gdscript">extends Area3D
+
+@export var amount: int = 25
+@export var sound: AudioStream
+
+static func _hammerite_entity() -&gt; Dictionary:
+    return {&amp;&quot;type&quot;: &amp;&quot;health&quot;, &amp;&quot;_editor_tint&quot;: Color.RED, &amp;&quot;_editor_rotation_axes&quot;: &quot;y&quot;,
+        &amp;&quot;_editor_doc/amount&quot;: &quot;How much it heals.&quot;}
+
+func trigger(_impulse: Variant = null) -&gt; void:
+    queue_free()
+</code></pre>
+<p><code>type</code> renames the type. Every other key is the type's own, as a registration would give it.</p>
+<p>Each scene is built once when the set is added, outside the tree, so the root's <code>_init</code> runs but
+its <code>_ready</code> does not. A scene saved while the game runs is picked up when the set is next added.</p>
+<h3 id="wiring-a-scene-to-other-entities">Wiring a scene to other entities</h3>
+<p>A node export names another entity. <code>@export var door: Node3D</code> is picked from the map's entity
+names, and as the world starts running it is set to that entity's node. Where that entity hosts a
+scene, it is set to the scene's root. Left empty, it keeps whatever the scene itself set.</p>
+<p>Each signal the root's script declares is a property too: <code>signal opened(by)</code> gives <code>target_opened</code>,
+picked from the map's names. Emitting the signal triggers every entity of that name and hands it
+the signal's first argument, as a <code>trigger</code> brush's <code>target</code> does. The editor draws the link.</p>
+<h3 id="a-scene-whose-root-is-the-entity">A scene whose root is the entity</h3>
+<p>When the root's script extends one of the entity bases, such as <code>HammeritePointEntityNode3D</code> or
+<code>HammeriteBrushEntityArea3D</code>, the scene's root <em>is</em> the entity's node instead of being built beneath
+one. Use this to give a scene's entity what only an entity class has: gizmos, handles, runtime
+properties, actions, or brushwork. A root on a brush base makes a brush type, so the author makes
+it from brushes. The exports, node links and signals work as above. The script needs neither
+<code>_apply_entity_property()</code> nor <code>_set_editor_active()</code>: the exports are set by name, a point entity
+is placed where it stands, and the root has its values before its <code>_ready</code>. Write any other hook as
+an entity class would.</p>
+<pre><code class="language-gdscript">extends HammeriteBrushEntityArea3D
+
+signal crossed(body: Node3D)
+
+@export var only_group: StringName = &amp;&quot;player&quot;
+
+func _init() -&gt; void:
+    monitoring = false
+    body_entered.connect(func(body: Node3D) -&gt; void:
+        if body.is_in_group(only_group):
+            crossed.emit(body))
+
+func _can_simulate() -&gt; bool:
+    return true
+
+func _start_simulation() -&gt; void:
+    set_deferred(&amp;&quot;monitoring&quot;, true)
+</code></pre>
 <h2 id="particles-particles">Particles (<code>particles</code>)</h2>
 <p><code>env_particles</code> is a <code>GPUParticles3D</code> made from its properties: <code>amount</code>, <code>lifetime</code>, <code>speed</code>, <code>spread</code>,
 <code>gravity</code>, <code>emission_radius</code>, <code>size</code>, a colour that fades from <code>color</code> to <code>color_end</code>, an optional
 <code>texture</code> picked from the project's images, <code>additive</code> for sparks and fire, <code>shaded</code> for smoke. It emits up its own Y, so turning it
 aims it. Triggered it starts, stops or - <code>one_shot</code> - bursts again. Like the scene, it is held still
 until the world runs.</p>
+<h2 id="map-tools-map_tools">Map tools (<code>map_tools</code>)</h2>
+<p><code>clip</code> is a wall nobody sees: brushwork that stops bodies, drawn only while the editor is - see-through,
+striped, purple, or blue, red or amber for a clip that stops only players, monsters or projectiles - and left
+out of the bake. It neither seals nor carves; it stands in a room. Its <code>blocks</code> says whether it stops everything,
+players, monsters or projectiles, each a physics layer of the game's own under <strong>Project Settings →
+Hammerite → Physics → Clip Layers</strong>, the first for all four until the game says. A <code>.map</code>'s clip brushes
+come in as clips (see <em>Importing .map files</em>), and <code>HammeriteFgdImporter.register_types()</code> adds this set
+for a game whose types are its FGD's.</p>
 <h2 id="writing-a-set-of-your-own">Writing a set of your own</h2>
 <p>A genre's pickups, a game's own furniture - written as core's are:</p>
 <pre><code class="language-gdscript">extends HammeriteEntitySet
@@ -167,6 +249,10 @@ func _register_types() -&gt; void:
 hammerite-editor calls as it starts, or as the set is added through it - <code>offer_choices(editor, type, property, provider)</code> gives a string
 property a searchable list, unless the game gave it a control of its own first. The editor is passed
 untyped, so a set needs nothing but core.</p>
+<p>A set configures an importer in <code>_configure_importer(importer)</code>, which the Godot editor's
+<strong>Project → Tools → Import .map File…</strong> and <strong>Import DromEd Mission…</strong> call for every set added before
+they read: a <code>.map</code> importer's <code>entity_types</code> and <code>entity_converter</code>, or a DromEd importer's
+<code>material_textures</code>. Check which it is with <code>is</code>; the DromEd importer is not in the runtime package.</p>
 <p>Add it as core's are. A set that <code>requires</code> another is refused until that one is added; one that
 <code>includes</code> others adds them along with it, so a pack can bring the sets it builds on.</p>
 <h2 id="not-yet">Not yet</h2>
@@ -179,7 +265,7 @@ untyped, so a set needs nothing but core.</p>
   is missing.</li>
 </ul>
 		</article>
-		<p class="docs-source">Hammerite latest · built from c0b28836, 2026-10-22</p>
+		<p class="docs-source">Hammerite latest · built from da4de48d, 2026-10-26</p>
 	</main>
 </div>
 

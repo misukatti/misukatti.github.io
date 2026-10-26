@@ -47,10 +47,10 @@
 <ul>
 <li>A sound in your room plays where it is.</li>
 <li>A sound you can see plays where it is, even in another room.</li>
-<li>Otherwise it takes the cheapest route through the openings and plays from the first opening you can see, at the level the route leaves it.</li>
+<li>Otherwise it plays from each opening of your room that you can see, up to four of them, each at its own level. It reaches each one by the way that loses least: round through an open doorway rather than through a shut door, when that is quieter.</li>
 <li>A sound with no route at all is almost silent.</li>
 </ul>
-<p>Each opening on the way, each corner turned and the distance travelled make the sound quieter and duller. A voice through a shut door sounds muffled and comes from the door's direction.</p>
+<p>Each opening on the way, each corner turned and the distance travelled make the sound quieter and duller. A voice through a shut door sounds muffled and comes from the door's direction. A room with a shut door and an open archway hears a guard's shout through both: clear through the archway, dull through the door.</p>
 <h2 id="naming-an-opening">Naming an opening</h2>
 <p>A door has to find the opening it fills. It does so by name. The name is stored on the wall the opening is cut from, so it survives edits and moves with the room.</p>
 <ol>
@@ -95,13 +95,13 @@
 <p>Edits in the panel can be undone.</p>
 <h2 id="closed-doors">Closed doors</h2>
 <p>Your game's door entity names the opening it stands in. As it swings shut it closes that opening, from 0 to 1, and sound through it drops by up to its <strong>Closed dB</strong> and turns dull. How a door is set up to name its opening is your game's.</p>
-<p>A shut door does not seal a room. Sound through it still arrives, quiet and dull.</p>
+<p>A shut door does not seal a room. Sound through it still arrives, quiet and dull. A fully shut door at the default 40 dB takes about two octaves off it; a light door of 10 dB or less makes it quieter and barely duller.</p>
 <blockquote class="callout callout-note"><p><strong>Note:</strong> A closed door does not stop guards walking through the opening. See <a href="../nav/links.html#doorways">Links</a>.</p>
 </blockquote>
 <h2 id="several-openings-between-two-rooms">Several openings between two rooms</h2>
 <p>A hall and a corridor joined by two doorways have two portals. The tool numbers them: the panel shows "Opening #2 between these two rooms". Name each one separately.</p>
 		</article>
-		<p class="docs-source">Hammerite latest · built from c0b28836, 2026-10-22</p>
+		<p class="docs-source">Hammerite latest · built from da4de48d, 2026-10-26</p>
 	</main>
 </div>
 

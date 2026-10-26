@@ -70,10 +70,6 @@
 <td><strong>File → Save Modified Prefab Sets</strong></td>
 </tr>
 <tr>
-<td>Bring in a map from TrenchBroom</td>
-<td><strong>File → Import .map File…</strong></td>
-</tr>
-<tr>
 <td>Migrate what Hammerite 1.x saved</td>
 <td><strong>File → Migrate 1.x Resources…</strong></td>
 </tr>
@@ -117,13 +113,22 @@
 <p>Use <code>.hmap</code> for maps you share or download. It holds values only, so opening one cannot run code. A <code>.tres</code> or <code>.res</code> can, which is why the editor refuses one from outside the project.</p>
 <p>To convert a map, open it and <strong>Save Map As…</strong> with the other extension.</p>
 <h2 id="maps-from-trenchbroom">Maps from TrenchBroom</h2>
-<p><strong>File → Import .map File…</strong> opens a <code>.map</code>, as TrenchBroom, J.A.C.K. and the Radiants save it, as a new map. Save it to keep it.</p>
+<p>Importing is done once, in the Godot editor: <strong>Project → Tools → Import .map File…</strong> reads a <code>.map</code>, as TrenchBroom, J.A.C.K. and the Radiants save it, and writes it into the project as a <code>.hmap</code>, <code>res://maps/&lt;name&gt;.hmap</code> unless you choose another. Open that here. <strong>Entity definitions</strong> is what the game's entities are, as its level's are: its entity set, a folder of scenes or an FGD, which may tell the importer what the game wants of each entity. Tick <strong>Quake's conventions</strong> for a map made with id's or Valve's art and entities.</p>
 <ul>
 <li>A <code>.map</code> builds walls in empty space; Hammerite carves rooms out of rock. The space around the map is filled back in as solid brushes, on a layer named <strong>Void filled on import</strong> that starts hidden. Leave them: they are the rock outside your map.</li>
 <li>Everything inside the map's walls comes in as <strong>one room</strong>, one air brush. Select it and choose <strong>Selection → Divide into Rooms</strong>: it is divided at every doorway and window - a hole through a wall that is larger than the hole - and wherever a door closes an opening, into air brushes that overlap within a room and abut at each doorway, so each doorway is a portal. Undo puts the one brush back. Where it divided wrongly or not at all, see <a href="dividing-rooms.html">Dividing a map into rooms</a>. The command divides any air brush that spans several rooms, not only an imported one.</li>
 <li>A map that leaks - with a gap in its outside walls - comes in with the space round it still open, and the message log says so. Close the gap and import it again.</li>
-<li>TrenchBroom's layers and groups come in as layers and groups, hidden and locked as they were. A layer TrenchBroom omits from export is left out.</li>
-<li>Which entities come in, and as what, is your game's choice; the message log names the kinds left out. Clip, skip and other tool brushes are left out of the world.</li>
+<li>TrenchBroom's layers and groups come in as layers and groups, hidden and locked as they were. A layer TrenchBroom omits from export is left out. A group inside another group becomes part of the outer one, since a group in Hammerite holds no groups.</li>
+<li>Which entities come in, and as what, is your game's choice; the message log names the kinds left out. Skip, hint and other tool brushes are left out of the world. A clip brush comes in as a wall nobody sees, a <strong>clip</strong> entity, where the game has the map tools' entity types: Hammerite's own sets have them, as do a TrenchBroom or func_godot game's ported entities. It is drawn striped and see-through, purple or in the colour of what it stops, and left out of the bake. Caulk and nodraw brushes are walls like any other.</li>
+</ul>
+<h2 id="missions-from-dromed">Missions from DromEd</h2>
+<p><strong>Project → Tools → Import DromEd Mission…</strong> in the Godot editor reads a Thief, Thief 2 or System Shock 2 mission, a <code>.mis</code>, and writes it into the project as a <code>.hmap</code>, as a <code>.map</code> is.</p>
+<ul>
+<li>DromEd carves rooms out of solid as Hammerite does, so each brush comes in as the brush it was, in the order DromEd applied them. Flood brushes become water.</li>
+<li>A face keeps the mission's own texture where your project has it, in <strong>Textures</strong> - <code>fam/city/wall7</code> is looked up as <code>dark_city_wall7</code>, or <code>!dark_city_wall7</code> where it is see-through - and takes the one named in <strong>Other faces</strong> where it has not. Unpack them first: <strong>Project → Tools → Unpack Game Textures…</strong> opens the game's <code>RES/fam.crf</code> and <code>RES/obj.crf</code>, or a fan mission's zip, and writes their textures to <code>res://textures/dark</code>, where the import looks. A texture's colour 0 is see-through, as the game draws it, and the glow a NewDark material (<code>.mtl</code>) gives it is its emission.</li>
+<li>The mission's lights come in, a flickering or pulsing one as a light that can change, and a spotlight as a spot, aimed the way its object faces, with its cone and its soft edge. A spotlight with ambient light is a spot and a point light together. Its other objects, and its guards' patrols, do not: how they map onto your game is your game's to say.</li>
+<li>The gamesys the mission names is read from beside it, for which material each texture is. Without one, the import still works and the message log says so.</li>
+<li>A mission saved without its brushes - as Looking Glass shipped their own - is refused: all that is left in it is the compiled world, which would come in as a brush for every convex piece of it.</li>
 </ul>
 <h2 id="files-from-hammerite-1x">Files from Hammerite 1.x</h2>
 <p>A <code>.tres</code>, <code>.res</code> or scene saved by Hammerite 1.x does not open in 2.0 until it is migrated. <strong>File → Migrate 1.x Resources…</strong> does it from the editor:</p>
@@ -143,7 +148,7 @@
 <h2 id="when-the-game-has-changed">When the game has changed</h2>
 <p>When you open a map, the editor checks what it names against what the game provides now: a texture gone, a model now provided by something else. Each change is listed in the <strong>Problems</strong> panel, under <strong>Changed in the game since saving</strong>, until you save the map.</p>
 		</article>
-		<p class="docs-source">Hammerite latest · built from c0b28836, 2026-10-22</p>
+		<p class="docs-source">Hammerite latest · built from da4de48d, 2026-10-26</p>
 	</main>
 </div>
 

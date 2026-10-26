@@ -45,7 +45,7 @@
 <p class="brief">A map&#x27;s baked light probes, with a uniform spatial grid for finding the nearest ones.</p>
 <p><a href="HammeriteMap.html#method-generate_light_probes"><code>HammeriteMap.generate_light_probes()</code></a> fills it and a bake lights it; most code reads it only through <a href="HammeriteMap.html#method-light_level_at"><code>HammeriteMap.light_level_at()</code></a>. Positions are in map space, the coordinates brushes are authored in.</p>
 <h2>Properties</h2>
-<table class="members"><thead><tr><th>Type</th><th>Name</th><th>Default</th></tr></thead><tbody><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_aabb.html"><code>AABB</code></a></td><td><a href="#property-bounds"><code>bounds</code></a></td><td><code>AABB(0, 0, 0, 0, 0, 0)</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_float.html"><code>float</code></a></td><td><a href="#property-cell_size"><code>cell_size</code></a></td><td><code>64.0</code></td></tr><tr><td><code>HammeriteLightProbe[]</code></td><td><a href="#property-probes"><code>probes</code></a></td><td><code>[]</code></td></tr></tbody></table>
+<table class="members"><thead><tr><th>Type</th><th>Name</th><th>Default</th></tr></thead><tbody><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_aabb.html"><code>AABB</code></a></td><td><a href="#property-bounds"><code>bounds</code></a></td><td><code>AABB(0, 0, 0, 0, 0, 0)</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_float.html"><code>float</code></a></td><td><a href="#property-cell_size"><code>cell_size</code></a></td><td><code>64.0</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_array.html"><code>Array</code></a></td><td><a href="#property-packed_probes"><code>packed_probes</code></a></td><td><code>[PackedFloat64Array(), PackedInt32Array(), PackedInt32Array(), []]</code></td></tr><tr><td><code>HammeriteLightProbe[]</code></td><td><a href="#property-probe_records"><code>probe_records</code></a></td><td><code>[]</code></td></tr><tr><td><code>HammeriteLightProbe[]</code></td><td><a href="#property-probes"><code>probes</code></a></td><td><code>[]</code></td></tr></tbody></table>
 <h2>Methods</h2>
 <table class="members"><thead><tr><th>Returns</th><th>Method</th></tr></thead><tbody><tr><td><code>void</code></td><td><a href="#method-add_probe"><code>add_probe</code></a><code>(probe: HammeriteLightProbe)</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_bool.html"><code>bool</code></a></td><td><a href="#method-has_nearby_probe"><code>has_nearby_probe</code></a><code>(pos: Vector3, min_distance: float, facing: Vector3 = Vector3(0, 0, 0))</code></td></tr><tr><td><a href="https://docs.godotengine.org/en/stable/classes/class_dictionary.html"><code>Dictionary</code></a></td><td><a href="#method-query"><code>query</code></a><code>(pos: Vector3, max_probes: int, max_radius: float = 512.0)</code></td></tr><tr><td><code>void</code></td><td><a href="#method-rebuild"><code>rebuild</code></a><code>()</code></td></tr></tbody></table>
 <h2>Property descriptions</h2>
@@ -55,6 +55,12 @@
 <h3 id="property-cell_size">cell_size</h3>
 <pre class="signature"><code>var cell_size: float = 64.0</code></pre>
 <p>Edge of one grid cell, in map units. Changing it has the grid built again before it is next asked.</p>
+<h3 id="property-packed_probes">packed_probes</h3>
+<pre class="signature"><code>var packed_probes: Array = [PackedFloat64Array(), PackedInt32Array(), PackedInt32Array(), []]</code></pre>
+<p><a href="#property-probes"><code>probes</code></a> as a file holds them: every probe a row of numbers, and the lights each sees by index into one list. For saving; read and assign <a href="#property-probes"><code>probes</code></a>.</p>
+<h3 id="property-probe_records">probe_records</h3>
+<pre class="signature"><code>var probe_records: HammeriteLightProbe[] = []</code></pre>
+<p>Where a set saved before its probes were packed is read from: assigning it assigns <a href="#property-probes"><code>probes</code></a>, and it reads empty.</p>
 <h3 id="property-probes">probes</h3>
 <pre class="signature"><code>var probes: HammeriteLightProbe[] = []</code></pre>
 <p>The probes the bake lights. <a href="#method-add_probe"><code>add_probe()</code></a> adds one; assigning the array, or growing it in place, has the grid built again before it is next asked.</p>
@@ -72,7 +78,7 @@
 <pre class="signature"><code>func rebuild() -&gt; void</code></pre>
 <p>Builds the grid and <a href="#property-bounds"><code>bounds</code></a> again from <a href="#property-probes"><code>probes</code></a> and <a href="#property-cell_size"><code>cell_size</code></a>. The map calls it on load, and a query calls it after the probes change; a probe edited in place - moved - is the one change it cannot see, and wants this called.</p>
 		</article>
-		<p class="docs-source">Hammerite latest · built from c0b28836, 2026-10-22</p>
+		<p class="docs-source">Hammerite latest · built from da4de48d, 2026-10-26</p>
 	</main>
 </div>
 

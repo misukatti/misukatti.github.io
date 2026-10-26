@@ -36,7 +36,7 @@
 		<label class="docs-version">Version
 			<select aria-label="Docs version"><option value="latest" selected>latest</option></select>
 		</label>
-		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="../install.html">Installing Hammerite</a></li><li><a href="../getting-started.html">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="writing-an-entity.html" aria-current="page">Writing an entity class</a></li><li><a href="rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="probe-lighting.html">Probe lighting</a></li><li><a href="entity-sets.html">Entity sets</a></li><li><a href="moving-brush-entities.html">Moving brush entities</a></li><li><a href="guard-navigation.html">Navigation for guards</a></li><li><a href="brush-materials.html">Brush materials and shaders</a></li><li><a href="brush-properties.html">Properties on brushes</a></li><li><a href="importing-map-files.html">Importing Quake maps</a></li></ul><h2>Reference</h2><ul><li><a href="../api/index.html">API reference</a></li><li><a href="../manual/index.html">Manual</a></li><li><a href="../migrating-to-2.0.html">Migrating to Hammerite 2.0</a></li><li><a href="../baking.html">Baking from a script</a></li><li><a href="../performance.html">Performance and limits</a></li><li><a href="../troubleshooting.html">Troubleshooting</a></li><li><a href="../api-stability.html">API stability</a></li></ul></nav>
+		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="../install.html">Installing Hammerite</a></li><li><a href="../getting-started.html">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="writing-an-entity.html" aria-current="page">Writing an entity class</a></li><li><a href="rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="rendering-hdr-lightmaps.html">Rendering HDR lightmaps</a></li><li><a href="probe-lighting.html">Probe lighting</a></li><li><a href="entity-sets.html">Entity sets</a></li><li><a href="moving-brush-entities.html">Moving brush entities</a></li><li><a href="guard-navigation.html">Navigation for guards</a></li><li><a href="brush-materials.html">Brush materials and shaders</a></li><li><a href="brush-properties.html">Properties on brushes</a></li><li><a href="importing-map-files.html">Importing Quake maps</a></li></ul><h2>Reference</h2><ul><li><a href="../api/index.html">API reference</a></li><li><a href="../manual/index.html">Manual</a></li><li><a href="../migrating-to-2.0.html">Migrating to Hammerite 2.0</a></li><li><a href="../baking.html">Baking from a script</a></li><li><a href="../performance.html">Performance and limits</a></li><li><a href="../troubleshooting.html">Troubleshooting</a></li><li><a href="../api-stability.html">API stability</a></li></ul></nav>
 	</aside>
 	<main class="docs-main">
 		<article class="prose">
@@ -49,6 +49,10 @@ post. It is two halves:</p>
 <li><strong>running</strong> - a node the game builds from it, found by the <code>classname</code> property. That is your
   script.</li>
 </ul>
+<p>A scene can be an entity type with no class at all: see
+<a href="entity-sets.html#scenes-as-types-hammeritesceneentityset">Scenes as types</a>. A scene whose root
+extends one of the bases below can have gizmos, handles, runtime properties and brushwork as well,
+with none of the registration this page writes.</p>
 <p>This page builds <span class="unlinked"><code>ExamplePickup</code></span> from the minimal
 example - a box that spins while the game runs and vanishes when triggered - and then the hooks it
 does not need: gizmos, handles, brushwork and triggers of your own.</p>
@@ -137,6 +141,19 @@ the map loads, and each time the author changes one in the editor:</p>
 <p><code>origin</code> is where it stands, in the map's space: set <code>position</code>, not <code>global_position</code>, and the
 entity goes wherever the <a href="../api/HammeriteMap3D.html"><code>HammeriteMap3D</code></a> goes. <code>rotation</code>, when the type
 has one, is applied for you before this is called.</p>
+<p><strong>Properties that depend on the entity.</strong> A type declares the same properties for every entity of it.
+Some depend on what one entity holds instead: a model's materials, or the variables a placed scene
+exports. Offer those from <code>_get_offered_properties()</code>, each with its default and any <code>_editor_</code> keys a
+type would give it. The inspector shows them as the type's own, and they reach
+<code>_apply_entity_property()</code> the same way. One set back to its default is cleared from the entity
+rather than written, and is told to you as <code>null</code>. Hammerite's <code>prop_scene</code> offers its scene's exports
+this way. An entity that dresses its model's materials could offer one property per material:</p>
+<pre><code class="language-gdscript">func _get_offered_properties() -&gt; Dictionary[StringName, Variant]:
+    var offered: Dictionary[StringName, Variant] = {}
+    for material: String in _material_names:
+        offered[&amp;&quot;texture/&quot; + material] = &quot;&quot;
+    return offered
+</code></pre>
 <h2 id="4-drawing-for-the-author">4. Drawing for the author</h2>
 <p><code>set_editor_active(active)</code> is told whether the editor is up over the world - as the node is built
 and on every change. It governs what the entity draws <em>for the author</em>, and says nothing about
@@ -148,13 +165,16 @@ whether the game is running. A light shows a bulb icon; a spawn point with no me
 <p><strong>Gizmos</strong> are lines over the level for what a mesh cannot show - how far something reaches, which
 way it looks. <code>draw_editor_gizmos()</code> is asked every frame the editor is up, and writes into a
 <a href="../api/HammeriteGizmoBuffer.html"><code>HammeriteGizmoBuffer</code></a> in world space. Say which views a shape is
-for: the ortho views already outline the entity's box, so a second box there is noise.</p>
+for: the ortho views already outline the entity's box, so a second box there is noise. Draw the box
+itself with <code>entity_box(entity.get_box(), ...)</code>, which is turned as the entity is and is the box it is
+clicked by, as every one of Hammerite's own point entities does; <code>box(get_aabb())</code> is the axis-aligned
+box round it, which for a turned entity is bigger.</p>
 <pre><code class="language-gdscript">func _draws_editor_gizmos_only_when_picked() -&gt; bool:
     return true
 
 func _draw_editor_gizmos(gizmos: HammeriteGizmoBuffer) -&gt; void:
     var color: Color = Color.GREEN if entity.selected else Color.WHITE_SMOKE
-    gizmos.box(get_aabb(), color, HammeriteGizmoBuffer.View.PERSPECTIVE)
+    gizmos.entity_box(entity.get_box(), color, HammeriteGizmoBuffer.View.PERSPECTIVE)
     gizmos.sphere(global_position, _watch_radius, color)
     gizmos.line(global_position, to_global(_look_at), color)
 </code></pre>
@@ -291,7 +311,7 @@ only while the editor is up, so the volume is invisible to whoever plays.</p>
 with or without the editor, and starts it. A map saved with a type your game no longer registers
 still loads; an entity whose <code>classname</code> no class answers to is reported and left out.</p>
 		</article>
-		<p class="docs-source">Hammerite latest · built from c0b28836, 2026-10-22</p>
+		<p class="docs-source">Hammerite latest · built from da4de48d, 2026-10-26</p>
 	</main>
 </div>
 

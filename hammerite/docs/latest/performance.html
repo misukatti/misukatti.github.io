@@ -36,7 +36,7 @@
 		<label class="docs-version">Version
 			<select aria-label="Docs version"><option value="latest" selected>latest</option></select>
 		</label>
-		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="install.html">Installing Hammerite</a></li><li><a href="getting-started.html">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="guides/writing-an-entity.html">Writing an entity class</a></li><li><a href="guides/rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="guides/stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="guides/stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="guides/probe-lighting.html">Probe lighting</a></li><li><a href="guides/entity-sets.html">Entity sets</a></li><li><a href="guides/moving-brush-entities.html">Moving brush entities</a></li><li><a href="guides/guard-navigation.html">Navigation for guards</a></li><li><a href="guides/brush-materials.html">Brush materials and shaders</a></li><li><a href="guides/brush-properties.html">Properties on brushes</a></li><li><a href="guides/importing-map-files.html">Importing Quake maps</a></li></ul><h2>Reference</h2><ul><li><a href="api/index.html">API reference</a></li><li><a href="manual/index.html">Manual</a></li><li><a href="migrating-to-2.0.html">Migrating to Hammerite 2.0</a></li><li><a href="baking.html">Baking from a script</a></li><li><a href="performance.html" aria-current="page">Performance and limits</a></li><li><a href="troubleshooting.html">Troubleshooting</a></li><li><a href="api-stability.html">API stability</a></li></ul></nav>
+		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="install.html">Installing Hammerite</a></li><li><a href="getting-started.html">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="guides/writing-an-entity.html">Writing an entity class</a></li><li><a href="guides/rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="guides/stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="guides/stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="guides/rendering-hdr-lightmaps.html">Rendering HDR lightmaps</a></li><li><a href="guides/probe-lighting.html">Probe lighting</a></li><li><a href="guides/entity-sets.html">Entity sets</a></li><li><a href="guides/moving-brush-entities.html">Moving brush entities</a></li><li><a href="guides/guard-navigation.html">Navigation for guards</a></li><li><a href="guides/brush-materials.html">Brush materials and shaders</a></li><li><a href="guides/brush-properties.html">Properties on brushes</a></li><li><a href="guides/importing-map-files.html">Importing Quake maps</a></li></ul><h2>Reference</h2><ul><li><a href="api/index.html">API reference</a></li><li><a href="manual/index.html">Manual</a></li><li><a href="migrating-to-2.0.html">Migrating to Hammerite 2.0</a></li><li><a href="baking.html">Baking from a script</a></li><li><a href="performance.html" aria-current="page">Performance and limits</a></li><li><a href="troubleshooting.html">Troubleshooting</a></li><li><a href="api-stability.html">API stability</a></li></ul></nav>
 	</aside>
 	<main class="docs-main">
 		<article class="prose">
@@ -86,11 +86,11 @@ Measure your own levels with the benchmarks at the end.</p>
 <tbody>
 <tr>
 <td><strong>Opening, cold</strong></td>
-<td>the world is carved from scratch: of the order of a minute on the reference level. Saving writes a worldrep cache beside the map (<code>level.worldrep.hcache</code>), and opening with one is far faster</td>
+<td>the world is carved from scratch: about four seconds on the reference level, after a second and a half reading the file. Saving writes a worldrep cache beside the map (<code>level.worldrep.hcache</code>), and opening with one is faster</td>
 </tr>
 <tr>
 <td><strong>An edit</strong></td>
-<td>recompiles only what the edit's carves reach: about half a second on the reference level, and no pause to notice on a small one</td>
+<td>recompiles only what the edit's carves reach, and the views draw again only what it changed: on the reference level, moving a small air brush is shown in the editor in about a tenth of a second and a detail brush in about a thirtieth, and on a small level there is no pause to notice</td>
 </tr>
 <tr>
 <td><strong>Drawing, in the game</strong></td>
@@ -99,6 +99,14 @@ Measure your own levels with the benchmarks at the end.</p>
 <tr>
 <td><strong>Navigation</strong></td>
 <td>building walkable ground and links takes over a minute on the reference level (#114); it runs on the compile's worker thread</td>
+</tr>
+<tr>
+<td><strong>The preview in Godot's editor</strong></td>
+<td>a <code>HammeriteLevel</code> shows its map's world in Godot's 3D view, unlit, from geometry kept beside the map as it is saved (<code>level.preview.res</code>). On City of Thieves' into_the_odd that file is 2.5 MB, written in 0.2 s; the scene opens at once and the whole map is shown 0.22 s later, its 55 chunks drawn at 0.8 ms of the CPU a frame. With no file, or one older than the map, the map is read and the geometry built on the worker pool, 8 s there, the editor never waiting on it, and kept for next time. A level's <strong>Preview In Editor</strong> turns it off</td>
+</tr>
+<tr>
+<td><strong>Scenes as types</strong></td>
+<td><code>HammeriteSceneEntitySet</code> builds each scene once as it is added, to read its root's exports. Over City of Thieves' 42 scenes, whole levels and test rigs among them, that took 1.1 s the first time, nearly all of it loading the scenes' resources, which placing their entities would load anyway; a median scene took 12 ms. With the resources loaded, all 42 took 0.1 s</td>
 </tr>
 <tr>
 <td><strong>Baking</strong></td>
@@ -126,9 +134,16 @@ without a pause.</p>
 godot --headless --path tests --script res://benchmark_detail.gd    # the cost of carving dressing
 godot --headless --path tests --script res://benchmark_nav.gd       # navigation build
 godot --headless --path tests --script res://benchmark_persist.gd   # save and load
+godot --headless --path tests --script res://benchmark_edit_map.gd -- level.hmap   # an edit on your level
+godot --headless --path tests --script res://benchmark_read_map.gd -- level.hmap   # reading your level
 </code></pre>
+<p><code>benchmark_edit_map.gd</code> loads a level of your own and moves a detail brush, a small air brush and a small solid
+there and back, printing what each recompile costs; <code>--cold</code> also carves the level from nothing first, as opening it
+without its worldrep cache does.</p>
+<p><code>benchmark_read_map.gd</code> reads a level of your own as it is and saved again in the current format, and leaves the
+level as it was.</p>
 		</article>
-		<p class="docs-source">Hammerite latest · built from c0b28836, 2026-10-22</p>
+		<p class="docs-source">Hammerite latest · built from da4de48d, 2026-10-26</p>
 	</main>
 </div>
 

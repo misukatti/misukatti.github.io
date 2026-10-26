@@ -36,7 +36,7 @@
 		<label class="docs-version">Version
 			<select aria-label="Docs version"><option value="latest" selected>latest</option></select>
 		</label>
-		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="install.html">Installing Hammerite</a></li><li><a href="getting-started.html" aria-current="page">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="guides/writing-an-entity.html">Writing an entity class</a></li><li><a href="guides/rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="guides/stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="guides/stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="guides/probe-lighting.html">Probe lighting</a></li><li><a href="guides/entity-sets.html">Entity sets</a></li><li><a href="guides/moving-brush-entities.html">Moving brush entities</a></li><li><a href="guides/guard-navigation.html">Navigation for guards</a></li><li><a href="guides/brush-materials.html">Brush materials and shaders</a></li><li><a href="guides/brush-properties.html">Properties on brushes</a></li><li><a href="guides/importing-map-files.html">Importing Quake maps</a></li></ul><h2>Reference</h2><ul><li><a href="api/index.html">API reference</a></li><li><a href="manual/index.html">Manual</a></li><li><a href="migrating-to-2.0.html">Migrating to Hammerite 2.0</a></li><li><a href="baking.html">Baking from a script</a></li><li><a href="performance.html">Performance and limits</a></li><li><a href="troubleshooting.html">Troubleshooting</a></li><li><a href="api-stability.html">API stability</a></li></ul></nav>
+		<nav class="api-nav"><h2>Get started</h2><ul><li><a href="install.html">Installing Hammerite</a></li><li><a href="getting-started.html" aria-current="page">Getting started</a></li></ul><h2>Guides</h2><ul><li><a href="guides/writing-an-entity.html">Writing an entity class</a></li><li><a href="guides/rooms-and-sight.html">Rooms, portals and line of sight</a></li><li><a href="guides/stealth-hearing.html">Hearing for stealth gameplay</a></li><li><a href="guides/stealth-light-level.html">Sampling the light level for stealth gameplay</a></li><li><a href="guides/rendering-hdr-lightmaps.html">Rendering HDR lightmaps</a></li><li><a href="guides/probe-lighting.html">Probe lighting</a></li><li><a href="guides/entity-sets.html">Entity sets</a></li><li><a href="guides/moving-brush-entities.html">Moving brush entities</a></li><li><a href="guides/guard-navigation.html">Navigation for guards</a></li><li><a href="guides/brush-materials.html">Brush materials and shaders</a></li><li><a href="guides/brush-properties.html">Properties on brushes</a></li><li><a href="guides/importing-map-files.html">Importing Quake maps</a></li></ul><h2>Reference</h2><ul><li><a href="api/index.html">API reference</a></li><li><a href="manual/index.html">Manual</a></li><li><a href="migrating-to-2.0.html">Migrating to Hammerite 2.0</a></li><li><a href="baking.html">Baking from a script</a></li><li><a href="performance.html">Performance and limits</a></li><li><a href="troubleshooting.html">Troubleshooting</a></li><li><a href="api-stability.html">API stability</a></li></ul></nav>
 	</aside>
 	<main class="docs-main">
 		<article class="prose">
@@ -52,6 +52,12 @@ that does not exist yet is a new one, which saving writes there - and its <stron
 <strong>HammeriteLevelEditor</strong> beneath it. Press F5: the level is built, a camera flies round it (right mouse
 to look, W A S D Q E to move), and F10 opens the editor over it.
 <span class="unlinked"><code>examples/starter</code></span> is exactly that, with a lit room to start from.</p>
+<p>The level shows in Godot's own 3D view too, so you can place your own nodes, a player start or a
+trigger area of your game's, against its walls. That view is a reference, not the game: the world's
+geometry and textures, lit by your scene's lights or Godot's preview sun rather than the bake, with no
+entities, and nothing edited there. Building, lighting and trying the level happen in the game, with F10.
+Saving the map keeps the preview's geometry beside it (<code>level.preview.res</code>), so the view is shown at
+once and follows each save within a second. Turn it off with the level's <strong>Preview In Editor</strong>.</p>
 <p>The rest of this guide is the same thing in code, which is where a game goes once it has entities and
 a player of its own.</p>
 <h2 id="1-textures">1. Textures</h2>
@@ -116,7 +122,7 @@ Map</strong> (<code>Cmd</code> <code>S</code>). The bake is saved with the map; 
 <li>How big a level can get: <a href="performance.html">Performance and limits</a>.</li>
 </ul>
 		</article>
-		<p class="docs-source">Hammerite latest · built from c0b28836, 2026-10-22</p>
+		<p class="docs-source">Hammerite latest · built from da4de48d, 2026-10-26</p>
 	</main>
 </div>
 

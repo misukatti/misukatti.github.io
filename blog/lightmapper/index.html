@@ -222,9 +222,16 @@
 		sky face also gives off the sky's own light.</p>
 
 		<figure>
-			<img src="lighting-sun.png" alt="A room lit by sunlight through a window, with a bright patch of sun on the floor and soft light on the walls" width="784" height="707" loading="lazy">
-			<figcaption>Sunlight through a window, and the sky's light bouncing around the room.</figcaption>
+			<img src="lighting-sun.png" alt="A room lit by sunlight through a window onto a stone courtyard, with a sharp-edged patch of sun on the floor and soft light on the walls and ceiling" width="784" height="707" loading="lazy">
+			<figcaption>Sunlight through a window, and the sky's light bouncing around the room. The room is baked at one unit a texel, and shown through an AgX tonemapper.</figcaption>
 		</figure>
+
+		<p>The sun patch is hundreds of times brighter than the walls around it, and the bake keeps all of
+		it, in half floats. What the screen makes of that is up to the tonemapper. Godot's default, with no
+		Environment, cuts everything above white off flat, so a patch of sun becomes a white shape. A
+		filmic one such as AgX rolls the brightest light off the way a camera does. The guide
+		<a href="../../hammerite/docs/latest/guides/rendering-hdr-lightmaps.html">Rendering HDR lightmaps</a>
+		has the details.</p>
 
 		<p>Static light is kept in full RGB. Switchable light is kept as a single brightness per slot, the
 		BT.709 luma of the light, because its colour is applied when the level is drawn. That is what lets a
@@ -428,9 +435,12 @@
 		<p>After an edit, walls that were moved or carved have no light until the next bake. A quick bake
 		lights just those walls with direct light, and leaves everything else as it was. On a large imported
 		level with 736 lamps a quick bake takes about a second.</p>
+		<p>The panel has presets. Simple is direct light alone, Thief the same with a linear falloff, and
+		Fancy, the default, turns on everything: bounces, water reflections and caustics. Your own settings
+		can be saved as presets of your own.</p>
 
 		<figure>
-			<img src="lighting-bake.png" alt="The Hammerite editor with a lightmap tool panel showing the bake settings beside two lit rooms" width="1092" height="707" loading="lazy">
+			<img src="lighting-bake.png" alt="The Hammerite editor with the Lightmap panel on its Fancy preset, showing the bake settings beside two lit rooms" width="1092" height="707" loading="lazy">
 			<figcaption>The lightmap tool in the editor.</figcaption>
 		</figure>
 
