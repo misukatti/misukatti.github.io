@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Hammerite's lightmapper — Misukatti Interactive</title>
-<meta name="description" content="How Hammerite's GPU radiosity lightmapper works, step by step: BVHs and charts, direct light, progressive radiosity through irradiance probes, four switchable light slots per surface, colour bleed for switchable light, refraction, caustics and reflection in water, how baked and real-time light meet in the shader, and reproducible bakes.">
+<meta name="description" content="How Hammerite's GPU radiosity lightmapper works, step by step: BVHs and charts, direct light, hierarchical radiosity between the walls, four switchable light slots per surface, colour bleed for switchable light, refraction, caustics and reflection in water, how baked and real-time light meet in the shader, and reproducible bakes.">
 <meta property="og:title" content="Hammerite's lightmapper">
-<meta property="og:image" content="https://misukatti.fi/blog/lightmapper/cornell-bleed-on.jpg">
+<meta property="og:image" content="https://misukatti.fi/blog/lightmapper/cornell-panel.jpg">
 <meta property="og:url" content="https://misukatti.fi/blog/lightmapper/">
 <meta property="og:type" content="article">
 <link rel="canonical" href="https://misukatti.fi/blog/lightmapper/">
@@ -37,15 +37,15 @@
 			<p class="post-meta"><time datetime="2026-10">October 2026</time> · Hammerite</p>
 			<h1>Hammerite's lightmapper</h1>
 			<p class="post-lede">Hammerite bakes light into lightmaps on the GPU: direct light with soft
-			shadows, and bounced light by progressive radiosity through a set of irradiance probes. A stealth
+			shadows, and bounced light by hierarchical radiosity between the walls. A stealth
 			game also needs light that changes while the game runs, so every surface holds four switchable
 			lights next to its static light, and the switchable light bounces in colour too. This post goes
 			through the whole pipeline, step by step.</p>
 		</header>
 
 		<figure>
-			<img src="cornell-bleed-on.jpg" alt="A Cornell box baked in Hammerite: a red wall on the left, a green wall on the right, two white blocks, lit by a switchable lamp under the ceiling, with red and green light bounced onto the blocks and the floor" width="1000" height="1000">
-			<figcaption>A Cornell box, baked in Hammerite at 4 units a texel and lit by one switchable lamp.</figcaption>
+			<img src="cornell-panel.jpg" alt="A Cornell box baked in Hammerite: a red wall on the left, a green wall on the right, two white blocks, lit by a glowing panel set into the ceiling, with red and green light bounced onto the blocks, the floor and the ceiling" width="1000" height="1000">
+			<figcaption>A Cornell box, baked in Hammerite at 4 units a texel, lit by a glowing panel set into the ceiling.</figcaption>
 		</figure>
 
 		<h2>Why lightmaps</h2>
@@ -57,8 +57,9 @@
 		Hammerite bakes everything it can, and makes the baked light switchable.</p>
 		<p>The first version, in 2024, did radiosity on the CPU, and it did not scale. Classic radiosity
 		trades light between every pair of patches that can see each other, so the work grows with the
-		square of the level. In 2025 I moved the whole bake to the GPU, as compute shaders, and changed how
-		the bounce is done.</p>
+		square of the level. In 2025 I moved the whole bake to the GPU, as compute shaders, and relayed the
+		bounce through light probes. In 2026 the bounce went back to the walls, as hierarchical radiosity,
+		which gives each pair of surfaces only as much detail as the light between them needs.</p>
 
 		<h2>The pipeline</h2>
 		<p>A bake has four parts. The level is prepared on the CPU, the light is transferred on the GPU, the
@@ -109,9 +110,9 @@
 						<text x="658" y="63">Texels</text>
 						<text x="58" y="203">Direct</text>
 						<text x="178" y="203">Water</text>
-						<text x="298" y="203">Gather</text>
+						<text x="298" y="203">Links</text>
 						<text x="418" y="203">Bounce ×N</text>
-						<text x="538" y="203">Distribute</text>
+						<text x="538" y="203">To texels</text>
 						<text x="658" y="203">Settle slots</text>
 						<text x="58" y="343">Group</text>
 						<text x="178" y="343">Pack</text>
@@ -127,17 +128,17 @@
 						<text x="658" y="483">light()</text>
 					</g>
 					<g fill="#c9bd9a" font-size="10.5">
-						<text x="58" y="104">walls and air</text>
+						<text x="58" y="104">for what moves</text>
 						<text x="178" y="104">light groups</text>
 						<text x="298" y="104">brushes, props</text>
 						<text x="418" y="104">planar projection</text>
 						<text x="538" y="104">faces that join</text>
-						<text x="658" y="104">one patch each</text>
+						<text x="658" y="104">trees of squares</text>
 						<text x="58" y="244">4 shadow rays</text>
 						<text x="178" y="244">mirrors, caustics</text>
-						<text x="298" y="244">patches → probes</text>
-						<text x="418" y="244">probes → probes</text>
-						<text x="538" y="244">probes → texels</text>
+						<text x="298" y="244">refined to the light</text>
+						<text x="418" y="244">gather, push, pull</text>
+						<text x="538" y="244">nine leaves each</text>
 						<text x="658" y="244">brightest four</text>
 						<text x="58" y="384">≤ 4 lights a set</text>
 						<text x="178" y="384">512² atlases</text>
@@ -175,11 +176,11 @@
 		watchdog never kills it. A cancelled bake puts the old lighting back.</p>
 
 		<h2>Preparing the level</h2>
-		<p><strong>Probes.</strong> The bounce goes through light probes, so they are placed first.
-		<em>Surface probes</em> sit on a 64-unit grid over every wall and every face of detail brushwork, one
-		unit out into the air, and each gets the area of surface around it. <em>Volume probes</em> sit on a
-		64-unit lattice through the air, kept away from the walls. Both are irradiance probes: they measure
-		the light that arrives at a point.</p>
+		<p><strong>Probes.</strong> Things that move, a guard or a crate, are lit from light probes, so they
+		are placed first. <em>Surface probes</em> sit on a 64-unit grid over every wall and every face of
+		detail brushwork, one unit out into the air. <em>Volume probes</em> sit on a 64-unit lattice through
+		the air, kept away from the walls. Both are irradiance probes: they measure the light that arrives at
+		a point.</p>
 		<p><strong>Lights.</strong> Every light is static or switchable, decided by its entity type. Switchable
 		lights are put into <em>light groups</em>: lights with the same group name share one slot and are
 		switched together, and a light with no group gets one of its own.</p>
@@ -201,9 +202,9 @@
 			<figcaption>The lightmap density view: one checker square is one texel.</figcaption>
 		</figure>
 
-		<p><strong>Texels.</strong> Each texel becomes one <em>patch</em>, the unit radiosity works with. It
-		gets a position, a normal and a reflectance, which is the albedo of the texture under it,
-		converted from sRGB to linear. A ring of padding texels goes around every face. How much light a
+		<p><strong>Texels.</strong> Each texel gets a position, a normal and a reflectance, which is the albedo
+		of the texture under it, converted from sRGB to linear. The texels of each room's walls are then
+		grouped into trees of squares for the bounce, described below. A ring of padding texels goes around every face. How much light a
 		padding texel keeps depends on what meets the face at that edge: all of it past an open edge, none
 		of it behind a wall that stands against it. This keeps a wall's light from bleeding under the floor
 		next to it.</p>
@@ -237,35 +238,84 @@
 		BT.709 luma of the light, because its colour is applied when the level is drawn. That is what lets a
 		lamp change colour at runtime.</p>
 
-		<h2>Bounce: radiosity through irradiance probes</h2>
+		<h2>Bounce: hierarchical radiosity</h2>
 		<p>In classic radiosity every patch sends light to every other patch it can see, weighted by the
 		<em>form factor</em>, the share of one surface that another one sees:</p>
 		<p class="formula">F = cos θ<sub>s</sub> · cos θ<sub>r</sub> · A<sub>s</sub> / (π d²)</p>
-		<p>With 4 million patches that is far too many pairs. Hammerite relays the bounce through the
-		probes instead, in three steps:</p>
+		<p>With millions of texels that is far too many pairs. Quake 2's radiosity cut the walls into patches
+		of one size, 64 units across by default, and traded light between every pair of them. That keeps the
+		pairs down, but a shadow cast by bounced light is then a blur 64 units wide, and halving the patches
+		makes sixteen times the pairs.</p>
+		<p>Hammerite uses hierarchical radiosity, after Hanrahan, Salzman and Aupperle. Each room's walls in
+		each plane become a quadtree of squares on the lightmap's texel grid, from the whole wall down to 8
+		units or one texel. Each prop becomes an octree of cubes. And each room as a whole is a
+		<em>cluster</em> of all of them, which only sends, like a body giving off light evenly in every
+		direction.</p>
+		<p>Two nodes are joined by a <em>link</em> at the coarsest level where little light passes between
+		them. How much could pass is the receiver's albedo and area, times the sender's light, times the
+		largest form factor the two could have if they were as close as their sizes let them be. When that
+		is more than a hundredth of what a leaf throws back, the larger end is split into its children and
+		each is tried again. A far, dim wall reaches a whole room in one link, while a near, bright one is
+		linked square by square.</p>
+
+		<figure class="atlas-row two">
+			<div>
+				<img src="radiosity-far.jpg" alt="A long hall seen from the end with the light. Its walls and ceiling are covered in coloured squares: large red, purple and blue ones near the camera, and small yellow and orange ones at the far end, around a white post marking one texel on the floor" width="1000" height="880" loading="lazy">
+				<p>From the far end of the hall</p>
+			</div>
+			<div>
+				<img src="radiosity-shadow.jpg" alt="The same hall from the far end, looking back at the pool of light and the block. The squares are small around the block and the pool, where a white post marks a texel on the floor, and large on the walls near the camera" width="1000" height="880" loading="lazy">
+				<p>Beside the pool of light</p>
+			</div>
+			<figcaption>What one texel's node on the floor takes its bounce from, marked by the white post. Each
+			square is a node it is linked to: 8 units across in yellow, 16 in orange, 32 in red, 64 in purple,
+			128 in blue and 256 in pale blue. Nearby walls are linked in small squares and far ones in large
+			squares. The first takes its light over 1,500 links, the second over 3,500.</figcaption>
+		</figure>
+
+		<p>The links are made twice. First against the direct light, and then against what two bounces over
+		those links add, because by the direct light alone every wall the lamps miss looks dark, and would
+		be linked coarsely. A link that sees its sender only in part is split, up to three more times, until
+		each one sees all of it or none. That is what gives a shadow cast by bounced light its edge.</p>
+		<p>What a link sees is traced with sixteen rays between texels of its two ends, spread over both so
+		that the first rays already cross both of them, and more for a link that carries a lot of light. It
+		is kept in half a byte per link.</p>
+
+		<figure>
+			<img src="radiosity-lit.jpg" alt="A long white hall lit only by one spot shining on the floor at the far end. The walls and ceiling around the pool of light glow with bounced light, and the block beside the pool casts a soft dark shadow on the ceiling above it" width="1000" height="880" loading="lazy">
+			<figcaption>The hall, lit. Everything but the pool on the floor is bounced light, and the block
+			casts a shadow of it on the ceiling.</figcaption>
+		</figure>
+
+		<p>A bounce is four GPU passes over the nodes:</p>
 		<ol>
-			<li><strong>Gather.</strong> Each probe collects the light reflected by the patches it can see,
-			within 768 units, using the same form factor and one visibility ray per patch. Far away patches
-			are clustered: within 64 by 64 units of one wall they are read as one sender from their
-			area-weighted centre, with one ray instead of sixteen. Before the clustering, the gather on my
-			reference level traced four billion rays.</li>
-			<li><strong>Bounce.</strong> The surface probes pass light between each other, once per bounce.
-			Each pass sends only what arrived in the pass before, the <em>unshot</em> energy, which is the idea
-			behind progressive refinement radiosity. The sender multiplies by its wall's reflectance, so a red
-			wall throws back red light and a dark wall throws back little.</li>
-			<li><strong>Distribute.</strong> Every texel interpolates the eight nearest surface probes that it
-			can see, weighted by distance and by how much their walls face the same way. The texel's own albedo
-			is not applied here: the shader does that.</li>
+			<li><strong>Gather.</strong> Every node collects what its senders send over its links: their light,
+			times what they throw back, times the form factor and what the link sees.</li>
+			<li><strong>Push.</strong> What reached each node goes down its tree. A child takes it from the nine
+			squares around its parent, weighted by a quadratic B-spline, so light that lands high in a tree
+			lies on the wall smoothly rather than in squares.</li>
+			<li><strong>Keep.</strong> The leaves add it to what they have had, and send it next.</li>
+			<li><strong>Pull.</strong> What the leaves send is summed back up their trees, so a link to a large
+			square sends what all of its leaves do.</li>
 		</ol>
-		<p>The volume probes gather too, but they never send. They are there for things that move.</p>
-		<p>I checked the result against the theory: a room with dark walls bounces about 12% of its direct
-		light back into itself, close to the 11% that the walls' reflectance predicts.</p>
+		<p>The bounces run until one adds less than 1% of the light, up to 32 of them. Then every texel takes
+		the nine leaves around it on its wall, again with B-spline weights, so the light bends nowhere.</p>
+		<p>Light keeps its colour on the way. What a node sends carries the colour that light arrived in, as
+		well as the colour of its own wall, so a white floor lit by a red wall throws red light on.</p>
+		<p>The cost grows with the detail that matters. Twice the lightmap resolution makes four times the
+		leaves, and on a test room the links grew 4.04 times, where patches of one size would have needed
+		sixteen. A closed grey room gives back 0.995 of what infinitely many bounces can, where patches of one
+		size gave back 0.94. The probe bounce Hammerite used before gave back 1.08 at four bounces, more
+		light than a room has, and a hall under a lamp grew brighter with every bounce after that.</p>
+		<p>Probes are still baked, from the same light, for the things that move. The Lightmap panel's
+		<em>Bounce</em> setting chooses between the probe bounce and the patches. Every picture in this post
+		is baked with the patches.</p>
 
 		<h2>Four light slots</h2>
 		<p>Each atlas has a <strong>static texture</strong> in RGB, for the light that never changes:
 		static lamps, daylight, glowing textures and all of their bounce. Next to it is a <strong>slot
 		texture</strong> in RGBA, which holds up to four switchable lights, one in each channel, each at full
-		strength and without colour. Both are 32-bit float.</p>
+		strength and without colour. Both are kept in half floats.</p>
 		<p>Below is the slot atlas of a room with four switchable lamps in its corners. Pick a channel to
 		see one lamp's light on its own, as it is stored. <em>All</em> shows the four together, each in its
 		lamp's colour, the way the shader adds them up.</p>
@@ -273,7 +323,7 @@
 		<figure class="slot-viewer">
 			<div class="slot-pictures">
 				<img src="slot-room.jpg" alt="A square room with a pillar in the middle, lit by four switchable lamps in its corners: red, green, blue and yellow" width="1000" height="774" loading="lazy">
-				<img class="slot-atlas" src="slot-all.png" alt="The room's slot atlas with all four channels, each in its lamp's colour" width="369" height="444" loading="lazy">
+				<img class="slot-atlas" src="slot-all.png" alt="The room's slot atlas with all four channels, each in its lamp's colour" width="458" height="488" loading="lazy">
 			</div>
 			<div class="slot-buttons" role="group" aria-label="Slot channel">
 				<button type="button" data-slot="all" aria-pressed="true">All</button>
@@ -300,7 +350,8 @@
 		texel would multiply the size of the atlases, so Hammerite stores it in two small textures instead.</p>
 		<p>While the bounce runs, every texel keeps a <em>chroma</em> vector for each slot: the light of that
 		slot that arrived coloured, in its colour. It is carried through every bounce at the same energy as
-		the bounce itself, so its luma is exactly the bounced part of the slot. When the atlas is written,
+		the bounce itself, so its luma is exactly the bounced part of the slot, and it keeps the colour of
+		every wall it came off. When the atlas is written,
 		that becomes:</p>
 		<ul>
 			<li><strong>A tint</strong> T: the sum of a texel's chroma vectors, scaled so its brightest channel
@@ -314,30 +365,32 @@
 		the same brightness. Light that came through tinted glass or water is counted as coloured too. It is
 		exact when every slot of a texel bounced in the same colour, which is nearly always the case, since
 		they bounced off the same walls.</p>
-		<p>Here is the same box with the colour bleed of its switchable lamp off and on:</p>
+		<p>Here is the box lit by switchable light instead: sixteen lamps under the ceiling in one light
+		group, so one slot, with the colour bleed off and on.</p>
 
 		<figure>
 			<div class="compare" style="--split: 50%">
-				<img src="cornell-bleed-off.jpg" alt="The Cornell box with the colour bleed of the switchable lamp turned off: the white blocks and floor are grey" width="1000" height="1000" loading="lazy">
-				<img class="compare-after" src="cornell-bleed-on.jpg" alt="The same Cornell box with colour bleed on: red light on the left sides of the blocks and the floor, green on the right" width="1000" height="1000" loading="lazy">
+				<img src="cornell-bleed-off.jpg" alt="The Cornell box lit by switchable lamps, with their colour bleed turned off: the white blocks and floor are grey" width="1000" height="1000" loading="lazy">
+				<img class="compare-after" src="cornell-bleed-on.jpg" alt="The same Cornell box with colour bleed on: red light on the sides of the blocks facing the red wall, green on the sides facing the green one" width="1000" height="1000" loading="lazy">
 				<span class="compare-label">Off</span>
 				<span class="compare-label compare-label-after">On</span>
 				<span class="compare-handle" aria-hidden="true"></span>
 				<input type="range" min="0" max="100" value="50" aria-label="Drag to compare colour bleed off and on">
 			</div>
-			<figcaption>Drag to compare. The light is the same, only how much of the bounce takes its colour changes.</figcaption>
+			<figcaption>Drag to compare. The light is the same, only whether the bounce takes its colour
+			changes.</figcaption>
 		</figure>
 
 		<figure class="atlas-row two">
 			<div>
-				<img src="ct-tint.png" alt="The Cornell box's tint atlas: faces near the red wall reddish, faces near the green wall greenish" width="966" height="642" loading="lazy">
+				<img src="ct-tint.png" alt="The Cornell box's tint atlas: faces near the red wall reddish, faces near the green wall greenish" width="888" height="944" loading="lazy">
 				<p>Tint</p>
 			</div>
 			<div>
-				<img src="ct-share.png" alt="The Cornell box's share atlas in greyscale: dark where the lamp shines directly, bright in the corners and under the blocks" width="966" height="642" loading="lazy">
+				<img src="ct-share.png" alt="The Cornell box's share atlas in greyscale: dark where the lamp shines directly, bright in the corners and under the blocks" width="888" height="944" loading="lazy">
 				<p>Share of the slot that bounced</p>
 			</div>
-			<figcaption>The two chroma textures of the Cornell box. The share is high where the lamp cannot reach and the light is all bounce.</figcaption>
+			<figcaption>The two chroma textures of the switchable Cornell box. The share is high where the lamps cannot reach and the light is all bounce.</figcaption>
 		</figure>
 
 		<h2>Water: refraction, caustics and reflection</h2>
@@ -371,7 +424,7 @@
 		The surface of the water ripples with the same pattern at the same speed, so the surface and the
 		light under it never drift apart.</p>
 		<p>Caustics are measured only along real paths through the water, in the direct pass. They are not
-		spread through the probes, which would put them on walls that never saw the pool.</p>
+		spread through the bounce, which would put them on walls that never saw the pool.</p>
 		<p><strong>Reflection.</strong> A lit pool throws its own shape onto the walls and the ceiling. A pass
 		after the direct light treats every texel of a water surface as a small mirror. The light it reflects
 		goes one way, mirrored about the water's normal, into a cone as wide as the water is disturbed, and
@@ -440,7 +493,7 @@
 		can be saved as presets of your own.</p>
 
 		<figure>
-			<img src="lighting-bake.png" alt="The Hammerite editor with the Lightmap panel on its Fancy preset, showing the bake settings beside two lit rooms" width="1092" height="707" loading="lazy">
+			<img src="lighting-bake.png" alt="The Hammerite editor with the Lightmap panel set to bounce with patches, showing the bake settings beside two lit rooms" width="1092" height="707" loading="lazy">
 			<figcaption>The lightmap tool in the editor.</figcaption>
 		</figure>
 
@@ -452,12 +505,19 @@
 		And the gather and the bounces are cut into parts sized to the GPU's speed, which changed where
 		floating-point sums were rounded. Each probe now keeps one running sum across the parts. On a large
 		imported level, two bakes used to differ on all but a few hundred of its 128,767 surfaces.</p>
+		<p>The bounce between the walls holds to the same. Its sight rays are random, but from seeds of each
+		link's own, so they are the same every time. And each pass stops at the end of its own dispatch: the
+		GPU runs threads in groups of 64, and the last group of one depth of the trees used to run on into the
+		next depth while its parents were still being written. Two bakes of one room differed on every texel,
+		by up to 3%.</p>
 		<p>The native code is also built without fused multiply-add, so it rounds the same way on every
 		machine.</p>
 
 		<h2>Numbers</h2>
 		<p>My reference level is large: 7,240 brushes, about 130,000 walls, 4.4 million patches, 54,000
-		probes and 736 lights. A full bake of it on a GTX 1070 Ti takes about 22 minutes. It used to take
+		probes and 736 lights. With the patches, its walls make 2.9 million nodes, two million of them
+		leaves, joined by 54 million links, and the bounce takes about two and a half minutes. A full bake
+		with the probe bounce, on a GTX 1070 Ti, takes about 22 minutes. It used to take
 		over two and a half hours, before the gather clustering and before the atlases were written in
 		native code.</p>
 
@@ -482,8 +542,10 @@
 			<a href="https://doi.org/10.1145/54852.378487">A progressive refinement approach to fast radiosity
 			image generation</a>. SIGGRAPH 1988. Shooting unshot energy, one pass at a time.</li>
 			<li>Pat Hanrahan, David Salzman and Larry Aupperle. <a href="https://graphics.stanford.edu/papers/rad/">A
-			rapid hierarchical radiosity algorithm</a>. SIGGRAPH 1991. Treating far away surfaces as one, which
-			the gather's clusters do in a much simpler way.</li>
+			rapid hierarchical radiosity algorithm</a>. SIGGRAPH 1991. Linking two surfaces only as finely as the
+			light between them needs, which is the bounce.</li>
+			<li>Brian Smits, James Arvo and Donald Greenberg. A clustering algorithm for radiosity in complex
+			environments. SIGGRAPH 1994. A group of surfaces sending as one, as a room's cluster does.</li>
 			<li>Michael F. Cohen and John R. Wallace. Radiosity and Realistic Image Synthesis. Academic Press,
 			1993.</li>
 			<li>Ian Ashdown. <a href="https://www.researchgate.net/publication/220690300_Radiosity_-_a_programmer's_perspective">Radiosity:
@@ -493,6 +555,8 @@
 			<li>Gene Greger, Peter Shirley, Philip M. Hubbard and Donald P. Greenberg.
 			<a href="https://doi.org/10.1109/38.656788">The irradiance volume</a>. IEEE Computer Graphics and
 			Applications, 1998. Light probes in the air for things that move.</li>
+			<li>id Software. <a href="https://github.com/id-Software/Quake-2-Tools">Quake II tools</a>, 1997.
+			qrad3, radiosity between patches of one size cut from the walls.</li>
 			<li>id Software. <a href="https://github.com/id-Software/Quake">Quake</a>, 1996. Lightmaps with up to
 			four light styles per face, switched and animated at runtime.</li>
 			<li>Gary McTaggart. <a href="https://drivers.amd.com/developer/gdc/D3DTutorial10_Half-Life2_Shading.pdf">Half-Life 2
