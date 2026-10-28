@@ -238,6 +238,32 @@
 		BT.709 luma of the light, because its colour is applied when the level is drawn. That is what lets a
 		lamp change colour at runtime.</p>
 
+		<h2>Light through glass</h2>
+		<p>A texture whose name starts with <code>!</code> can be seen through wherever its alpha is below
+		one. Most are cut-outs, a grate or a railing, opaque or clear, but nothing stops the alpha from
+		lying in between, and the bake reads it as glass. When a shadow ray crosses such a face it looks up
+		the texel it hit. The alpha a says how much of the light the glass covers, and the colour c tints
+		the part it covers:</p>
+		<p class="formula">through = (1 − a) · mix(1, c, a)</p>
+		<p>The colour is weighted by the alpha because the colour under an alpha of zero is whatever the
+		image editor left there, usually black, which would make a clear hole as dark as a lead bar. A ray
+		goes through up to three such surfaces and takes the colour of each. A pane built as a thin brush
+		is crossed twice, by its front face and its back face, so its colour counts twice.</p>
+
+		<figure>
+			<img src="stained-glass.jpg" alt="A tall room lit only by the sun through a stained glass window in its left wall. The window's red, blue, green and yellow figures fall on the floor and run up the far wall as coloured light, and the walls around glow faintly warm with its bounce" width="1000" height="689" loading="lazy">
+			<figcaption>Sun through a stained glass window, baked at one unit a texel and shown through AgX
+			at a lower exposure, since the patch is far brighter than the room. The glass is a French panel
+			from about 1270, <a href="https://www.metmuseum.org/art/collection/search/26846">in the
+			Metropolitan Museum of Art</a>, whose photograph is in the public domain.</figcaption>
+		</figure>
+
+		<p>To make the texture, the lead and the painted lines were given an alpha of 1 and the glass 0.85, and
+		the glass's colour was scaled up to full strength, since the alpha already says how dark it is.
+		The bake samples the texture at its own resolution, so the figures land on the floor sharp, as long
+		as the floor's texels are fine enough to hold them. The coloured light then bounces like any other,
+		and the walls around the room take a little of its warmth.</p>
+
 		<h2>Bounce: hierarchical radiosity</h2>
 		<p>In classic radiosity every patch sends light to every other patch it can see, weighted by the
 		<em>form factor</em>, the share of one surface that another one sees:</p>
@@ -307,9 +333,9 @@
 		sixteen. A closed grey room gives back 0.995 of what infinitely many bounces can, where patches of one
 		size gave back 0.94. The probe bounce Hammerite used before gave back 1.08 at four bounces, more
 		light than a room has, and a hall under a lamp grew brighter with every bounce after that.</p>
-		<p>Probes are still baked, from the same light, for the things that move. The Lightmap panel's
-		<em>Bounce</em> setting chooses between the probe bounce and the patches. Every picture in this post
-		is baked with the patches.</p>
+		<p>The probe bounce is gone now. Probes are still baked for the things that move, but they no longer
+		bounce light between themselves and paint it back onto the walls. Once the walls' bounce has settled,
+		each probe gathers once from the walls around it, so a guard is lit by the light the walls show.</p>
 
 		<h2>Four light slots</h2>
 		<p>Each atlas has a <strong>static texture</strong> in RGB, for the light that never changes:
@@ -493,7 +519,7 @@
 		can be saved as presets of your own.</p>
 
 		<figure>
-			<img src="lighting-bake.png" alt="The Hammerite editor with the Lightmap panel set to bounce with patches, showing the bake settings beside two lit rooms" width="1092" height="707" loading="lazy">
+			<img src="lighting-bake.png" alt="The Hammerite editor with the Lightmap panel on its Fancy preset, showing the bake settings beside two lit rooms" width="1092" height="707" loading="lazy">
 			<figcaption>The lightmap tool in the editor.</figcaption>
 		</figure>
 
@@ -515,11 +541,10 @@
 
 		<h2>Numbers</h2>
 		<p>My reference level is large: 7,240 brushes, about 130,000 walls, 4.4 million patches, 54,000
-		probes and 736 lights. With the patches, its walls make 2.9 million nodes, two million of them
+		probes and 736 lights. Its walls make 2.9 million nodes, two million of them
 		leaves, joined by 54 million links, and the bounce takes about two and a half minutes. A full bake
-		with the probe bounce, on a GTX 1070 Ti, takes about 22 minutes. It used to take
-		over two and a half hours, before the gather clustering and before the atlases were written in
-		native code.</p>
+		used to take over two and a half hours. The gather clustering and writing the atlases in native code
+		brought it to about 22 minutes on a GTX 1070 Ti, with the probe bounce Hammerite used then.</p>
 
 		<h2>Limits</h2>
 		<ul>
